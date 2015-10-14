@@ -4,11 +4,37 @@ L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
 		maxZoom: 18
 		}).addTo(map);
+// Adding Custom Icon
+var healthIcon = L.icon({
+    iconUrl: 'img/health.png',
+    iconSize:     [60, 50], // size of the icon
+    iconAnchor:   [25, 25], // point of the icon which will correspond to marker's location
+    popupAnchor:  [-5, -16] // point from which the popup should open relative to the iconAnchor
+});
+var residentialIcon = L.icon({
+    iconUrl: 'img/residential.png',
+    iconSize:     [60, 50], // size of the icon
+    iconAnchor:   [25, 25], // point of the icon which will correspond to marker's location
+    popupAnchor:  [-5, -16] // point from which the popup should open relative to the iconAnchor
+});
+var economyIcon = L.icon({
+    iconUrl: 'img/economy.png',
+    iconSize:     [60, 50], // size of the icon
+    iconAnchor:   [25, 25], // point of the icon which will correspond to marker's location
+    popupAnchor:  [-5, -16] // point from which the popup should open relative to the iconAnchor
+});
+var educationIcon = L.icon({
+    iconUrl: 'img/education.png',
+    iconSize:     [60, 50], // size of the icon
+    iconAnchor:   [25, 25], // point of the icon which will correspond to marker's location
+    popupAnchor:  [-5, -16] // point from which the popup should open relative to the iconAnchor
+});
+
 // Data seed
 	var markers = new Array();
-	markers[0] = L.marker([-6.89856, 107.64443]).bindPopup("<h2> Sungai Cidurian</h2> <p> Sungai ini kotor, ditepinya ada pemukiman penduduk</p>");
+	markers[0] = L.marker([-6.89856, 107.64443],{icon: healthIcon}).bindPopup("<h2> Sungai Cidurian</h2> <p> Sungai ini kotor, ditepinya ada pemukiman penduduk</p>");
 	markers[1] = L.marker([-6.90172, 107.63499]).bindPopup("<h2> Perempatan Pahlawan </h2> <p> Selalu jadi titik macet di jam brgkt-plg kerja</p>");
-	markers[2] = L.marker([-6.922, 107.61327]).bindPopup("<h2> Jalan Asia Afika </h2> <p> Community Asset </p>");
+	markers[2] = L.marker([-6.922, 107.61327], {icon: economyIcon}).bindPopup("<h2> Jalan Asia Afika </h2> <p> Community Asset </p>");
 	for (var i=0; i<3; i++){
 		map.addLayer(markers[i]);
 	}
