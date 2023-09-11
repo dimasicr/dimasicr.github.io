@@ -15,6 +15,10 @@ let container = document.createElementNS("http://www.w3.org/2000/svg", "g");
 svg.appendChild(container);
 
 
+
+ 
+    
+
 function get_equation(x1, y1, x2, y2){
   // return equation: y = mx + c;
   m = (y2 - y1) / (x2 - x1);
@@ -182,6 +186,171 @@ function draw_polygon(n, x,y, r, rot_deg){
   draw_polygon(4, distance3 * Math.cos(Math.PI /3 - 6 * Math.PI / 3), distance3 * Math.sin(Math.PI /3 - 6 * Math.PI / 3), r_square, 15 );
   draw_polygon(4, distance3 * Math.cos(Math.PI /3 - 7 * Math.PI / 3), distance3 * Math.sin(Math.PI /3 - 7 * Math.PI / 3), r_square, 45 );
   draw_polygon(4, distance3 * Math.cos(Math.PI /3 - 8 * Math.PI / 3), distance3 * Math.sin(Math.PI /3 - 8 * Math.PI / 3), r_square, 75 );
+
+  let isen_group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  tanahan_kawung = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  tanahan_kawung.setAttribute("transform", "translate(0 -75) scale(0.3 0.3) rotate(45)");
+  tanahan_kawung.setAttribute("fill", main_colour);
+  rect1 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+  rect1.setAttribute("x", - r  * 22.5 / 70);
+  rect1.setAttribute("y", - r * 1.5 /70);
+  rect1.setAttribute("width", r * 15/ 70);
+  rect1.setAttribute("height", r * 4/ 70);
+  rect2 = rect1.cloneNode(true);
+  rect2.setAttribute("transform", "rotate(90)");
+  rect3 = rect1.cloneNode(true);
+  rect3.setAttribute("transform", "rotate(180)");
+  rect4 = rect1.cloneNode(true);
+  rect4.setAttribute("transform", "rotate(270)"); 
+  tanahan_kawung.appendChild(rect1);
+  tanahan_kawung.appendChild(rect2);
+  tanahan_kawung.appendChild(rect3);
+  tanahan_kawung.appendChild(rect4);
+  tanahan_kawung2 = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  tanahan_kawung2.setAttribute("fill", main_colour);
+  tanahan_kawung2.setAttribute("transform", "translate(0 -75) scale(0.3 0.3)");
+  tnh_1 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  tnh_1.setAttribute("d", `M -${r*30/70} 0 Q -${r*20/70}  -${r*6/70}  -${r*10/70}  0 Q -${r*20/70}  ${r*6/70}  -${r*30/70}  0`);
+  tnh_2 = tnh_1.cloneNode(true);
+  tnh_2.setAttribute("transform", "rotate(90)");
+  tnh_3 = tnh_1.cloneNode(true);
+  tnh_3.setAttribute("transform", "rotate(180)");  
+  tnh_4 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  tnh_4.setAttribute("d", `M -${r*50/70} 0 Q -${r*25/70}  -${r*6/70}  -${r*10/70}  0 Q -${r*25/70}  ${r*6/70}  -${r*50/70}  0`);
+  tnh_4.setAttribute("transform", "rotate(270)");
+  tanahan_kawung2.appendChild(tnh_1);
+  tanahan_kawung2.appendChild(tnh_2);
+  tanahan_kawung2.appendChild(tnh_3);
+  tanahan_kawung2.appendChild(tnh_4);
+  isen_group.appendChild(tanahan_kawung);
+  isen_group.appendChild(tanahan_kawung2);
+  isen_group2 = isen_group.cloneNode(true);
+  isen_group2.setAttribute("transform", "rotate(30)")
+  isen_group3 = isen_group.cloneNode(true);
+  isen_group3.setAttribute("transform", "rotate(60)")
+  isen_group4 = isen_group.cloneNode(true);
+  isen_group4.setAttribute("transform", "rotate(90)")
+  isen_group5 = isen_group.cloneNode(true);
+  isen_group5.setAttribute("transform", "rotate(120)")
+  isen_group6 = isen_group.cloneNode(true);
+  isen_group6.setAttribute("transform", "rotate(150)")
+  isen_group7 = isen_group.cloneNode(true);
+  isen_group7.setAttribute("transform", "rotate(180)")
+  isen_group8 = isen_group.cloneNode(true);
+  isen_group8.setAttribute("transform", "rotate(210)")
+  isen_group9 = isen_group.cloneNode(true);
+  isen_group9.setAttribute("transform", "rotate(240)")
+  isen_group10 = isen_group.cloneNode(true);
+  isen_group10.setAttribute("transform", "rotate(270)")
+  isen_group11 = isen_group.cloneNode(true);
+  isen_group11.setAttribute("transform", "rotate(300)")
+  isen_group12 = isen_group.cloneNode(true);
+  isen_group12.setAttribute("transform", "rotate(330)")
+  container.appendChild(isen_group);
+  container.appendChild(isen_group2);
+  container.appendChild(isen_group3);
+  container.appendChild(isen_group4);
+  container.appendChild(isen_group5);
+  container.appendChild(isen_group6);
+  container.appendChild(isen_group7);
+  container.appendChild(isen_group8);
+  container.appendChild(isen_group9);
+  container.appendChild(isen_group10);
+  container.appendChild(isen_group11);
+  container.appendChild(isen_group12);
+
+  outer_isen_group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  tanahan_kawung = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  tanahan_kawung.setAttribute("transform", `translate(${-distance3} ${-r_square * 0.7}) scale(0.22 0.22) rotate(45)`);
+  tanahan_kawung.setAttribute("fill", main_colour);
+  rect1 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+  rect1.setAttribute("x", - r  * 22.5 / 70);
+  rect1.setAttribute("y", - r * 1.5 /70);
+  rect1.setAttribute("width", r * 15/ 70);
+  rect1.setAttribute("height", r * 4/ 70);
+  rect2 = rect1.cloneNode(true);
+  rect2.setAttribute("transform", "rotate(90)");
+  rect3 = rect1.cloneNode(true);
+  rect3.setAttribute("transform", "rotate(180)");
+  rect4 = rect1.cloneNode(true);
+  rect4.setAttribute("transform", "rotate(270)"); 
+  tanahan_kawung.appendChild(rect1);
+  tanahan_kawung.appendChild(rect2);
+  tanahan_kawung.appendChild(rect3);
+  tanahan_kawung.appendChild(rect4);
+  tanahan_kawung2 = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  tanahan_kawung2.setAttribute("fill", main_colour);
+  tanahan_kawung2.setAttribute("transform", `translate(${-distance3} ${-r_square * 0.7}) scale(0.3 0.3)`);
+  tnh_1 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  tnh_1.setAttribute("d", `M -${r*30/70} 0 Q -${r*20/70}  -${r*6/70}  -${r*10/70}  0 Q -${r*20/70}  ${r*6/70}  -${r*30/70}  0`);
+  tnh_2 = tnh_1.cloneNode(true);
+  tnh_2.setAttribute("d", `M -${r*40/70} 0 Q -${r*20/70}  -${r*6/70}  -${r*10/70}  0 Q -${r*20/70}  ${r*6/70}  -${r*40/70}  0`);
+  tnh_2.setAttribute("transform", "rotate(90)");
+  tnh_3 = tnh_1.cloneNode(true);
+  tnh_3.setAttribute("transform", "rotate(180)");  
+  tnh_4 = tnh_1.cloneNode(true);
+  tnh_4.setAttribute("transform", "rotate(270)");
+
+
+  tanahan_kawung2.appendChild(tnh_1);
+  tanahan_kawung2.appendChild(tnh_2);
+  tanahan_kawung2.appendChild(tnh_3);
+  tanahan_kawung2.appendChild(tnh_4);
+
+
+  outer_isen_group.appendChild(tanahan_kawung);
+  outer_isen_group.appendChild(tanahan_kawung2);
+
+  outer_isen_group2 = outer_isen_group.cloneNode(true);
+  outer_isen_group2.setAttribute("transform", "rotate(60)")
+  outer_isen_group3 = outer_isen_group.cloneNode(true);
+  outer_isen_group3.setAttribute("transform", "rotate(120)")
+  outer_isen_group4 = outer_isen_group.cloneNode(true);
+  outer_isen_group4.setAttribute("transform", "rotate(180)")
+  outer_isen_group5 = outer_isen_group.cloneNode(true);
+  outer_isen_group5.setAttribute("transform", "rotate(240)")
+  outer_isen_group6 = outer_isen_group.cloneNode(true);
+  outer_isen_group6.setAttribute("transform", "rotate(300)")
+  // container.appendChild(outer_isen_group);
+  // container.appendChild(outer_isen_group2);
+  // container.appendChild(outer_isen_group3);
+  // container.appendChild(outer_isen_group4);
+  // container.appendChild(outer_isen_group5);
+  // container.appendChild(outer_isen_group6);
+
+  tanahan_kawung_mirror = tanahan_kawung.cloneNode(true);
+  tanahan_kawung_mirror.setAttribute("transform", `translate(${-distance3} ${r_square * 0.7}) scale(0.22 0.22) rotate(45)`);
+  tanahan_kawung_mirror_2 = tanahan_kawung2.cloneNode(true);
+  tanahan_kawung_mirror_2.setAttribute("transform", `translate(${-distance3} ${r_square * 0.7}) scale(0.3 -0.3)`);
+
+  outer_isen_group_mirror = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  outer_isen_group_mirror.appendChild(tanahan_kawung_mirror);
+  outer_isen_group_mirror.appendChild(tanahan_kawung_mirror_2);
+
+  outer_isen_group2_mirror = outer_isen_group_mirror.cloneNode(true);
+  outer_isen_group2_mirror.setAttribute("transform", "rotate(60)")
+  outer_isen_group3_mirror = outer_isen_group_mirror.cloneNode(true);
+  outer_isen_group3_mirror.setAttribute("transform", "rotate(120)")
+  outer_isen_group4_mirror = outer_isen_group_mirror.cloneNode(true);
+  outer_isen_group4_mirror.setAttribute("transform", "rotate(180)")
+  outer_isen_group5_mirror = outer_isen_group_mirror.cloneNode(true);
+  outer_isen_group5_mirror.setAttribute("transform", "rotate(240)")
+  outer_isen_group6_mirror = outer_isen_group_mirror.cloneNode(true);
+  outer_isen_group6_mirror.setAttribute("transform", "rotate(300)")
+  // container.appendChild(outer_isen_group_mirror);
+  // container.appendChild(outer_isen_group2_mirror);
+  // container.appendChild(outer_isen_group3_mirror);
+  // container.appendChild(outer_isen_group4_mirror);
+  // container.appendChild(outer_isen_group5_mirror);
+  // container.appendChild(outer_isen_group6_mirror);
+  // container.appendChild(outer_isen_group_mirror);
+
+
+
+
+
+
+
 
 }
 
