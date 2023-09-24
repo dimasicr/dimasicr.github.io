@@ -1,9 +1,7 @@
 // THE CODE STARTS HERE
-var maxdepth = 4;
-var sqrt3 = Math.sqrt(3);
 let circles = [];
-let rafId = null;
 let selectedSet = 'symmetric';
+const slider = document.getElementById('slider');
 
 class Circle {
   constructor(r, center) {
@@ -16,30 +14,6 @@ class Circle {
     this.alpha = 0;
   }
 }
-
-
-// functions returning a set of three kissing circles
-// If a circle has other circles in it, it has a negative curvature
-const symmetricSet = () => {
-  let c1r = -MID;
-  let c1center = new Complex(MID, MID);
-  let c1 = new Circle(c1r, c1center);
-
-  let c2r = 100;
-  let c2center = new Complex(c2r, MID);
-  let c2 = new Circle(c2r, c2center);
-
-  let c3r = Math.abs(c1.r) - c2.r;
-  let c3x = c2.center.re + c2.r + c3r;
-  let c3y = c2.center.im;
-  let c3center = new Complex(c3x, c3y);
-  let c3 = new Circle(c3r, c3center);
-
-  return [[c1, c2, c3]];
-}
-
-
-
 
 const solveEquation = (k1, k2, k3) => {
   // "When trying to find the radius of a fourth circle tangent to three given kissing circles, the equation is best rewritten as:"
@@ -93,17 +67,17 @@ const recurse = (c1, c2, c3, c4, depth = 0) => {
   let cn3 = flip(c3, c1, c2, c4);
   let cn4 = flip(c4, c1, c2, c3);
 
-  if (cn2.r > 5) {
+  if (cn2.r > slider.value) {
     addCircle(cn2);
     recurse(cn2, c1, c3, c4, depth + 1);
   }
 
-  if (cn3.r > 5) {
+  if (cn3.r > slider.value) {
     addCircle(cn3);
     recurse(cn3, c1, c2, c4, depth + 1);
   }
 
-  if (cn4.r > 5) {
+  if (cn4.r > slider.value) {
     addCircle(cn4);
     recurse(cn4, c1, c2, c3, depth + 1);
   }
@@ -439,6 +413,243 @@ function redraw(selectedSet, padding){
     circles.forEach(drawKawung, padding)
   }
 
+  else if (selectedSet === 'nested'){
+    let c1r = -160;
+    let c1center = new Complex(200, 200);
+    let c1 = new Circle(c1r, c1center);
+    
+    let c2r = 120;
+    let c2center = new Complex(160, 200);
+    let c2 = new Circle(c2r, c2center);
+    
+    let c3r = Math.abs(c1.r) - c2.r;
+    let c3x = c2.center.re + c2.r + c3r;
+    let c3y = c2.center.im;
+    let c3center = new Complex(c3x, c3y);
+    let c3 = new Circle(c3r, c3center);
+    
+    circles = [];
+    circles.push(c1);
+    circles.push(c2);
+    circles.push(c3);
+    drawGasket(circles[0], circles[1], circles[2]);
+
+    newCircles = circles.filter(function(element) {
+      return element.r !== 120;
+    });
+
+    newCircles.forEach(drawKawung, padding);
+
+    // 2nd iteration
+    c1r = -120;
+    c1center = new Complex(200-160 + 120, 200);
+    c1 = new Circle(c1r, c1center);
+
+    c2r = 120 * 0.75;
+    c2center = new Complex(200-160 + 120 * 0.75, 200);
+    c2 = new Circle(c2r, c2center);
+
+    c3r = Math.abs(c1.r) - c2.r;
+    c3x = c2.center.re + c2.r + c3r;
+    c3y = c2.center.im;
+    c3center = new Complex(c3x, c3y);
+    c3 = new Circle(c3r, c3center);
+
+    circles = [];
+    circles.push(c1);
+    circles.push(c2);
+    circles.push(c3);
+
+    drawGasket(circles[0], circles[1], circles[2]);
+
+    newCircles = circles.filter(function(element) {
+      return element.r !== -120 && element.r !== 120 * 0.75;
+    });
+
+    newCircles.forEach(drawKawung, padding);
+
+
+    // 3rd iteration
+    c1r = (-1 * 120 * 0.75);
+    c1center = new Complex(200-160 + (120 * 0.75), 200);
+    c1 = new Circle(c1r, c1center);
+
+    c2r = (120 * 0.75 * 0.75);
+    c2center = new Complex(200-160 + (120 * 0.75 * 0.75), 200);
+    c2 = new Circle(c2r, c2center);
+
+    c3r = Math.abs(c1.r) - c2.r;
+    c3x = c2.center.re + c2.r + c3r;
+    c3y = c2.center.im;
+    c3center = new Complex(c3x, c3y);
+    c3 = new Circle(c3r, c3center);
+
+    circles = [];
+    newCircles = [];
+    circles.push(c1);
+    circles.push(c2);
+    circles.push(c3);
+
+    drawGasket(circles[0], circles[1], circles[2]);
+
+    newCircles = circles.filter(function(element) {
+      return element.r !==  -1 * (120 * 0.75) && element.r !== 120 * 0.75 * 0.75;
+    });
+
+    newCircles.forEach(drawKawung, padding);
+
+
+
+    // 4th iteration
+    c1r = (-1 * 120 * 0.75 * 0.75);
+    c1center = new Complex(200-160 + (120 * 0.75 * 0.75), 200);
+    c1 = new Circle(c1r, c1center);
+
+    c2r = (120 * 0.75 * 0.75 * 0.75);
+    c2center = new Complex(200-160 + (120 * 0.75 * 0.75 * 0.75), 200);
+    c2 = new Circle(c2r, c2center);
+
+    c3r = Math.abs(c1.r) - c2.r;
+    c3x = c2.center.re + c2.r + c3r;
+    c3y = c2.center.im;
+    c3center = new Complex(c3x, c3y);
+    c3 = new Circle(c3r, c3center);
+
+    circles = [];
+    newCircles = [];
+    circles.push(c1);
+    circles.push(c2);
+    circles.push(c3);
+
+    drawGasket(circles[0], circles[1], circles[2]);
+
+    newCircles = circles.filter(function(element) {
+      return element.r !==  -1 * (120 * 0.75 * 0.75)  && element.r !==  (120 * 0.75 * 0.75 * 0.75);
+    });
+
+    newCircles.forEach(drawKawung, padding);
+
+
+    // 5th iteration
+    c1r = (-1 * 120 * 0.75 * 0.75 * 0.75);
+    c1center = new Complex(200-160 + (120 * 0.75 * 0.75 * 0.75), 200);
+    c1 = new Circle(c1r, c1center);
+
+    c2r = (120 * 0.75 * 0.75 * 0.75 * 0.75);
+    c2center = new Complex(200-160 + (120 * 0.75 * 0.75 * 0.75 * 0.75), 200);
+    c2 = new Circle(c2r, c2center);
+
+    c3r = Math.abs(c1.r) - c2.r;
+    c3x = c2.center.re + c2.r + c3r;
+    c3y = c2.center.im;
+    c3center = new Complex(c3x, c3y);
+    c3 = new Circle(c3r, c3center);
+
+    circles = [];
+    newCircles = [];
+    circles.push(c1);
+    circles.push(c2);
+    circles.push(c3);
+
+    drawGasket(circles[0], circles[1], circles[2]);
+
+    newCircles = circles.filter(function(element) {
+      return element.r !==  -1 * (120 * 0.75 * 0.75 * 0.75)  && element.r !==  (120 * 0.75 * 0.75 * 0.75 * 0.75);
+    });
+    newCircles.forEach(drawKawung, padding);
+
+
+    // 6th iteration
+    c1r = (-1 * 120 * 0.75 * 0.75 * 0.75 * 0.75);
+    c1center = new Complex(200-160 + (120 * 0.75 * 0.75 * 0.75 * 0.75), 200);
+    c1 = new Circle(c1r, c1center);
+
+    c2r = (120 * 0.75 * 0.75 * 0.75 * 0.75 * 0.75);
+    c2center = new Complex(200-160 + (120 * 0.75 * 0.75 * 0.75 * 0.75 * 0.75), 200);
+    c2 = new Circle(c2r, c2center);
+
+    c3r = Math.abs(c1.r) - c2.r;
+    c3x = c2.center.re + c2.r + c3r;
+    c3y = c2.center.im;
+    c3center = new Complex(c3x, c3y);
+    c3 = new Circle(c3r, c3center);
+
+    circles = [];
+    newCircles = [];
+    circles.push(c1);
+    circles.push(c2);
+    circles.push(c3);
+
+    drawGasket(circles[0], circles[1], circles[2]);
+
+    newCircles = circles.filter(function(element) {
+      return element.r !==  -1 * (120 * 0.75 * 0.75 * 0.75 * 0.75)  && element.r !==  (120 * 0.75 * 0.75 * 0.75 * 0.75 * 0.75);
+    });
+    newCircles.forEach(drawKawung, padding);
+
+
+    // 7th iteration
+    c1r = (-1 * 120 * 0.75 * 0.75 * 0.75 * 0.75 * 0.75);
+    c1center = new Complex(200-160 + (120 * 0.75 * 0.75 * 0.75 * 0.75 * 0.75), 200);
+    c1 = new Circle(c1r, c1center);
+
+    c2r = (120 * 0.75 * 0.75 * 0.75 * 0.75 * 0.75 * 0.75);
+    c2center = new Complex(200-160 + (120 * 0.75 * 0.75 * 0.75 * 0.75 * 0.75 * 0.75), 200);
+    c2 = new Circle(c2r, c2center);
+
+    c3r = Math.abs(c1.r) - c2.r;
+    c3x = c2.center.re + c2.r + c3r;
+    c3y = c2.center.im;
+    c3center = new Complex(c3x, c3y);
+    c3 = new Circle(c3r, c3center);
+
+    circles = [];
+    newCircles = [];
+    circles.push(c1);
+    circles.push(c2);
+    circles.push(c3);
+
+    drawGasket(circles[0], circles[1], circles[2]);
+
+    newCircles = circles.filter(function(element) {
+      return element.r !==  -1 * (120 * 0.75 * 0.75 * 0.75 * 0.75 * 0.75)  && element.r !==  (120 * 0.75 * 0.75 * 0.75 * 0.75 * 0.75 * 0.75);
+    });
+    newCircles.forEach(drawKawung, padding);
+
+
+    // 8th iteration
+    c1r = (-1 * 120 * 0.75 * 0.75 * 0.75 * 0.75 * 0.75 * 0.75);
+    c1center = new Complex(200-160 + (120 * 0.75 * 0.75 * 0.75 * 0.75 * 0.75 * 0.75), 200);
+    c1 = new Circle(c1r, c1center);
+
+    c2r = (120 * 0.75 * 0.75 * 0.75 * 0.75 * 0.75 * 0.75 * 0.75);
+    c2center = new Complex(200-160 + (120 * 0.75 * 0.75 * 0.75 * 0.75 * 0.75 * 0.75 * 0.75), 200);
+    c2 = new Circle(c2r, c2center);
+
+    c3r = Math.abs(c1.r) - c2.r;
+    c3x = c2.center.re + c2.r + c3r;
+    c3y = c2.center.im;
+    c3center = new Complex(c3x, c3y);
+    c3 = new Circle(c3r, c3center);
+
+    circles = [];
+    newCircles = [];
+    circles.push(c1);
+    circles.push(c2);
+    circles.push(c3);
+
+    drawGasket(circles[0], circles[1], circles[2]);
+
+    newCircles = circles.filter(function(element) {
+      return element.r !==  -1 * (120 * 0.75 * 0.75 * 0.75 * 0.75 * 0.75 * 0.75) ;
+    });
+    newCircles.forEach(drawKawung, padding);
+
+
+
+
+  }
+
   
 
 }
@@ -481,6 +692,9 @@ checkbox.addEventListener("click", function() {
     }
   });
 
+slider.addEventListener('input', function() {
+      redraw(document.querySelector('.btn.is-selected').getAttribute('data-set'));
+  });
 
 
 
