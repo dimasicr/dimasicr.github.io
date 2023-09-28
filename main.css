@@ -1,106 +1,153 @@
+        /* Reset some default styles */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Raleway', sans-serif;
+            height: 100%; 
+        }
 
-::selection {
-  color: #fff;
-  background: #28a2a2;
-}
-::-moz-selection {
-  color: #fff;
-  background: #28a2a2;
-}
-html, body {
-  margin: 0;
-  padding: 0;
-}
-body {
-  font-family: 'Raleway', sans-serif;
+        /* Main container for the layout */
+        .container {
+            display: flex;
+            height: 100%;
+        }
+
+        /* Style for the side navigation bar */
+        .sidenav {
+            width: 250px;
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            transition: transform 0.3s ease-in-out;
+            height: 100%;
+        }
+
+        /* Style for the main content area */
+        .main-content {
+            flex: 1;
+            padding-top: 40px;
+        }
+
+        .main-content p {
+            text-align: center;
+        }
+
+        #svg-container {
+            display: flex;
+            justify-content: center; 
+        }
+        #slider_input, #checkbox_input {
+            display: flex;
+            justify-content: center; 
+            width: 100%;
+        }
+
+        /* Add some dummy content for demonstration purposes */
+        .main-content p {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        /* Toggle button for small screens */
+        .toggle-button {
+            display: none;
+            cursor: pointer;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #333;
+            color: #fff;
+            text-align: left;
+            padding: 10px;
+            font-size: 24px;
+            width: 100%;
+            height: 30px;
+            z-index: 1000;
+        }
+
+        /* Style for the navigation links */
+        .nav-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .nav-links li {
+            margin-bottom: 10px;
+            transition: transform 0.3s ease; /* Add transition effect */
+        }
+
+        /* Add hover effect */
+        .nav-links li:hover {
+            transform: scale(1.05); /* Scale up the link on hover */
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        h2 {
+            padding-top: 30px;
+        }
+
+        .btn, #motives, #paddings, #threshold, #recursion_threshold {
+            display: block; /* Display buttons as block elements for better mobile touch targets */
+            margin: 0.4rem auto; /* Center-align buttons */
+            padding: 0.5rem 1rem; /* Add more padding for better touch targets */
+            background: none;
+            border: 1px solid #bfbfbf;
+            color: #585858;
+            text-align: center; /* Center-align button text */
+            width: 80%; /* Make buttons 80% wide to fit smaller screens */
+        }
+
+        .btn:hover, .btn.is-selected, #download-btn:hover {
+            color: #28a2a2;
+            border-color: #28a2a2;
+        }
+
+        #download-btn {
+          display: block; /* Display buttons as block elements for better mobile touch targets */
+          margin: 0.4rem auto; /* Center-align buttons */
+          padding: 0.5rem 1rem; /* Add more padding for better touch targets */
+          background: none;
+          border: 1px solid #bfbfbf;
+          color: #585858;
+          text-align: center; /* Center-align button text */
+          width: 80%; /* Make buttons 80% wide to fit smaller screens */
+        }
+
+
+        /* Media query for small screens */
+        @media (max-width: 768px) {
+            .toggle-button {
+                display: block;
+            }
+
+            .container {
+                flex-direction: column;
+            }
+
+.sidenav {
+    width: 100%;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+    position: fixed; /* Add fixed positioning */
+    top: 0; /* Position it at the top */
+    left: -100%; /* Move it completely off-screen */
+    height: 100%; /* Full height */
+    /* Other sidebar styles go here */
 }
 
-.container {
-  display: flex;
-  margin: 0 auto;
-  text-align: center;
-  height: 100%;
-}
+.show-nav .sidenav {
+    transform: translateX(0);
+    left: 0%;
 
 
-.sidebar {
-  width: 20%;
-  background: #f0f0f0;
-  border-radius: 20px 0 0 20px;
-  height: 100%;
 }
-
-.main-section {
-  width: 80%;
-  background: #ffffff;
-}
-
-
-
-#svg-container {
-  width: 800px;
-  margin: 0 auto;
-  text-align: center;
-}
-h1, h2 {
-  margin-top: 1rem;
-  font-weight: normal;
-}
-a {
-  color: #28a2a2;
-}
-a:hover {
-  color: #1e7979;
-  text-decoration: none;
-}
-blockquote {
-  display: inline-block;
-  margin-top: 0;
-  padding-left: 1rem;
-  font-style: italic;
-  line-height: 1.6;
-  border-left: 4px solid #d4f5f5;
-}
-blockquote .content {
-  margin-top: 0;
-}
-canvas {
-  margin-bottom: 1rem;
-}
-.btn {
-  display: inline-block;
-  margin: 0.4rem 0.2rem;
-  padding: 0.3rem;
-  background: none;
-  border: 1px solid #bfbfbf;
-  color: #585858;
-}
-
-
-
-#download-btn {
-  display: inline-block;
-  margin: 0.4rem 0.2rem;
-  padding: 0.3rem;
-  background: none;
-  border: 1px solid #bfbfbf;
-  color: #585858;
-}
-
-.btn:hover, .btn.is-selected {
-  color: #28a2a2;
-  border-color: #28a2a2;
-}
-.reading-list {
-  padding: 0;
-  list-style-type: none;
-  font-size: 0.9rem;
-  text-align: left;
-}
-.reading-list li {
-  margin-bottom: 0.5rem;
-  width: 600px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+        }
