@@ -1,18 +1,23 @@
 // Create the SVG document
 const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+const screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+const main_colour = "rgb(235, 210, 140)";
+const secondary_colour = "rgb(170, 130, 75)";
+
 svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-svg.setAttribute("width", "400");
-svg.setAttribute("height", "400");
-let main_colour = "rgb(235, 210, 140)";
-let secondary_colour = "rgb(170, 130, 75)";
-let bg_rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+if (screenWidth >=  400){
+  svg.setAttribute("width", 400);
+  svg.setAttribute("height", 400);
+}
+else {
+  svg.setAttribute("width", screenWidth * (screenWidth/ 400));
+  svg.setAttribute("height", screenWidth * (screenWidth/ 400));
+}
+bg_rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
 bg_rect.setAttribute("width", "100%");
 bg_rect.setAttribute("height", "100%");
 bg_rect.setAttribute("fill", secondary_colour);
 svg.appendChild(bg_rect);
-let group = document.createElementNS("http://www.w3.org/2000/svg", "g");
-let container = document.createElementNS("http://www.w3.org/2000/svg", "g");
-svg.appendChild(container);
 
 
 function height(side_length){
@@ -26,12 +31,12 @@ function draw_triangle(g, x, y, rot_deg, w, padding=false) {
   group.setAttribute("transform", `translate(${x}, ${y}) rotate(${rot_deg})`);
   group.setAttribute("fill", main_colour);
 
-  // tumpal_outline = document.createElementNS("http://www.w3.org/2000/svg", "path");
-  // tumpal_outline.setAttribute("d", `M ${w/2} 0 L 0 ${-h} ${-w/2} 0 Z`);
-  // tumpal_outline.setAttribute("stroke", main_colour);
-  // tumpal_outline.setAttribute("fill", "none");
+  tumpal_outline = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  tumpal_outline.setAttribute("d", `M ${w/2} 0 L 0 ${-h} ${-w/2} 0 Z`);
+  tumpal_outline.setAttribute("stroke", main_colour);
+  tumpal_outline.setAttribute("fill", "none");
 
-  if (padding === false){
+  if (selectPadding.value  !== "padding"){
   //Draw Tumpal
     tumpal_1 = document.createElementNS("http://www.w3.org/2000/svg", "path");
     tumpal_1.setAttribute("d", `M0 0 C${0.158*w} 0 ${0.158*w} ${-0.211*w} ${0.316*w} ${-0.211*w} A${0.105*w} ${0.105*w} 0 0 1 ${0.316*w} 0 A${0.052*w} ${0.052*w} 0 0 1 ${0.316*w} ${-0.105*w} C${0.211*w} ${-0.105 *w}  ${0.211*w} 0 ${0.105 *w}  0 Z`);
@@ -102,72 +107,130 @@ function reset(){
 }
 
 
-function redraw(cX = 200, cY = 200, l = 200, padding = false){
+function redraw(motive = 'tesselation'){
   reset();
-  main_g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-  main_g.setAttribute("transform", `translate(${cX}, ${cY})`);
+
+
+  w = svg.getAttribute("width")/4;
+  h = height(w);
+  cx = svg.getAttribute("width")/2;
+  cy = svg.getAttribute("height")/2;
+
+  if (motive === 'tesselation'){
+    for (let i=0; i<6; i++){
+      g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      g.setAttribute("transform", `translate(${cx}, ${cy - h}) rotate(${i*60} 0 ${h}) scale(1,-1)`);
+      draw_triangle(g,  0, 0, 0, w, padding=false);
+      container.appendChild(g);
   
-  g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-  g.setAttribute("transform", `translate(${0}, ${height(l/2)}) rotate(${0} 0 ${0}) scale(1 -1)`);
-  draw_triangle(g,0, 0, 0, l/2, padding);
-  main_g.appendChild(g);
+      g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      g.setAttribute("transform", `translate(${cx}, ${cy - h - 2 *h}) rotate(${i*60} 0 ${h}) scale(1,-1)`);
+      draw_triangle(g,  0, 0, 0, w, padding=false);
+      container.appendChild(g);
   
-  g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-  g.setAttribute("transform", `translate(${0}, ${height(l/2)}) rotate(${60} 0 ${height(l/2)}) scale(1 -1)`);
-  draw_triangle(g,0, 0, 0, l/2, padding);
-  main_g.appendChild(g);
-  
-  g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-  g.setAttribute("transform", `translate(${0}, ${height(l/2)}) rotate(${-60} 0 ${height(l/2)}) scale(1 -1)`);
-  draw_triangle(g,0, 0, 0, l/2, padding);
-  main_g.appendChild(g);
-  
-  g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-  g.setAttribute("transform", `translate(${0}, ${height(l/2)}) rotate(${0} 0 ${0}) scale(1 1)`);
-  draw_triangle(g,0, 0, 0, l/2, padding);
-  main_g.appendChild(g);
+      g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      g.setAttribute("transform", `translate(${cx}, ${cy - h + 2 *h}) rotate(${i*60} 0 ${h}) scale(1,-1)`);
+      draw_triangle(g,  0, 0, 0, w, padding=false);
+      container.appendChild(g);
   
   
-  main_g2 = main_g.cloneNode(true);
-  main_g2.setAttribute("transform", `translate(${cX}, ${cY}) rotate(60)`);
-  main_g3 = main_g.cloneNode(true);
-  main_g3.setAttribute("transform", `translate(${cX}, ${cY}) rotate(120)`);
-  main_g4 = main_g.cloneNode(true);
-  main_g4.setAttribute("transform", `translate(${cX}, ${cY}) rotate(180)`);
-  main_g5 = main_g.cloneNode(true);
-  main_g5.setAttribute("transform", `translate(${cX}, ${cY}) rotate(240)`);
-  main_g6 = main_g.cloneNode(true);
-  main_g6.setAttribute("transform", `translate(${cX}, ${cY}) rotate(300)`);
+      // Right
   
-  container.appendChild(main_g);
-  container.appendChild(main_g2);
-  container.appendChild(main_g3);
-  container.appendChild(main_g4);
-  container.appendChild(main_g5);
-  container.appendChild(main_g6);
+      g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      g.setAttribute("transform", `translate(${cx + 1.5 * w}, ${cy - h + 1 *h}) rotate(${i*60} 0 ${h}) scale(1,-1)`);
+      draw_triangle(g,  0, 0, 0, w, padding=false);
+      container.appendChild(g);
+  
+      g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      g.setAttribute("transform", `translate(${cx + 1.5 * w}, ${cy - h + 1 *h - 2 * h}) rotate(${i*60} 0 ${h}) scale(1,-1)`);
+      draw_triangle(g,  0, 0, 0, w, padding=false);
+      container.appendChild(g);
+  
+      g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      g.setAttribute("transform", `translate(${cx + 1.5 * w}, ${cy - h + 1 *h - 4 * h}) rotate(${i*60} 0 ${h}) scale(1,-1)`);
+      draw_triangle(g,  0, 0, 0, w, padding=false);
+      container.appendChild(g);
+  
+      g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      g.setAttribute("transform", `translate(${cx + 1.5 * w}, ${cy - h + 1 *h + 2 * h}) rotate(${i*60} 0 ${h}) scale(1,-1)`);
+      draw_triangle(g,  0, 0, 0, w, padding=false);
+      container.appendChild(g);
+  
+      // Left
+  
+      g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      g.setAttribute("transform", `translate(${cx - 1.5 * w}, ${cy - h + 1 *h}) rotate(${i*60} 0 ${h}) scale(1,-1)`);
+      draw_triangle(g,  0, 0, 0, w, padding=false);
+      container.appendChild(g);
+  
+      g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      g.setAttribute("transform", `translate(${cx - 1.5 * w}, ${cy - h + 1 *h - 2 * h}) rotate(${i*60} 0 ${h}) scale(1,-1)`);
+      draw_triangle(g,  0, 0, 0, w, padding=false);
+      container.appendChild(g);
+  
+      g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      g.setAttribute("transform", `translate(${cx - 1.5 * w}, ${cy - h + 1 *h - 4 * h}) rotate(${i*60} 0 ${h}) scale(1,-1)`);
+      draw_triangle(g,  0, 0, 0, w, padding=false);
+      container.appendChild(g);
+  
+      g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      g.setAttribute("transform", `translate(${cx - 1.5 * w}, ${cy - h + 1 *h + 2 * h}) rotate(${i*60} 0 ${h}) scale(1,-1)`);
+      draw_triangle(g,  0, 0, 0, w, padding=false);
+      container.appendChild(g);
+  
+    }
+  }
+
+  else {
+    for (let i=0; i<6; i++){
+      g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      g.setAttribute("transform", `translate(${cx}, ${cy - h}) rotate(${i*60} 0 ${h}) scale(1,-1)`);
+      draw_triangle(g,  0, 0, 0, w, padding=false);
+      container.appendChild(g);  
+    }
+
+    g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    g.setAttribute("transform", `translate(${cx}, ${cy - h - 2 * h}) rotate(${180} 0 ${h}) scale(1,-1)`);
+    draw_triangle(g,  0, 0, 0, w, padding=false);
+    container.appendChild(g);  
+
+    g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    g.setAttribute("transform", `translate(${cx - 1.5 * w}, ${cy - h - 2 * h  + 1 * h + 2 * h}) rotate(${60} 0 ${h}) scale(1,-1)`);
+    draw_triangle(g,  0, 0, 0, w, padding=false);
+    container.appendChild(g);  
+
+    g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    g.setAttribute("transform", `translate(${cx + 1.5 * w}, ${cy - h - 2 * h  + 1 * h + 2 * h}) rotate(${300} 0 ${h}) scale(1,-1)`);
+    draw_triangle(g,  0, 0, 0, w, padding=false);
+    container.appendChild(g);  
+
+
+
+
+  }
+
+
+
 }
 
 
+const selectPadding = document.getElementById('paddings');
+// Add an event listener to the select input
+selectPadding.addEventListener('change', function() {
+    redraw(selectBox.value);
+});
 
 
+const selectBox = document.getElementById('motives');
+  // Add an event listener to the select input
+  selectBox.addEventListener('change', function() {
+  // Retrieve the selected value
+  const selectedValue = selectBox.value;
+          
+  // Display the selected value
+  redraw(selectedValue);
+});
 
-
-const checkbox = document.getElementById("myCheckbox");
-
-
-
-
-
-checkbox.addEventListener("click", function() {
-    if (this.checked) {
-      redraw(200,200,200, true);
-    } else {
-      redraw(200,200,200, false);
-    }
-  });
-
-
-redraw(200,200,200, false);
-
+  redraw();
 
 
