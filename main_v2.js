@@ -4,7 +4,6 @@ const screenWidth = window.innerWidth || document.documentElement.clientWidth ||
 const main_colour = "rgb(235, 210, 140)";
 const secondary_colour = "rgb(170, 130, 75)";
 
-
 svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
 if (screenWidth >=  400){
   svg.setAttribute("width", 400);
