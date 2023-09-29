@@ -1,8 +1,10 @@
 // Create the SVG document
 const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 const screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-const main_colour = "rgb(235, 210, 140)";
-const secondary_colour = "rgb(170, 130, 75)";
+// const main_colour = "rgb(235, 210, 140)";
+// const secondary_colour = "rgb(170, 130, 75)";
+const main_colour = '#F7F0F5';
+const secondary_colour =  '#333';
 
 svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
 if (screenWidth >=  400){
