@@ -1,58 +1,73 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title> Karsadera </title>
-  <link rel="icon" href="logo.ico" type="image/x-icon">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="main.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karsadera </title>
+    <link rel="icon" href="logo.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="main.css">
 </head>
 <body>
-  <div class="container">
+    <div class="container">
+        <!-- Toggle button for small screens -->
+        <div class="toggle-button" id="toggleButton">&#9776; <span> Karsadera </span> </div>
+        <!-- Side Navigation Bar -->
+        <div class="sidenav" id="sidenav">
+            <h2>Gallery</h2>
+            <ul class="nav-links">
+                <li><a href="index.html">Apollonian Kawung</a></li>
+                <li><a href="fibonacci.html">Fibonacci Kawung</a></li>
+                <li><a href="poincare.html">Poincare Kawung</a></li>
+                <li><a href="tumpal.html">Sierpinski Tumpal</a></li>
+                <li><a href="semiregular.html">Tesselation of Kawung </a></li>
+                <li><a href="buketan.html">Tesselation of Buketan </a></li>
+            </ul>
+        </div>
 
-  <div class="sidebar">
-    <!-- Sidebar content here -->
-    <h1> Table of Content </h1>
-    <hr> </hr>
-    <p><a href="index.html"> Apollonian Gasket </a></p>
-    <p><a href="semiregular.html"> Semiregular Tesselation </a> </p>
-    <p><a href="fibonacci.html"> Fibonacci Kawung </a></p>
-    <p><a href="tumpal.html"> Tumpal Sierpinski </a></p>
-    <p><a href="buketan.html"> Parametric Buketan </a></p>
-    <p><a href="poincare.html"> Poincare Kawung </a></p>
-  </div>
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <h1>Semiregular Tesselation of Kawung </h1>
+            <div id="svg-container"></div>
+            <p> 8 semiregular tesselation of Kawung</p>
 
-  <div class="main-section">
-    <h1>Semiregular Tesselation </h1>
-    <div id="svg-container"></div>
-    <div>
-      <input type="checkbox" id="myCheckbox">
-      <label for="myCheckbox">Padding</label>
+            <select name="tesselation_type" id="tesselation_type" class="btns" >
+              <option value="dodecagon_hexagon_square" >Dodecagon Hexagon Square </option>
+              <option value="octagon_square" >Octagon Square </option>
+              <option value="dodecagon_triangle" >Dodecagon Triangle </option>
+              <option value="hexagon_triangle_complex" >Hexagon Triangle Complex </option>
+              <option value="square_triangle" >Square Triangle </option>
+              <option value="square_triangle_complex" selected>Square Triangle Complex </option>
+              <option value="hexagon_square_triangle">Hexagon Square Triangle </option>
+              <option value="hexagon_triangle">Hexagon Triangle </option>
+            </select>
+
+            <select name="Tesselation" id="motives" class="btns" >
+              <option value="single">Single</option>
+              <option value="tesselation" selected >Tesselation</option>
+            </select>
+
+            <select name="Paddings" id="paddings" class="btns" >
+              <option value="no_padding" selected >No Padding</option>
+              <option value="padding">Padding</option>
+            </select>
+
+
+
+            <button id="download-btn"> <i class="fa fa-download"></i>  Download SVG </span> </button>
+        </div>
     </div>
-  
-      <div class="btns">
-        <button class="btn is-selected" data-set="DHS"> DHS </button>
-        <button class="btn" data-set="OS">OS</button>
-        <button class="btn" data-set="DT">DT</button>
-        <button class="btn" data-set="HMT">HMT</button>
-        <button class="btn" data-set="ST">ST</button>
-        <button class="btn" data-set="STC">STC</button>
-        <button class="btn" data-set="HST">HST</button>
-        <button class="btn" data-set="HT">HT</button>
-      </div>
-  
-  
-      <button id="download-btn"> Download SVG</button>
-  
-    <p> Apollonian Gasket adorned with traditional batik kawung pattern </p>
-  </div>
-
-</div>
-  
-  <script src="semiregular.js"> </script>
-
-  <script>
+    <script src="semiregular.js"></script>
+    <script>
+    // JavaScript to toggle the side navigation bar
+    document.getElementById('toggleButton').addEventListener('click', function() {
+            const sidenav = document.getElementById('sidenav');
+            const container = document.querySelector('.container');
+            container.classList.toggle('show-nav');
+    });
     // Retrieve the SVG container element
     const svgContainer = document.getElementById("svg-container");
 
@@ -82,6 +97,6 @@
       // Clean up by revoking the URL
       URL.revokeObjectURL(downloadURL);
     });
-  </script>
+  </script> 
 </body>
 </html>
