@@ -1,19 +1,29 @@
 // Create the SVG document
 const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+const screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+// const main_colour = "rgb(235, 210, 140)";
+// const secondary_colour = "rgb(170, 130, 75)";
+const main_colour = '#F7F0F5';
+const secondary_colour =  '#333';
+
 svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-svg.setAttribute("width", "400");
-svg.setAttribute("height", "400");
-let main_colour = "rgb(235, 210, 140)";
-let secondary_colour = "rgb(170, 130, 75)";
-let bg_rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+if (screenWidth >=  400){
+  svg.setAttribute("width", 400);
+  svg.setAttribute("height", 400);
+}
+else {
+  svg.setAttribute("width", screenWidth * (screenWidth/ 400));
+  svg.setAttribute("height", screenWidth * (screenWidth/ 400));
+}
+bg_rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
 bg_rect.setAttribute("width", "100%");
 bg_rect.setAttribute("height", "100%");
 bg_rect.setAttribute("fill", secondary_colour);
 svg.appendChild(bg_rect);
-let group = document.createElementNS("http://www.w3.org/2000/svg", "g");
-let container = document.createElementNS("http://www.w3.org/2000/svg", "g");
-svg.appendChild(container);
 
+
+cx = svg.getAttribute("width")/2;
+cy = svg.getAttribute("height")/2;
 
 
  
@@ -83,13 +93,13 @@ function draw_polygon(n, x,y, r, rot_deg){
 
   // Input all 12 vertices
   for (let i = 0; i< n; i++){
-    if (checkbox.checked === false) {
+    if (selectPadding.value !== 'padding') {
       x = Math.cos(deg * (i+1) ) * r;
       y = Math.sin(deg * (i+1)) * r;
       vertices.push([x,y]);
     }
 
-    else if (checkbox.checked === true) {
+    else if (selectPadding.value === 'padding') {
       x = Math.cos(deg * (i+1) ) * 0.92 * r;
       y = Math.sin(deg * (i+1)) * 0.92   * r;
       vertices.push([x,y]);
@@ -114,52 +124,29 @@ function draw_polygon(n, x,y, r, rot_deg){
 
     // Isen Circle
     isen_circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    isen_circle.setAttribute("cx", vertices[j][0] * 0.75);
-    isen_circle.setAttribute("cy", vertices[j][1] * 0.75);
-    isen_circle.setAttribute("r", r / 20);
+    isen_circle.setAttribute("cx", vertices[j][0] * 0.8);
+    isen_circle.setAttribute("cy", vertices[j][1] * 0.8);
+    isen_circle.setAttribute("r", r / 17.5);
     isen_circle.setAttribute("fill", secondary_colour);
-
     group.appendChild(kawung_part);
     group.appendChild(isen_circle);
 
 
-
-    // ctx.beginPath();
-    // ctx.moveTo(0, 0);
-    // ctx.quadraticCurveTo(new_x2, new_y2 , vertices[0][0], vertices[0][1]);
-    // ctx.quadraticCurveTo(new_x, new_y , 0, 0);
-    // ctx.stroke();
-    // ctx.fill();
-
-  // ctx.fillStyle = "#dac292";
-
-  // ctx.beginPath();
-  // ctx.moveTo(Math.cos(deg) * 0.3 * r,Math.sin(deg) * 0.3 * r);
-  // ctx.lineTo(Math.cos(deg) * 0.6 * r,Math.sin(deg) * 0.6 * r);
-  // ctx.stroke();
-
-  // ctx.beginPath();
-  // ctx.arc(Math.cos(deg) * 0.8 * r,Math.sin(deg) * 0.8 * r, 0.04 * r, 0, 2 * Math.PI);
-  // ctx.stroke();
-  // ctx.fill();
+    // isen_circle2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    // isen_circle2.setAttribute("cx", vertices[j][0] * 0.65);
+    // isen_circle2.setAttribute("cy", vertices[j][1] * 0.65);
+    // isen_circle2.setAttribute("r", r / 30);
+    // isen_circle2.setAttribute("fill", secondary_colour);
+    // group.appendChild(isen_circle2);
 
 
-  // ctx.beginPath();
-  // ctx.arc(Math.cos(deg) * 0.7 * r,Math.sin(deg) * 0.7 * r, 0.03 * r, 0, 2 * Math.PI);
-  // ctx.stroke();
-  // ctx.fill();
-
-
-
-
-
-  // ctx.rotate(2 * Math.PI / n);
   }
 }
 
 
 
-  function preset_dodecagon_hexagon_square(x,y,r) {
+function preset_dodecagon_hexagon_square(x,y,r) {
+  container = document.createElementNS("http://www.w3.org/2000/svg", "g");
   theta = 2 * Math.PI / 12;
   distance = Math.cos(Math.PI/12) * r;
   svg.appendChild(container);
@@ -187,175 +174,11 @@ function draw_polygon(n, x,y, r, rot_deg){
   draw_polygon(4, distance3 * Math.cos(Math.PI /3 - 7 * Math.PI / 3), distance3 * Math.sin(Math.PI /3 - 7 * Math.PI / 3), r_square, 45 );
   draw_polygon(4, distance3 * Math.cos(Math.PI /3 - 8 * Math.PI / 3), distance3 * Math.sin(Math.PI /3 - 8 * Math.PI / 3), r_square, 75 );
 
-  let isen_group = document.createElementNS("http://www.w3.org/2000/svg", "g");
-  tanahan_kawung = document.createElementNS("http://www.w3.org/2000/svg", "g");
-  tanahan_kawung.setAttribute("transform", "translate(0 -75) scale(0.3 0.3) rotate(45)");
-  tanahan_kawung.setAttribute("fill", main_colour);
-  rect1 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-  rect1.setAttribute("x", - r  * 22.5 / 70);
-  rect1.setAttribute("y", - r * 1.5 /70);
-  rect1.setAttribute("width", r * 15/ 70);
-  rect1.setAttribute("height", r * 4/ 70);
-  rect2 = rect1.cloneNode(true);
-  rect2.setAttribute("transform", "rotate(90)");
-  rect3 = rect1.cloneNode(true);
-  rect3.setAttribute("transform", "rotate(180)");
-  rect4 = rect1.cloneNode(true);
-  rect4.setAttribute("transform", "rotate(270)"); 
-  tanahan_kawung.appendChild(rect1);
-  tanahan_kawung.appendChild(rect2);
-  tanahan_kawung.appendChild(rect3);
-  tanahan_kawung.appendChild(rect4);
-  tanahan_kawung2 = document.createElementNS("http://www.w3.org/2000/svg", "g");
-  tanahan_kawung2.setAttribute("fill", main_colour);
-  tanahan_kawung2.setAttribute("transform", "translate(0 -75) scale(0.3 0.3)");
-  tnh_1 = document.createElementNS("http://www.w3.org/2000/svg", "path");
-  tnh_1.setAttribute("d", `M -${r*30/70} 0 Q -${r*20/70}  -${r*6/70}  -${r*10/70}  0 Q -${r*20/70}  ${r*6/70}  -${r*30/70}  0`);
-  tnh_2 = tnh_1.cloneNode(true);
-  tnh_2.setAttribute("transform", "rotate(90)");
-  tnh_3 = tnh_1.cloneNode(true);
-  tnh_3.setAttribute("transform", "rotate(180)");  
-  tnh_4 = document.createElementNS("http://www.w3.org/2000/svg", "path");
-  tnh_4.setAttribute("d", `M -${r*50/70} 0 Q -${r*25/70}  -${r*6/70}  -${r*10/70}  0 Q -${r*25/70}  ${r*6/70}  -${r*50/70}  0`);
-  tnh_4.setAttribute("transform", "rotate(270)");
-  tanahan_kawung2.appendChild(tnh_1);
-  tanahan_kawung2.appendChild(tnh_2);
-  tanahan_kawung2.appendChild(tnh_3);
-  tanahan_kawung2.appendChild(tnh_4);
-  isen_group.appendChild(tanahan_kawung);
-  isen_group.appendChild(tanahan_kawung2);
-  isen_group2 = isen_group.cloneNode(true);
-  isen_group2.setAttribute("transform", "rotate(30)")
-  isen_group3 = isen_group.cloneNode(true);
-  isen_group3.setAttribute("transform", "rotate(60)")
-  isen_group4 = isen_group.cloneNode(true);
-  isen_group4.setAttribute("transform", "rotate(90)")
-  isen_group5 = isen_group.cloneNode(true);
-  isen_group5.setAttribute("transform", "rotate(120)")
-  isen_group6 = isen_group.cloneNode(true);
-  isen_group6.setAttribute("transform", "rotate(150)")
-  isen_group7 = isen_group.cloneNode(true);
-  isen_group7.setAttribute("transform", "rotate(180)")
-  isen_group8 = isen_group.cloneNode(true);
-  isen_group8.setAttribute("transform", "rotate(210)")
-  isen_group9 = isen_group.cloneNode(true);
-  isen_group9.setAttribute("transform", "rotate(240)")
-  isen_group10 = isen_group.cloneNode(true);
-  isen_group10.setAttribute("transform", "rotate(270)")
-  isen_group11 = isen_group.cloneNode(true);
-  isen_group11.setAttribute("transform", "rotate(300)")
-  isen_group12 = isen_group.cloneNode(true);
-  isen_group12.setAttribute("transform", "rotate(330)")
-  container.appendChild(isen_group);
-  container.appendChild(isen_group2);
-  container.appendChild(isen_group3);
-  container.appendChild(isen_group4);
-  container.appendChild(isen_group5);
-  container.appendChild(isen_group6);
-  container.appendChild(isen_group7);
-  container.appendChild(isen_group8);
-  container.appendChild(isen_group9);
-  container.appendChild(isen_group10);
-  container.appendChild(isen_group11);
-  container.appendChild(isen_group12);
-
-  outer_isen_group = document.createElementNS("http://www.w3.org/2000/svg", "g");
-  tanahan_kawung = document.createElementNS("http://www.w3.org/2000/svg", "g");
-  tanahan_kawung.setAttribute("transform", `translate(${-distance3} ${-r_square * 0.7}) scale(0.22 0.22) rotate(45)`);
-  tanahan_kawung.setAttribute("fill", main_colour);
-  rect1 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-  rect1.setAttribute("x", - r  * 22.5 / 70);
-  rect1.setAttribute("y", - r * 1.5 /70);
-  rect1.setAttribute("width", r * 15/ 70);
-  rect1.setAttribute("height", r * 4/ 70);
-  rect2 = rect1.cloneNode(true);
-  rect2.setAttribute("transform", "rotate(90)");
-  rect3 = rect1.cloneNode(true);
-  rect3.setAttribute("transform", "rotate(180)");
-  rect4 = rect1.cloneNode(true);
-  rect4.setAttribute("transform", "rotate(270)"); 
-  tanahan_kawung.appendChild(rect1);
-  tanahan_kawung.appendChild(rect2);
-  tanahan_kawung.appendChild(rect3);
-  tanahan_kawung.appendChild(rect4);
-  tanahan_kawung2 = document.createElementNS("http://www.w3.org/2000/svg", "g");
-  tanahan_kawung2.setAttribute("fill", main_colour);
-  tanahan_kawung2.setAttribute("transform", `translate(${-distance3} ${-r_square * 0.7}) scale(0.3 0.3)`);
-  tnh_1 = document.createElementNS("http://www.w3.org/2000/svg", "path");
-  tnh_1.setAttribute("d", `M -${r*30/70} 0 Q -${r*20/70}  -${r*6/70}  -${r*10/70}  0 Q -${r*20/70}  ${r*6/70}  -${r*30/70}  0`);
-  tnh_2 = tnh_1.cloneNode(true);
-  tnh_2.setAttribute("d", `M -${r*40/70} 0 Q -${r*20/70}  -${r*6/70}  -${r*10/70}  0 Q -${r*20/70}  ${r*6/70}  -${r*40/70}  0`);
-  tnh_2.setAttribute("transform", "rotate(90)");
-  tnh_3 = tnh_1.cloneNode(true);
-  tnh_3.setAttribute("transform", "rotate(180)");  
-  tnh_4 = tnh_1.cloneNode(true);
-  tnh_4.setAttribute("transform", "rotate(270)");
-
-
-  tanahan_kawung2.appendChild(tnh_1);
-  tanahan_kawung2.appendChild(tnh_2);
-  tanahan_kawung2.appendChild(tnh_3);
-  tanahan_kawung2.appendChild(tnh_4);
-
-
-  outer_isen_group.appendChild(tanahan_kawung);
-  outer_isen_group.appendChild(tanahan_kawung2);
-
-  outer_isen_group2 = outer_isen_group.cloneNode(true);
-  outer_isen_group2.setAttribute("transform", "rotate(60)")
-  outer_isen_group3 = outer_isen_group.cloneNode(true);
-  outer_isen_group3.setAttribute("transform", "rotate(120)")
-  outer_isen_group4 = outer_isen_group.cloneNode(true);
-  outer_isen_group4.setAttribute("transform", "rotate(180)")
-  outer_isen_group5 = outer_isen_group.cloneNode(true);
-  outer_isen_group5.setAttribute("transform", "rotate(240)")
-  outer_isen_group6 = outer_isen_group.cloneNode(true);
-  outer_isen_group6.setAttribute("transform", "rotate(300)")
-  // container.appendChild(outer_isen_group);
-  // container.appendChild(outer_isen_group2);
-  // container.appendChild(outer_isen_group3);
-  // container.appendChild(outer_isen_group4);
-  // container.appendChild(outer_isen_group5);
-  // container.appendChild(outer_isen_group6);
-
-  tanahan_kawung_mirror = tanahan_kawung.cloneNode(true);
-  tanahan_kawung_mirror.setAttribute("transform", `translate(${-distance3} ${r_square * 0.7}) scale(0.22 0.22) rotate(45)`);
-  tanahan_kawung_mirror_2 = tanahan_kawung2.cloneNode(true);
-  tanahan_kawung_mirror_2.setAttribute("transform", `translate(${-distance3} ${r_square * 0.7}) scale(0.3 -0.3)`);
-
-  outer_isen_group_mirror = document.createElementNS("http://www.w3.org/2000/svg", "g");
-  outer_isen_group_mirror.appendChild(tanahan_kawung_mirror);
-  outer_isen_group_mirror.appendChild(tanahan_kawung_mirror_2);
-
-  outer_isen_group2_mirror = outer_isen_group_mirror.cloneNode(true);
-  outer_isen_group2_mirror.setAttribute("transform", "rotate(60)")
-  outer_isen_group3_mirror = outer_isen_group_mirror.cloneNode(true);
-  outer_isen_group3_mirror.setAttribute("transform", "rotate(120)")
-  outer_isen_group4_mirror = outer_isen_group_mirror.cloneNode(true);
-  outer_isen_group4_mirror.setAttribute("transform", "rotate(180)")
-  outer_isen_group5_mirror = outer_isen_group_mirror.cloneNode(true);
-  outer_isen_group5_mirror.setAttribute("transform", "rotate(240)")
-  outer_isen_group6_mirror = outer_isen_group_mirror.cloneNode(true);
-  outer_isen_group6_mirror.setAttribute("transform", "rotate(300)")
-  // container.appendChild(outer_isen_group_mirror);
-  // container.appendChild(outer_isen_group2_mirror);
-  // container.appendChild(outer_isen_group3_mirror);
-  // container.appendChild(outer_isen_group4_mirror);
-  // container.appendChild(outer_isen_group5_mirror);
-  // container.appendChild(outer_isen_group6_mirror);
-  // container.appendChild(outer_isen_group_mirror);
-
-
-
-
-
-
-
-
 }
 
 
 function preset_octagon_square(x,y, r){
+  container = document.createElementNS("http://www.w3.org/2000/svg", "g");
   theta = 2 * Math.PI / 8;
   distance = Math.sin(Math.PI/8 + Math.PI/4) * r;
   svg.appendChild(container);
@@ -378,6 +201,7 @@ function preset_octagon_square(x,y, r){
 
 
 function preset_dodecagon_triangle(x,y, r){
+  container = document.createElementNS("http://www.w3.org/2000/svg", "g");
   theta = 2 * Math.PI / 12;
   distance = Math.cos(Math.PI/12) * r;
   svg.appendChild(container);
@@ -404,7 +228,30 @@ function preset_dodecagon_triangle(x,y, r){
 }
 
 
+function dodecagon_triangle_unit(x,y, r){
+  container = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  theta = 2 * Math.PI / 12;
+  distance = Math.cos(Math.PI/12) * r;
+  svg.appendChild(container);
+  container.setAttribute("transform", `translate(${x}, ${y})`);
+
+  draw_polygon(12, 0, 0, r, 15);
+
+  dodecagon_side_length = getSideLength(12, r);
+  r_triangle   = getRadius(dodecagon_side_length, 3);
+  distance2 = r_triangle   * Math.sin(30 * 2 * Math.PI/360) + distance;
+  draw_polygon(3, 0, distance2, r_triangle, - 30 );
+  draw_polygon(3, distance2 * Math.cos(Math.PI /6), distance2 * Math.sin(Math.PI /6), r_triangle, 30 );
+  draw_polygon(3, distance2 * Math.cos(Math.PI /6 - Math.PI / 3), distance2 * Math.sin(Math.PI /6 - Math.PI/3), r_triangle, -30 );
+  draw_polygon(3, distance2 * Math.cos(Math.PI /6 - 2 * Math.PI / 3), distance2 * Math.sin(Math.PI /6 - 2 *Math.PI/3), r_triangle, 30 );
+  draw_polygon(3, distance2 * Math.cos(Math.PI /6 - 3 * Math.PI / 3), distance2 * Math.sin(Math.PI /6 - 3 *Math.PI/3), r_triangle, - 30 );
+  draw_polygon(3, distance2 * Math.cos(Math.PI /6 - 4 * Math.PI / 3), distance2 * Math.sin(Math.PI /6 - 4 *Math.PI/3), r_triangle,  30 );
+
+}
+
+
 function preset_hexagonal_multiple_triangle(x,y,r) {
+  container = document.createElementNS("http://www.w3.org/2000/svg", "g");
   theta = 2 * Math.PI / 6;
   svg.appendChild(container);
   container.setAttribute("transform", `translate(${x}, ${y})`);
@@ -441,6 +288,7 @@ function preset_hexagonal_multiple_triangle(x,y,r) {
 
 
 function preset_square_triangle(x,y,r){
+  container = document.createElementNS("http://www.w3.org/2000/svg", "g");
 
   svg.appendChild(container);
   container.setAttribute("transform", `translate(${x}, ${y})`);
@@ -474,6 +322,7 @@ function preset_square_triangle(x,y,r){
 
 
 function preset_square_triangle_complex(x,y,r){
+  container = document.createElementNS("http://www.w3.org/2000/svg", "g");
   svg.appendChild(container);
   container.setAttribute("transform", `translate(${x}, ${y})`);
 
@@ -505,6 +354,7 @@ function preset_square_triangle_complex(x,y,r){
 
 
 function preset_hexagon_square_triangle(x,y,r){
+  container = document.createElementNS("http://www.w3.org/2000/svg", "g");
   svg.appendChild(container);
   container.setAttribute("transform", `translate(${x}, ${y})`);
   draw_polygon(6, 0, 0, r, 30);
@@ -536,6 +386,7 @@ function preset_hexagon_square_triangle(x,y,r){
 
 
 function preset_hexagonal_triangle(x, y, r){
+  container = document.createElementNS("http://www.w3.org/2000/svg", "g");
   svg.appendChild(container);
   container.setAttribute("transform", `translate(${x}, ${y})`);
   draw_polygon(6, - 2 * r, 0, r, 0);
@@ -565,95 +416,338 @@ function preset_hexagonal_triangle(x, y, r){
 }
 
 
+function preset_hexagonal_triangle_unit(x, y, r){
+  container = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  svg.appendChild(container);
+  container.setAttribute("transform", `translate(${x}, ${y})`);
+  draw_polygon(6, 0, 0, r, 0 );
+
+  // calculate r for triangle 
+  hexagonal_side_length = getSideLength(6, r);
+  r_triangle = getRadius(hexagonal_side_length, 3);
+  distance = Math.abs(Math.sin(2 * Math.PI / 6) * r) + Math.abs(Math.sin(30 *  2 * Math.PI / 360) * r_triangle);
+  draw_polygon(3, 0, - distance, r_triangle, 30);
+  draw_polygon(3, distance * Math.cos(Math.PI/ 3 - Math.PI /2), distance * Math.sin(Math.PI /3 - Math.PI/2), r_triangle, - 30 );
+  draw_polygon(3, distance * Math.cos(2 * Math.PI/ 3 - Math.PI /2), distance * Math.sin(2 * Math.PI /3 - Math.PI/2), r_triangle, 30 );
+  draw_polygon(3, 0, distance, r_triangle, -30 );
+  draw_polygon(3, distance * Math.cos(4 * Math.PI/ 3 - Math.PI /2), distance * Math.sin(4 * Math.PI /3 - Math.PI/2), r_triangle, 30);
+  draw_polygon(3, distance * Math.cos(5 * Math.PI/ 3 - Math.PI /2), distance * Math.sin(5 * Math.PI /3 - Math.PI/2), r_triangle, - 30);
+}
+
+
+
 function reset(){
   svg.innerHTML = '';
   svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-  svg.setAttribute("width", "400");
-  svg.setAttribute("height", "400");
-  let main_colour = "rgb(235, 210, 140)";
-  let secondary_colour = "rgb(170, 130, 75)";
-  let bg_rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+  if (screenWidth >=  400){
+    svg.setAttribute("width", 400);
+    svg.setAttribute("height", 400);
+  }
+  else {
+    svg.setAttribute("width", screenWidth * (screenWidth/ 400));
+    svg.setAttribute("height", screenWidth * (screenWidth/ 400));
+  }
+  bg_rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
   bg_rect.setAttribute("width", "100%");
   bg_rect.setAttribute("height", "100%");
   bg_rect.setAttribute("fill", secondary_colour);
   svg.appendChild(bg_rect);
-  container = document.createElementNS("http://www.w3.org/2000/svg", "g");
-  svg.appendChild(container);
 }
 
 
 function redraw(selectedSet){
   reset();
-  if (selectedSet === 'DHS'){
-    preset_dodecagon_hexagon_square(200,200,80);
-  }
-  else if (selectedSet === 'OS'){
-    preset_octagon_square(200, 200, 55);
-  }
-
-  else if (selectedSet === 'DT'){
-    preset_dodecagon_triangle(200,200,55)
-  }
-
-  else if (selectedSet === 'HMT'){
-    preset_hexagonal_multiple_triangle(200,200,65)
-  }
-
-  else if (selectedSet === 'ST'){
-    preset_square_triangle(200,200, 60);
-  }
-
-  else if (selectedSet === 'STC'){
-    preset_square_triangle_complex(200,200,60);
-  }
-  else if (selectedSet === 'HST'){
-    preset_hexagon_square_triangle(200,200,65);
-  }
-  else if (selectedSet === 'HT'){
-    preset_hexagonal_triangle(200,200,50);
-  }
-
-}
-
-
-
-let btns = document.querySelectorAll('.btn');
-const checkbox = document.getElementById("myCheckbox");
-
-
-const onSetBtnClick = (e) => {
-  document.querySelector('.btn.is-selected').classList.remove('is-selected');
-
-  let btn =  e.target;
-
-  btn.classList.add('is-selected');
-  selectedSet = btn.getAttribute('data-set');
-
-  redraw(selectedSet);
-
-  
-
-
-}
-
-
-for (let btn of btns) {
-  btn.addEventListener('click', onSetBtnClick);
-}
-
-
-
-
-checkbox.addEventListener("click", function() {
-    if (this.checked) {
-      redraw(document.querySelector('.btn.is-selected').getAttribute('data-set'));
-    } else {
-      redraw(document.querySelector('.btn.is-selected').getAttribute('data-set'));
+  if (selectedSet === 'dodecagon_hexagon_square'){
+    if (selectMotive.value === 'single'){
+      preset_dodecagon_hexagon_square(cx,cy,80 * svg.getAttribute("width") / 400);
     }
-  });
+    else{
+      r =  80 * svg.getAttribute("width") / 400;
+      distance = Math.cos(Math.PI/12) * r;
+      dodecagon_side_length = getSideLength(12, r);
+      r_hexagon   = getRadius(dodecagon_side_length, 6);
+      distance2 = distance + Math.sin(2 * Math.PI / 6) * r_hexagon;
+      // Square
+      r_square   = getRadius(dodecagon_side_length, 4);
+      distance3 = distance + Math.cos(2 * Math.PI / 8) * r_square;
 
 
-redraw(document.querySelector('.btn.is-selected').getAttribute('data-set'));
+      preset_dodecagon_hexagon_square(cx,cy, r);
+      preset_dodecagon_hexagon_square(cx + distance3 * 2,cy, r);
+      preset_dodecagon_hexagon_square(cx - distance3 * 2,cy, r);
+
+
+      preset_dodecagon_hexagon_square(cx - distance3 * 1,cy - distance2  - Math.sin(2 * Math.PI / 6) * r_hexagon  - Math.cos(2 * Math.PI / 8) * r_square, r);
+      preset_dodecagon_hexagon_square(cx - distance3 * 1 + distance3 * 2,cy - distance2  - Math.sin(2 * Math.PI / 6) * r_hexagon  - Math.cos(2 * Math.PI / 8) * r_square, r);
+
+
+      preset_dodecagon_hexagon_square(cx - distance3 * 1,cy + distance2  + Math.sin(2 * Math.PI / 6) * r_hexagon  + Math.cos(2 * Math.PI / 8) * r_square, r);
+      preset_dodecagon_hexagon_square(cx - distance3 * 1 + distance3 * 2,cy + distance2  + Math.sin(2 * Math.PI / 6) * r_hexagon  + Math.cos(2 * Math.PI / 8) * r_square, r);
+
+      // preset_dodecagon_hexagon_square(cx,cy, r);
+    }
+    
+  }
+  else if (selectedSet === 'octagon_square'){
+    if (selectMotive.value === 'single'){
+      preset_octagon_square(cx, cy, 55 * svg.getAttribute("width") / 400);
+    }
+    else {
+      r = 55 * svg.getAttribute("width") / 400;
+      distance = Math.sin(Math.PI/8 + Math.PI/4) * r;
+
+      preset_octagon_square(cx - 4 * distance, cy, r);
+      preset_octagon_square(cx - 2 * distance, cy, r);
+      preset_octagon_square(cx, cy, r);
+      preset_octagon_square(cx + 2 * distance, cy, r);
+      preset_octagon_square(cx + 4 * distance, cy, r);
+
+      preset_octagon_square(cx - 4 * distance, cy - 2 * distance, r);
+      preset_octagon_square(cx - 2 * distance, cy - 2 * distance, r);
+      preset_octagon_square(cx, cy - 2 * distance, r);
+      preset_octagon_square(cx + 2 * distance, cy - 2 * distance, r);
+      preset_octagon_square(cx + 4 * distance, cy - 2 * distance, r);
+
+      preset_octagon_square(cx - 4 * distance, cy + 2 * distance, r);
+      preset_octagon_square(cx - 2 * distance, cy + 2 * distance, r);
+      preset_octagon_square(cx, cy + 2 * distance, r);
+      preset_octagon_square(cx + 2 * distance, cy + 2 * distance, r);
+      preset_octagon_square(cx + 4 * distance, cy + 2 * distance, r);
+
+    }
+  }
+  else if (selectedSet === 'dodecagon_triangle'){
+    if (selectMotive.value === 'single'){
+      preset_dodecagon_triangle(cx,cy,55 * svg.getAttribute("width") / 400);
+    }
+    // preset_dodecagon_triangle(cx,cy,55 * svg.getAttribute("width") / 400);
+    r = 55 * svg.getAttribute("width") / 400;
+    distance = Math.cos(Math.PI/12) * r;
+    dodecagon_side_length = getSideLength(12, r);
+    r_triangle   = getRadius(dodecagon_side_length, 3);
+    distance2 = r_triangle   * Math.sin(30 * 2 * Math.PI/360) + distance;
+
+    dodecagon_triangle_unit(cx - 4 * distance,cy, r);
+    dodecagon_triangle_unit(cx - 2 * distance,cy, r);
+    dodecagon_triangle_unit(cx,cy, r);
+    dodecagon_triangle_unit(cx + 2 * distance,cy, r);
+    dodecagon_triangle_unit(cx + 4 * distance,cy, r);
+
+    dodecagon_triangle_unit(cx + 4 * distance,cy + 2 * (distance + Math.sin(45 * 2 * Math.PI / 360) * r), r);
+    dodecagon_triangle_unit(cx + 2 * distance,cy + 2 * (distance + Math.sin(45 * 2 * Math.PI / 360) * r), r);
+    dodecagon_triangle_unit(cx,cy + 2 * (distance + Math.sin(45 * 2 * Math.PI / 360) * r), r);
+    dodecagon_triangle_unit(cx - 2 * distance,cy + 2 * (distance + Math.sin(45 * 2 * Math.PI / 360) * r), r);
+    dodecagon_triangle_unit(cx - 4 * distance,cy + 2 * (distance + Math.sin(45 * 2 * Math.PI / 360) * r), r);
+
+    dodecagon_triangle_unit(cx + 4 * distance,cy - 2 * (distance + Math.sin(45 * 2 * Math.PI / 360) * r), r);
+    dodecagon_triangle_unit(cx + 2 * distance,cy - 2 * (distance + Math.sin(45 * 2 * Math.PI / 360) * r), r);
+    dodecagon_triangle_unit(cx,cy - 2 * (distance + Math.sin(45 * 2 * Math.PI / 360) * r), r);
+    dodecagon_triangle_unit(cx - 2 * distance,cy - 2 * (distance + Math.sin(45 * 2 * Math.PI / 360) * r), r);
+    dodecagon_triangle_unit(cx - 4 * distance,cy - 2 * (distance + Math.sin(45 * 2 * Math.PI / 360) * r), r);
+
+
+
+    dodecagon_triangle_unit(cx - distance, cy - distance - Math.sin(45 * 2 * Math.PI / 360) * r, r );
+    dodecagon_triangle_unit(cx - distance - 2 * distance, cy - distance - Math.sin(45 * 2 * Math.PI / 360) * r, r );
+    dodecagon_triangle_unit(cx - distance + 2  * distance, cy - distance - Math.sin(45 * 2 * Math.PI / 360) * r, r );
+    dodecagon_triangle_unit(cx - distance + 4  * distance, cy - distance - Math.sin(45 * 2 * Math.PI / 360) * r, r );
+
+
+    dodecagon_triangle_unit(cx - distance, cy + distance + Math.sin(45 * 2 * Math.PI / 360) * r, r );
+    dodecagon_triangle_unit(cx - distance - 2 * distance, cy + distance + Math.sin(45 * 2 * Math.PI / 360) * r, r );
+    dodecagon_triangle_unit(cx - distance + 2  * distance, cy + distance + Math.sin(45 * 2 * Math.PI / 360) * r, r );
+    dodecagon_triangle_unit(cx - distance + 4  * distance, cy + distance + Math.sin(45 * 2 * Math.PI / 360) * r, r );
+
+  }
+  else if (selectedSet === 'hexagon_triangle_complex'){
+    r = 65 * svg.getAttribute("width") / 400;
+
+    if (selectMotive.value === 'single'){
+      preset_hexagonal_multiple_triangle(cx,cy, r);
+    }
+    else {
+      hexagonal_side_length = getSideLength(6, r);
+      r_triangle = getRadius(hexagonal_side_length, 3);
+      distance = Math.abs(Math.sin(2 * Math.PI / 6) * r) + Math.abs(Math.sin(30 *  2 * Math.PI / 360) * r_triangle);
+      preset_hexagonal_multiple_triangle(cx,cy, r);
+
+      triangle_side_length = getSideLength(3, r_triangle);
+      h = triangle_side_length * Math.sqrt(3) * 0.5;
+      preset_hexagonal_multiple_triangle(cx + 2.5 * triangle_side_length, cy + h, r);
+      preset_hexagonal_multiple_triangle(cx - 2.5 * triangle_side_length, cy + h, r);
+
+      preset_hexagonal_multiple_triangle(cx - 0.5 * triangle_side_length,cy - 3 *h, r);
+      preset_hexagonal_multiple_triangle(cx - 2.5 * triangle_side_length - 0.5 * triangle_side_length, cy + h - 3 * h, r);
+      preset_hexagonal_multiple_triangle(cx + 2.5 * triangle_side_length - 0.5 * triangle_side_length, cy + h - 3 * h, r);
+
+      preset_hexagonal_multiple_triangle(cx + 0.5 * triangle_side_length,cy + 3 * h, r);
+      preset_hexagonal_multiple_triangle(cx - 2.5 * triangle_side_length + 0.5 * triangle_side_length, cy + h + 3 *h , r);
+      preset_hexagonal_multiple_triangle(cx + 2.5 * triangle_side_length + 0.5 * triangle_side_length, cy + h + 3 * h, r);
+
+    }
+
+  }
+  else if (selectedSet === 'square_triangle'){
+    r = 60 * svg.getAttribute("width") / 400;
+    if (selectMotive.value === 'single'){
+      preset_square_triangle(cx,cy, r);
+    }
+    else {
+      square_side_length = getSideLength(4, r);
+      r_triangle   = getRadius(square_side_length, 3);
+      distance =  Math.sin(Math.PI/4) * r + Math.sin(Math.PI /6) * r_triangle;
+      h = square_side_length * Math.sqrt(3) * 0.5
+
+
+      preset_square_triangle(cx,cy, r);
+      preset_square_triangle(cx - square_side_length,cy, r);
+      preset_square_triangle(cx - 2 * square_side_length,cy, r);
+      preset_square_triangle(cx + square_side_length,cy, r);
+      preset_square_triangle(cx + 2 * square_side_length,cy, r);
+
+      preset_square_triangle(cx - 0.5 * square_side_length,cy - h - square_side_length, r);
+      preset_square_triangle(cx - 0.5 * square_side_length - square_side_length,cy - h - square_side_length, r);
+      preset_square_triangle(cx - 0.5 * square_side_length + square_side_length,cy - h - square_side_length, r);
+      preset_square_triangle(cx - 0.5 * square_side_length + 2 * square_side_length,cy - h - square_side_length, r);
+
+      preset_square_triangle(cx - 0.5 * square_side_length,cy + h + square_side_length, r);
+      preset_square_triangle(cx - 0.5 * square_side_length - square_side_length,cy + h + square_side_length, r);
+      preset_square_triangle(cx - 0.5 * square_side_length + square_side_length,cy + h + square_side_length, r);
+      preset_square_triangle(cx - 0.5 * square_side_length + 2 * square_side_length,cy + h + square_side_length, r);
+
+    }
+  }
+  else if (selectedSet === 'square_triangle_complex'){
+    r = 60 * svg.getAttribute("width") / 400;
+    if (selectMotive.value === 'single'){
+      preset_square_triangle_complex(cx,cy, r);
+    }
+    else {
+        square_side_length = getSideLength(4, r);
+        r_triangle   = getRadius(square_side_length, 3);
+        distance =  Math.sin(Math.PI/4) * r + Math.sin(Math.PI /6) * r_triangle;
+        h = square_side_length * Math.sqrt(3) * 0.5;
+        preset_square_triangle_complex(cx,cy, r);
+        preset_square_triangle_complex(cx + square_side_length + h,cy + 0.5 * square_side_length, r);
+        preset_square_triangle_complex(cx - square_side_length - h,cy - 0.5 * square_side_length, r);
+
+        preset_square_triangle_complex(cx +  0.5 * square_side_length,cy - square_side_length - h, r);
+        preset_square_triangle_complex(cx +  0.5 * square_side_length + square_side_length + h,cy - square_side_length - h + 0.5 * square_side_length, r);
+        preset_square_triangle_complex(cx +  0.5 * square_side_length - square_side_length - h,cy - square_side_length - h - 0.5 * square_side_length, r);
+
+
+        preset_square_triangle_complex(cx -  0.5 * square_side_length,cy + square_side_length + h, r);
+        preset_square_triangle_complex(cx -  0.5 * square_side_length + square_side_length + h,cy + square_side_length + h + 0.5 * square_side_length, r);
+        preset_square_triangle_complex(cx -  0.5 * square_side_length - square_side_length - h,cy + square_side_length + h - 0.5 * square_side_length, r);
+
+    }
+  }
+  else if (selectedSet === 'hexagon_square_triangle'){
+    r = 65 * svg.getAttribute("width") / 400;
+    if (selectMotive.value === 'single'){
+      preset_hexagon_square_triangle(cx,cy, r);
+    }
+    else {  
+      hexagon_side_length = getSideLength(6, r);
+      r_square   = getRadius(hexagon_side_length, 4);
+      distance =  Math.cos(Math.PI/6) * r + Math.cos(Math.PI /4) * r_square ;
+      square_side_length = getSideLength(4, r_square);
+      r_triangle     = getRadius(square_side_length, 3);
+
+
+      h = square_side_length * Math.sqrt(3) * 0.5 ;
+
+
+
+      preset_hexagon_square_triangle(cx,cy, r);
+      preset_hexagon_square_triangle(cx + 2 * distance,cy, r);
+      preset_hexagon_square_triangle(cx - 2 * distance,cy, r);
+
+      preset_hexagon_square_triangle(cx - distance,cy - 0.5 * square_side_length - h - r , r);
+      preset_hexagon_square_triangle(cx - distance + 2 * distance,cy - 0.5 * square_side_length - h - r , r);
+
+      preset_hexagon_square_triangle(cx - distance,cy + 0.5 * square_side_length + h + r , r);
+      preset_hexagon_square_triangle(cx - distance + 2 * distance,cy + 0.5 * square_side_length + h + r , r);
+
+
+    }
+  }
+  else if (selectedSet === 'hexagon_triangle'){
+    r = 50 * svg.getAttribute("width") / 400; 
+    if (selectMotive.value === 'single'){
+      preset_hexagonal_triangle(cx,cy, r);
+    }
+    else {
+      preset_hexagonal_triangle_unit(cx, cy, r);
+      preset_hexagonal_triangle_unit(cx - 2 * r, cy, r);
+      preset_hexagonal_triangle_unit(cx - 4 * r, cy, r);
+      preset_hexagonal_triangle_unit(cx + 2 * r, cy, r);
+      preset_hexagonal_triangle_unit(cx + 4 * r, cy, r);
+
+
+
+      hexagonal_side_length = getSideLength(6, r);
+      r_triangle = getRadius(hexagonal_side_length, 3);
+      distance = Math.abs(Math.sin(2 * Math.PI / 6) * r) + Math.abs(Math.sin(30 *  2 * Math.PI / 360) * r_triangle);
+
+      h = hexagonal_side_length * Math.sqrt(3) * 0.5 + Math.abs(Math.sin(2 * Math.PI / 6) * r) ;
+
+      preset_hexagonal_triangle_unit(cx -r , cy - h, r);
+      preset_hexagonal_triangle_unit(cx -r - 2 * r, cy - h, r);
+      preset_hexagonal_triangle_unit(cx -r + 2 * r, cy - h, r);
+      preset_hexagonal_triangle_unit(cx -r + 4 * r, cy - h, r);
+
+      preset_hexagonal_triangle_unit(cx -r , cy + h, r);
+      preset_hexagonal_triangle_unit(cx -r - 2 * r, cy + h, r);
+      preset_hexagonal_triangle_unit(cx -r + 2 * r, cy + h, r);
+      preset_hexagonal_triangle_unit(cx -r + 4 * r, cy + h, r);
+
+
+      preset_hexagonal_triangle_unit(cx, cy + 2 * h, r);
+      preset_hexagonal_triangle_unit(cx - 2 * r, cy + 2 * h, r);
+      preset_hexagonal_triangle_unit(cx - 4 * r, cy + 2 * h, r);
+      preset_hexagonal_triangle_unit(cx + 2 * r, cy + 2 * h, r);
+      preset_hexagonal_triangle_unit(cx + 4 * r, cy + 2 * h, r);
+
+      preset_hexagonal_triangle_unit(cx, cy - 2 * h, r);
+      preset_hexagonal_triangle_unit(cx - 2 * r, cy - 2 * h, r);
+      preset_hexagonal_triangle_unit(cx - 4 * r, cy - 2 * h, r);
+      preset_hexagonal_triangle_unit(cx + 2 * r, cy - 2 * h, r);
+      preset_hexagonal_triangle_unit(cx + 4 * r, cy - 2 * h, r);
+    }
+  }
+
+}
+
+
+const selectPadding = document.getElementById('paddings');
+// Add an event listener to the select input
+selectPadding.addEventListener('change', function() {
+    redraw(selectBox.value);
+});
+
+
+const selectBox = document.getElementById('tesselation_type');
+  // Add an event listener to the select input
+  selectBox.addEventListener('change', function() {
+  // Retrieve the selected value
+  const selectedValue = selectBox.value;
+  // Display the selected value
+  redraw(selectBox.value);
+});
+
+
+const selectMotive = document.getElementById('motives');
+  // Add an event listener to the select input
+  selectMotive.addEventListener('change', function() {
+  // Retrieve the selected value
+  const selectedMotiveValue = selectMotive.value;
+  // Display the selected value
+  redraw(selectBox.value);
+});
+
+
+redraw(selectBox.value);
 
 
 
