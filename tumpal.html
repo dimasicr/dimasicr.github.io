@@ -1,91 +1,238 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Karsadera </title>
-    <link rel="icon" href="logo.ico" type="image/x-icon">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="main.css">
-</head>
-<body>
-    <div class="container">
-        <!-- Toggle button for small screens -->
-        <div class="toggle-button" id="toggleButton">&#9776; <span> Karsadera </span> </div>
-        <!-- Side Navigation Bar -->
-        <div class="sidenav" id="sidenav">
-            <h2>Gallery</h2>
-            <ul class="nav-links">
-                <li><a href="index.html">Apollonian Kawung</a></li>
-                <li><a href="fibonacci.html">Fibonacci Kawung</a></li>
-                <li><a href="poincare.html">Poincare Kawung</a></li>
-                <li><a href="tumpal.html">Sierpinski Tumpal</a></li>
-                <li><a href="semiregular.html">Tesselation of Kawung </a></li>
-                <li><a href="buketan.html">Tesselation of Buketan </a></li>
-            </ul>
-        </div>
+// Create the SVG document
+const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+const screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+// const main_colour = "rgb(235, 210, 140)";
+// const secondary_colour = "rgb(170, 130, 75)";
+const main_colour = '#F7F0F5';
+const secondary_colour =  '#333';
 
-        <!-- Main Content Area -->
-        <div class="main-content">
-            <h1>Sierpinski Tumpal</h1>
-            <div id="svg-container"></div>
-            <p> Hexagonal Tesselation of Tumpal Triangle </p>
-
-            <select name="Tesselation" id="motives" class="btns" >
-              <option value="single">Single</option>
-              <option value="tesselation"  selected>Tesselation</option>
-            </select>
-
-            <select name="Paddings" id="paddings" class="btns" >
-              <option value="no_padding" selected >No Padding</option>
-              <option value="padding">Padding</option>
-            </select>
+svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+if (screenWidth >=  400){
+  svg.setAttribute("width", 400);
+  svg.setAttribute("height", 400);
+}
+else {
+  svg.setAttribute("width", screenWidth * (screenWidth/ 400));
+  svg.setAttribute("height", screenWidth * (screenWidth/ 400));
+}
+bg_rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+bg_rect.setAttribute("width", "100%");
+bg_rect.setAttribute("height", "100%");
+bg_rect.setAttribute("fill", secondary_colour);
+svg.appendChild(bg_rect);
 
 
+function height(side_length){
+  return side_length * Math.sqrt(3) * 0.5;
+}
 
-            <button id="download-btn"> <i class="fa fa-download"></i>  Download SVG </span> </button>
-        </div>
-    </div>
-    <script src="tumpal.js"></script>
-    <script>
-    // JavaScript to toggle the side navigation bar
-    document.getElementById('toggleButton').addEventListener('click', function() {
-            const sidenav = document.getElementById('sidenav');
-            const container = document.querySelector('.container');
-            container.classList.toggle('show-nav');
-    });
-    // Retrieve the SVG container element
-    const svgContainer = document.getElementById("svg-container");
+function draw_triangle(g, x, y, rot_deg, w, padding=false) {
+  h = height(w);
 
-    // Append the SVG document to the container
-    svgContainer.appendChild(svg);
+  group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  group.setAttribute("transform", `translate(${x}, ${y}) rotate(${rot_deg})`);
+  group.setAttribute("fill", main_colour);
 
-    // Attach click event listener to the download button
-    const downloadBtn = document.getElementById("download-btn");
-    downloadBtn.addEventListener("click", () => {
-      // Convert the SVG document to a string
-      const svgString = new XMLSerializer().serializeToString(svg);
+  tumpal_outline = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  tumpal_outline.setAttribute("d", `M ${w/2} 0 L 0 ${-h} ${-w/2} 0 Z`);
+  tumpal_outline.setAttribute("stroke", main_colour);
+  tumpal_outline.setAttribute("fill", "none");
 
-      // Create a Blob with the SVG string
-      const blob = new Blob([svgString], { type: "image/svg+xml" });
+  if (selectPadding.value  !== "padding"){
+  //Draw Tumpal
+    tumpal_1 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    tumpal_1.setAttribute("d", `M0 0 C${0.158*w} 0 ${0.158*w} ${-0.211*w} ${0.316*w} ${-0.211*w} A${0.105*w} ${0.105*w} 0 0 1 ${0.316*w} 0 A${0.052*w} ${0.052*w} 0 0 1 ${0.316*w} ${-0.105*w} C${0.211*w} ${-0.105 *w}  ${0.211*w} 0 ${0.105 *w}  0 Z`);
+    tumpal_2 = tumpal_1.cloneNode(true);
+    tumpal_2.setAttribute("transform", `scale(-1,1)`);
+    tumpal_3 = tumpal_1.cloneNode(true);
+    tumpal_3.setAttribute("transform", `rotate(-90)`);
+    tumpal_4 = tumpal_1.cloneNode(true);
+    tumpal_4.setAttribute("transform", `scale(-1,1) rotate(-90)`);
+    tumpal_5 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    tumpal_5.setAttribute("d", `M ${0.079*w} ${-0.079*w} A${0.039*w} ${0.039*w} 0 0 0 0 ${-0.079*w} A${0.079*w} ${0.079*w} 0 0 0 ${0.158*w} ${-0.079*w} C${0.158*w} ${-0.261*w} 0 ${-0.261*w}  0 ${-0.444*w} L0 ${-0.395*w} C0 ${-0.246 * w} ${0.079*w} ${-0.246 * w}  ${0.079*w} ${-0.079*w}`);
+    tumpal_5.setAttribute("transform", `translate(0, ${-0.422*w})`);
+    tumpal_6 = tumpal_5.cloneNode(true);
+    tumpal_6.setAttribute("transform", `scale(-1,1) translate(0, ${-0.422*w})`);
+  }
 
-      // Create a download URL for the Blob
-      const downloadURL = URL.createObjectURL(blob);
+  else {
+    tumpal_1 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    tumpal_1.setAttribute("d", `M ${0.013*w} ${-0.013*w} C${0.158*w} 0 ${0.158*w} ${-0.197*w} ${0.316*w} ${-0.197*w} A${0.092*w} ${0.092*w} 0 0 1 ${0.316*w} ${-0.013*w} A${0.046*w} ${0.046*w} 0 0 1 ${0.316*w} ${-0.105*w} C${0.211*w} ${-0.105*w}  ${0.211*w} ${-0.013*w} ${0.105*w}  ${-0.013*w} Z`);
+    tumpal_2 = tumpal_1.cloneNode(true);
+    tumpal_2.setAttribute("transform", `scale(-1,1)`);
+    tumpal_3 = tumpal_1.cloneNode(true);
+    tumpal_3.setAttribute("transform", `rotate(-90)`);
+    tumpal_4 = tumpal_1.cloneNode(true);
+    tumpal_4.setAttribute("transform", `scale(-1,1) rotate(-90)`);    
 
-      // Create a temporary link element
-      const link = document.createElement("a");
-      link.href = downloadURL;
-      link.download = "example.svg";
+    // d="M 30 -30 A14 14 0 0 0 2 -30 A28 28 0 0 0 58 -30 C60 -99.2075 0 -99.2075  2 -166.415 L2 -150 C0 -93.20 30 -93.20  30 -30"
+    tumpal_5 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    tumpal_5.setAttribute("d", `M ${0.079*w} ${-0.079*w} A${0.037*w} ${0.037*w} 0 0 0 ${0.005*w} ${-0.079*w} A${0.074*w} ${0.074*w} 0 0 0 ${0.153*w} ${-0.079*w} C${0.158*w} ${-0.261*w} 0 ${-0.261*w}  ${0.005*w} ${-0.439*w} L${0.005*w} ${-0.395*w} C0 ${-0.246*w} ${0.079*w} ${-0.246*w}  ${0.079*w} ${-0.079*w}`);
+    tumpal_5.setAttribute("transform", `translate(0, ${-0.422*w})`);
+    tumpal_6 = tumpal_5.cloneNode(true);
+    tumpal_6.setAttribute("transform", `scale(-1,1) translate(0, ${-0.422*w})`);
+  }
 
-      // Programmatically click the link to trigger the download
-      link.click();
+  // group.appendChild(tumpal_outline);
+  group.appendChild(tumpal_1);
+  group.appendChild(tumpal_2);
+  group.appendChild(tumpal_3);
+  group.appendChild(tumpal_4);
+  group.appendChild(tumpal_5);
+  group.appendChild(tumpal_6);
+  g.appendChild(group);
+}
 
-      // Clean up by revoking the URL
-      URL.revokeObjectURL(downloadURL);
-    });
-  </script> 
-</body>
-</html>
+
+
+// g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+// g.setAttribute("transform", `translate(${200}, ${200 + height(150)}) rotate(${0})`)
+// draw_triangle(g,0, 0, 0, 150, false);
+// container.appendChild(g);
+
+
+cX = 200;
+cY = 200;
+l = 200;
+
+
+function reset(){
+  svg.innerHTML = '';
+  let bg_rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+  bg_rect.setAttribute("width", "100%");
+  bg_rect.setAttribute("height", "100%");
+  bg_rect.setAttribute("fill", secondary_colour);
+  svg.appendChild(bg_rect);
+  group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  container = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  svg.appendChild(container);
+}
+
+
+function redraw(motive = 'tesselation'){
+  reset();
+
+
+  w = svg.getAttribute("width")/4;
+  h = height(w);
+  cx = svg.getAttribute("width")/2;
+  cy = svg.getAttribute("height")/2;
+
+  if (motive === 'tesselation'){
+    for (let i=0; i<6; i++){
+      g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      g.setAttribute("transform", `translate(${cx}, ${cy - h}) rotate(${i*60} 0 ${h}) scale(1,-1)`);
+      draw_triangle(g,  0, 0, 0, w, padding=false);
+      container.appendChild(g);
+  
+      g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      g.setAttribute("transform", `translate(${cx}, ${cy - h - 2 *h}) rotate(${i*60} 0 ${h}) scale(1,-1)`);
+      draw_triangle(g,  0, 0, 0, w, padding=false);
+      container.appendChild(g);
+  
+      g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      g.setAttribute("transform", `translate(${cx}, ${cy - h + 2 *h}) rotate(${i*60} 0 ${h}) scale(1,-1)`);
+      draw_triangle(g,  0, 0, 0, w, padding=false);
+      container.appendChild(g);
+  
+  
+      // Right
+  
+      g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      g.setAttribute("transform", `translate(${cx + 1.5 * w}, ${cy - h + 1 *h}) rotate(${i*60} 0 ${h}) scale(1,-1)`);
+      draw_triangle(g,  0, 0, 0, w, padding=false);
+      container.appendChild(g);
+  
+      g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      g.setAttribute("transform", `translate(${cx + 1.5 * w}, ${cy - h + 1 *h - 2 * h}) rotate(${i*60} 0 ${h}) scale(1,-1)`);
+      draw_triangle(g,  0, 0, 0, w, padding=false);
+      container.appendChild(g);
+  
+      g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      g.setAttribute("transform", `translate(${cx + 1.5 * w}, ${cy - h + 1 *h - 4 * h}) rotate(${i*60} 0 ${h}) scale(1,-1)`);
+      draw_triangle(g,  0, 0, 0, w, padding=false);
+      container.appendChild(g);
+  
+      g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      g.setAttribute("transform", `translate(${cx + 1.5 * w}, ${cy - h + 1 *h + 2 * h}) rotate(${i*60} 0 ${h}) scale(1,-1)`);
+      draw_triangle(g,  0, 0, 0, w, padding=false);
+      container.appendChild(g);
+  
+      // Left
+  
+      g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      g.setAttribute("transform", `translate(${cx - 1.5 * w}, ${cy - h + 1 *h}) rotate(${i*60} 0 ${h}) scale(1,-1)`);
+      draw_triangle(g,  0, 0, 0, w, padding=false);
+      container.appendChild(g);
+  
+      g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      g.setAttribute("transform", `translate(${cx - 1.5 * w}, ${cy - h + 1 *h - 2 * h}) rotate(${i*60} 0 ${h}) scale(1,-1)`);
+      draw_triangle(g,  0, 0, 0, w, padding=false);
+      container.appendChild(g);
+  
+      g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      g.setAttribute("transform", `translate(${cx - 1.5 * w}, ${cy - h + 1 *h - 4 * h}) rotate(${i*60} 0 ${h}) scale(1,-1)`);
+      draw_triangle(g,  0, 0, 0, w, padding=false);
+      container.appendChild(g);
+  
+      g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      g.setAttribute("transform", `translate(${cx - 1.5 * w}, ${cy - h + 1 *h + 2 * h}) rotate(${i*60} 0 ${h}) scale(1,-1)`);
+      draw_triangle(g,  0, 0, 0, w, padding=false);
+      container.appendChild(g);
+  
+    }
+  }
+
+  else {
+    for (let i=0; i<6; i++){
+      g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      g.setAttribute("transform", `translate(${cx}, ${cy - h}) rotate(${i*60} 0 ${h}) scale(1,-1)`);
+      draw_triangle(g,  0, 0, 0, w, padding=false);
+      container.appendChild(g);  
+    }
+
+    g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    g.setAttribute("transform", `translate(${cx}, ${cy - h - 2 * h}) rotate(${180} 0 ${h}) scale(1,-1)`);
+    draw_triangle(g,  0, 0, 0, w, padding=false);
+    container.appendChild(g);  
+
+    g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    g.setAttribute("transform", `translate(${cx - 1.5 * w}, ${cy - h - 2 * h  + 1 * h + 2 * h}) rotate(${60} 0 ${h}) scale(1,-1)`);
+    draw_triangle(g,  0, 0, 0, w, padding=false);
+    container.appendChild(g);  
+
+    g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    g.setAttribute("transform", `translate(${cx + 1.5 * w}, ${cy - h - 2 * h  + 1 * h + 2 * h}) rotate(${300} 0 ${h}) scale(1,-1)`);
+    draw_triangle(g,  0, 0, 0, w, padding=false);
+    container.appendChild(g);  
+
+
+
+
+  }
+
+
+
+}
+
+
+const selectPadding = document.getElementById('paddings');
+// Add an event listener to the select input
+selectPadding.addEventListener('change', function() {
+    redraw(selectBox.value);
+});
+
+
+const selectBox = document.getElementById('motives');
+  // Add an event listener to the select input
+  selectBox.addEventListener('change', function() {
+  // Retrieve the selected value
+  const selectedValue = selectBox.value;
+          
+  // Display the selected value
+  redraw(selectedValue);
+});
+
+  redraw();
+
+
