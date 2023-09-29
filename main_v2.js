@@ -1,8 +1,11 @@
 // Create the SVG document
 const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 const screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-const main_colour = "rgb(235, 210, 140)";
-const secondary_colour = "rgb(170, 130, 75)";
+// const main_colour = "rgb(235, 210, 140)";
+// const secondary_colour = "rgb(170, 130, 75)";
+const main_colour = '#F7F0F5';
+const secondary_colour =  '#333';
+const tertiary_colour = main_colour;
 
 svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
 if (screenWidth >=  400){
@@ -229,7 +232,7 @@ if (r < 130) {
     // Create Kawung Isen
     let tanahan_kawung = document.createElementNS("http://www.w3.org/2000/svg", "g");
     tanahan_kawung.setAttribute("transform", "rotate(45)");
-    tanahan_kawung.setAttribute("fill", main_colour);
+    tanahan_kawung.setAttribute("fill", tertiary_colour);
     
     let rect1 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
     rect1.setAttribute("x", - r  * 22.5 / 70);
@@ -265,7 +268,7 @@ if (r < 130) {
     
     
     let tanahan_kawung2 = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    tanahan_kawung2.setAttribute("fill", main_colour);
+    tanahan_kawung2.setAttribute("fill", tertiary_colour);
     
     let tnh_1 = document.createElementNS("http://www.w3.org/2000/svg", "path");
     tnh_1.setAttribute("d", `M -${r*30/70} 0 Q -${r*20/70}  -${r*6/70}  -${r*10/70}  0 Q -${r*20/70}  ${r*6/70}  -${r*30/70}  0`);
