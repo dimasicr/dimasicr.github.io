@@ -320,7 +320,7 @@ outline_path = doit(svg.getAttribute("width"), 8, 3,12, 2000);
 
 graph = createAdjacencyList(es_new);
 
-for (let i = 0; i < es_new.length; i++){
+for (let i = 0; i < es_new.length; i += 3){
   vertex = es_new[i][0];
   findCyclicPath(graph, vertex, vertex, 0, []);
 }
