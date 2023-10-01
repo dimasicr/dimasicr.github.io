@@ -311,7 +311,7 @@ function drawKawung(Points){
 }
 
 
-outline_path = doit(svg.getAttribute("width"), 8, 3,12, 2000);
+outline_path = doit(svg.getAttribute("width"), 8, 3,10, 2000);
 // outline = document.createElementNS("http://www.w3.org/2000/svg", "path");
 // outline.setAttribute("d", outline_path);
 // outline.setAttribute("stroke", main_colour);
