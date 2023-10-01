@@ -5,8 +5,6 @@ const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 const screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 const main_colour = '#F7F0F5';
 const secondary_colour =  '#333';
-const es = [];
-const es_new = [];
 
 
 // Resize screen accordingly
@@ -28,7 +26,7 @@ svg.appendChild(bg_rect);
 
 
 function createAdjacencyList(edges) {
-  const adjacencyList = new Map();
+  adjacencyList = new Map();
 
   for (const [u, v] of edges) {
     // If the vertex u is not in the adjacency list, add it with an empty array
@@ -111,6 +109,8 @@ function createAdjacencyList(edges) {
  const doit = (svgsize,p,q,steps,maxverts) => {
   const curvature = Math.sign(4-(p-2)*(q-2));  // -1:hyperbolic, 0:planar, 1:spherical
   const Dist = (a,b) => ChordDistance(a,b, curvature);
+  es_new = [];
+  es = [];
 
   const euclidean_first_edge_length = curvature===0 ? 1 :
     Math.sqrt(Math.abs((Math.sin(Math.PI/q)/Math.cos(Math.PI/p))**2 - 1))
@@ -180,7 +180,7 @@ function createAdjacencyList(edges) {
     }
 
     if (!objectExists) {
-    	// drawText(x0,y0, String(x0.toFixed(1)) + '_' +  String(y0.toFixed(1)));
+      // drawText(x0,y0, String(x0.toFixed(1)) + '_' +  String(y0.toFixed(1)));
       // points.push(p);
       // sentencepoints += `<text x= "${p.x}" y="${p.y}" font-size="24"> (${p.x}, ${p.y}) </text>`
     }
@@ -194,22 +194,22 @@ function createAdjacencyList(edges) {
       svg_html += 'M'+Math.round(x0)+','+Math.round(y0)+'A'+r.toFixed(2)+','+r.toFixed(2)+',0,0,'+(r<0?1:0)+','+Math.round(x1)+','+Math.round(y1);
     }
   }
-  return svg_html;
+  return es_new;
  }; // doit
 
  // IMPLEMENTATION ENDS HERE
  // ========================
 
 
-function findCyclicPath(adjacencyList, startVertex, currentVertex, steps, path) {
-  if (steps >= 8 && currentVertex === startVertex) {
+function findCyclicPath(adjacencyList, startVertex, currentVertex, steps, path, polygon) {
+  if (steps >= polygon && currentVertex === startVertex) {
     // console.log('Cyclic path found:', path.concat(currentVertex));
     console.log('Cyclic path found:', path);
     drawKawung(path);
     return path; // Indicate that a cyclic path was found
   }
 
-  if (steps > 8) {
+  if (steps > polygon) {
     return false; // Indicate that no cyclic path was found
   }
 
@@ -217,7 +217,7 @@ function findCyclicPath(adjacencyList, startVertex, currentVertex, steps, path) 
 
   for (const neighbor of neighbors) {
     if (!path.includes(neighbor) || neighbor === startVertex) {
-      const foundCyclicPath = findCyclicPath(adjacencyList, startVertex, neighbor, steps + 1, [...path, currentVertex]);
+      const foundCyclicPath = findCyclicPath(adjacencyList, startVertex, neighbor, steps + 1, [...path, currentVertex], polygon);
       if (foundCyclicPath) {
         return path; // Propagate the result if a cyclic path was found in the subtree
       }
@@ -228,60 +228,60 @@ function findCyclicPath(adjacencyList, startVertex, currentVertex, steps, path) 
 }
 
 function drawText(x,y, text){
-	textElement = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-	textElement.setAttribute('x', x); // X-coordinate of the text
-	textElement.setAttribute('y', y); // Y-coordinate of the text
-	textElement.setAttribute('font-size', '6'); // Font size
-	textElement.setAttribute('fill', main_colour); // Fill color
-	textElement.textContent = text; // Text content
-	svg.appendChild(textElement);
+  textElement = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  textElement.setAttribute('x', x); // X-coordinate of the text
+  textElement.setAttribute('y', y); // Y-coordinate of the text
+  textElement.setAttribute('font-size', '6'); // Font size
+  textElement.setAttribute('fill', main_colour); // Fill color
+  textElement.textContent = text; // Text content
+  svg.appendChild(textElement);
 }
 
 function midpoint(x1, x2){
   return (x1+x2) /2 ;
 }
 
-function drawKawung(Points){	
-	xc = 0;
-	yc = 0;
-	for (let i=0; i < Points.length; i++){
-		parts = Points[i].split("_");
-		numbers = parts.map(part => parseFloat(part));
-		xc += numbers[0];
-		yc += numbers[1];
-	}
-	xc = xc / Points.length;
-	yc = yc / Points.length;
+function drawKawung(Points){  
+  xc = 0;
+  yc = 0;
+  for (let i=0; i < Points.length; i++){
+    parts = Points[i].split("_");
+    numbers = parts.map(part => parseFloat(part));
+    xc += numbers[0];
+    yc += numbers[1];
+  }
+  xc = xc / Points.length;
+  yc = yc / Points.length;
 
-	for (let i=0; i < Points.length ; i++){
-	parts = Points[i].split("_");
-	numbers = parts.map(part => parseFloat(part));
-	parts0 = Points[0].split("_");
-	numbers0 = parts0.map(part => parseFloat(part));
+  for (let i=0; i < Points.length ; i++){
+  parts = Points[i].split("_");
+  numbers = parts.map(part => parseFloat(part));
+  parts0 = Points[0].split("_");
+  numbers0 = parts0.map(part => parseFloat(part));
 
-	if (i < Points.length -1) {
+  if (i < Points.length -1) {
       parts2 = Points[i+1].split("_");
       numbers2 = parts2.map(part => parseFloat(part));
-    	new_x = midpoint(numbers[0],numbers2[0]);
-    	new_y = midpoint(numbers[1], numbers2[1]);
-	}
-	else {
-	    new_x = midpoint(numbers[0],numbers0[0]);
-    	new_y = midpoint(numbers[1], numbers0[1]);		
-	}
+      new_x = midpoint(numbers[0],numbers2[0]);
+      new_y = midpoint(numbers[1], numbers2[1]);
+  }
+  else {
+      new_x = midpoint(numbers[0],numbers0[0]);
+      new_y = midpoint(numbers[1], numbers0[1]);    
+  }
 
-	if (i === 0){
+  if (i === 0){
       partslast = Points[Points.length -1].split("_");
   numberslast = partslast.map(part => parseFloat(part));
-		new_x2 = midpoint(numbers[0],numberslast[0]);
-    	new_y2 = midpoint(numbers[1], numberslast[1]);	
-	}
-	else {
+    new_x2 = midpoint(numbers[0],numberslast[0]);
+      new_y2 = midpoint(numbers[1], numberslast[1]);  
+  }
+  else {
       partsbefore = Points[i -1].split("_");
       numbersbefore = partsbefore.map(part => parseFloat(part));
-		  new_x2 = midpoint(numbers[0], numbersbefore[0]);
-    	new_y2 = midpoint(numbers[1], numbersbefore[1]);	
-	}
+      new_x2 = midpoint(numbers[0], numbersbefore[0]);
+      new_y2 = midpoint(numbers[1], numbersbefore[1]);  
+  }
 
     // Quadratic Bezier Curve
     kawung_part = document.createElementNS("http://www.w3.org/2000/svg", "path");
@@ -307,23 +307,76 @@ function drawKawung(Points){
     circle.setAttribute("fill", secondary_colour); // fill color
     svg.appendChild(circle);
 
-	}
+  }
+}
+
+function reset(){
+  svg.innerHTML = '';
+  svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+  if (screenWidth >=  400){
+    svg.setAttribute("width", 400);
+    svg.setAttribute("height", 400);
+  }
+  else {
+    svg.setAttribute("width", screenWidth * (screenWidth/ 400));
+    svg.setAttribute("height", screenWidth * (screenWidth/ 400));
+  }
+  bg_rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+  bg_rect.setAttribute("width", "100%");
+  bg_rect.setAttribute("height", "100%");
+  bg_rect.setAttribute("fill", secondary_colour);
+  svg.appendChild(bg_rect);
 }
 
 
-outline_path = doit(svg.getAttribute("width"), 8, 3,10, 2000);
-// outline = document.createElementNS("http://www.w3.org/2000/svg", "path");
-// outline.setAttribute("d", outline_path);
-// outline.setAttribute("stroke", main_colour);
-// svg.appendChild(outline);
-
-
-graph = createAdjacencyList(es_new);
-
-for (let i = 0; i < es_new.length; i += 3){
-  vertex = es_new[i][0];
-  findCyclicPath(graph, vertex, vertex, 0, []);
+function redraw(){
+  reset();
+  if (selectBox.value === 'hexagonal'){
+    chiho= doit(svg.getAttribute("width"), 8, 3,10, 2000);
+    graph = createAdjacencyList(es_new);
+    for (let i = 0; i < chiho.length; i += 3){
+    vertex = chiho[i][0];
+      findCyclicPath(graph, vertex, vertex, 0, [], 8);
+    }
+  }
+  else if (selectBox.value === 'heptagonal') {
+    chiho = doit(svg.getAttribute("width"), 7, 3,10, 2000);
+    graph = createAdjacencyList(chiho);
+    for (let i = 0; i < chiho.length; i += 3){
+    vertex = chiho[i][0];
+    findCyclicPath(graph, vertex, vertex, 0, [], 7);
+    }  
+  }
+  else if (selectBox.value === 'pentagonal') {
+    chiho = doit(svg.getAttribute("width"), 5, 4,10, 2000);
+    graph = createAdjacencyList(chiho);
+    for (let i = 0; i < chiho.length; i += 3){
+    vertex = chiho[i][0];
+    findCyclicPath(graph, vertex, vertex, 0, [], 5);
+    }  
+  }
 }
 
 
+// outline_path = doit(svg.getAttribute("width"), 8, 3,12, 2000);
+// graph = createAdjacencyList(es_new);
 
+// for (let i = 0; i < es_new.length; i += 3){
+//   vertex = es_new[i][0];
+//   findCyclicPath(graph, vertex, vertex, 0, []);
+// }
+
+
+
+const selectBox = document.getElementById('tesselation_type');
+  // Add an event listener to the select input
+
+selectBox.addEventListener('change', function() {
+  // Retrieve the selected value
+  const selectedValue = selectBox.value;
+  // Display the selected value
+  redraw();
+});
+
+
+redraw();
