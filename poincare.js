@@ -334,7 +334,7 @@ function redraw(){
   if (selectBox.value === 'hexagonal'){
     chiho= doit(svg.getAttribute("width"), 8, 3,10, 2000);
     graph = createAdjacencyList(es_new);
-    for (let i = 0; i < chiho.length; i += 3){
+    for (let i = 0; i < chiho.length; i += 2){
     vertex = chiho[i][0];
       findCyclicPath(graph, vertex, vertex, 0, [], 8);
     }
@@ -342,7 +342,7 @@ function redraw(){
   else if (selectBox.value === 'heptagonal') {
     chiho = doit(svg.getAttribute("width"), 7, 3,10, 2000);
     graph = createAdjacencyList(chiho);
-    for (let i = 0; i < chiho.length; i += 3){
+    for (let i = 0; i < chiho.length; i += 2){
     vertex = chiho[i][0];
     findCyclicPath(graph, vertex, vertex, 0, [], 7);
     }  
@@ -350,7 +350,7 @@ function redraw(){
   else if (selectBox.value === 'pentagonal') {
     chiho = doit(svg.getAttribute("width"), 5, 4,10, 2000);
     graph = createAdjacencyList(chiho);
-    for (let i = 0; i < chiho.length; i += 3){
+    for (let i = 0; i < chiho.length; i += 2){
     vertex = chiho[i][0];
     findCyclicPath(graph, vertex, vertex, 0, [], 5);
     }  
