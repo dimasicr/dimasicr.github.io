@@ -444,13 +444,13 @@ function drawKawung(Points){
 
 
 
-let main_circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-main_circle.setAttribute("cx", svg.getAttribute("width")/2);
-main_circle.setAttribute("cy", svg.getAttribute("height")/2,);
-main_circle.setAttribute("r", svg.getAttribute("width")/2);
-main_circle.setAttribute("stroke", main_colour);
-main_circle.setAttribute("fill", secondary_colour);
-svg.appendChild(main_circle);
+// let main_circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+// main_circle.setAttribute("cx", svg.getAttribute("width")/2);
+// main_circle.setAttribute("cy", svg.getAttribute("height")/2,);
+// main_circle.setAttribute("r", svg.getAttribute("width")/2);
+// main_circle.setAttribute("stroke", main_colour);
+// main_circle.setAttribute("fill", secondary_colour);
+// svg.appendChild(main_circle);
 
 
 
@@ -465,14 +465,14 @@ svg.appendChild(main_circle);
 // svg.appendChild(main_circle);
 
 
-main_circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-main_circle.setAttribute("cx", svg.getAttribute("width")/2);
-main_circle.setAttribute("cy", svg.getAttribute("height")/2);
-main_circle.setAttribute("r", svg.getAttribute("width")* 3/(2*5));
-main_circle.setAttribute("stroke", main_colour);
-main_circle.setAttribute("fill", secondary_colour);
+// main_circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+// main_circle.setAttribute("cx", svg.getAttribute("width")/2);
+// main_circle.setAttribute("cy", svg.getAttribute("height")/2);
+// main_circle.setAttribute("r", svg.getAttribute("width")* 3/(2*5));
+// main_circle.setAttribute("stroke", main_colour);
+// main_circle.setAttribute("fill", secondary_colour);
 
-svg.appendChild(main_circle);
+// svg.appendChild(main_circle);
 
 
 // main_circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
@@ -485,14 +485,14 @@ svg.appendChild(main_circle);
 // svg.appendChild(main_circle);
 
 
-main_circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-main_circle.setAttribute("cx", svg.getAttribute("width")/2);
-main_circle.setAttribute("cy", svg.getAttribute("height")/2);
-main_circle.setAttribute("r", svg.getAttribute("width")* 1/(2*5));
-main_circle.setAttribute("stroke", main_colour);
-main_circle.setAttribute("fill", secondary_colour);
+// main_circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+// main_circle.setAttribute("cx", svg.getAttribute("width")/2);
+// main_circle.setAttribute("cy", svg.getAttribute("height")/2);
+// main_circle.setAttribute("r", svg.getAttribute("width")* 1/(2*5));
+// main_circle.setAttribute("stroke", main_colour);
+// main_circle.setAttribute("fill", secondary_colour);
 
-svg.appendChild(main_circle);
+// svg.appendChild(main_circle);
 
 r = svg.getAttribute("width")/10;
 degree = 2 * Math.PI/24;
@@ -502,7 +502,7 @@ yc = svg.getAttribute("height")/2;
 
 
 
-for (let i=0; i <24; i++) {
+for (let i=0; i <24; i+= 2) {
 xc = svg.getAttribute("width")/2;
 yc = svg.getAttribute("height")/2;
 
@@ -529,7 +529,7 @@ drawKawung([
 }
 
 
-for (let i=0; i <24; i++) {
+for (let i=1; i <24; i += 2) {
 xc = svg.getAttribute("width")/2;
 yc = svg.getAttribute("height")/2;
 
@@ -556,7 +556,7 @@ drawKawung([
 }
 
 
-for (let i=0; i <24; i++) {
+for (let i=0; i <24; i += 2) {
 xc = svg.getAttribute("width")/2;
 yc = svg.getAttribute("height")/2;
 
@@ -582,7 +582,7 @@ drawKawung([
 
 }
 
-for (let i=0; i <24; i++) {
+for (let i=1; i <24; i+=2) {
 xc = svg.getAttribute("width")/2;
 yc = svg.getAttribute("height")/2;
 
@@ -609,7 +609,7 @@ drawKawung([
 }
 
 
-for (let i=0; i <24; i++) {
+for (let i=0; i <24; i+=2) {
 xc = svg.getAttribute("width")/2;
 yc = svg.getAttribute("height")/2;
 
