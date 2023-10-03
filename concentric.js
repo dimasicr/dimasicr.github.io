@@ -495,14 +495,14 @@ function drawKawung(Points){
 // svg.appendChild(main_circle);
 
 r = svg.getAttribute("width")/10;
-degree = 2 * Math.PI/18;
+degree = 2 * Math.PI/24;
 
 xc = svg.getAttribute("width")/2;
 yc = svg.getAttribute("height")/2;
 
 
 
-for (let i=0; i <18; i+= 2) {
+for (let i=0; i <24; i+= 2) {
 xc = svg.getAttribute("width")/2;
 yc = svg.getAttribute("height")/2;
 
@@ -529,7 +529,7 @@ drawKawung([
 }
 
 
-for (let i=1; i <18; i += 2) {
+for (let i=1; i <24; i += 2) {
 xc = svg.getAttribute("width")/2;
 yc = svg.getAttribute("height")/2;
 
@@ -556,7 +556,7 @@ drawKawung([
 }
 
 
-for (let i=0; i <18; i += 2) {
+for (let i=0; i <24; i += 2) {
 xc = svg.getAttribute("width")/2;
 yc = svg.getAttribute("height")/2;
 
@@ -582,7 +582,7 @@ drawKawung([
 
 }
 
-for (let i=1; i <18; i+=2) {
+for (let i=1; i <24; i+=2) {
 xc = svg.getAttribute("width")/2;
 yc = svg.getAttribute("height")/2;
 
@@ -609,7 +609,7 @@ drawKawung([
 }
 
 
-for (let i=0; i <18; i+=2) {
+for (let i=0; i <24; i+=2) {
 xc = svg.getAttribute("width")/2;
 yc = svg.getAttribute("height")/2;
 
@@ -640,4 +640,23 @@ drawKawung([
 
 
 
+// x1 = xc + Math.cos(degree + degree) * 4 * r;
+// y1 = yc + Math.sin(degree + degree) * 4 * r;
 
+// x2 = xc + Math.cos(degree + degree) * 5 * r;
+// y2 = yc + Math.sin(degree + degree) * 5 * r;
+
+// x3 = xc + Math.cos(2 * degree + degree) * 5 * r;
+// y3 = yc + Math.sin(2 * degree + degree) * 5 * r;
+
+// x4 = xc + Math.cos(2 * degree + degree) * 4 * r;
+// y4 = yc + Math.sin(2 * degree + degree) * 4 * r;
+
+// console.log(x1);
+  
+// drawKawung([
+//   String(x1) +  '_' + String(y1),
+//   String(x2) +  '_' + String(y2),
+//   String(x3) +  '_' + String(y3),
+//   String(x4) +  '_' + String(y4)
+//   ]);
