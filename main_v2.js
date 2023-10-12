@@ -253,7 +253,7 @@ if (r < 130) {
     // Create Kawung Isen
     let tanahan_kawung = document.createElementNS("http://www.w3.org/2000/svg", "g");
     tanahan_kawung.setAttribute("transform", "rotate(45)");
-    tanahan_kawung.setAttribute("fill", secondary_colour);
+    tanahan_kawung.setAttribute("fill", main_colour);
     
     let rect1 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
     rect1.setAttribute("x", - r  * 22.5 / 70);
