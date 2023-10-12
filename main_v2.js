@@ -1,11 +1,24 @@
 // Create the SVG document
 const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 const screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-// const main_colour = "rgb(235, 210, 140)";
-// const secondary_colour = "rgb(170, 130, 75)";
-const main_colour = '#F7F0F5';
-const secondary_colour =  '#333';
-const tertiary_colour = main_colour;
+
+// Uluwatu Sunset
+// let main_colour = "rgb(235, 210, 140)";
+// let secondary_colour = "rgb(170, 130, 75)";
+// let stroke_colour = "peru";
+// let stroke_width = 0.5;
+
+// Hitam Putih Nusantara
+// let main_colour = '#F7F0F5';
+// let secondary_colour =  '#333';
+// let stroke_colour = "none";
+// let stroke_width = 0;
+
+// Old Java
+const main_colour =  "#e4d5b7";
+const secondary_colour = "#493118";
+let stroke_colour = "brown";
+let stroke_width = 0.5;
 
 svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
 if (screenWidth >=  400){
@@ -170,6 +183,14 @@ if (r < 130) {
     kawung_part2.setAttribute("fill", main_colour);
     kawung_part3.setAttribute("fill", main_colour);
     kawung_part4.setAttribute("fill", main_colour);
+    kawung_part1.setAttribute("stroke", stroke_colour);
+    kawung_part2.setAttribute("stroke", stroke_colour);
+    kawung_part3.setAttribute("stroke", stroke_colour);
+    kawung_part4.setAttribute("stroke", stroke_colour);
+    kawung_part1.setAttribute("stroke-width", stroke_width);
+    kawung_part2.setAttribute("stroke-width", stroke_width);
+    kawung_part3.setAttribute("stroke-width", stroke_width);
+    kawung_part4.setAttribute("stroke-width", stroke_width);
     
     // Create Kawung Isen
     let cecek_kawung = document.createElementNS("http://www.w3.org/2000/svg", "g");
