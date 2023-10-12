@@ -758,11 +758,17 @@ const selectThemes = document.getElementById('themes');
 // Add an event listener to the select input
 selectThemes.addEventListener('change', function() {
 
-if (selectThemes.value === 'old_java){
+if (selectThemes.value === 'old_java'){
   main_colour =  "#e4d5b7";
   secondary_colour = "#493118";
   stroke_colour = "brown";
   stroke_width = 0.5;
+}
+else if (selectThemes.value === 'nusantara_blend'){
+  main_colour = '#F7F0F5';
+  secondary_colour =  '#333';
+  stroke_colour = "none";
+  stroke_width = 0;
 }
         
 // Display the selected value
