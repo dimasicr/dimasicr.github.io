@@ -95,7 +95,7 @@
             padding-top: 30px;
         }
 
-        .btn, #motives, #paddings, #threshold, #recursion_threshold, #tesselation_type {
+        .btn, #motives, #paddings, #threshold, #recursion_threshold, #tesselation_type, #themes {
             display: block; /* Display buttons as block elements for better mobile touch targets */
             margin: 0.4rem auto; /* Center-align buttons */
             padding: 0.5rem 1rem; /* Add more padding for better touch targets */
