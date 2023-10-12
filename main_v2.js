@@ -417,12 +417,12 @@ function redraw(selectedSet, padding){
     let c1center = new Complex(svg.getAttribute("width")/2,svg.getAttribute("height")/2);
     let c1 = new Circle(c1r, c1center);
     
-    let c2r =  1.392 * Math.abs(c1r) / 3 * svg.getAttribute("width")/ 400;
-    let c2center = new Complex(svg.getAttribute("width")/2 + c2r, svg.getAttribute("height")/2 +  49.56 * svg.getAttribute("width")/ 400);
+    let c2r =  0.464 * Math.abs(c1r) ;
+    let c2center = new Complex(svg.getAttribute("width")/2 + c2r , svg.getAttribute("height")/2 +  c2r * Math.sqrt(3) / 3);
     let c2 = new Circle(c2r, c2center);
     
-    let c3r = 1.392 * Math.abs(c1r) / 3 * svg.getAttribute("width")/ 400;
-    let c3center = new Complex(svg.getAttribute("width")/2 - (200-125.76) *185/160 * svg.getAttribute("width")/ 400, svg.getAttribute("height")/2 +  49.56 * svg.getAttribute("width")/ 400);
+    let c3r = c2r;
+    let c3center = new Complex(svg.getAttribute("width")/2 - c2r , svg.getAttribute("height")/2 +  c2r * Math.sqrt(3) / 3);
     let c3 = new Circle(c3r, c3center);
     
     circles.push(c1);
