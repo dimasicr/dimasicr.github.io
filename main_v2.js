@@ -289,7 +289,7 @@ if (r < 130) {
     
     
     let tanahan_kawung2 = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    tanahan_kawung2.setAttribute("fill", secondary_colour);
+    tanahan_kawung2.setAttribute("fill", main_colour);
     
     let tnh_1 = document.createElementNS("http://www.w3.org/2000/svg", "path");
     tnh_1.setAttribute("d", `M -${r*30/70} 0 Q -${r*20/70}  -${r*6/70}  -${r*10/70}  0 Q -${r*20/70}  ${r*6/70}  -${r*30/70}  0`);
