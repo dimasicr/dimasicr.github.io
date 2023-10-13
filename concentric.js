@@ -3,8 +3,10 @@ const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 const screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 // const main_colour = "rgb(235, 210, 140)";
 // const secondary_colour = "rgb(170, 130, 75)";
-const main_colour = '#F7F0F5';
-const secondary_colour =  '#333';
+let main_colour =  "#e4d5b7";
+let secondary_colour = "#493118";
+let stroke_colour = "brown";
+let stroke_width = 0.5;
 
 
 function midpoint(x1, x2){
@@ -418,7 +420,8 @@ function drawKawung(Points){
     // Quadratic Bezier Curve
     kawung_part = document.createElementNS("http://www.w3.org/2000/svg", "path");
     kawung_part.setAttribute("d", `M ${xc.toFixed(1)} ${yc.toFixed(1)} Q${new_x.toFixed(1)} ${new_y.toFixed(1)} ${numbers[0].toFixed(1)} ${numbers[1].toFixed(1)} Q${new_x2.toFixed(1)} ${new_y2.toFixed(1)} ${xc.toFixed(1)} ${yc.toFixed(1)}`);
-    kawung_part.setAttribute("stroke", secondary_colour);
+    kawung_part.setAttribute("stroke", stroke_colour);
+    kawung_part.setAttribute("stroke-width", stroke_width);
     kawung_part.setAttribute("fill", main_colour);
     svg.appendChild(kawung_part);
 
@@ -495,14 +498,14 @@ function drawKawung(Points){
 // svg.appendChild(main_circle);
 
 r = svg.getAttribute("width")/10;
-degree = 2 * Math.PI/24;
+degree = 2 * Math.PI/18;
 
 xc = svg.getAttribute("width")/2;
 yc = svg.getAttribute("height")/2;
 
 
 
-for (let i=0; i <24; i+= 2) {
+for (let i=0; i <18; i+= 2) {
 xc = svg.getAttribute("width")/2;
 yc = svg.getAttribute("height")/2;
 
@@ -529,7 +532,7 @@ drawKawung([
 }
 
 
-for (let i=1; i <24; i += 2) {
+for (let i=1; i <18; i += 2) {
 xc = svg.getAttribute("width")/2;
 yc = svg.getAttribute("height")/2;
 
@@ -556,7 +559,7 @@ drawKawung([
 }
 
 
-for (let i=0; i <24; i += 2) {
+for (let i=0; i <18; i += 2) {
 xc = svg.getAttribute("width")/2;
 yc = svg.getAttribute("height")/2;
 
@@ -582,7 +585,7 @@ drawKawung([
 
 }
 
-for (let i=1; i <24; i+=2) {
+for (let i=1; i <18; i+=2) {
 xc = svg.getAttribute("width")/2;
 yc = svg.getAttribute("height")/2;
 
@@ -609,7 +612,7 @@ drawKawung([
 }
 
 
-for (let i=0; i <24; i+=2) {
+for (let i=0; i <18; i+=2) {
 xc = svg.getAttribute("width")/2;
 yc = svg.getAttribute("height")/2;
 
@@ -640,23 +643,4 @@ drawKawung([
 
 
 
-// x1 = xc + Math.cos(degree + degree) * 4 * r;
-// y1 = yc + Math.sin(degree + degree) * 4 * r;
 
-// x2 = xc + Math.cos(degree + degree) * 5 * r;
-// y2 = yc + Math.sin(degree + degree) * 5 * r;
-
-// x3 = xc + Math.cos(2 * degree + degree) * 5 * r;
-// y3 = yc + Math.sin(2 * degree + degree) * 5 * r;
-
-// x4 = xc + Math.cos(2 * degree + degree) * 4 * r;
-// y4 = yc + Math.sin(2 * degree + degree) * 4 * r;
-
-// console.log(x1);
-  
-// drawKawung([
-//   String(x1) +  '_' + String(y1),
-//   String(x2) +  '_' + String(y2),
-//   String(x3) +  '_' + String(y3),
-//   String(x4) +  '_' + String(y4)
-//   ]);
