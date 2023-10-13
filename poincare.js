@@ -3,8 +3,12 @@
 // Create the SVG document
 const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 const screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-const main_colour = '#F7F0F5';
-const secondary_colour =  '#333';
+
+// Old Java
+let main_colour =  "#e4d5b7";
+let secondary_colour = "#493118";
+let stroke_colour = "brown";
+let stroke_width = 0.5;
 
 
 // Resize screen accordingly
@@ -376,6 +380,28 @@ selectBox.addEventListener('change', function() {
   const selectedValue = selectBox.value;
   // Display the selected value
   redraw();
+});
+
+const selectThemes = document.getElementById('themes');
+
+// Add an event listener to the select input
+selectThemes.addEventListener('change', function() {
+
+if (selectThemes.value === 'old_java'){
+  main_colour =  "#e4d5b7";
+  secondary_colour = "#493118";
+  stroke_colour = "brown";
+  stroke_width = 0.5;
+}
+else if (selectThemes.value === 'nusantara_blend'){
+  main_colour = '#F7F0F5';
+  secondary_colour =  '#333';
+  stroke_colour = "none";
+  stroke_width = 0;
+}
+        
+// Display the selected value
+            redraw();
 });
 
 
