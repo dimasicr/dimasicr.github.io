@@ -3,8 +3,19 @@ const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 const screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 // const main_colour = "rgb(235, 210, 140)";
 // const secondary_colour = "rgb(170, 130, 75)";
-const main_colour = '#F7F0F5';
-const secondary_colour =  '#333';
+// const main_colour = '#F7F0F5';
+// const secondary_colour =  '#333';
+
+
+
+
+let main_colour =  "#e4d5b7";
+let secondary_colour = "#493118";
+let stroke_colour = "brown";
+let stroke_width = 0.5;
+
+
+
 
 svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
 if (screenWidth >=  400){
@@ -213,6 +224,24 @@ function drawFibonacci(x,y, r, fib_motive = 'Full'){
     kawung_partA_3.setAttribute("fill", main_colour);
     kawung_partA_4.setAttribute("fill", main_colour);
     kawung_partA_5.setAttribute("fill", main_colour);
+
+    kawung_partA.setAttribute("stroke", stroke_colour);
+    kawung_partA_1.setAttribute("stroke", stroke_colour);
+    kawung_partA_2.setAttribute("stroke", stroke_colour);
+    kawung_partA_3.setAttribute("stroke", stroke_colour);
+    kawung_partA_4.setAttribute("stroke", stroke_colour);
+    kawung_partA_5.setAttribute("stroke", stroke_colour);
+
+    kawung_partA.setAttribute("stroke-width", stroke_width);
+    kawung_partA_1.setAttribute("stroke-width", stroke_width);
+    kawung_partA_2.setAttribute("stroke-width", stroke_width);
+    kawung_partA_3.setAttribute("stroke-width", stroke_width);
+    kawung_partA_4.setAttribute("stroke-width", stroke_width);
+    kawung_partA_5.setAttribute("stroke-width", stroke_width);
+
+
+
+
     // kawung_part2.setAttribute("fill", main_colour);
     // kawung_part3.setAttribute("fill", main_colour);
     // kawung_part4.setAttribute("fill", main_colour);
@@ -329,7 +358,7 @@ function reset(){
 function redraw(motive='single'){
   reset();
   if (motive === 'single'){
-    drawFibonacci(svg.getAttribute("width")/2, svg.getAttribute("height")/2,svg.getAttribute("width")/5, 'Full');
+    drawFibonacci(svg.getAttribute("width")/2, svg.getAttribute("height")/2,svg.getAttribute("width")/4, 'Full');
   }
   else {
     wanted_width = svg.getAttribute("width")/4;
@@ -362,6 +391,29 @@ const selectBox = document.getElementById('motives');
           
   // Display the selected value
   redraw(selectedValue);
+});
+
+
+const selectThemes = document.getElementById('themes');
+
+// Add an event listener to the select input
+selectThemes.addEventListener('change', function() {
+
+if (selectThemes.value === 'old_java'){
+  main_colour =  "#e4d5b7";
+  secondary_colour = "#493118";
+  stroke_colour = "brown";
+  stroke_width = 0.5;
+}
+else if (selectThemes.value === 'nusantara_blend'){
+  main_colour = '#F7F0F5';
+  secondary_colour =  '#333';
+  stroke_colour = "none";
+  stroke_width = 0;
+}
+        
+// Display the selected value
+            redraw(selectBox.value);
 });
 
 
