@@ -1,11 +1,11 @@
 // Create the SVG document
 const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 const screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-// const main_colour = "rgb(235, 210, 140)";
-// const secondary_colour = "rgb(170, 130, 75)";
-let main_colour =  "#e4d5b7";
-let secondary_colour = "#493118";
-let stroke_colour = "brown";
+// const main_colour = "#493118";
+// const secondary_colour = "#e4d5b7";
+let  main_colour = '#F7F0F5';
+let secondary_colour =  '#333';
+let stroke_colour = "none";
 let stroke_width = 0.5;
 
 
@@ -497,6 +497,49 @@ function drawKawung(Points){
 
 // svg.appendChild(main_circle);
 
+
+
+// for (let i=0; i < 48; i++){
+//   xc = svg.getAttribute("width")/2;
+//   yc = svg.getAttribute("height")/2;
+//   deg = i * 2 * Math.PI / 12;
+//   r = 5 + 5 * deg;
+//   x1 = xc + r * Math.cos(deg);
+//   y1 = yc + r * Math.sin(deg);
+
+//   deg = i * 2 * Math.PI / 12 + 2 * Math.PI/12;
+//   r = 5 + 5 * deg;
+//   x2 = xc + r * Math.cos(deg);
+//   y2 = yc + r * Math.sin(deg);
+
+//   deg = i * 2 * Math.PI / 12 + 2 * Math.PI / 12 + 2 * Math.PI;
+//   r = 5 + 5 * deg;
+
+//   x3 = xc + r * Math.cos(deg);
+//   y3 = yc + r * Math.sin(deg);
+
+//   deg = i * 2 * Math.PI / 12 + 2 * Math.PI; 
+//   r = 5 + 5 * deg;
+
+//   x4 = xc + r * Math.cos(deg);
+//   y4 = yc + r * Math.sin(deg);
+
+//   console.log("x1: " + x1);
+//   console.log("y1: " + y1);
+//   console.log("x2: " + x2);
+//   console.log("y2: " + y2);
+//   console.log("x3: " + x3);
+//   console.log("y3: " + y3);
+
+//   drawKawung([
+//   String(x1) +  '_' + String(y1),
+//   String(x2) +  '_' + String(y2),
+//   String(x3) +  '_' + String(y3),
+//   String(x4) +  '_' + String(y4)
+//   ]);
+
+// }
+
 r = svg.getAttribute("width")/10;
 degree = 2 * Math.PI/18;
 
@@ -504,8 +547,59 @@ xc = svg.getAttribute("width")/2;
 yc = svg.getAttribute("height")/2;
 
 
+for (let i=0; i <18; i+= 1) {
+xc = svg.getAttribute("width")/2;
+yc = svg.getAttribute("height")/2;
 
-for (let i=0; i <18; i+= 2) {
+x1 = xc + Math.cos(0 + i * degree) * 6 * r;
+y1 = yc + Math.sin(0 + i * degree) * 6 * r;
+
+x2 = xc + Math.cos(0 + i * degree) * 7 * r;
+y2 = yc + Math.sin(0 + i * degree) * 7 * r;
+
+x3 = xc + Math.cos(degree + i * degree) * 7 * r;
+y3 = yc + Math.sin(degree + i * degree) * 7 * r;
+
+x4 = xc + Math.cos(degree + i * degree) * 6 * r;
+y4 = yc + Math.sin(degree + i * degree) * 6 * r;
+
+
+drawKawung([
+  String(x1) +  '_' + String(y1),
+  String(x2) +  '_' + String(y2),
+  String(x3) +  '_' + String(y3),
+  String(x4) +  '_' + String(y4)
+  ]);
+}
+
+
+for (let i=0; i <18; i+= 1) {
+xc = svg.getAttribute("width")/2;
+yc = svg.getAttribute("height")/2;
+
+x1 = xc + Math.cos(0 + i * degree) * 5 * r;
+y1 = yc + Math.sin(0 + i * degree) * 5 * r;
+
+x2 = xc + Math.cos(0 + i * degree) * 6 * r;
+y2 = yc + Math.sin(0 + i * degree) * 6 * r;
+
+x3 = xc + Math.cos(degree + i * degree) * 6 * r;
+y3 = yc + Math.sin(degree + i * degree) * 6 * r;
+
+x4 = xc + Math.cos(degree + i * degree) * 5 * r;
+y4 = yc + Math.sin(degree + i * degree) * 5 * r;
+
+
+drawKawung([
+  String(x1) +  '_' + String(y1),
+  String(x2) +  '_' + String(y2),
+  String(x3) +  '_' + String(y3),
+  String(x4) +  '_' + String(y4)
+  ]);
+}
+
+
+for (let i=0; i <18; i+= 1) {
 xc = svg.getAttribute("width")/2;
 yc = svg.getAttribute("height")/2;
 
@@ -528,11 +622,10 @@ drawKawung([
   String(x3) +  '_' + String(y3),
   String(x4) +  '_' + String(y4)
   ]);
-
 }
 
 
-for (let i=1; i <18; i += 2) {
+for (let i=0; i <18; i += 1) {
 xc = svg.getAttribute("width")/2;
 yc = svg.getAttribute("height")/2;
 
@@ -559,7 +652,7 @@ drawKawung([
 }
 
 
-for (let i=0; i <18; i += 2) {
+for (let i=0; i <18; i += 1) {
 xc = svg.getAttribute("width")/2;
 yc = svg.getAttribute("height")/2;
 
@@ -585,7 +678,7 @@ drawKawung([
 
 }
 
-for (let i=1; i <18; i+=2) {
+for (let i=0; i <18; i+=1) {
 xc = svg.getAttribute("width")/2;
 yc = svg.getAttribute("height")/2;
 
@@ -612,7 +705,7 @@ drawKawung([
 }
 
 
-for (let i=0; i <18; i+=2) {
+for (let i=0; i <18; i+=1) {
 xc = svg.getAttribute("width")/2;
 yc = svg.getAttribute("height")/2;
 
