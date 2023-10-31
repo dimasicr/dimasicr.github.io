@@ -28,6 +28,13 @@ const themes = {
         strokeColor: "none",
         strokeWidth: 0.5
     }
+    ,"tetradiac": {
+        mainColor:   ["#87895d", "#d19f5b", "#945f42", "#616f82"],
+        secondaryColor: "#f1e4d8",
+        isenColor: "#493118",
+        strokeColor: "black",
+        strokeWidth: 0.5
+    }
 };
 
 
@@ -161,7 +168,12 @@ function drawKawung(x, y, r, mainColor=themes["batavia"].mainColor, secondaryCol
             let isenElement = document.createElementNS(svgURI, "circle");
             isenElement.setAttribute("cx", -r * 6 / 7);
             isenElement.setAttribute("cy", -r / 7);
-            isenElement.setAttribute("r", r / 15);
+            if (padding){
+                isenElement.setAttribute("r", r / 25);
+            }
+            else {
+                isenElement.setAttribute("r", r / 15);
+            }
             isenElement.setAttribute("transform", `rotate(${90 * i})`);
             isenElement.setAttribute("fill", secondaryColor);
             cecekKawung.appendChild(isenElement);
@@ -259,7 +271,7 @@ function drawFibonacciKawung(x,y, r, mainColor = themes["batavia"].mainColor, se
 }
 
 class Circle {
-  constructor(r, center) {
+  constructor(r, center, color) {
     this.r = r;
     this.b = 1 / this.r;
 
@@ -267,6 +279,7 @@ class Circle {
     this.bc = this.center.mul(this.b);
 
     this.alpha = 0;
+    this.color= color;
   }
 }
 
@@ -284,6 +297,19 @@ const solveEquation = (k1, k2, k3) => {
   return ksum.sqrt().mul(2).add(s);
 }
 
+function adjacentColor(col1, col2, col3) {
+    const colorList = ["#d19f5b", "#945f42", "#616f82", "#87895d"];
+    for (let i = 0; i < colorList.length; i++) {
+        if (colorList[i] !== col1 && colorList[i] !== col2 && colorList[i] !== col3) {
+            return colorList[i];
+        }
+    }
+    return null; // Return null if no color is found
+}
+
+
+
+
 const getAdjacent = (c1, c2, c3) => {
   // get the bend (curvature) fo the 4th circle:
   // https://mathlesstraveled.com/2016/05/04/apollonian-gaskets-and-descartes-theorem/
@@ -299,7 +325,9 @@ const getAdjacent = (c1, c2, c3) => {
   // http://arxiv.org/pdf/math/0101066v1.pdf
   let pos4 = solveEquation(c1.bc, c2.bc, c3.bc).div(b4);
 
-  return new Circle(r4, pos4);
+  col4 = adjacentColor(c1.color, c2.color, c3.color);
+
+  return new Circle(r4, pos4, col4);
 }
 
 const flip = (c4, c1, c2, c3) => {
@@ -314,7 +342,8 @@ const flip = (c4, c1, c2, c3) => {
   // https://mathlesstraveled.com/2016/06/10/apollonian-gaskets-and-descartes-theorem-ii/
   let center = c1.bc.add(c2.bc).add(c3.bc).mul(2).sub(c4.bc).div(bend);
 
-  return new Circle(1 / bend, center);
+  col4 = adjacentColor(c1.color, c2.color, c3.color);
+  return new Circle(1 / bend, center, col4);
 }
 
 const recurse = (c1, c2, c3, c4, depth = 0) => {
@@ -322,17 +351,17 @@ const recurse = (c1, c2, c3, c4, depth = 0) => {
   let cn3 = flip(c3, c1, c2, c4);
   let cn4 = flip(c4, c1, c2, c3);
 
-  if (cn2.r > 5) {
+  if (cn2.r > selectThreshold.value ) {
     addCircle(cn2);
     recurse(cn2, c1, c3, c4, depth + 1);
   }
 
-  if (cn3.r > 5) {
+  if (cn3.r > selectThreshold.value) {
     addCircle(cn3);
     recurse(cn3, c1, c2, c4, depth + 1);
   }
 
-  if (cn4.r > 5) {
+  if (cn4.r > selectThreshold.value) {
     addCircle(cn4);
     recurse(cn4, c1, c2, c3, depth + 1);
   }
@@ -358,46 +387,56 @@ const addCircle = (circle) => {
 };
 
 
-function drawApollonianKawung(x,y, r, motive='symmetric' ,mainColor = themes["oldJava"].mainColor, secondaryColor= themes["oldJava"].secondaryColor, strokeColor = themes["oldJava"].strokeColor, isen='cecek', tanahan='rect_diamond', padding=false ){
+function drawApollonianKawung(x,y, r, motive='symmetric', theme='oldJava', mainColor = themes["oldJava"].mainColor, secondaryColor= themes["oldJava"].secondaryColor, strokeColor = themes["oldJava"].strokeColor, isen='cecek', tanahan='rect_diamond', padding=false ){
   circles = [];
   if (motive === 'symmetric'){
     c1r = -r;
     c1center = new Complex(x,y);
-    c1 = new Circle(c1r, c1center);
+    c1 = new Circle(c1r, c1center, "#616f82");
     circles.push(c1);
     
     c2r = Math.abs(c1r/2);
     c2center = new Complex(x - c2r, y);
-    c2 = new Circle(c2r, c2center);
+    c2 = new Circle(c2r, c2center, "#d19f5b");
     circles.push(c2);
     
     c3r = Math.abs(c1r/2);
     c3center = new Complex(x+ c3r, y);
-    c3 = new Circle(c3r, c3center);
+    c3 = new Circle(c3r, c3center, "#87895d");
     circles.push(c3);
     drawGasket(circles[0], circles[1], circles[2]);
 
     newCircles = circles.filter(function(element) {
       return element.r !==  c1r;
     });
+
+    
     newCircles.forEach(function(e) {
-        drawKawung(e.center.re, e.center.im, e.r, mainColor, secondaryColor, strokeColor , isen, tanahan, padding);
+        if (theme === 'tetradiac') {
+            drawKawung(e.center.re, e.center.im, e.r, e.color, "#493118", strokeColor , isen, tanahan, padding);
+        }
+        else {
+            drawKawung(e.center.re, e.center.im, e.r, mainColor, secondaryColor, strokeColor , isen, tanahan, padding);
+        }
     });
+    
+
+
   }
  else if (motive === 'asymmetric'){
     c1r = -r;
     c1center = new Complex(x, y);
-    let c1 = new Circle(c1r, c1center);
+    let c1 = new Circle(c1r, c1center, "#616f82");
     
     let c2r = 0.63 * r;
     let c2center = new Complex(x, y + c1r + c2r);
-    let c2 = new Circle(c2r, c2center);
+    let c2 = new Circle(c2r, c2center, "#d19f5b");
     
     let c3r = Math.abs(c1.r) - c2.r;
     let c3x = c2.center.re;
     let c3y = c2.center.im + c2.r + c3r;
     let c3center = new Complex(c3x, c3y);
-    let c3 = new Circle(c3r, c3center);
+    let c3 = new Circle(c3r, c3center, "#87895d");
     
     circles.push(c1);
     circles.push(c2);
@@ -407,23 +446,30 @@ function drawApollonianKawung(x,y, r, motive='symmetric' ,mainColor = themes["ol
       return element.r !==  c1r;
     });
     newCircles.forEach(function(e) {
-        drawKawung(e.center.re, e.center.im, e.r, mainColor, secondaryColor, strokeColor , isen, tanahan, padding);
+        if (theme === 'tetradiac') {
+            drawKawung(e.center.re, e.center.im, e.r, e.color, "#493118", strokeColor , isen, tanahan, padding);
+        }
+        else {
+            drawKawung(e.center.re, e.center.im, e.r, mainColor, secondaryColor, strokeColor , isen, tanahan, padding);
+        }
     });
+
+
   }
 
 else if (motive === 'triplet'){
     //https://www.quora.com/If-three-tangent-circles-of-equal-radius-are-inscribed-in-a-circle-of-radius-3-what-are-their-radii-What-is-r-in-the-picture-and-how-do-you-calculate-it
     let c1r = -r;
     let c1center = new Complex(x,y);
-    let c1 = new Circle(c1r, c1center);
+    let c1 = new Circle(c1r, c1center, "#616f82");
     
     let c2r =  0.464 * Math.abs(c1r) ;
     let c2center = new Complex(x + c2r , y +  c2r * Math.sqrt(3) / 3);
-    let c2 = new Circle(c2r, c2center);
+    let c2 = new Circle(c2r, c2center, "#d19f5b");
     
     let c3r = c2r;
     let c3center = new Complex(x - c2r , y +  c2r * Math.sqrt(3) / 3);
-    let c3 = new Circle(c3r, c3center);
+    let c3 = new Circle(c3r, c3center, "#87895d");
     
     circles.push(c1);
     circles.push(c2);
@@ -433,8 +479,16 @@ else if (motive === 'triplet'){
       return element.r !==  c1r;
     });
     newCircles.forEach(function(e) {
-        drawKawung(e.center.re, e.center.im, e.r, mainColor, secondaryColor, strokeColor , isen, tanahan, padding);
+        if (theme === 'tetradiac') {
+            drawKawung(e.center.re, e.center.im, e.r, e.color, "#493118", strokeColor , isen, tanahan, padding);
+        }
+        else {
+            drawKawung(e.center.re, e.center.im, e.r, mainColor, secondaryColor, strokeColor , isen, tanahan, padding);
+        }
     });
+
+
+
   }
 }
 
@@ -514,7 +568,7 @@ function drawArbitraryKawung(Points, x, y, r =200, rotDeg= 0, mainColor=themes["
 
 
 // document.addEventListener("DOMContentLoaded", function(event) {
-//     setup(400, 400, themes["oldJava"].secondaryColor);
+//     setup(400, 400, themes["tetradiac"].secondaryColor);
 //     cX = svg.getAttribute("width")/2;
 //     cY = svg.getAttribute("height")/2;
 
@@ -541,7 +595,7 @@ function drawArbitraryKawung(Points, x, y, r =200, rotDeg= 0, mainColor=themes["
 
 
     // Apollonian Kawung
-    // drawApollonianKawung(cX ,cY, 0.93 * cY, 'triplet',themes["oldJava"].mainColor,themes["oldJava"].secondaryColor,themes["oldJava"].strokeColor, 'cecek', 'rect_diamond', false);
+//     drawApollonianKawung(cX ,cY, 0.93 * cY, 'asymmetric','tetradiac',themes["oldJava"].mainColor,themes["oldJava"].secondaryColor,themes["tetradiac"].strokeColor, 'cecek', 'rect_diamond', false);
 
 
 // });
