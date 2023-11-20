@@ -1,4 +1,4 @@
-useTheme = 'oldJava';
+useTheme = 'batavia';
 
 const selectBox = document.getElementById('tesselation_type');
 selectBox.addEventListener('change', function() {
