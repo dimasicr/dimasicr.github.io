@@ -26,9 +26,7 @@ function redraw(){
   }
   else if (selectBox.value === 'sq_squareFiveVertices') {
     for(let i=0; i < sq_squareFiveVertices.length; i++){
-        for (let j=0; j < 4; j++){
-        drawArbitraryKawung(sq_squareFiveVertices[i], cX, cY, cX, 90 * j, themes[useTheme].mainColor, themes[useTheme].secondaryColor, themes[useTheme].strokeColor);
-        }
+        drawArbitraryKawung(sq_squareFiveVertices[i], cX, cY, cX,0, themes["batavia"].mainColor, themes["batavia"].secondaryColor, 'black');
     }
   }
 }
