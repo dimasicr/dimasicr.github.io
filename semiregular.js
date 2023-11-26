@@ -524,7 +524,7 @@ function redraw(selectedSet){
   }
   else if (selectedSet === 'dodecagon_triangle'){
     if (selectMotive.value === 'single'){
-      preset_dodecagon_triangle(cx,cy,55 * svg.getAttribute("width") / 400);
+      preset_dodecagon_triangle_unit(cx,cy,55 * svg.getAttribute("width") / 400);
     }
     // preset_dodecagon_triangle(cx,cy,55 * svg.getAttribute("width") / 400);
     r = 55 * svg.getAttribute("width") / 400;
