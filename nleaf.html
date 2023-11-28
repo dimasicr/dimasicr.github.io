@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karsadera </title>
+    <link rel="icon" href="logo.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Toggle button for small screens -->
+        <div class="toggle-button" id="toggleButton">&#9776; <span> Karsadera </span> </div>
+        <!-- Side Navigation Bar -->
+        <div class="sidenav" id="sidenav">
+            <h2>Gallery</h2>
+            <ul class="nav-links">
+                <li><a href="index.html">Apollonian Kawung</a></li>
+                <li><a href="fibonacci.html">Fibonacci Kawung</a></li>
+                <li><a href="poincare.html">Poincare Kawung</a></li>
+                <li><a href="tumpal.html">Sierpinski Tumpal</a></li>
+                <li><a href="semiregular.html">Tesselation of Kawung </a></li>
+            </ul>
+            <h2>Animation</h2>
+            <ul class="nav-links">
+                <li><a href="circular.html"> Circular Kawung</a></li>
+                <li><a href="nleaf.html"> N Leaf Kawung</a></li>
+            </ul>
+
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <h1> N Leaf Kawung </h1>
+            <div style="text-align: center;">
+              <canvas id="myCanvas" style="display: block; margin: auto;"></canvas>
+            </div>
+            <p> Kawung as bezier curve from origin, to vertex. Using vertex midpoint and control point </p>
+
+
+
+
+        </div>
+    </div>
+
+    <script>
+    
+    // JavaScript to toggle the side navigation bar
+    document.getElementById('toggleButton').addEventListener('click', function() {
+            const sidenav = document.getElementById('sidenav');
+            const container = document.querySelector('.container');
+            container.classList.toggle('show-nav');
+    });
+    const canvas = document.getElementById('myCanvas');
+    const ctx = canvas.getContext('2d');
+    const screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+
+
+    if (screenWidth > 400){
+        canvas.width = 400;
+        canvas.height = 400;
+    }
+    else {
+        canvas.width = screenWidth * screenWidth / canvas.width;
+        canvas.height = screenWidth * screenWidth / canvas.width;
+        console.log(canvas.width);
+    }
+
+    let line1_x1 = 0;
+    let line1_y1 = 0;
+    let line1_x2 = 0;
+    let line1_y2 = canvas.height/4;
+    let line1_step = 0;
+
+
+    let line2_x1 = 0;
+    let line2_y1 = canvas.height/4 * 0.1;
+    let line2_x2 = canvas.width/4 * 0.1;
+    let line2_y2 = canvas.height/4;
+    let line2_step = 0;
+
+    let line3_x1 = 0;
+    let line3_y1 = canvas.height/4 * 0.2;
+    let line3_x2 = canvas.width/4 * 0.2;
+    let line3_y2 = canvas.height/4;
+    let line3_step = 0;
+
+    let line4_x1 = 0;
+    let line4_y1 = canvas.height/4 * 0.3;
+    let line4_x2 = canvas.width/4 * 0.3;
+    let line4_y2 = canvas.height/4;
+    let line4_step = 0;
+
+
+    let line5_x1 = 0;
+    let line5_y1 = canvas.height/4 * 0.4;
+    let line5_x2 = canvas.width/4 * 0.4;
+    let line5_y2 = canvas.height/4;
+    let line5_step = 0;
+
+
+    let line6_x1 = 0;
+    let line6_y1 = canvas.height/4 * 0.5;
+    let line6_x2 = canvas.width/4 * 0.5;
+    let line6_y2 = canvas.height/4;
+    let line6_step = 0;
+
+
+    let line7_x1 = 0;
+    let line7_y1 = canvas.height/4 * 0.6;
+    let line7_x2 = canvas.width/4 * 0.6;
+    let line7_y2 = canvas.height/4;
+    let line7_step = 0;
+
+
+    let line8_x1 = 0;
+    let line8_y1 = canvas.height/4 * 0.7;
+    let line8_x2 = canvas.width/4 * 0.7;
+    let line8_y2 = canvas.height/4;
+    let line8_step = 0;
+
+
+    let line9_x1 = 0;
+    let line9_y1 = canvas.height/4 * 0.8;
+    let line9_x2 = canvas.width/4 * 0.8;
+    let line9_y2 = canvas.height/4;
+    let line9_step = 0;
+
+    let line10_x1 = 0;
+    let line10_y1 = canvas.height/4 * 0.9;
+    let line10_x2 = canvas.width/4 * 0.9;
+    let line10_y2 = canvas.height/4;
+    let line10_step = 0;
+
+    let line11_x1 = 0;
+    let line11_y1 = canvas.height/4 * 1;
+    let line11_x2 = canvas.width/4 * 1;
+    let line11_y2 = canvas.height/4;
+    let line11_step = 0;
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ctx.save();
+      ctx.setLineDash([5, 5]);
+
+      ctx.translate(canvas.width/2, canvas.height/2);
+
+      ctx.moveTo(-canvas.width/4, -canvas.height/4);
+      ctx.lineTo(canvas.width/4, -canvas.height/4);
+      ctx.lineTo(canvas.width/4, canvas.height/4);
+      ctx.lineTo(-canvas.width/4, canvas.height/4);
+      ctx.lineTo(-canvas.width/4, -canvas.height/4);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(-canvas.width/4, -canvas.height/4, 2.5, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.fillText('(-100, 100)', -canvas.width/4, -canvas.height/4 - canvas.height/25);
+
+      ctx.beginPath();
+      ctx.arc(canvas.width/4, -canvas.height/4, 2.5, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.fillText('(100, 100)', canvas.width/4, -canvas.height/4 - canvas.height/25);
+
+      ctx.beginPath();
+      ctx.arc(canvas.width/4, canvas.height/4, 2.5, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.fillText('(100, -100)', canvas.width/4, canvas.height/4 + canvas.height/25);
+
+
+      ctx.beginPath();
+      ctx.arc(-canvas.width/4, canvas.height/4, 2.5, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.fillText('(-100, -100)', -canvas.width/4, canvas.height/4 + canvas.height/25);
+
+
+      ctx.beginPath();
+      ctx.arc(0, 0, 2.5, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.fillText('(0, 0)', 0, - canvas.height/25);
+
+      ctx.setLineDash([]);
+      ctx.strokeStyle = "#945f42";
+      ctx.save();
+      for (let i=0; i<4; i++){
+        ctx.beginPath();
+        ctx.moveTo(line1_x1, line1_y1); // Starting point
+        ctx.lineTo(line1_x1 + (line1_x2 - line1_x1)/ 20 * line1_step, line1_y1 + (line1_y2 - line1_y1)/ 20 * line1_step); // Ending point (lineLength dynamically changes)
+        ctx.stroke();
+        ctx.rotate(Math.PI/2);
+      }
+
+      ctx.scale(-1,1);
+      for (let i=0; i<4; i++){
+        ctx.beginPath();
+        ctx.moveTo(line1_x1, line1_y1); // Starting point
+        ctx.lineTo(line1_x1 + (line1_x2 - line1_x1)/ 20 * line1_step, line1_y1 + (line1_y2 - line1_y1)/ 20 * line1_step); // Ending point (lineLength dynamically changes)
+        ctx.stroke();
+        ctx.rotate(Math.PI/2);
+      }
+
+      ctx.restore();
+
+  
+      if (line1_step < 20){
+        line1_step += 1;
+      }
+
+
+      if (line1_step === 20){
+        ctx.save();
+        for (let i=0; i<4; i++){
+          ctx.beginPath();
+          ctx.moveTo(line2_x1, line2_y1); // Starting point
+          ctx.lineTo(line2_x1 + (line2_x2 - line2_x1)/ 20 * line2_step, line2_y1 + (line2_y2 - line2_y1)/ 20 * line2_step); // Ending point (lineLength dynamically changes)
+          ctx.stroke();
+          ctx.rotate(Math.PI/2);
+        }
+        ctx.scale(-1,1);
+        for (let i=0; i<4; i++){
+          ctx.beginPath();
+          ctx.moveTo(line2_x1, line2_y1); // Starting point
+          ctx.lineTo(line2_x1 + (line2_x2 - line2_x1)/ 20 * line2_step, line2_y1 + (line2_y2 - line2_y1)/ 20 * line2_step); // Ending point (lineLength dynamically changes)
+          ctx.stroke();
+          ctx.rotate(Math.PI/2);
+        }
+
+        ctx.restore();
+
+        if (line2_step < 20){
+          line2_step += 1;
+        }
+        else if (line2_step === 20){
+          ctx.save();
+          for (let i=0; i<4; i++){
+            ctx.beginPath();
+            ctx.moveTo(line3_x1, line3_y1); // Starting point
+            ctx.lineTo(line3_x1 + (line3_x2 - line3_x1)/ 20 * line3_step, line3_y1 + (line3_y2 - line3_y1)/ 20 * line3_step); // Ending point (lineLength dynamically changes)
+            ctx.stroke();
+            ctx.rotate(Math.PI/2);
+          }
+          ctx.scale(-1,1);
+          for (let i=0; i<4; i++){
+            ctx.beginPath();
+            ctx.moveTo(line3_x1, line3_y1); // Starting point
+            ctx.lineTo(line3_x1 + (line3_x2 - line3_x1)/ 20 * line3_step, line3_y1 + (line3_y2 - line3_y1)/ 20 * line3_step); // Ending point (lineLength dynamically changes)
+            ctx.stroke();
+            ctx.rotate(Math.PI/2);
+          }
+
+
+
+          ctx.restore();
+
+          if (line3_step < 20){
+            line3_step += 1;
+          }
+
+          else if (line3_step === 20){
+          ctx.save();
+          for (let i=0; i<4; i++){
+            ctx.beginPath();
+            ctx.moveTo(line4_x1, line4_y1); // Starting point
+            ctx.lineTo(line4_x1 + (line4_x2 - line4_x1)/ 20 * line4_step, line4_y1 + (line4_y2 - line4_y1)/ 20 * line4_step); // Ending point (lineLength dynamically changes)
+            ctx.stroke();
+            ctx.rotate(Math.PI/2);
+          }
+          ctx.scale(-1, 1);
+
+          for (let i=0; i<4; i++){
+            ctx.beginPath();
+            ctx.moveTo(line4_x1, line4_y1); // Starting point
+            ctx.lineTo(line4_x1 + (line4_x2 - line4_x1)/ 20 * line4_step, line4_y1 + (line4_y2 - line4_y1)/ 20 * line4_step); // Ending point (lineLength dynamically changes)
+            ctx.stroke();
+            ctx.rotate(Math.PI/2);
+          }
+
+          ctx.restore();
+
+          if (line4_step < 20){
+            line4_step += 1;
+          }
+
+          else if (line4_step === 20){
+          ctx.save();
+          for(let i=0; i<4; i++){
+            ctx.beginPath();
+            ctx.moveTo(line5_x1, line5_y1); // Starting point
+            ctx.lineTo(line5_x1 + (line5_x2 - line5_x1)/ 20 * line5_step, line5_y1 + (line5_y2 - line5_y1)/ 20 * line5_step); // Ending point (lineLength dynamically changes)
+            ctx.stroke();
+            ctx.rotate(Math.PI/2);
+          }
+          ctx.scale(-1,1);
+
+          for(let i=0; i<4; i++){
+            ctx.beginPath();
+            ctx.moveTo(line5_x1, line5_y1); // Starting point
+            ctx.lineTo(line5_x1 + (line5_x2 - line5_x1)/ 20 * line5_step, line5_y1 + (line5_y2 - line5_y1)/ 20 * line5_step); // Ending point (lineLength dynamically changes)
+            ctx.stroke();
+            ctx.rotate(Math.PI/2);
+          }
+
+
+
+          ctx.restore();
+          if (line5_step < 20){
+            line5_step += 1;
+          }
+          else if (line5_step === 20){
+          ctx.save();
+
+          for(let i=0;i<4; i++){
+            ctx.beginPath();
+            ctx.moveTo(line6_x1, line6_y1); // Starting point
+            ctx.lineTo(line6_x1 + (line6_x2 - line6_x1)/ 20 * line6_step, line6_y1 + (line6_y2 - line6_y1)/ 20 * line6_step); // Ending point (lineLength dynamically changes)
+            ctx.stroke();
+            ctx.rotate(Math.PI/2);
+          }
+          ctx.scale(-1,1);
+          for(let i=0;i<4; i++){
+            ctx.beginPath();
+            ctx.moveTo(line6_x1, line6_y1); // Starting point
+            ctx.lineTo(line6_x1 + (line6_x2 - line6_x1)/ 20 * line6_step, line6_y1 + (line6_y2 - line6_y1)/ 20 * line6_step); // Ending point (lineLength dynamically changes)
+            ctx.stroke();
+            ctx.rotate(Math.PI/2);
+          }
+
+
+
+
+          ctx.restore();
+
+
+          if (line6_step < 20){
+            line6_step += 1;
+          }
+          else if (line6_step === 20){
+          ctx.save();
+
+          for(let i =0;i<4; i++){
+          ctx.beginPath();
+          ctx.moveTo(line7_x1, line7_y1); // Starting point
+          ctx.lineTo(line7_x1 + (line7_x2 - line7_x1)/ 20 * line7_step, line7_y1 + (line7_y2 - line7_y1)/ 20 * line7_step); // Ending point (lineLength dynamically changes)
+          ctx.stroke();
+          ctx.rotate(Math.PI/2);
+          }
+          ctx.scale(-1,1);
+          for(let i =0;i<4; i++){
+          ctx.beginPath();
+          ctx.moveTo(line7_x1, line7_y1); // Starting point
+          ctx.lineTo(line7_x1 + (line7_x2 - line7_x1)/ 20 * line7_step, line7_y1 + (line7_y2 - line7_y1)/ 20 * line7_step); // Ending point (lineLength dynamically changes)
+          ctx.stroke();
+          ctx.rotate(Math.PI/2);
+          }
+
+
+
+
+
+          ctx.restore();
+
+          if (line7_step < 20){
+            line7_step += 1;
+          }
+
+          else if (line7_step === 20){
+
+          ctx.save();
+
+          for (let i=0; i<4; i++){
+            ctx.beginPath();
+            ctx.moveTo(line8_x1, line8_y1); // Starting point
+            ctx.lineTo(line8_x1 + (line8_x2 - line8_x1)/ 20 * line8_step, line8_y1 + (line8_y2 - line8_y1)/ 20 * line8_step); // Ending point (lineLength dynamically changes)
+            ctx.stroke();
+            ctx.rotate(Math.PI/2);
+          }
+          ctx.scale(-1, 1);
+          for (let i=0; i<4; i++){
+            ctx.beginPath();
+            ctx.moveTo(line8_x1, line8_y1); // Starting point
+            ctx.lineTo(line8_x1 + (line8_x2 - line8_x1)/ 20 * line8_step, line8_y1 + (line8_y2 - line8_y1)/ 20 * line8_step); // Ending point (lineLength dynamically changes)
+            ctx.stroke();
+            ctx.rotate(Math.PI/2);
+          }
+
+          ctx.restore();
+
+
+          if (line8_step < 20){
+            line8_step += 1;
+          }
+          else if (line8_step === 20){
+          ctx.save();
+
+          for (let i=0; i<4; i++){
+            ctx.beginPath();
+            ctx.moveTo(line9_x1, line9_y1); // Starting point
+            ctx.lineTo(line9_x1 + (line9_x2 - line9_x1)/ 20 * line9_step, line9_y1 + (line9_y2 - line9_y1)/ 20 * line9_step); // Ending point (lineLength dynamically changes)
+            ctx.stroke();
+            ctx.rotate(Math.PI/2);
+          }
+          ctx.scale(-1,1);
+          for (let i=0; i<4; i++){
+            ctx.beginPath();
+            ctx.moveTo(line9_x1, line9_y1); // Starting point
+            ctx.lineTo(line9_x1 + (line9_x2 - line9_x1)/ 20 * line9_step, line9_y1 + (line9_y2 - line9_y1)/ 20 * line9_step); // Ending point (lineLength dynamically changes)
+            ctx.stroke();
+            ctx.rotate(Math.PI/2);
+          }
+
+          ctx.restore();
+          if (line9_step < 20){
+            line9_step += 1;
+          }
+
+          else if (line9_step === 20){
+          ctx.save();
+
+          for (let i=0; i<4; i++){
+            ctx.beginPath();
+            ctx.moveTo(line10_x1, line10_y1); // Starting point
+            ctx.lineTo(line10_x1 + (line10_x2 - line10_x1)/ 20 * line10_step, line10_y1 + (line10_y2 - line10_y1)/ 20 * line10_step); // Ending point (lineLength dynamically   changes)
+            ctx.stroke();
+            ctx.rotate(Math.PI/2);
+          }
+
+          ctx.scale(-1, 1);
+          for (let i=0; i<4; i++){
+            ctx.beginPath();
+            ctx.moveTo(line10_x1, line10_y1); // Starting point
+            ctx.lineTo(line10_x1 + (line10_x2 - line10_x1)/ 20 * line10_step, line10_y1 + (line10_y2 - line10_y1)/ 20 * line10_step); // Ending point (lineLength dynamically   changes)
+            ctx.stroke();
+            ctx.rotate(Math.PI/2);
+          }
+          ctx.restore();
+
+
+          if (line10_step < 20){
+            line10_step += 1;
+          }
+
+          else if (line10_step === 20){
+          ctx.save();
+
+          for (let i=0; i<4; i++){
+            ctx.beginPath();
+            ctx.moveTo(line11_x1, line11_y1); // Starting point
+            ctx.lineTo(line11_x1 + (line11_x2 - line11_x1)/ 20 * line11_step, line11_y1 + (line11_y2 - line11_y1)/ 20 * line11_step); // Ending point (lineLength dynamically   changes)
+            ctx.stroke();
+            ctx.rotate(Math.PI/2);
+          }
+
+          ctx.scale(-1, 1);
+
+          for (let i=0; i<4; i++){
+            ctx.beginPath();
+            ctx.moveTo(line11_x1, line11_y1); // Starting point
+            ctx.lineTo(line11_x1 + (line11_x2 - line11_x1)/ 20 * line11_step, line11_y1 + (line11_y2 - line11_y1)/ 20 * line11_step); // Ending point (lineLength dynamically   changes)
+            ctx.stroke();
+            ctx.rotate(Math.PI/2);
+          }
+
+          ctx.restore();
+          if (line11_step < 20){
+            line11_step += 1;
+          }
+
+
+
+
+
+          }
+
+
+
+
+
+          }
+
+
+
+
+
+
+
+          }
+
+
+          }
+
+
+          }
+
+
+
+          }
+
+
+
+
+
+          }
+
+
+
+          }
+
+
+
+
+
+        }
+      }
+
+
+
+
+      ctx.restore();
+      requestAnimationFrame(draw);
+    }
+
+    if (screenWidth > 400){
+        canvas.width = 400;
+        canvas.height = 400;
+    }
+    else {
+        canvas.width = screenWidth * screenWidth / canvas.width;
+        canvas.height = screenWidth * screenWidth / canvas.width;
+        console.log(canvas.width);
+    }
+    
+    draw();
+  </script>
+ 
+</body>
+</html>
