@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karsadera </title>
+    <link rel="icon" href="logo.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Toggle button for small screens -->
+        <div class="toggle-button" id="toggleButton">&#9776; <span> Karsadera </span> </div>
+        <!-- Side Navigation Bar -->
+        <div class="sidenav" id="sidenav">
+            <h2>Gallery</h2>
+            <ul class="nav-links">
+                <li><a href="index.html">Apollonian Kawung</a></li>
+                <li><a href="fibonacci.html">Fibonacci Kawung</a></li>
+                <li><a href="poincare.html">Poincare Kawung</a></li>
+                <li><a href="tumpal.html">Sierpinski Tumpal</a></li>
+                <li><a href="semiregular.html">Tesselation of Kawung </a></li>
+            </ul>
+            <h2>Animation</h2>
+            <ul class="nav-links">
+                <li><a href="kawungdefinition.html"> Circular Kawung</a></li>
+            </ul>
+
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <h1>Circular Kawung </h1>
+            <div style="text-align: center;">
+              <canvas id="myCanvas" style="display: block; margin: auto;"></canvas>
+            </div>
+            <p> Kawung as intersection of four circles </p>
+
+
+
+
+        </div>
+    </div>
+
+    <script>
+    const canvas = document.getElementById('myCanvas');
+    const ctx = canvas.getContext('2d');
+    const screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+
+    if (screenWidth > 400){
+        canvas.width = 400;
+        canvas.height = 400;
+    }
+    else {
+        canvas.width = screenWidth * screenWidth / canvas.width;
+        canvas.height = screenWidth * screenWidth / canvas.width;
+        console.log(canvas.width);
+    }
+
+    const centerX = 100;
+    const centerY = 200;
+    const radius = 100;
+
+    function kawung(x, y, r, fill_col = 'rgb(235, 210, 140)') {
+      ctx.save();
+        ctx.translate(x,y);
+        ctx.fillStyle = fill_col;
+        ctx.strokeStyle = 'rgb(170, 130, 75)';
+        k = 4;
+        // Kawung 
+        for (var i = 0; i <k; i++) {
+          ctx.beginPath();
+          ctx.arc(0, -r, r, 0.5 * Math.PI, 1 * Math.PI);
+          ctx.arc(- r, 0, r, 1.5 * Math.PI, 2 * Math.PI);
+          ctx.fill();
+          ctx.stroke();
+          ctx.rotate(Math.PI/2); 
+        }
+      
+        ctx.restore();
+    }
+
+    let txt1_opacity = 0;
+    let txt2_opacity = 0;
+    let txt3_opacity = 0;
+    let txt4_opacity = 0;
+    const fadeSpeed = 0.04;
+
+    let startAngle = 0;
+    let endAngle = 0;
+    const strokeThickness = 2;
+    const strokeColor = 'rgb(170, 130, 75)';
+    const dashPattern = [6, 6];
+    let drawSecond = 0;
+    let second_startAngle = 0;
+    let second_endAngle = 0;
+
+
+    let drawThird = 0;
+    let third_startAngle = 0;
+    let third_endAngle = 0;
+
+
+    let drawFourth = 0;
+    let fourth_startAngle = 0;
+    let fourth_endAngle = 0;
+
+    let drawFifth = 0;
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ctx.globalAlpha = txt1_opacity;
+      if (txt1_opacity < 1) {
+        txt1_opacity += fadeSpeed;
+      }
+
+      ctx.fillText('C (-r,0)', canvas.width/4 + canvas.width * 0.0125, canvas.width/2);
+      ctx.beginPath();
+      ctx.arc(canvas.width/4, canvas.width/2, 2.5, 0, 2 * Math.PI);
+      ctx.fill();
+
+
+      if (txt1_opacity >= 1) {
+        ctx.beginPath();
+        ctx.arc(canvas.width/4, canvas.width/2, canvas.width/4, startAngle, endAngle);
+        ctx.strokeStyle = strokeColor;
+        ctx.lineWidth = strokeThickness;
+        ctx.setLineDash(dashPattern);
+        ctx.stroke();
+        endAngle += 0.04; // Change the speed of animation by modifying this value
+      }
+
+      if (endAngle <= Math.PI * 2){
+        endAngle += 0.04
+      }
+      else {
+        drawSecond = 1;
+      }
+
+
+      // ctx.globalAlpha = txt2_opacity;
+
+      if (drawSecond === 1) {
+        txt2_opacity += fadeSpeed;
+        ctx.fillText('D (r,0)', canvas.width * 3 /4 + canvas.width * 0.0125 , canvas.width/2);
+        ctx.beginPath();
+        ctx.arc(canvas.width * 3/ 4, canvas.width / 2, 2.5, 0, 2 * Math.PI);
+        ctx.fill();
+      }
+
+      
+
+      if (drawSecond === 1 && txt1_opacity >= 1) {
+        second_endAngle += 0.04;
+        ctx.beginPath();
+        ctx.arc(canvas.width * 3/ 4, canvas.width /2, canvas.width / 4, second_startAngle, second_endAngle);
+        ctx.strokeStyle = strokeColor;
+        ctx.lineWidth = strokeThickness;
+        ctx.setLineDash(dashPattern);
+        ctx.stroke();
+      }
+
+      if (second_endAngle > Math.PI * 2){
+        drawThird = 1;
+      }
+
+      if (drawThird === 1) {
+        txt3_opacity += fadeSpeed;
+        ctx.fillText('A (0,r)', canvas.width/2 + canvas.width * 0.0125 , canvas.width/4);
+        ctx.beginPath();
+        ctx.arc(canvas.width/2, canvas.width/4, 2.5, 0, 2 * Math.PI);
+        ctx.fill();
+      }
+
+
+      if (drawThird === 1 && txt2_opacity >= 1) {
+        third_endAngle += 0.04;
+        ctx.beginPath();
+        ctx.arc(canvas.width/2, canvas.width/4, canvas.width/4, third_startAngle, third_endAngle);
+        ctx.strokeStyle = strokeColor;
+        ctx.lineWidth = strokeThickness;
+        ctx.setLineDash(dashPattern);
+        ctx.stroke();
+      }
+
+
+      if (third_endAngle > Math.PI * 2){
+        drawFourth = 1;
+      }
+
+      if (drawFourth === 1) {
+        txt4_opacity += fadeSpeed;
+        ctx.fillText('B (0,-r)', canvas.width/2 + canvas.width * 0.0125, canvas.width * 3 / 4);
+        ctx.beginPath();
+        ctx.arc(canvas.width/2, canvas.width * 3 / 4, 2.5, 0, 2 * Math.PI);
+        ctx.fill();
+      }
+
+
+      if (drawFourth === 1 && txt3_opacity >= 1) {
+        fourth_endAngle += 0.04;
+        ctx.beginPath();
+        ctx.arc(canvas.width /2, canvas.width * 3 / 4, canvas.width / 4, fourth_startAngle, fourth_endAngle);
+        ctx.strokeStyle = strokeColor;
+        ctx.lineWidth = strokeThickness;
+        ctx.setLineDash(dashPattern);
+        ctx.stroke();
+      }
+
+      if (fourth_endAngle > Math.PI * 2){
+        drawFifth = 1;
+      }
+
+
+      if (drawFifth === 1) {
+        ctx.setLineDash([]);
+        kawung(canvas.width / 2, canvas.width / 2, canvas.width / 4);
+      }
+
+
+
+
+      requestAnimationFrame(draw);
+    }
+
+    if (screenWidth > 400){
+        canvas.width = 400;
+        canvas.height = 400;
+    }
+    else {
+        canvas.width = screenWidth * screenWidth / canvas.width;
+        canvas.height = screenWidth * screenWidth / canvas.width;
+        console.log(canvas.width);
+    }
+
+    draw();
+  </script>
+ 
+</body>
+</html>
