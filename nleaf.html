@@ -55,10 +55,15 @@
             const container = document.querySelector('.container');
             container.classList.toggle('show-nav');
     });
+
+    
+
+
+
+
     const canvas = document.getElementById('myCanvas');
     const ctx = canvas.getContext('2d');
     const screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-
 
     if (screenWidth > 400){
         canvas.width = 400;
@@ -66,123 +71,123 @@
     }
     else {
         canvas.width = screenWidth * screenWidth / canvas.width;
-        canvas.height = screenWidth * screenWidth / canvas.width;
+        canvas.height = canvas.width;
         console.log(canvas.width);
     }
 
     let line1_x1 = 0;
     let line1_y1 = 0;
     let line1_x2 = 0;
-    let line1_y2 = canvas.height/4;
+    let line1_y2 = canvas.width/4;
     let line1_step = 0;
 
 
     let line2_x1 = 0;
-    let line2_y1 = canvas.height/4 * 0.1;
+    let line2_y1 = canvas.width/4 * 0.1;
     let line2_x2 = canvas.width/4 * 0.1;
-    let line2_y2 = canvas.height/4;
+    let line2_y2 = canvas.width/4;
     let line2_step = 0;
 
     let line3_x1 = 0;
-    let line3_y1 = canvas.height/4 * 0.2;
+    let line3_y1 = canvas.width/4 * 0.2;
     let line3_x2 = canvas.width/4 * 0.2;
-    let line3_y2 = canvas.height/4;
+    let line3_y2 = canvas.width/4;
     let line3_step = 0;
 
     let line4_x1 = 0;
-    let line4_y1 = canvas.height/4 * 0.3;
+    let line4_y1 = canvas.width/4 * 0.3;
     let line4_x2 = canvas.width/4 * 0.3;
-    let line4_y2 = canvas.height/4;
+    let line4_y2 = canvas.width/4;
     let line4_step = 0;
 
 
     let line5_x1 = 0;
-    let line5_y1 = canvas.height/4 * 0.4;
+    let line5_y1 = canvas.width/4 * 0.4;
     let line5_x2 = canvas.width/4 * 0.4;
-    let line5_y2 = canvas.height/4;
+    let line5_y2 = canvas.width/4;
     let line5_step = 0;
 
 
     let line6_x1 = 0;
-    let line6_y1 = canvas.height/4 * 0.5;
+    let line6_y1 = canvas.width/4 * 0.5;
     let line6_x2 = canvas.width/4 * 0.5;
-    let line6_y2 = canvas.height/4;
+    let line6_y2 = canvas.width/4;
     let line6_step = 0;
 
 
     let line7_x1 = 0;
-    let line7_y1 = canvas.height/4 * 0.6;
+    let line7_y1 = canvas.width/4 * 0.6;
     let line7_x2 = canvas.width/4 * 0.6;
-    let line7_y2 = canvas.height/4;
+    let line7_y2 = canvas.width/4;
     let line7_step = 0;
 
 
     let line8_x1 = 0;
-    let line8_y1 = canvas.height/4 * 0.7;
+    let line8_y1 = canvas.width/4 * 0.7;
     let line8_x2 = canvas.width/4 * 0.7;
-    let line8_y2 = canvas.height/4;
+    let line8_y2 = canvas.width/4;
     let line8_step = 0;
 
 
     let line9_x1 = 0;
-    let line9_y1 = canvas.height/4 * 0.8;
+    let line9_y1 = canvas.width/4 * 0.8;
     let line9_x2 = canvas.width/4 * 0.8;
-    let line9_y2 = canvas.height/4;
+    let line9_y2 = canvas.width/4;
     let line9_step = 0;
 
     let line10_x1 = 0;
-    let line10_y1 = canvas.height/4 * 0.9;
+    let line10_y1 = canvas.width/4 * 0.9;
     let line10_x2 = canvas.width/4 * 0.9;
-    let line10_y2 = canvas.height/4;
+    let line10_y2 = canvas.width/4;
     let line10_step = 0;
 
     let line11_x1 = 0;
-    let line11_y1 = canvas.height/4 * 1;
+    let line11_y1 = canvas.width/4 * 1;
     let line11_x2 = canvas.width/4 * 1;
-    let line11_y2 = canvas.height/4;
+    let line11_y2 = canvas.width/4;
     let line11_step = 0;
 
     function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, canvas.width, canvas.width);
 
       ctx.save();
       ctx.setLineDash([5, 5]);
 
-      ctx.translate(canvas.width/2, canvas.height/2);
+      ctx.translate(canvas.width/2, canvas.width/2);
 
-      ctx.moveTo(-canvas.width/4, -canvas.height/4);
-      ctx.lineTo(canvas.width/4, -canvas.height/4);
-      ctx.lineTo(canvas.width/4, canvas.height/4);
-      ctx.lineTo(-canvas.width/4, canvas.height/4);
-      ctx.lineTo(-canvas.width/4, -canvas.height/4);
+      ctx.moveTo(-canvas.width/4, -canvas.width/4);
+      ctx.lineTo(canvas.width/4, -canvas.width/4);
+      ctx.lineTo(canvas.width/4, canvas.width/4);
+      ctx.lineTo(-canvas.width/4, canvas.width/4);
+      ctx.lineTo(-canvas.width/4, -canvas.width/4);
       ctx.stroke();
 
       ctx.beginPath();
-      ctx.arc(-canvas.width/4, -canvas.height/4, 2.5, 0, 2 * Math.PI);
+      ctx.arc(-canvas.width/4, -canvas.width/4, 2.5, 0, 2 * Math.PI);
       ctx.fill();
-      ctx.fillText('(-100, 100)', -canvas.width/4, -canvas.height/4 - canvas.height/25);
+      ctx.fillText('(-100, 100)', -canvas.width/4, -canvas.width/4 - canvas.width/25);
 
       ctx.beginPath();
-      ctx.arc(canvas.width/4, -canvas.height/4, 2.5, 0, 2 * Math.PI);
+      ctx.arc(canvas.width/4, -canvas.width/4, 2.5, 0, 2 * Math.PI);
       ctx.fill();
-      ctx.fillText('(100, 100)', canvas.width/4, -canvas.height/4 - canvas.height/25);
+      ctx.fillText('(100, 100)', canvas.width/4, -canvas.width/4 - canvas.width/25);
 
       ctx.beginPath();
-      ctx.arc(canvas.width/4, canvas.height/4, 2.5, 0, 2 * Math.PI);
+      ctx.arc(canvas.width/4, canvas.width/4, 2.5, 0, 2 * Math.PI);
       ctx.fill();
-      ctx.fillText('(100, -100)', canvas.width/4, canvas.height/4 + canvas.height/25);
+      ctx.fillText('(100, -100)', canvas.width/4, canvas.width/4 + canvas.width/25);
 
 
       ctx.beginPath();
-      ctx.arc(-canvas.width/4, canvas.height/4, 2.5, 0, 2 * Math.PI);
+      ctx.arc(-canvas.width/4, canvas.width/4, 2.5, 0, 2 * Math.PI);
       ctx.fill();
-      ctx.fillText('(-100, -100)', -canvas.width/4, canvas.height/4 + canvas.height/25);
+      ctx.fillText('(-100, -100)', -canvas.width/4, canvas.width/4 + canvas.width/25);
 
 
       ctx.beginPath();
       ctx.arc(0, 0, 2.5, 0, 2 * Math.PI);
       ctx.fill();
-      ctx.fillText('(0, 0)', 0, - canvas.height/25);
+      ctx.fillText('(0, 0)', 0, - canvas.width/25);
 
       ctx.setLineDash([]);
       ctx.strokeStyle = "#945f42";
@@ -524,15 +529,15 @@
       requestAnimationFrame(draw);
     }
 
-    if (screenWidth > 400){
-        canvas.width = 400;
-        canvas.height = 400;
-    }
-    else {
-        canvas.width = screenWidth * screenWidth / canvas.width;
-        canvas.height = screenWidth * screenWidth / canvas.width;
-        console.log(canvas.width);
-    }
+    // if (screenWidth > 400){
+    //     canvas.width = 400;
+    //     canvas.height = 400;
+    // }
+    // else {
+    //     canvas.width = screenWidth * screenWidth / canvas.width;
+    //     canvas.height = screenWidth * screenWidth / canvas.width;
+    //     console.log(canvas.width);
+    // }
     
     draw();
   </script>
