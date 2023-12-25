@@ -565,41 +565,418 @@ function drawArbitraryKawung(Points, x, y, r =200, rotDeg= 0, mainColor=themes["
 }
 
 
+function drawFlower(x, y, n, A, b = 0.3,  mainColor=themes["batavia"].mainColor, secondaryColor=themes["batavia"].secondaryColor, strokeColor=themes["batavia"].strokeColor , use_isen = true) {
+  group = document.createElementNS(svgURI, "g");
+  group.setAttribute("transform", `translate(${x}, ${y})`);
+  group.setAttribute("fill", mainColor);
+  group.setAttribute("stroke", secondaryColor);
+  container.appendChild(group);
 
 
-// document.addEventListener("DOMContentLoaded", function(event) {
-//     setup(400, 400, themes["tetradiac"].secondaryColor);
-//     cX = svg.getAttribute("width")/2;
-//     cY = svg.getAttribute("height")/2;
+  let flower = document.createElementNS(svgURI, "path");
+  sentence = '';
+
+  maxR = 0;
+  maxTheta = -1000;
 
 
-    // for(let i=0; i < squareFiveVertices.length; i++){
-        // drawArbitraryKawung(squareFiveVertices[i], cX, cY, cX,0, themes["oldJava"].mainColor, themes["oldJava"].secondaryColor, '#4D0900');
-        // for (let j=0; j < 4; j++){
-            // drawArbitraryKawung(pentagonFourVertices[i], cX, cY, cX, 90 * j, themes["oldJava"].mainColor, themes["oldJava"].secondaryColor, '#4D0900');
-            // drawArbitraryKawung(hexagonFourVertices[i], cX, cY, cX,90 * j, themes["oldJava"].mainColor, themes["oldJava"].secondaryColor, '#4D0900');
-        // }
-    // }
+  for(let theta = 0; theta <= 360; theta++){
+      let r = A * Math.pow(Math.abs(Math.sin(  (n*theta) * (2 * Math.PI) / 360 )), b)  - 0.25 * A * Math.pow(Math.abs(Math.sin( (2*n*theta) * (2 * Math.PI) / 360    )), b) + 0.3 * A;
+      if (Math.abs(r) > Math.abs(maxR) ){
+        maxR = r;
+        maxTheta = theta;
+      }
 
 
-    // cX = svg.getAttribute("width")/2;
-    // cY = svg.getAttribute("height")/2;
-    // rFib = svg.getAttribute("width") / 9.6;
+      let x = r * Math.cos( theta * (2 * Math.PI) / 360);
+      let y = r * Math.sin( theta * (2 * Math.PI) / 360);
 
-    // for(let i=0; i<3; i++){
-    //     for(let j=0; j<5; j++){
-    //         drawFibonacciKawung(1.6 * rFib + i * 2 * rFib * 1.6, rFib + j * 2 * rFib, rFib, themes["oldJava"].mainColor, themes["oldJava"].secondaryColor, themes["oldJava"].strokeColor, 'cecek', false);
-    //     }
-    // }
-
-
-
-    // Apollonian Kawung
-//     drawApollonianKawung(cX ,cY, 0.93 * cY, 'asymmetric','tetradiac',themes["oldJava"].mainColor,themes["oldJava"].secondaryColor,themes["tetradiac"].strokeColor, 'cecek', 'rect_diamond', false);
+      if (theta === 0){
+        sentence += `M ${x} ${y} `
+      }
+      else {
+        sentence += `L ${x} ${y}`
+      }
+  }
 
 
-// });
+  flower.setAttribute("d", sentence);
+  flower.setAttribute("stroke", secondaryColor);
+  flower.setAttribute("fill", mainColor);
+  flower.setAttribute("stroke-width", 2);
+  group.appendChild(flower);
 
+  
+
+
+
+  if (use_isen){
+
+
+     for (let i = 0; i < 2 * n ; i++){
+        let deg = i * 2 * Math.PI / (2 * n) + Math.PI / (2 * n);
+
+
+        isen_group = document.createElementNS(svgURI, "g");
+        if (2* n === 3){
+            isen_group.setAttribute("transform", `rotate(${ deg * 360 / (2 * Math.PI)  + 30  })`);
+        }
+        else if (2* n === 4){
+            isen_group.setAttribute("transform", `rotate(${ deg * 360 / (2 * Math.PI)  + 90  })`);
+        }
+        else if (2* n === 5){
+            isen_group.setAttribute("transform", `rotate(${ deg * 360 / (2 * Math.PI)  + 54  })`);
+        }
+        else if (2* n === 6){
+            isen_group.setAttribute("transform", `rotate(${ deg * 360 / (2 * Math.PI)  + 30  })`);
+        }
+        else if (2* n === 7){
+            isen_group.setAttribute("transform", `rotate(${ deg * 360 / (2 * Math.PI)  + 15  })`);
+        }
+        else if (2* n === 8){
+            isen_group.setAttribute("transform", `rotate(${ deg * 360 / (2 * Math.PI)    })`);
+        }
+        group.appendChild(isen_group);
+
+        line = document.createElementNS(svgURI, "path");
+        line.setAttribute("d", `M${-0.025 * A} ${0}, Q ${-0.025 * A} ${0.65 * A }, ${-0.1 * A} ${0.65 * A } `);
+        line.setAttribute("stroke", secondaryColor);
+        line.setAttribute("fill", "none");
+        line.setAttribute("stroke-width", 1.5);
+        isen_group.appendChild(line);
+
+        line = document.createElementNS(svgURI, "path");
+        line.setAttribute("d", `M${0.025 * A} ${0}, Q ${0.025 * A} ${0.65 * A }, ${0.1 * A} ${0.65 * A } `);
+        line.setAttribute("stroke", secondaryColor);
+        line.setAttribute("fill", "none");
+        line.setAttribute("stroke-width", 1.5);
+        isen_group.appendChild(line);
+
+        line = document.createElementNS(svgURI, "path");
+        line.setAttribute("d", `M${-0.05 * A} ${0}, Q ${-0.1 * A} ${0.55 * A }, ${-0.15 * A} ${0.55 * A } `);
+        line.setAttribute("stroke", secondaryColor);
+        line.setAttribute("fill", "none");
+        line.setAttribute("stroke-width", 1.5);
+        isen_group.appendChild(line);
+
+        line = document.createElementNS(svgURI, "path");
+        line.setAttribute("d", `M${0.05 * A } ${0}, Q ${0.1 * A} ${0.45 * A }, ${0.15 * A} ${0.55 * A } `);
+        line.setAttribute("stroke", secondaryColor);
+        line.setAttribute("fill", "none");
+        line.setAttribute("stroke-width", 1.5);
+        isen_group.appendChild(line);
+
+        circle = document.createElementNS(svgURI, "circle");
+        circle.setAttribute("cx", 0);
+        circle.setAttribute("cy", 0.2 * A);
+        circle.setAttribute("r", 0.12 * A);
+        circle.setAttribute("fill", secondaryColor);
+        circle.setAttribute("stroke", mainColor);
+        isen_group.appendChild(circle);
+
+
+        circle = document.createElementNS(svgURI, "circle");
+        circle.setAttribute("cx", 0.9 * A * Math.cos(deg));
+        circle.setAttribute("cy", 0.9 * A * Math.sin(deg));
+        circle.setAttribute("r", 0.05 * A);
+        circle.setAttribute("fill", secondaryColor);
+        circle.setAttribute("stroke", "none");
+        group.appendChild(circle);
+
+
+
+
+
+        deg = i * 2 * Math.PI / (2 * n) - Math.PI / (3 * n)
+
+        circle = document.createElementNS(svgURI, "circle");
+        circle.setAttribute("cx", 0.8 * A * Math.cos(deg));
+        circle.setAttribute("cy", 0.8 * A * Math.sin(deg));
+        circle.setAttribute("r", 0.05 * A);
+        circle.setAttribute("fill", secondaryColor);
+        circle.setAttribute("stroke", "none");
+        group.appendChild(circle);
+
+
+
+
+        deg = i * 2 * Math.PI / (2 * n) + Math.PI / (3 * n)
+
+        circle = document.createElementNS(svgURI, "circle");
+        circle.setAttribute("cx", 0.8 * A * Math.cos(deg));
+        circle.setAttribute("cy", 0.8 * A * Math.sin(deg));
+        circle.setAttribute("r", 0.05 * A);
+        circle.setAttribute("fill", secondaryColor);
+        circle.setAttribute("stroke", "none");
+        group.appendChild(circle);
+
+
+    }
+
+    circle = document.createElementNS(svgURI, "circle");
+    circle.setAttribute("cx", 0);
+    circle.setAttribute("cy", 0);
+    circle.setAttribute("r", 0.16 * A);
+    circle.setAttribute("fill", secondaryColor);
+    circle.setAttribute("stroke-width", 1.5);
+    circle.setAttribute("stroke", mainColor);
+    group.appendChild(circle);
+
+
+  }
+}
+
+
+function drawParang(xStart,yStart, xEnd, yEnd,h, rotDeg =0, mainColor = themes["batavia"].mainColor, secondaryColor = themes["batavia"].secondaryColor, strokeColor = themes["batavia"].strokeColor, useContainer = false){
+    /*
+    Function to draw parang.
+    Parang is bounded by rectangle, with (x,y) as the left most coordinate at:
+    x = xStart - 0.5 r and y = yStart -  -0.63*h
+    and it has width equal to xEnd - xStart + r and height equal to  1.26 h
+    */
+
+
+    r = 0.24 * h;
+    degree = Math.atan((yEnd - yStart)/ (xEnd - xStart));
+    num = Math.floor( (xEnd - xStart) / (r*Math.cos(degree)));
+
+    group = document.createElementNS(svgURI, "g");
+    group.setAttribute("transform", `translate(${xStart}, ${yStart}) rotate(${(degree)*360/ (2 * Math.PI) +rotDeg})`);
+    group.setAttribute("stroke", strokeColor);
+    group.setAttribute("fill", mainColor)
+    group.setAttribute("stroke-width", 1);
+
+    if (useContainer){
+        container.appendChild(group);
+    }
+    else {
+        svg.appendChild(group);
+    }
+    
+
+
+
+    topLine = document.createElementNS(svgURI, "path");
+    topLine.setAttribute("d", 
+    `M ${- 0.5 * r} ${-0.63*h},
+     L ${xEnd - xStart + 1 * r} ${-0.63*h}
+    `);
+    topLine.setAttribute("stroke", "white");
+    group.appendChild(topLine);
+
+    botLine = topLine.cloneNode(true);
+    botLine.setAttribute("d", 
+    `M ${- 0.5 * r} ${0.63*h},
+     L ${xEnd - xStart + 1 * r} ${0.63*h}
+    `);
+    group.appendChild(botLine);
+
+    for (let i=0; i<num; i++){
+        if (i%2 == 1){
+            let prg = document.createElementNS(svgURI, "path");
+            prg.setAttribute("d", 
+                `M ${- 0.5 * r + i*r} ${0.5*h},
+                 C ${- 0.5 * r + i*r} ${0.65*h}, ${0.5 * r + i*r - 0.2 *r} ${0.65*h}, ${0.5 * r + i*r} ${0.5*h},
+                 C ${0.5 * r + i*r - 0.3 * r} ${0.4*h}, ${- 0.5 * r  + 3*r + i* r} ${- 0.5*h}, ${- 0.5 * r  + 3*r + i* r} ${- 0.5 * r  + 3*r + i* r,  - 0.5*h},
+                 C ${- 0.5 * r  + 3*r + i* r} ${- 0.65*h}, ${- 0.5 * r  + 2*r + i* r + 0.2 * r} ${- 0.65*h}, ${- 0.5 * r  + 2*r + i* r} ${- 0.5*h},
+                 C ${- 0.5 * r  + 2*r + i* r + 0.3 * r} ${- 0.5*h}, ${- 0.5 * r + i*r} ${0.5*h}, ${- 0.5 * r + i*r} ${0.5*h}
+                `);
+            group.appendChild(prg);
+        }
+        else {
+            let cBottom = document.createElementNS(svgURI, "path");
+            cBottom.setAttribute("d", 
+                `M ${- 0.5 * r + i*r} ${0.5*h},
+                 C ${- 0.5 * r + i*r} ${0.65*h}, ${0.5 * r + i*r - 0.2 *r} ${0.65*h}, ${0.5 * r + i*r} ${0.5*h},
+                 C ${0.5 * r + i*r} ${0.5*h}, ${0.5 * r + i*r} ${0.35*h}, ${- 0.5 * r + i*r} ${0.5*h},
+                `);
+            group.appendChild(cBottom);
+
+            let cTop = document.createElementNS(svgURI, "path");
+            cTop.setAttribute("d", 
+                `M ${- 0.5 * r  + 3*r + i* r} ${- 0.5*h},
+                 C ${- 0.5 * r  + 3*r + i* r} ${- 0.65*h}, ${- 0.5 * r  + 2*r + i* r + 0.2 * r} ${- 0.65*h}, ${- 0.5 * r  + 2*r + i* r} ${- 0.5*h},
+                 C ${- 0.5 * r  + 2*r + i* r} ${- 0.4*h}, ${- 0.5 * r  + 3*r + i* r} ${- 0.4*h}, ${- 0.5 * r  + 3*r + i* r} ${- 0.5*h},
+                `);
+            group.appendChild(cTop);
+
+            let prg2 = document.createElementNS(svgURI, "path");
+            prg2.setAttribute("d", 
+                `M ${0.5 * r + i*r} ${0.5*h},
+                 C ${- 0.5 * r + i*r + 0.6*r} ${0.5*h - (h/(2*r)) * 0.6 * r}, ${- 0.5 * r + i*r + 1*r} ${0.5*h - (h/(2*r)) * 1 * r}, ${- 0.5 * r + i*r + 1*r} ${0.5*h - (h/(2*r)) * 1 * r},
+                 L ${- 0.5 * r  + 2*r + i* r} ${- 0.5*h},
+                 C ${- 0.5 * r + i*r + 2.4*r} ${0.5*h - (h/(2*r)) * 1.4 * r}, ${- 0.5 * r + i*r + 2*r} ${0.5*h - (h/(2*r)) * 1 * r}, ${- 0.5 * r + i*r + 2*r} ${0.5*h - (h/(2*r)) * 1 * r},
+                 L ${0.5 * r + i*r} ${0.5*h}
+                `);
+            group.appendChild(prg2);
+        }
+
+        mlinjon = document.createElementNS(svgURI, "path");
+        mlinjon.setAttribute("d", `
+            M ${i*r} ${0.7*h},
+            L ${ i*r + 0.5 * r} ${0.65*h},
+            L ${ i*r + r} ${0.7*h},
+            L ${ i*r + 0.5 * r} ${0.75*h},
+            Z
+            `)
+        mlinjon.setAttribute("stroke-width", 0.5);
+        group.appendChild(mlinjon);
+
+        mlinjon2 = document.createElementNS(svgURI, "path");
+        mlinjon2.setAttribute("d", `
+            M ${i*r + 0.2 * r} ${0.7*h},
+            L ${ i*r + 0.5 * r} ${0.67*h},
+            L ${ i*r + 0.8 * r} ${0.7*h},
+            L ${ i*r + 0.5 * r} ${0.73*h},
+            Z
+            `)
+        mlinjon2.setAttribute("stroke-width", 0.75);
+        group.appendChild(mlinjon2);
+
+
+        mlinjon = mlinjon.cloneNode(true);
+        mlinjon.setAttribute("d", `
+            M ${i*r} ${-0.7*h},
+            L ${ i*r + 0.5 * r} ${-0.65*h},
+            L ${ i*r + r} ${-0.7*h},
+            L ${ i*r + 0.5 * r} ${-0.75*h},
+            Z
+            `)
+        group.appendChild(mlinjon);
+
+        mlinjon2 = mlinjon2.cloneNode(true);
+        mlinjon2.setAttribute("d", `
+            M ${i*r + 0.2 * r} ${-0.7*h},
+            L ${ i*r + 0.5 * r} ${-0.67*h},
+            L ${ i*r + 0.8 * r} ${-0.7*h},
+            L ${ i*r + 0.5 * r} ${-0.73*h},
+            Z
+            `)
+        group.appendChild(mlinjon2);
+
+    }
+
+
+
+
+
+    mlinjon = document.createElementNS(svgURI, "path");
+    mlinjon.setAttribute("d", `
+            M ${num*r} ${0.7*h},
+            L ${num*r + 0.5 * r} ${0.65*h},
+            L ${num*r + r} ${0.7*h},
+            L ${num*r + 0.5 * r} ${0.75*h},
+            Z
+            `)
+    mlinjon.setAttribute("stroke-width", 0.5);
+    group.appendChild(mlinjon);
+
+    mlinjon2 = document.createElementNS(svgURI, "path");
+    mlinjon2.setAttribute("d", `
+            M ${ num*r + 0.2 * r} ${0.7*h},
+            L ${ num*r + 0.5 * r} ${0.67*h},
+            L ${ num*r + 0.8 * r} ${0.7*h},
+            L ${ num*r + 0.5 * r} ${0.73*h},
+            Z
+            `)
+    mlinjon2.setAttribute("stroke-width", 0.75);
+    group.appendChild(mlinjon2);
+
+
+    mlinjon = document.createElementNS(svgURI, "path");
+    mlinjon.setAttribute("d", `
+            M ${num*r} ${-0.7*h},
+            L ${num*r + 0.5 * r} ${-0.65*h},
+            L ${num*r + r} ${-0.7*h},
+            L ${num*r + 0.5 * r} ${-0.75*h},
+            Z
+            `)
+    mlinjon.setAttribute("stroke-width", 0.5);
+    group.appendChild(mlinjon);
+
+    mlinjon2 = document.createElementNS(svgURI, "path");
+    mlinjon2.setAttribute("d", `
+            M ${ num*r + 0.2 * r} ${-0.7*h},
+            L ${ num*r + 0.5 * r} ${-0.67*h},
+            L ${ num*r + 0.8 * r} ${-0.7*h},
+            L ${ num*r + 0.5 * r} ${-0.73*h},
+            Z
+            `)
+    mlinjon2.setAttribute("stroke-width", 0.75);
+    group.appendChild(mlinjon2);
+
+    cTop = document.createElementNS(svgURI, "path");
+    cTop.setAttribute("d", 
+    `M ${- 0.5 * r  + 3*r + -1* r} ${- 0.5*h},
+     C ${- 0.5 * r  + 3*r + -1* r} ${- 0.65*h}, ${- 0.5 * r  + 2*r + -1* r + 0.2 * r} ${- 0.65*h}, ${- 0.5 * r  + 2*r + -1* r} ${- 0.5*h},
+     C ${- 0.5 * r  + 2*r + -1* r} ${- 0.4*h}, ${- 0.5 * r  + 3*r + -1* r} ${- 0.4*h}, ${- 0.5 * r  + 3*r + -1* r} ${- 0.5*h},
+    `);
+    group.appendChild(cTop);
+
+    cTop = document.createElementNS(svgURI, "path");
+    cTop.setAttribute("d", 
+        `M ${- 0.5 * r  + 3*r + -2* r} ${- 0.5*h},
+         C ${- 0.5 * r  + 3*r + -2* r} ${- 0.65*h}, ${- 0.5 * r  + 2*r + -2* r + 0.2 * r} ${- 0.65*h}, ${- 0.5 * r  + 2*r + -2* r} ${- 0.5*h},
+         C ${- 0.5 * r  + 2*r + -2* r} ${- 0.4*h}, ${- 0.5 * r  + 3*r + -2* r} ${- 0.4*h}, ${- 0.5 * r  + 3*r + -2* r} ${- 0.5*h},
+        `);
+    group.appendChild(cTop);
+
+
+    cBottom = document.createElementNS(svgURI, "path");
+    cBottom.setAttribute("d", 
+        `M ${- 0.5 * r + (num)*r} ${0.5*h},
+         C ${- 0.5 * r + (num)*r} ${0.65*h}, ${0.5 * r + (num)*r - 0.2 *r} ${0.65*h}, ${0.5 * r + (num)*r} ${0.5*h},
+         C ${0.5 * r + (num)*r} ${0.5*h}, ${0.5 * r + (num)*r} ${0.35*h}, ${- 0.5 * r + (num)*r} ${0.5*h},
+        `);
+    group.appendChild(cBottom);
+
+    cBottom = document.createElementNS(svgURI, "path");
+    cBottom.setAttribute("d", 
+        `M ${- 0.5 * r + (num+1)*r} ${0.5*h},
+         C ${- 0.5 * r + (num+1)*r} ${0.65*h}, ${0.5 * r + (num+1)*r - 0.2 *r} ${0.65*h}, ${0.5 * r + (num+1)*r} ${0.5*h},
+         C ${0.5 * r + (num+1)*r} ${0.5*h}, ${0.5 * r + (num+1)*r} ${0.35*h}, ${- 0.5 * r + (num+1)*r} ${0.5*h},
+        `);
+    cBottom.setAttribute("fill", mainColor);
+    cBottom.setAttribute("stroke", strokeColor);
+    group.appendChild(cBottom);
+
+
+
+
+    leftBorder = document.createElementNS(svgURI, "path");
+    leftBorder.setAttribute("d", 
+    `M ${- 1.5 *  r  + 3*r + -2* r} ${- 0.42*h},
+     L ${- 1.5 *  r  + 3*r + -2* r} ${0.2*h},
+     Q ${- 1.5 *  r  + 3*r + -2* r} ${0.42*h}, ${- 0.5 *  r  + 2.7 *r + -2* r} ${0.42*h},
+     L ${- 0.5 *  r  + 2.7 *r + -2* r} ${-0.2*h}
+     Q ${- 0.5 *  r  + 2.7 *r + -2* r} ${- 0.42*h}, ${- 1.5 *  r  + 3*r + -2* r} ${- 0.42*h}
+     Z
+
+    `);
+    group.appendChild(leftBorder);
+
+
+    let rightBorder = document.createElementNS(svgURI, "path");
+    rightBorder.setAttribute("d", 
+        `M ${0.5 * r + num*r} ${0.5*h},
+         C ${- 0.5 * r + num*r + 0.6*r} ${0.5*h - (h/(2*r)) * 0.6 * r}, ${- 0.5 * r + num*r + 1*r} ${0.5*h - (h/(2*r)) * 1 * r}, ${- 0.5 * r + num*r + 1*r} ${0.5*h - (h/(2*r)) * 1 * r},
+         L ${- 0.5 * r  + 2*r + num* r} ${- 0.5*h},
+         C ${- 0.5 * r + num*r + 2*r} ${0.5*h - (h/(2*r)) * 1.4 * r}, ${- 0.5 * r + num*r + 2*r} ${0.5*h - (h/(2*r)) * 1 * r}, ${- 0.5 * r + num*r + 2*r} ${0.5*h - (h/(2*r)) * 1 * r},
+         L ${0.5 * r + num*r} ${0.5*h}
+        `);
+    group.appendChild(rightBorder);
+
+
+    centerLine = document.createElementNS(svgURI, "path");
+    centerLine.setAttribute("d", 
+    `M ${-0.5 * r} ${0},
+     L ${xEnd - xStart + r} ${yEnd - yStart}
+    `);
+    centerLine.setAttribute("stroke", "white");
+    // group.appendChild(centerLine);
+
+
+}
 
 
  
