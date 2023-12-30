@@ -75,6 +75,7 @@ function setup(w, h, mainColor=themes["batavia"].secondaryColor){
         svg.setAttribute("height", screenWidth * (screenWidth/w) * h/w);
     }
     bg_rect = document.createElementNS(svgURI, "rect");
+    bg_rect.setAttribute("rx", 15);
     bg_rect.setAttribute("width", "100%");
     bg_rect.setAttribute("height", "100%");
     bg_rect.setAttribute("fill", mainColor);
