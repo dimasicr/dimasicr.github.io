@@ -1,30 +1,30 @@
 <svg
 	xmlns="http://www.w3.org/2000/svg" width="200" height="200">
-	<g transform="translate(100, 100)" stroke="black" >
-		<circle cx="0" cy="0" r="93"  fill="#333"/>
+	<g transform="translate(100, 100)" stroke="brown" >
+		<circle cx="0" cy="0" r="93"  fill="#493118"/>
 		<g>
-			<path d="M 0 -93 A93 93 0 0 1 93 0 A93 93 0 0 1 0 -93" transform="rotate(0)" fill="#F7F0F5"/>
-			<path d="M 0 -93 A93 93 0 0 1 93 0 A93 93 0 0 1 0 -93" transform="rotate(90)" fill="#F7F0F5"/>
-			<path d="M 0 -93 A93 93 0 0 1 93 0 A93 93 0 0 1 0 -93" transform="rotate(180)" fill="#F7F0F5"/>
-			<path d="M 0 -93 A93 93 0 0 1 93 0 A93 93 0 0 1 0 -93" transform="rotate(270)" fill="#F7F0F5"/>
+			<path d="M 0 -93 A93 93 0 0 1 93 0 A93 93 0 0 1 0 -93" transform="rotate(0)" fill="#e4d5b7"/>
+			<path d="M 0 -93 A93 93 0 0 1 93 0 A93 93 0 0 1 0 -93" transform="rotate(90)" fill="#e4d5b7"/>
+			<path d="M 0 -93 A93 93 0 0 1 93 0 A93 93 0 0 1 0 -93" transform="rotate(180)" fill="#e4d5b7"/>
+			<path d="M 0 -93 A93 93 0 0 1 93 0 A93 93 0 0 1 0 -93" transform="rotate(270)" fill="#e4d5b7"/>
 		</g>
 		<g>
-			<circle cx="-79.71428571428571" cy="-13.285714285714286" r="6.2" transform="rotate(0)" fill="#333"/>
-			<circle cx="-13.285714285714286" cy="-79.71428571428571" r="6.2" transform="rotate(0)" fill="#333"/>
-			<circle cx="-79.71428571428571" cy="-13.285714285714286" r="6.2" transform="rotate(90)" fill="#333"/>
-			<circle cx="-13.285714285714286" cy="-79.71428571428571" r="6.2" transform="rotate(90)" fill="#333"/>
-			<circle cx="-79.71428571428571" cy="-13.285714285714286" r="6.2" transform="rotate(180)" fill="#333"/>
-			<circle cx="-13.285714285714286" cy="-79.71428571428571" r="6.2" transform="rotate(180)" fill="#333"/>
-			<circle cx="-79.71428571428571" cy="-13.285714285714286" r="6.2" transform="rotate(270)" fill="#333"/>
-			<circle cx="-13.285714285714286" cy="-79.71428571428571" r="6.2" transform="rotate(270)" fill="#333"/>
+			<circle cx="-79.71428571428571" cy="-13.285714285714286" r="6.2" transform="rotate(0)" fill="#493118"/>
+			<circle cx="-13.285714285714286" cy="-79.71428571428571" r="6.2" transform="rotate(0)" fill="#493118"/>
+			<circle cx="-79.71428571428571" cy="-13.285714285714286" r="6.2" transform="rotate(90)" fill="#493118"/>
+			<circle cx="-13.285714285714286" cy="-79.71428571428571" r="6.2" transform="rotate(90)" fill="#493118"/>
+			<circle cx="-79.71428571428571" cy="-13.285714285714286" r="6.2" transform="rotate(180)" fill="#493118"/>
+			<circle cx="-13.285714285714286" cy="-79.71428571428571" r="6.2" transform="rotate(180)" fill="#493118"/>
+			<circle cx="-79.71428571428571" cy="-13.285714285714286" r="6.2" transform="rotate(270)" fill="#493118"/>
+			<circle cx="-13.285714285714286" cy="-79.71428571428571" r="6.2" transform="rotate(270)" fill="#493118"/>
 		</g>
-		<g transform="rotate(45)" fill="#F7F0F5">
+		<g transform="rotate(45)" fill="#e4d5b7">
 			<rect x="-29.892857142857142" y="-1.9928571428571429" width="19.928571428571427" height="5.314285714285714" transform="rotate(0) scale(1.1 1.1)"/>
 			<rect x="-29.892857142857142" y="-1.9928571428571429" width="19.928571428571427" height="5.314285714285714" transform="rotate(90) scale(1.1 1.1)"/>
 			<rect x="-29.892857142857142" y="-1.9928571428571429" width="19.928571428571427" height="5.314285714285714" transform="rotate(180) scale(1.1 1.1)"/>
 			<rect x="-29.892857142857142" y="-1.9928571428571429" width="19.928571428571427" height="5.314285714285714" transform="rotate(270) scale(1.1 1.1)"/>
 		</g>
-		<g fill="#F7F0F5">
+		<g fill="#e4d5b7">
 			<path d="M -39.857142857142854 0 Q -26.571428571428573  -7.9714285714285715  -13.285714285714286  0 Q -26.571428571428573  7.9714285714285715  -39.857142857142854  0" transform="rotate(0) scale(1.1 1.1)"/>
 			<path d="M -39.857142857142854 0 Q -26.571428571428573  -7.9714285714285715  -13.285714285714286  0 Q -26.571428571428573  7.9714285714285715  -39.857142857142854  0" transform="rotate(90) scale(1.1 1.1)"/>
 			<path d="M -39.857142857142854 0 Q -26.571428571428573  -7.9714285714285715  -13.285714285714286  0 Q -26.571428571428573  7.9714285714285715  -39.857142857142854  0" transform="rotate(180) scale(1.1 1.1)"/>
