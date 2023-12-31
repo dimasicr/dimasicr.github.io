@@ -114,46 +114,40 @@
             <div id="svg-container"></div>
          <figure>
             <figcaption style="width: 80%; text-align: center; margin: auto; margin-top: 10px;">Swipe image to change pattern</figcaption>
+            <details style="margin-top: 5px;">
+               <summary> <span> Interactive Image  </span> </summary>  
+               <select name="Paddings" id="paddings" class="btns" >
+                  <option value="false" selected >No Padding</option>
+                  <option value="true">Padding</option>
+               </select>
+               <select name="recursion_threshold" id="recursion_threshold" class="btns" >
+                  <option value="1"> Detail </option>
+                  <option value="3.5" selected> Normal </option>
+                  <option value="5"> Rough </option>
+               </select>
+               <select name="Motives" id="motives" class="btns" style="margin-top: 10px;" >
+                  <option value="symmetric">Symmetric</option>
+                  <option value="asymmetric">Asymmetric</option>
+                  <option value="triplet">Triplet</option>
+               </select>
+               <select name="theme" id="themes" class="btns" >
+                  <option value="oldJava">Old Java </option>
+                  <option value="tetradiac">Nusantara </option>
+                  <option value="batavia">Batavia </option>
+               </select>
+               <button id="download-btn"> <i class="fa fa-download"></i>  Download SVG </span> </button>
+            </details>
          </figure>
          
          <article style="width: 80%; text-align: center; margin: auto;">
-         <p style="text-align: justify;"> Motive inspired by traditional Indonesian motive <i> Kawung </i>  decorated with traditional <i> isen cecek</i>, arranged as Apollonian Gasket. Apollonian Gasket is a circle fractals, where 4 circles is kissing (mutually tangent). The equation to draw this is first described by French philosopher and mathematician, Rene Descartes.
-         </p>
-         <details>
-         <summary> Description </summary>
+         <p style="text-align: justify;"> Motive inspired by traditional Indonesian motive <i> Kawung </i>  decorated with traditional <i> isen cecek</i>, arranged as Apollonian Gasket. Apollonian Gasket is a circle fractals, where 4 circles is kissing (mutually tangent). The equation to draw this is first described by French philosopher and mathematician, Rene Descartes.</p>
+         <h3 style="text-align: justify;"> Description </h3>
          <p style="text-align: justify;"> Both Kawung and Apollonian gasket are one of the oldest pattern known. In Indonesia, Kawung motive is found in 13th century status of Mahakala, a relic from Singosari Kingdom. In French, Rene Descartes famous philosopher and mathematician states that four every four kissing circles, the radii of the circles satisfy a certain quadratic equation. We can treat Kawung as a Circle, and by doing that we can use Descartes theorem to draw Apollonian Kawung Gasket  </p>
-         </details>
-         <details style="margin-top: 5px;">
-         <summary> Math Concept </summary>
+         <h3> Math Concept </h3>
          <p style="text-align: justify;"> Descartes theorem states that curvature k ( 1 / radius) of four mutually tangent circles can be described as:  </p>
          <p style=" overflow-x: scroll;"> \( (k_1 + k_2 + k_3 + k_4)^2  = 2 \cdot (2k_1 ^2 + k_2 ^2+ k_3 ^2 + k_4 ^2)  \) </p>
          <p style="text-align: justify;"> To get location of circle center, we can use complex Descartes theorem:  </p>
          <p style=" overflow-x: scroll;"> \( (k_1 z_1 + k_2 z_2 + k_3 z_3 + k_4 z_4)^2  = 2 \cdot (2k_1 ^2 z_1 ^ 2+ k_2 ^2 z_2^2+ k_3 ^2 z_3 ^ 2 + k_4 ^2 z_4 ^ 2)  \) </p>         </details>
-         <details style="margin-top: 5px;">
-         <summary>
-         <span> Interactive Image  </span>
-         </summary>  
-         <select name="Paddings" id="paddings" class="btns" >
-         <option value="false" selected >No Padding</option>
-         <option value="true">Padding</option>
-         </select>
-         <select name="recursion_threshold" id="recursion_threshold" class="btns" >
-         <option value="1"> Detail </option>
-         <option value="3.5" selected> Normal </option>
-         <option value="5"> Rough </option>
-         </select>
-         <select name="Motives" id="motives" class="btns" style="margin-top: 10px;" >
-         <option value="symmetric">Symmetric</option>
-         <option value="asymmetric">Asymmetric</option>
-         <option value="triplet">Triplet</option>
-         </select>
-         <select name="theme" id="themes" class="btns" >
-         <option value="oldJava">Old Java </option>
-         <option value="tetradiac">Nusantara </option>
-         <option value="batavia">Batavia </option>
-         </select>
-         <button id="download-btn"> <i class="fa fa-download"></i>  Download SVG </span> </button>
-         </details>
          </article>
          </div>
       </div>
