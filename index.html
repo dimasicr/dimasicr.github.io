@@ -110,9 +110,13 @@
          <!-- Main Content Area -->
          <div class="main-content">
          <h1 > Apollonian Kawung</h1>
-         <div id="svg-container"></div>
+         <figure>
+            <div id="svg-container"></div>
+            <figcaption style="width: 80%; text-align: center; margin: auto; margin-top: 10px;">Swipe image to change pattern</figcaption>
+         </figure>
+         
          <article style="width: 80%; text-align: center; margin: auto;">
-         <p style="text-align: justify;"> Motive inspired by traditional Indonesian motive <i> Kawung </i>  decorated with traditional <i> isen cecek</i>, arranged as Apollonian Gasket. Apollonian Gasket is a circle fractals, where 4 circles is kissing (mutually tangent). The equation to draw this is first described by French philosopher and Mathematician, Rene Descartes.
+         <p style="text-align: justify;"> Motive inspired by traditional Indonesian motive <i> Kawung </i>  decorated with traditional <i> isen cecek</i>, arranged as Apollonian Gasket. Apollonian Gasket is a circle fractals, where 4 circles is kissing (mutually tangent). The equation to draw this is first described by French philosopher and mathematician, Rene Descartes.
          </p>
          <details>
          <summary> Description </summary>
@@ -127,16 +131,6 @@
          <details style="margin-top: 5px;">
          <summary>
          <span> Interactive Image  </span>
-         <select name="Motives" id="motives" class="btns" style="margin-top: 10px;" >
-         <option value="symmetric">Symmetric</option>
-         <option value="asymmetric">Asymmetric</option>
-         <option value="triplet">Triplet</option>
-         </select>
-         <select name="theme" id="themes" class="btns" >
-         <option value="oldJava">Old Java </option>
-         <option value="tetradiac">Nusantara </option>
-         <option value="batavia">Batavia </option>
-         </select>
          </summary>  
          <select name="Paddings" id="paddings" class="btns" >
          <option value="false" selected >No Padding</option>
@@ -146,6 +140,16 @@
          <option value="1"> Detail </option>
          <option value="3.5" selected> Normal </option>
          <option value="5"> Rough </option>
+         </select>
+         <select name="Motives" id="motives" class="btns" style="margin-top: 10px;" >
+         <option value="symmetric">Symmetric</option>
+         <option value="asymmetric">Asymmetric</option>
+         <option value="triplet">Triplet</option>
+         </select>
+         <select name="theme" id="themes" class="btns" >
+         <option value="oldJava">Old Java </option>
+         <option value="tetradiac">Nusantara </option>
+         <option value="batavia">Batavia </option>
          </select>
          <button id="download-btn"> <i class="fa fa-download"></i>  Download SVG </span> </button>
          </details>
