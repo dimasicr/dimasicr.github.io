@@ -6,6 +6,86 @@ const selectSharpness = document.getElementById('recursion_threshold');
 
 
 
+let touchStartX = 0;
+let touchEndX = 0;
+let currentPattern = selectBox.value;
+
+// Function to handle swipe
+function handleSwipe() {
+    const swipeThreshold = 50; // Adjust this value as needed
+
+    // Calculate the distance of swipe
+    const swipeLength = touchEndX - touchStartX;
+
+    if (swipeLength > swipeThreshold) {
+        // Swipe right
+        if (currentPattern === '3') {
+          currentPattern = '3.5';
+          selectBox.value = '3.5';
+        } 
+        else if (currentPattern === '3.5') {
+          currentPattern = '4';
+          selectBox.value = '4';
+        } 
+        else if (currentPattern === '4') {
+          currentPattern = '2';
+          selectBox.value = '2';
+        } 
+        else if (currentPattern === '2') {
+          currentPattern = '2.5';
+          selectBox.value = '2.5';
+        }
+        else if (currentPattern === '2.5') {
+          currentPattern = '3';
+          selectBox.value = '3';
+        }
+
+    } else if (swipeLength < -swipeThreshold) {
+        // Swipe left
+        if (currentPattern === '4') {
+          currentPattern = '3.5';
+          selectBox.value = '3.5';
+        } 
+        else if (currentPattern === '3.5') {
+          currentPattern = '3';
+          selectBox.value = '3';
+        } 
+        else if (currentPattern === '3') {
+          currentPattern = '2.5';
+          selectBox.value = '2.5';
+        } 
+        else if (currentPattern === '2.5') {
+          currentPattern = '2';
+          selectBox.value = '2';
+        } 
+        else if (currentPattern === '2') {
+          currentPattern = '4';
+          selectBox.value = '4';
+        } 
+    }
+    redraw();
+}
+
+svg.addEventListener("touchstart", (event) => {
+    touchStartX = event.touches[0].clientX;
+});
+
+svg.addEventListener("touchend", (event) => {
+    touchEndX = event.changedTouches[0].clientX;
+    handleSwipe();
+});
+
+// Mouse events (for desktop)
+svg.addEventListener("mousedown", (event) => {
+    touchStartX = event.clientX;
+});
+
+svg.addEventListener("mouseup", (event) => {
+    touchEndX = event.clientX;
+    handleSwipe();
+});
+
+
 
 
 
@@ -62,15 +142,6 @@ function redraw(){
 
 
   drawFlower(0, 0,selectBox.value, 0.2 * w , selectSharpness.value, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, true);
-
-
-  // for (let i = -2; i <3; i++){
-  //   for (let j = -2; j<3; j++){
-  //     drawKawung(0 + i * 3 * w/7, 0 + j * 3 * w/7, w/14, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor ,'cecek', 'rect_diamond', false);
-  //     drawFlower(1.5 * w/7 + i * 3 * w/ 7 , -1.5 * w/7 + j * 3 * w/ 7,3.5, 0.1 * w , themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, true);
-  //   }
-  // }
-
 
 
 }
