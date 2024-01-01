@@ -1,47 +1,82 @@
-// Create the SVG document
-const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-const screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-// const main_colour = "rgb(235, 210, 140)";
-// const secondary_colour = "rgb(170, 130, 75)";
-// Old Java
-let main_colour =  "#e4d5b7";
-let secondary_colour = "#493118";
-let stroke_colour = "brown";
-let stroke_width = 0.5;
+const selectBox = document.getElementById('motives');
+const selectPadding = document.getElementById('paddings');
+const selectThemes = document.getElementById('themes');
+const selectThreshold = document.getElementById('recursion_threshold');
 
-svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-if (screenWidth >=  400){
-  svg.setAttribute("width", 400);
-  svg.setAttribute("height", 400);
+
+let touchStartX = 0;
+let touchEndX = 0;
+let currentPattern = selectBox.value;
+
+// Function to handle swipe
+function handleSwipe() {
+    const swipeThreshold = 50; // Adjust this value as needed
+
+    // Calculate the distance of swipe
+    const swipeLength = touchEndX - touchStartX;
+
+    if (swipeLength > swipeThreshold) {
+        // Swipe right
+        if (currentPattern === 'single') {
+          currentPattern = 'tesselation';
+          selectBox.value = 'tesselation';
+        } 
+        else if (currentPattern === 'tesselation') {
+          currentPattern = 'single';
+          selectBox.value = 'single';
+        } 
+
+    } else if (swipeLength < -swipeThreshold) {
+        // Swipe left
+        if (currentPattern === 'tesselation') {
+          currentPattern = 'single';
+          selectBox.value = 'single';
+        } 
+        else if (currentPattern === 'single') {
+          currentPattern = 'tesselation';
+          selectBox.value = 'tesselation';
+        } 
+    }
+    redraw();
 }
-else {
-  svg.setAttribute("width", screenWidth * (screenWidth/ 400));
-  svg.setAttribute("height", screenWidth * (screenWidth/ 400));
-}
-bg_rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-bg_rect.setAttribute("width", "100%");
-bg_rect.setAttribute("height", "100%");
-bg_rect.setAttribute("fill", secondary_colour);
-svg.appendChild(bg_rect);
+
+svg.addEventListener("touchstart", (event) => {
+    touchStartX = event.touches[0].clientX;
+});
+
+svg.addEventListener("touchend", (event) => {
+    touchEndX = event.changedTouches[0].clientX;
+    handleSwipe();
+});
+
+// Mouse events (for desktop)
+svg.addEventListener("mousedown", (event) => {
+    touchStartX = event.clientX;
+});
+
+svg.addEventListener("mouseup", (event) => {
+    touchEndX = event.clientX;
+    handleSwipe();
+});
 
 
 function height(side_length){
   return side_length * Math.sqrt(3) * 0.5;
 }
 
-function draw_triangle(g, x, y, rot_deg, w, padding=false) {
+function draw_triangle(g, x, y, rot_deg, w, padding=false, mainColor = themes[selectThemes.value].mainColor ) {
   h = height(w);
 
   group = document.createElementNS("http://www.w3.org/2000/svg", "g");
   group.setAttribute("transform", `translate(${x}, ${y}) rotate(${rot_deg})`);
-  group.setAttribute("fill", main_colour);
+  group.setAttribute("fill", mainColor);
 
   tumpal_outline = document.createElementNS("http://www.w3.org/2000/svg", "path");
   tumpal_outline.setAttribute("d", `M ${w/2} 0 L 0 ${-h} ${-w/2} 0 Z`);
-  tumpal_outline.setAttribute("stroke", main_colour);
+  tumpal_outline.setAttribute("stroke", mainColor);
   tumpal_outline.setAttribute("fill", "none");
 
-  if (selectPadding.value  !== "padding"){
+  if (selectPadding.value  !== 'true'){
   //Draw Tumpal
     tumpal_1 = document.createElementNS("http://www.w3.org/2000/svg", "path");
     tumpal_1.setAttribute("d", `M0 0 C${0.158*w} 0 ${0.158*w} ${-0.211*w} ${0.316*w} ${-0.211*w} A${0.105*w} ${0.105*w} 0 0 1 ${0.316*w} 0 A${0.052*w} ${0.052*w} 0 0 1 ${0.316*w} ${-0.105*w} C${0.211*w} ${-0.105 *w}  ${0.211*w} 0 ${0.105 *w}  0 Z`);
@@ -88,32 +123,13 @@ function draw_triangle(g, x, y, rot_deg, w, padding=false) {
 
 
 
-// g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-// g.setAttribute("transform", `translate(${200}, ${200 + height(150)}) rotate(${0})`)
-// draw_triangle(g,0, 0, 0, 150, false);
-// container.appendChild(g);
 
+function redraw(){
+  setup(400, 400, themes[selectThemes.value].secondaryColor);
+  cX = svg.getAttribute("width")/2;
+  cY = svg.getAttribute("height")/2;
+  l = svg.getAttribute("width")/2;
 
-cX = 200;
-cY = 200;
-l = 200;
-
-
-function reset(){
-  svg.innerHTML = '';
-  let bg_rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-  bg_rect.setAttribute("width", "100%");
-  bg_rect.setAttribute("height", "100%");
-  bg_rect.setAttribute("fill", secondary_colour);
-  svg.appendChild(bg_rect);
-  group = document.createElementNS("http://www.w3.org/2000/svg", "g");
-  container = document.createElementNS("http://www.w3.org/2000/svg", "g");
-  svg.appendChild(container);
-}
-
-
-function redraw(motive = 'tesselation'){
-  reset();
 
 
   w = svg.getAttribute("width")/4;
@@ -121,22 +137,22 @@ function redraw(motive = 'tesselation'){
   cx = svg.getAttribute("width")/2;
   cy = svg.getAttribute("height")/2;
 
-  if (motive === 'tesselation'){
+  if (selectBox.value === 'tesselation'){
     for (let i=0; i<6; i++){
       g = document.createElementNS("http://www.w3.org/2000/svg", "g");
       g.setAttribute("transform", `translate(${cx}, ${cy - h}) rotate(${i*60} 0 ${h}) scale(1,-1)`);
       draw_triangle(g,  0, 0, 0, w, padding=false);
-      container.appendChild(g);
+      svg.appendChild(g);
   
       g = document.createElementNS("http://www.w3.org/2000/svg", "g");
       g.setAttribute("transform", `translate(${cx}, ${cy - h - 2 *h}) rotate(${i*60} 0 ${h}) scale(1,-1)`);
       draw_triangle(g,  0, 0, 0, w, padding=false);
-      container.appendChild(g);
+      svg.appendChild(g);
   
       g = document.createElementNS("http://www.w3.org/2000/svg", "g");
       g.setAttribute("transform", `translate(${cx}, ${cy - h + 2 *h}) rotate(${i*60} 0 ${h}) scale(1,-1)`);
       draw_triangle(g,  0, 0, 0, w, padding=false);
-      container.appendChild(g);
+      svg.appendChild(g);
   
   
       // Right
@@ -144,45 +160,53 @@ function redraw(motive = 'tesselation'){
       g = document.createElementNS("http://www.w3.org/2000/svg", "g");
       g.setAttribute("transform", `translate(${cx + 1.5 * w}, ${cy - h + 1 *h}) rotate(${i*60} 0 ${h}) scale(1,-1)`);
       draw_triangle(g,  0, 0, 0, w, padding=false);
-      container.appendChild(g);
+      svg.appendChild(g);
   
       g = document.createElementNS("http://www.w3.org/2000/svg", "g");
       g.setAttribute("transform", `translate(${cx + 1.5 * w}, ${cy - h + 1 *h - 2 * h}) rotate(${i*60} 0 ${h}) scale(1,-1)`);
       draw_triangle(g,  0, 0, 0, w, padding=false);
-      container.appendChild(g);
+      svg.appendChild(g);
   
+      if (i != 2) {
       g = document.createElementNS("http://www.w3.org/2000/svg", "g");
       g.setAttribute("transform", `translate(${cx + 1.5 * w}, ${cy - h + 1 *h - 4 * h}) rotate(${i*60} 0 ${h}) scale(1,-1)`);
       draw_triangle(g,  0, 0, 0, w, padding=false);
-      container.appendChild(g);
+      svg.appendChild(g);
+      }
   
+      if (i != 1){
       g = document.createElementNS("http://www.w3.org/2000/svg", "g");
       g.setAttribute("transform", `translate(${cx + 1.5 * w}, ${cy - h + 1 *h + 2 * h}) rotate(${i*60} 0 ${h}) scale(1,-1)`);
       draw_triangle(g,  0, 0, 0, w, padding=false);
-      container.appendChild(g);
+      svg.appendChild(g);
+      }
   
       // Left
   
       g = document.createElementNS("http://www.w3.org/2000/svg", "g");
       g.setAttribute("transform", `translate(${cx - 1.5 * w}, ${cy - h + 1 *h}) rotate(${i*60} 0 ${h}) scale(1,-1)`);
       draw_triangle(g,  0, 0, 0, w, padding=false);
-      container.appendChild(g);
+      svg.appendChild(g);
   
       g = document.createElementNS("http://www.w3.org/2000/svg", "g");
       g.setAttribute("transform", `translate(${cx - 1.5 * w}, ${cy - h + 1 *h - 2 * h}) rotate(${i*60} 0 ${h}) scale(1,-1)`);
       draw_triangle(g,  0, 0, 0, w, padding=false);
-      container.appendChild(g);
+      svg.appendChild(g);
   
+      if (i != 4){
       g = document.createElementNS("http://www.w3.org/2000/svg", "g");
       g.setAttribute("transform", `translate(${cx - 1.5 * w}, ${cy - h + 1 *h - 4 * h}) rotate(${i*60} 0 ${h}) scale(1,-1)`);
       draw_triangle(g,  0, 0, 0, w, padding=false);
-      container.appendChild(g);
+      svg.appendChild(g);
+      }
   
+      if (i != 5){
       g = document.createElementNS("http://www.w3.org/2000/svg", "g");
       g.setAttribute("transform", `translate(${cx - 1.5 * w}, ${cy - h + 1 *h + 2 * h}) rotate(${i*60} 0 ${h}) scale(1,-1)`);
       draw_triangle(g,  0, 0, 0, w, padding=false);
-      container.appendChild(g);
-  
+      svg.appendChild(g);
+      }
+
     }
   }
 
@@ -190,24 +214,24 @@ function redraw(motive = 'tesselation'){
     for (let i=0; i<6; i++){
       g = document.createElementNS("http://www.w3.org/2000/svg", "g");
       g.setAttribute("transform", `translate(${cx}, ${cy - h}) rotate(${i*60} 0 ${h}) scale(1,-1)`);
-      draw_triangle(g,  0, 0, 0, w, padding=false);
-      container.appendChild(g);  
+      draw_triangle(g,  0, 0, 0, w, selectPadding.value);
+      svg.appendChild(g);  
     }
 
     g = document.createElementNS("http://www.w3.org/2000/svg", "g");
     g.setAttribute("transform", `translate(${cx}, ${cy - h - 2 * h}) rotate(${180} 0 ${h}) scale(1,-1)`);
-    draw_triangle(g,  0, 0, 0, w, padding=false);
-    container.appendChild(g);  
+    draw_triangle(g,  0, 0, 0, w, selectPadding.value);
+    svg.appendChild(g);  
 
     g = document.createElementNS("http://www.w3.org/2000/svg", "g");
     g.setAttribute("transform", `translate(${cx - 1.5 * w}, ${cy - h - 2 * h  + 1 * h + 2 * h}) rotate(${60} 0 ${h}) scale(1,-1)`);
-    draw_triangle(g,  0, 0, 0, w, padding=false);
-    container.appendChild(g);  
+    draw_triangle(g,  0, 0, 0, w, selectPadding.value);
+    svg.appendChild(g);  
 
     g = document.createElementNS("http://www.w3.org/2000/svg", "g");
     g.setAttribute("transform", `translate(${cx + 1.5 * w}, ${cy - h - 2 * h  + 1 * h + 2 * h}) rotate(${300} 0 ${h}) scale(1,-1)`);
-    draw_triangle(g,  0, 0, 0, w, padding=false);
-    container.appendChild(g);  
+    draw_triangle(g,  0, 0, 0, w, selectPadding.value);
+    svg.appendChild(g);  
 
 
 
@@ -219,46 +243,23 @@ function redraw(motive = 'tesselation'){
 }
 
 
-const selectPadding = document.getElementById('paddings');
 // Add an event listener to the select input
 selectPadding.addEventListener('change', function() {
-    redraw(selectBox.value);
+    redraw();
 });
 
 
-const selectBox = document.getElementById('motives');
   // Add an event listener to the select input
-  selectBox.addEventListener('change', function() {
-  // Retrieve the selected value
-  const selectedValue = selectBox.value;
-          
-  // Display the selected value
-  redraw(selectedValue);
+selectBox.addEventListener('change', function() {
+  redraw();
 });
 
-const selectThemes = document.getElementById('themes');
 
 // Add an event listener to the select input
 selectThemes.addEventListener('change', function() {
-
-if (selectThemes.value === 'old_java'){
-  main_colour =  "#e4d5b7";
-  secondary_colour = "#493118";
-  stroke_colour = "brown";
-  stroke_width = 0.5;
-}
-else if (selectThemes.value === 'nusantara_blend'){
-  main_colour = '#F7F0F5';
-  secondary_colour =  '#333';
-  stroke_colour = "none";
-  stroke_width = 0;
-}
-        
-// Display the selected value
-            redraw(selectBox.value);
+  redraw();
 });
 
 
-  redraw();
-
+redraw();
 
