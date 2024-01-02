@@ -77,15 +77,71 @@ function handleSwipe() {
         } 
 
     } else if (swipeLength < -swipeThreshold) {
-        // Swipe left
-        // if (currentPattern === 'tesselation') {
-        //   currentPattern = 'single';
-        //   selectBox.value = 'single';
-        // } 
-        // else if (currentPattern === 'single') {
-        //   currentPattern = 'tesselation';
-        //   selectBox.value = 'tesselation';
-        // } 
+        if (selectBox.value === 'dodecagon_hexagon_square' && selectMotive.value === 'single') {
+          selectBox.value = 'hexagon_triangle';
+          selectMotive.value = 'tesselation';
+        } 
+        else if (selectBox.value === 'hexagon_triangle' && selectMotive.value === 'tesselation') {
+          selectBox.value = 'hexagon_triangle';
+          selectMotive.value = 'single';
+        } 
+        else if (selectBox.value === 'hexagon_triangle' && selectMotive.value === 'single') {
+          selectBox.value = 'hexagon_square_triangle';
+          selectMotive.value = 'tesselation';
+        } 
+        else if (selectBox.value === 'hexagon_square_triangle' && selectMotive.value === 'tesselation') {
+          selectBox.value = 'hexagon_square_triangle';
+          selectMotive.value = 'single';
+        } 
+        else if (selectBox.value === 'hexagon_square_triangle' && selectMotive.value === 'single') {
+          selectBox.value = 'square_triangle_complex';
+          selectMotive.value = 'tesselation';
+        } 
+        else if (selectBox.value === 'square_triangle_complex' && selectMotive.value === 'tesselation') {
+          selectBox.value = 'square_triangle_complex';
+          selectMotive.value = 'single';
+        } 
+        else if (selectBox.value === 'square_triangle_complex' && selectMotive.value === 'single') {
+          selectBox.value = 'square_triangle';
+          selectMotive.value = 'tesselation';
+        } 
+        else if (selectBox.value === 'square_triangle' && selectMotive.value === 'tesselation') {
+          selectBox.value = 'square_triangle';
+          selectMotive.value = 'single';
+        } 
+        else if (selectBox.value === 'square_triangle' && selectMotive.value === 'single') {
+          selectBox.value = 'hexagon_triangle_complex';
+          selectMotive.value = 'tesselation';
+        } 
+        else if (selectBox.value === 'hexagon_triangle_complex' && selectMotive.value === 'tesselation') {
+          selectBox.value = 'hexagon_triangle_complex';
+          selectMotive.value = 'single';
+        } 
+        else if (selectBox.value === 'hexagon_triangle_complex' && selectMotive.value === 'single') {
+          selectBox.value = 'dodecagon_triangle';
+          selectMotive.value = 'tesselation';
+        }
+        else if (selectBox.value === 'dodecagon_triangle' && selectMotive.value === 'tesselation') {
+          selectBox.value = 'dodecagon_triangle';
+          selectMotive.value = 'single';
+        } 
+        else if (selectBox.value === 'dodecagon_triangle' && selectMotive.value === 'single') {
+          selectBox.value = 'octagon_square';
+          selectMotive.value = 'tesselation';
+        } 
+        else if (selectBox.value === 'octagon_square' && selectMotive.value === 'tesselation') {
+          selectBox.value = 'octagon_square';
+          selectMotive.value = 'single';
+        }
+        else if (selectBox.value === 'octagon_square' && selectMotive.value === 'single') {
+          selectBox.value = 'dodecagon_hexagon_square';
+          selectMotive.value = 'tesselation';
+        } 
+        else if (selectBox.value === 'dodecagon_hexagon_square' && selectMotive.value === 'tesselation') {
+          selectBox.value = 'dodecagon_hexagon_square';
+          selectMotive.value = 'single';
+        }
+        
     }
     redraw();
 }
