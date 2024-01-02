@@ -1,37 +1,114 @@
-// Create the SVG document
-const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-const screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-// const main_colour = "rgb(235, 210, 140)";
-// const secondary_colour = "rgb(170, 130, 75)";
 
-// Old Java
-let main_colour =  "#e4d5b7";
-let secondary_colour = "#493118";
-let stroke_colour = "brown";
-let stroke_width = 0.5;
+let touchStartX = 0;
+let touchEndX = 0;
 
-svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-if (screenWidth >=  400){
-  svg.setAttribute("width", 400);
-  svg.setAttribute("height", 400);
+// Function to handle swipe
+function handleSwipe() {
+    const swipeThreshold = 50; // Adjust this value as needed
+
+    // Calculate the distance of swipe
+    const swipeLength = touchEndX - touchStartX;
+
+    if (swipeLength > swipeThreshold) {
+        // Swipe right
+        if (selectBox.value === 'dodecagon_hexagon_square' &&  selectMotive.value === 'single') {
+          selectMotive.value = 'tesselation';
+        } 
+        else if (selectBox.value === 'dodecagon_hexagon_square' && selectMotive.value === 'tesselation') {
+          selectBox.value = 'octagon_square';
+          selectMotive.value = 'single';
+        } 
+        else if (selectBox.value === 'octagon_square' && selectMotive.value === 'single') {
+          selectBox.value = 'octagon_square';
+          selectMotive.value = 'tesselation';
+        } 
+        else if (selectBox.value === 'octagon_square' && selectMotive.value === 'tesselation') {
+          selectBox.value = 'dodecagon_triangle';
+          selectMotive.value = 'single';
+        } 
+        else if (selectBox.value === 'dodecagon_triangle' && selectMotive.value === 'single') {
+          selectBox.value = 'dodecagon_triangle';
+          selectMotive.value = 'tesselation';
+        } 
+        else if (selectBox.value === 'dodecagon_triangle' && selectMotive.value === 'tesselation') {
+          selectBox.value = 'hexagon_triangle_complex';
+          selectMotive.value = 'single';
+        } 
+        else if (selectBox.value === 'hexagon_triangle_complex' && selectMotive.value === 'single') {
+          selectBox.value = 'hexagon_triangle_complex';
+          selectMotive.value = 'tesselation';
+          console.log("chiho")
+        } 
+        else if (selectBox.value === 'hexagon_triangle_complex' && selectMotive.value === 'tesselation') {
+          selectBox.value = 'square_triangle';
+          selectMotive.value = 'single';
+        } 
+        else if (selectBox.value === 'square_triangle' && selectMotive.value === 'single') {
+          selectBox.value = 'square_triangle';
+          selectMotive.value = 'tesselation';
+        } 
+        else if (selectBox.value === 'square_triangle' && selectMotive.value === 'tesselation') {
+          selectBox.value = 'square_triangle_complex';
+          selectMotive.value = 'single';
+        } 
+        else if (selectBox.value === 'square_triangle_complex' && selectMotive.value === 'single') {
+          selectBox.value = 'square_triangle_complex';
+          selectMotive.value = 'tesselation';
+        } 
+        else if (selectBox.value === 'square_triangle_complex' && selectMotive.value === 'tesselation') {
+          selectBox.value = 'hexagon_square_triangle';
+          selectMotive.value = 'single';
+        } 
+        else if (selectBox.value === 'hexagon_square_triangle' && selectMotive.value === 'single') {
+          selectBox.value = 'hexagon_square_triangle';
+          selectMotive.value = 'tesselation';
+        } 
+        else if (selectBox.value === 'hexagon_square_triangle' && selectMotive.value === 'tesselation') {
+          selectBox.value = 'hexagon_triangle';
+          selectMotive.value = 'single';
+        } 
+        else if (selectBox.value === 'hexagon_triangle' && selectMotive.value === 'single') {
+          selectBox.value = 'hexagon_triangle';
+          selectMotive.value = 'tesselation';
+        } 
+        else if (selectBox.value === 'hexagon_triangle' && selectMotive.value === 'tesselation') {
+          selectBox.value = 'dodecagon_hexagon_square';
+          selectMotive.value = 'single';
+        } 
+
+    } else if (swipeLength < -swipeThreshold) {
+        // Swipe left
+        // if (currentPattern === 'tesselation') {
+        //   currentPattern = 'single';
+        //   selectBox.value = 'single';
+        // } 
+        // else if (currentPattern === 'single') {
+        //   currentPattern = 'tesselation';
+        //   selectBox.value = 'tesselation';
+        // } 
+    }
+    redraw();
 }
-else {
-  svg.setAttribute("width", screenWidth * (screenWidth/ 400));
-  svg.setAttribute("height", screenWidth * (screenWidth/ 400));
-}
-bg_rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-bg_rect.setAttribute("width", "100%");
-bg_rect.setAttribute("height", "100%");
-bg_rect.setAttribute("fill", secondary_colour);
-svg.appendChild(bg_rect);
 
+svg.addEventListener("touchstart", (event) => {
+    touchStartX = event.touches[0].clientX;
+});
 
-cx = svg.getAttribute("width")/2;
-cy = svg.getAttribute("height")/2;
+svg.addEventListener("touchend", (event) => {
+    touchEndX = event.changedTouches[0].clientX;
+    handleSwipe();
+});
 
+// Mouse events (for desktop)
+svg.addEventListener("mousedown", (event) => {
+    touchStartX = event.clientX;
+});
 
- 
-    
+svg.addEventListener("mouseup", (event) => {
+    touchEndX = event.clientX;
+    handleSwipe();
+});
+
 
 function get_equation(x1, y1, x2, y2){
   // return equation: y = mx + c;
@@ -92,8 +169,8 @@ function draw_polygon(n, x,y, r, rot_deg){
   let deg =  2 * Math.PI / n;
   group = document.createElementNS("http://www.w3.org/2000/svg", "g");
   group.setAttribute("transform", `translate(${x}, ${y}) rotate(${rot_deg})`);
-  group.setAttribute("stroke", stroke_colour);
-  group.setAttribute("stroke-width", stroke_width);
+  group.setAttribute("stroke", strokeColor);
+  group.setAttribute("stroke-width", 0.5);
   container.appendChild(group);
 
 
@@ -125,7 +202,7 @@ function draw_polygon(n, x,y, r, rot_deg){
     kawung_part = document.createElementNS("http://www.w3.org/2000/svg", "path");
     kawung_part.setAttribute('transform', `rotate(${ j * 360 / n})`)
     kawung_part.setAttribute("d", `M0 0 Q${new_x2} ${new_y2} ${vertices[0][0]} ${vertices[0][1]} Q${new_x} ${new_y} ${0} ${0}Z`);
-    kawung_part.setAttribute("fill", main_colour);
+    kawung_part.setAttribute("fill", mainColor);
     // kawung_part.setAttribute("stroke", 'black');
 
     // Isen Circle
@@ -133,7 +210,7 @@ function draw_polygon(n, x,y, r, rot_deg){
     isen_circle.setAttribute("cx", vertices[j][0] * 0.8);
     isen_circle.setAttribute("cy", vertices[j][1] * 0.8);
     isen_circle.setAttribute("r", r / 17.5);
-    isen_circle.setAttribute("fill", secondary_colour);
+    isen_circle.setAttribute("fill", secondaryColor);
     group.appendChild(kawung_part);
     group.appendChild(isen_circle);
 
@@ -142,7 +219,7 @@ function draw_polygon(n, x,y, r, rot_deg){
     // isen_circle2.setAttribute("cx", vertices[j][0] * 0.65);
     // isen_circle2.setAttribute("cy", vertices[j][1] * 0.65);
     // isen_circle2.setAttribute("r", r / 30);
-    // isen_circle2.setAttribute("fill", secondary_colour);
+    // isen_circle2.setAttribute("fill", secondaryColor);
     // group.appendChild(isen_circle2);
 
 
@@ -441,29 +518,19 @@ function preset_hexagonal_triangle_unit(x, y, r){
 }
 
 
-
-function reset(){
-  svg.innerHTML = '';
-  svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-  if (screenWidth >=  400){
-    svg.setAttribute("width", 400);
-    svg.setAttribute("height", 400);
-  }
-  else {
-    svg.setAttribute("width", screenWidth * (screenWidth/ 400));
-    svg.setAttribute("height", screenWidth * (screenWidth/ 400));
-  }
-  bg_rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-  bg_rect.setAttribute("width", "100%");
-  bg_rect.setAttribute("height", "100%");
-  bg_rect.setAttribute("fill", secondary_colour);
-  svg.appendChild(bg_rect);
-}
-
-
 function redraw(selectedSet){
-  reset();
-  if (selectedSet === 'dodecagon_hexagon_square'){
+  setup(400, 400, themes[selectThemes.value].secondaryColor);
+  cx = svg.getAttribute("width")/2;
+  cy = svg.getAttribute("height")/2;
+
+  mainColor = themes[selectThemes.value].mainColor;
+  secondaryColor = themes[selectThemes.value].secondaryColor;
+  strokeColor = themes[selectThemes.value].strokeColor;
+
+
+
+
+  if (selectBox.value === 'dodecagon_hexagon_square'){
     if (selectMotive.value === 'single'){
       preset_dodecagon_hexagon_square(cx,cy,80 * svg.getAttribute("width") / 400);
     }
@@ -494,7 +561,7 @@ function redraw(selectedSet){
     }
     
   }
-  else if (selectedSet === 'octagon_square'){
+  else if (selectBox.value === 'octagon_square'){
     if (selectMotive.value === 'single'){
       preset_octagon_square(cx, cy, 55 * svg.getAttribute("width") / 400);
     }
@@ -522,10 +589,11 @@ function redraw(selectedSet){
 
     }
   }
-  else if (selectedSet === 'dodecagon_triangle'){
+  else if (selectBox.value === 'dodecagon_triangle'){
     if (selectMotive.value === 'single'){
       dodecagon_triangle_unit(cx,cy,55 * svg.getAttribute("width") / 400);
     }
+    else {
     // preset_dodecagon_triangle(cx,cy,55 * svg.getAttribute("width") / 400);
     r = 55 * svg.getAttribute("width") / 400;
     distance = Math.cos(Math.PI/12) * r;
@@ -563,9 +631,10 @@ function redraw(selectedSet){
     dodecagon_triangle_unit(cx - distance - 2 * distance, cy + distance + Math.sin(45 * 2 * Math.PI / 360) * r, r );
     dodecagon_triangle_unit(cx - distance + 2  * distance, cy + distance + Math.sin(45 * 2 * Math.PI / 360) * r, r );
     dodecagon_triangle_unit(cx - distance + 4  * distance, cy + distance + Math.sin(45 * 2 * Math.PI / 360) * r, r );
+    }
 
   }
-  else if (selectedSet === 'hexagon_triangle_complex'){
+  else if (selectBox.value === 'hexagon_triangle_complex'){
     r = 65 * svg.getAttribute("width") / 400;
 
     if (selectMotive.value === 'single'){
@@ -593,7 +662,7 @@ function redraw(selectedSet){
     }
 
   }
-  else if (selectedSet === 'square_triangle'){
+  else if (selectBox.value === 'square_triangle'){
     r = 60 * svg.getAttribute("width") / 400;
     if (selectMotive.value === 'single'){
       preset_square_triangle(cx,cy, r);
@@ -623,7 +692,7 @@ function redraw(selectedSet){
 
     }
   }
-  else if (selectedSet === 'square_triangle_complex'){
+  else if (selectBox.value === 'square_triangle_complex'){
     r = 60 * svg.getAttribute("width") / 400;
     if (selectMotive.value === 'single'){
       preset_square_triangle_complex(cx,cy, r);
@@ -648,7 +717,7 @@ function redraw(selectedSet){
 
     }
   }
-  else if (selectedSet === 'hexagon_square_triangle'){
+  else if (selectBox.value === 'hexagon_square_triangle'){
     r = 65 * svg.getAttribute("width") / 400;
     if (selectMotive.value === 'single'){
       preset_hexagon_square_triangle(cx,cy, r);
@@ -678,7 +747,7 @@ function redraw(selectedSet){
 
     }
   }
-  else if (selectedSet === 'hexagon_triangle'){
+  else if (selectBox.value === 'hexagon_triangle'){
     r = 50 * svg.getAttribute("width") / 400; 
     if (selectMotive.value === 'single'){
       preset_hexagonal_triangle(cx,cy, r);
@@ -729,27 +798,20 @@ function redraw(selectedSet){
 const selectPadding = document.getElementById('paddings');
 // Add an event listener to the select input
 selectPadding.addEventListener('change', function() {
-    redraw(selectBox.value);
+    redraw();
 });
 
 
 const selectBox = document.getElementById('tesselation_type');
-  // Add an event listener to the select input
   selectBox.addEventListener('change', function() {
-  // Retrieve the selected value
-  const selectedValue = selectBox.value;
-  // Display the selected value
-  redraw(selectBox.value);
+  redraw();
 });
 
 
 const selectMotive = document.getElementById('motives');
   // Add an event listener to the select input
   selectMotive.addEventListener('change', function() {
-  // Retrieve the selected value
-  const selectedMotiveValue = selectMotive.value;
-  // Display the selected value
-  redraw(selectBox.value);
+  redraw();
 });
 
 
@@ -757,26 +819,11 @@ const selectThemes = document.getElementById('themes');
 
 // Add an event listener to the select input
 selectThemes.addEventListener('change', function() {
-
-if (selectThemes.value === 'old_java'){
-  main_colour =  "#e4d5b7";
-  secondary_colour = "#493118";
-  stroke_colour = "brown";
-  stroke_width = 0.5;
-}
-else if (selectThemes.value === 'nusantara_blend'){
-  main_colour = '#F7F0F5';
-  secondary_colour =  '#333';
-  stroke_colour = "none";
-  stroke_width = 0;
-}
-        
-// Display the selected value
-            redraw(selectBox.value);
+    redraw();
 });
 
 
-redraw(selectBox.value);
+redraw();
 
 
 
