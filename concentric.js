@@ -81,6 +81,12 @@ function redraw(){
   setup(400, 400, themes[useTheme].secondaryColor);
   cX = svg.getAttribute("width")/2;
   cY = svg.getAttribute("height")/2;
+  let container = document.createElementNS(svgURI, "g");
+  container.setAttribute("transform", `translate(${cX}, ${cY})`);
+
+
+
+
   if (selectBox.value === 'sq_pentagonFourVertices'){
     for(let i=0; i < selectThreshold.value; i++){
         for (let j=0; j < 4; j++){
@@ -90,9 +96,34 @@ function redraw(){
   }
   else if (selectBox.value === 'sq_squareFiveVertices') {
     for(let i=0; i < selectThreshold.value; i++){
-        drawArbitraryKawung(sq_squareFiveVertices[i], cX, cY, cX,0, themes["batavia"].mainColor, themes["batavia"].secondaryColor, 'black');
+        drawArbitraryKawung(sq_squareFiveVertices[i], cX, cY, cX,0, themes[useTheme].mainColor, themes[useTheme].secondaryColor, themes[useTheme].strokeColor);
     }
   }
+
+  border = document.createElementNS(svgURI, "path");
+  border.setAttribute("d", `M ${-0.5 * svg.getAttribute("width")} ${-0.4 * svg.getAttribute("height") } L${-0.5 * svg.getAttribute("width")} ${-0.5 * svg.getAttribute("height")} L${-0.4 * svg.getAttribute("width")} ${-0.5 * svg.getAttribute("height")}  Z     `);
+  border.setAttribute("fill", themes[useTheme].secondaryColor);
+
+  border_stripe = document.createElementNS(svgURI, "path");
+  border_stripe.setAttribute("d", `M ${-0.5 * svg.getAttribute("width")} ${-0.42 * svg.getAttribute("height") }  L${-0.42 * svg.getAttribute("width")} ${-0.5 * svg.getAttribute("height")} L${-0.45 * svg.getAttribute("width")} ${-0.5 * svg.getAttribute("height")}  L${-0.5 * svg.getAttribute("width")} ${-0.45 * svg.getAttribute("height")}   Z     `);
+  border_stripe.setAttribute("fill", themes[useTheme].mainColor);
+
+  svg.appendChild(container);
+  container.appendChild(border);
+  container.appendChild(border_stripe);
+
+  container2 = container.cloneNode(true);
+  container2.setAttribute("transform", `translate(${cX}, ${cY}) rotate(90)`)
+  svg.appendChild(container2);
+
+  container3 = container.cloneNode(true);
+  container3.setAttribute("transform", `translate(${cX}, ${cY}) rotate(180)`)
+  svg.appendChild(container3);
+
+  container4 = container.cloneNode(true);
+  container4.setAttribute("transform", `translate(${cX}, ${cY}) rotate(270)`)
+  svg.appendChild(container4);
+
 }
 
 redraw();
