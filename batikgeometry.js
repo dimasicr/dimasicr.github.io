@@ -727,6 +727,56 @@ function drawFlower(x, y, n, A, b = 0.3,  mainColor=themes["batavia"].mainColor,
   }
 }
 
+function drawTumpal(x, y, s = 200, trig_degree = 45, rotDeg= 0, mainColor=themes["oldJava"].mainColor, secondaryColor=themes["oldJava"].secondaryColor, strokeColor = themes["oldJava"].strokeColor, use_outline=false){  
+    
+    let container = document.createElementNS(svgURI, "g");
+    container.setAttribute("transform", `translate(${x}, ${y}) rotate(${rotDeg})`);
+    svg.appendChild(container);
+
+    h = Math.tan(trig_degree/360 * 2 * Math.PI) * (0.5 * s);
+    let outline = document.createElementNS(svgURI, "path");
+    outline_sentence = `M0 0  ${0.5 * s}, ${h}  ${-0.5 * s}, ${h} Z`;
+    outline.setAttribute("d", outline_sentence);
+    outline.setAttribute("fill", "none");
+    outline.setAttribute("stroke", strokeColor);
+    if (use_outline){
+        container.appendChild(outline);
+    }
+
+    R = s / 10;
+    Xc = 0.5 * s - R / Math.tan(0.5 * trig_degree/360 * 2 * Math.PI)
+    tpl_pth = `M0 ${h}  C ${Xc * 0.5} ${h}  ${Xc * 0.5} ${h - 2*R} ${Xc} ${h - 2* R}, A${R} ${R} 0 0 1 ${Xc} ${h}, A ${0.5 * R} ${0.5* R} 0 0 1 ${Xc} ${h - R}, C${Xc - R} ${h - R} ${Xc - R} ${h}  ${Xc - 2 * R} ${h} Z`;
+    tpl = document.createElementNS(svgURI, "path");
+    tpl.setAttribute("d", tpl_pth);
+    tpl.setAttribute("fill", mainColor);
+    tpl.setAttribute("stroke", strokeColor);
+    container.appendChild(tpl);
+
+
+    tpl2 = tpl.cloneNode(true);
+    tpl2.setAttribute("transform", "scale(-1 1)");
+    container.appendChild(tpl2);
+
+
+    tpl3 = tpl.cloneNode(true);
+    tpl3.setAttribute("transform", `rotate(90 0 ${h}) scale(-1 1)`);
+    container.appendChild(tpl3);
+
+    tpl4 = tpl.cloneNode(true);
+    tpl4.setAttribute("transform", `rotate(-90 0 ${h})`);
+    container.appendChild(tpl4);
+
+
+    tpl5 = tpl.cloneNode(true);
+    tpl5.setAttribute("d", `M0 0 Q${0} ${h - Xc - R}, ${( h - Xc - R) / h * 0.5 * s} ${h - Xc - R}`);
+    container.appendChild(tpl5);
+
+    tpl6 = tpl5.cloneNode(true);
+    tpl6.setAttribute("transform", `scale(-1, 1)`);
+    container.appendChild(tpl6);
+
+
+}
 
 function drawParang(xStart,yStart, xEnd, yEnd,h, rotDeg =0, mainColor = themes["batavia"].mainColor, secondaryColor = themes["batavia"].secondaryColor, strokeColor = themes["batavia"].strokeColor, useContainer = false){
     /*
