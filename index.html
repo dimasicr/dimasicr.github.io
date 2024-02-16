@@ -152,42 +152,7 @@
       <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
       <script src="complex.js"></script>
       <script src="batikgeometry.js"></script>
-      <script src="main_v2.js"> </script><script>
-         // JavaScript to toggle the side navigation bar
-         document.getElementById('toggleButton').addEventListener('click', function() {
-                 const sidenav = document.getElementById('sidenav');
-                 const container = document.querySelector('.container');
-                 container.classList.toggle('show-nav');
-         });
-         // Retrieve the SVG container element
-         const svgContainer = document.getElementById("svg-container");
-         
-         // Append the SVG document to the container
-         svgContainer.appendChild(svg);
-         
-         // Attach click event listener to the download button
-         const downloadBtn = document.getElementById("download-btn");
-         downloadBtn.addEventListener("click", () => {
-           // Convert the SVG document to a string
-           const svgString = new XMLSerializer().serializeToString(svg);
-         
-           // Create a Blob with the SVG string
-           const blob = new Blob([svgString], { type: "image/svg+xml" });
-         
-           // Create a download URL for the Blob
-           const downloadURL = URL.createObjectURL(blob);
-         
-           // Create a temporary link element
-           const link = document.createElement("a");
-           link.href = downloadURL;
-           link.download = "example.svg";
-         
-           // Programmatically click the link to trigger the download
-           link.click();
-         
-           // Clean up by revoking the URL
-           URL.revokeObjectURL(downloadURL);
-         });
-      </script> 
+      <script src="main_v2.js"> </script>
+      <script src="js/main-ui.js"></script> 
    </body>
 </html>
