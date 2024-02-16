@@ -1,4 +1,5 @@
-<h2>Gallery</h2>
+document.write('<h2>Gallery</h2>');
+document.write('
 <ul class="nav-links">
   <li><a href="index.html">Apollonian Kawung</a></li>
   <li><a href="fibonacci.html">Fibonacci Kawung</a></li>
@@ -8,9 +9,9 @@
   <li><a href="concentric.html"> Concentric Kawung </a></li>
   <li><a href="parametricbuketan.html"> Parametric Buketan </a></li>
   <li><a href="tumpaltesselation.html"> Tesselation of Tumpal </a></li>
-</ul>
-
-<h2>Tutorial</h2>
+</ul>')
+document.write('<h2>Tutorial</h2>');
+document.write('
 <ul class="nav-links">
   <li><a href="circular.html"> Circular Kawung</a></li>
   <li><a href="apolloniangasket.html"> Apollonian Kawung</a></li>
@@ -19,4 +20,9 @@
   <li><a href="sixleaves.html"> Six Leaves Kawung</a></li>
   <li><a href="eightleaves.html"> Eight Leaves Kawung</a></li>
   <li><a href="twelveleaves.html"> Twelve Leaves Kawung</a></li>
-</ul>
+</ul>');
+
+
+
+
+
