@@ -1,4 +1,4 @@
-This is repository for [The Geometry of Batik](https:www.geometryofbatik.com) website
+This is repository for [The Geometry of Batik](https://www.geometryofbatik.com/index.html) website
 
 Geometry of batik is a website dedicated to showcase the beauty of Indonesian Batik.
 The goal of the repo is to make beautiful pattern that can be drawn manually using only pencil, ruler, and compass, and stencil.
