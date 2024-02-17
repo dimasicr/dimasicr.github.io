@@ -152,7 +152,10 @@ selectBox.addEventListener('change', function() {
   redraw();
 });
 
-
+// Add an event listener to the select input
+selectIsens.addEventListener('change', function() {
+  redraw();
+});
 
 // Add an event listener to the select input
 selectThemes.addEventListener('change', function() {
