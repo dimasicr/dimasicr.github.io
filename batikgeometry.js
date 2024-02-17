@@ -727,8 +727,7 @@ function drawFlower(x, y, n, A, b = 0.3,  mainColor=themes["batavia"].mainColor,
   }
 }
 
-function drawTumpal(x, y, s = 200, trig_degree = 45, rotDeg= 0, mainColor=themes["oldJava"].mainColor, secondaryColor=themes["oldJava"].secondaryColor, strokeColor = themes["oldJava"].strokeColor, use_outline=false){  
-    
+function drawTumpal(x, y, isen='tumpal', s = 200, trig_degree = 45, rotDeg= 0, mainColor=themes["oldJava"].mainColor, secondaryColor=themes["oldJava"].secondaryColor, strokeColor = themes["oldJava"].strokeColor, use_outline=false){  
     let container = document.createElementNS(svgURI, "g");
     container.setAttribute("transform", `translate(${x}, ${y}) rotate(${rotDeg})`);
     svg.appendChild(container);
@@ -767,15 +766,32 @@ function drawTumpal(x, y, s = 200, trig_degree = 45, rotDeg= 0, mainColor=themes
     container.appendChild(tpl4);
 
 
-    tpl5 = tpl.cloneNode(true);
-    tpl5.setAttribute("d", `M0 0 Q${0} ${h - Xc - R}, ${( h - Xc - R) / h * 0.5 * s} ${h - Xc - R}`);
-    container.appendChild(tpl5);
+    if (isen === 'tumpal'){
+        if (trig_degree === 60) {
+            R_new = 2 * R;
+        }
+        else if (trig_degree === 45) {
+            R_new = R;
+        }
+        else if (trig_degree === 67.5) {
+            R_new = 2.5 * R;
+        }
+        tpl5 = tpl.cloneNode(true);
+        tpl5.setAttribute("d", `M 0 0 C 0 ${ 0.5 * (h - Xc - R - 0.4 * R_new) } ${0.4 * R_new}  ${ 0.5 * (h - Xc - R - 0.4 * R_new) } ${0.4 * R_new} ${h - Xc - R - 0.4 * R_new} A${0.2 * R_new} ${0.2 * R_new} 0 0 0 ${0} ${h - Xc - R - 0.4 * R_new} A${0.4 * R_new} ${0.4 * R_new} 0 0 0 ${0.8 * R_new} ${ h - Xc - R - 0.4 * R_new} C${0.8 * R_new} ${0.5 * (h - Xc - R - 0.4 * R_new) } ${0} ${0.5 * (h - Xc - R - 0.4 * R_new)} 0 0`);
+        container.appendChild(tpl5);
+        tpl6 = tpl5.cloneNode(true);
+        tpl6.setAttribute("transform", `scale(-1, 1)`);
+        container.appendChild(tpl6);
+    }
 
-    tpl6 = tpl5.cloneNode(true);
-    tpl6.setAttribute("transform", `scale(-1, 1)`);
-    container.appendChild(tpl6);
-
-
+    else if (isen === 'kawung'){
+        tpl5 = tpl.cloneNode(true);
+        tpl5.setAttribute("d", `M0 0 Q${0} ${h - Xc - R}, ${( h - Xc - R) / h * 0.5 * s} ${h - Xc - R}`);
+        container.appendChild(tpl5);
+        tpl6 = tpl5.cloneNode(true);
+        tpl6.setAttribute("transform", `scale(-1, 1)`);
+        container.appendChild(tpl6);
+    }
 }
 
 function drawParang(xStart,yStart, xEnd, yEnd,h, rotDeg =0, mainColor = themes["batavia"].mainColor, secondaryColor = themes["batavia"].secondaryColor, strokeColor = themes["batavia"].strokeColor, useContainer = false){
