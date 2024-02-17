@@ -22,6 +22,6 @@ document.write(
     '<li><a href="sixleaves.html">Six Leaves Kawung</a></li>' +
     '<li><a href="eightleaves.html">Eight Leaves Kawung</a></li>' +
     '<li><a href="twelveleaves.html">Twelve Leaves Kawung</a></li>' +
-    '<li><a href="tumpaltutorial.html">Tumpal</a></li>'
+    '<li><a href="tumpaltutorial.html">Tumpal</a></li>' +
   '</ul>'
 );
