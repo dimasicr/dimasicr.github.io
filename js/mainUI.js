@@ -27,3 +27,8 @@ downloadBtn.addEventListener("click", () => {
     // Clean up by revoking the URL
     URL.revokeObjectURL(downloadURL);
 });
+
+const refreshBtn = document.getElementById("refresh-btn");
+refreshBtn.addEventListener("click", () => {
+    step = 0;
+});
