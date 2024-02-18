@@ -57,13 +57,21 @@
          </figure>
          
          <article style="width: 80%; text-align: center; margin: auto;">
-         <h3 style="text-align: justify;"> Description </h3>
+         <h2 style="text-align: justify;"> Description </h2>
          <p style="text-align: justify;"> Motive inspired by traditional Indonesian motive <i> kawung </i> mapped conformally from poincare disk to square. Inspired by great paper "Analytical Methods for Squaring the Disc" written by Chamberlain Fong   </p>
-         <h3 style="text-align: justify;"> Math Concept </h3>
+         <h2 style="text-align: justify;"> Math Concept </h2>
          <p style="text-align: justify;"> We can use this formula to map from circle to square: </p>
          <p> \( x =  Re(  \frac{1-i}{-K_e} F(cos ^{-1}(\frac{1+i}{\sqrt{2}} (u + vi)), \frac{1}{\sqrt{2}}))  + 1  \) </p>
          <p> \( y =  Im(  \frac{1-i}{-K_e} F(cos ^{-1}(\frac{1+i}{\sqrt{2}} (u + vi)), \frac{1}{\sqrt{2}}))  - 1  \) </p>
 
+         <h2 style="text-align: justify; color: #493118; font-weight: bold;"> How to Draw </h2>
+         <div style="text-align: center;">
+              <canvas id="myCanvas" style="display: block; margin: auto;"></canvas>
+         </div>
+         <button id="refresh-btn"> <i class="fa fa-refresh"></i>  Replay Animation </span> </button>
+         <p style="text-align: justify;"> 1. Given any polygon, we can draw any n-leaf polygon using simple algorithm </p>
+         <p style="text-align: justify;"> 2. First, we determine the center of polygon.  </p>
+         <p style="text-align: justify;"> 3. Second, we draw bezier curve from polygon center, mid point of polygon verticex, and the vertices.</p>
 
          </article>
          </div>
@@ -74,6 +82,8 @@
       <script src="dataset/hyperbolicDatasetSimplified.js"> </script>
       <script src="js/hyperbolic.js"></script>
       <script src="js/mainUI.js"></script>
+      <script src="js/animationToolkit.js"></script>
+      <script src="js/animationIrregularPolygon.js"></script>
    </body>
 </html>
 
