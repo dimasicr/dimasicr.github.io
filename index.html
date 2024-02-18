@@ -69,12 +69,13 @@
          <p style="text-align: justify;"> To get location of circle center, we can use complex Descartes theorem:  </p>
          <p style=" overflow-x: scroll;"> \( (k_1 z_1 + k_2 z_2 + k_3 z_3 + k_4 z_4)^2  = 2 \cdot (2k_1 ^2 z_1 ^ 2+ k_2 ^2 z_2^2+ k_3 ^2 z_3 ^ 2 + k_4 ^2 z_4 ^ 2)  \) </p>         </details>
          <h3 style="text-align: justify;"> How to draw Kawung </h3>
-         <p style="text-align: justify;"> Given a square ABCD with center at O, we can draw circle inscribed inside the square.  </p>
-         <p style="text-align: justify;"> We then draw a quarter circle, centered at A. We repeat the same process 3 times for each vertex  </p>
-         <p style="text-align: justify;"> The process can be can be illustrated in the image below:  </p>
          <div style="text-align: center;">
               <canvas id="myCanvas" style="display: block; margin: auto;"></canvas>
          </div>
+         <button id="refresh-btn"> <i class="fa fa-refresh"></i>  Replay Animation </span> </button>
+         <p style="text-align: justify;"> 1. Given square ABCD, draw circle centered at O with radius equal to half of of the square side length  </p>
+         <p style="text-align: justify;"> 2. Draw a quarter of circle, centered at vertex A, with same radius.  </p>
+         <p style="text-align: justify;"> 3. Repeat step #2 3 times, centered at vertices B, C, and D </p>
          </article>
          </div>
       </div>
@@ -85,5 +86,6 @@
       <script src="js/apollonianGasket.js"> </script>
       <script src="js/mainUI.js"></script> 
       <script src="js/animationToolkit.js"></script>
+      <script src="js/animationCircularKawung.js"></script>
    </body>
 </html>
