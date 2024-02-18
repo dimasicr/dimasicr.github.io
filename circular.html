@@ -65,6 +65,11 @@ document.getElementById('toggleButton').addEventListener('click', function() {
     const container = document.querySelector('.container');
     container.classList.toggle('show-nav');
 });
+
+const refreshBtn = document.getElementById("refresh-btn");
+refreshBtn.addEventListener("click", () => {
+    step = 0;
+});
       
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.width);
