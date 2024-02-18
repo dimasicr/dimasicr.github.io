@@ -6,7 +6,7 @@ document.write(
     '<li><a href="poincare.html">Poincare Kawung</a></li>' +
     '<li><a href="tumpal.html">Sierpinski Tumpal</a></li>' +
     '<li><a href="semiregular.html">Tesselation of Kawung</a></li>' +
-    '<li><a href="concentric.html">Concentric Kawung</a></li>' +
+    '<li><a href="hyperbolic.html">Concentric Kawung</a></li>' +
     '<li><a href="parametricbuketan.html">Parametric Buketan</a></li>' +
     '<li><a href="tumpaltesselation.html">Tesselation of Tumpal</a></li>' +
   '</ul>'
