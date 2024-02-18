@@ -61,6 +61,16 @@
          <p style=" overflow-x: scroll;"> For Hyperbolic tessellation,  \( \frac{1}{n} + \frac{1}{k} < \frac{1}{2}  \) </p>
          <p style=" overflow-x: scroll;"> For Elliptical tessellation,  \( \frac{1}{n} + \frac{1}{k} > \frac{1}{2}  \) </p>
 
+
+         <h2 style="text-align: justify; color: #493118; font-weight: bold;"> How to Draw </h2>
+         <div style="text-align: center;">
+              <canvas id="myCanvas" style="display: block; margin: auto;"></canvas>
+         </div>
+         <button id="refresh-btn"> <i class="fa fa-refresh"></i>  Replay Animation </span> </button>
+         <p style="text-align: justify;"> 1. Given any polygon, we can draw any n-leaf polygon using simple algorithm </p>
+         <p style="text-align: justify;"> 2. First, we determine the center of polygon.  </p>
+         <p style="text-align: justify;"> 3. Second, we draw bezier curve from polygon center, mid point of polygon verticex, and the vertices.</p>
+
          </article>
          </div>
       </div>
@@ -70,5 +80,7 @@
       <script src="js/batikGeometry.js"></script>
       <script src="js/poincare.js"> </script>
       <script src="js/mainUI.js"></script> 
+      <script src="js/animationToolkit.js"></script>
+      <script src="js/animationIrregularPolygon.js"></script>
    </body>
 </html>
