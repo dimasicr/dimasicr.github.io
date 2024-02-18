@@ -80,7 +80,7 @@
  h2 {
      padding-top: 30px;
 }
- .btn, #motives, #paddings, #threshold, #recursion_threshold, #tesselation_type, #themes, #download-btn, #Isens {
+ .btn, #motives, #paddings, #threshold, #recursion_threshold, #tesselation_type, #themes, #download-btn, #Isens, #refresh-btn  {
      display: block;
      margin: 0.4rem auto;
      padding: 0.5rem 1rem;
