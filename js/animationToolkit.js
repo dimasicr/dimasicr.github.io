@@ -1,13 +1,5 @@
-// JavaScript to toggle the side navigation bar
-document.getElementById('toggleButton').addEventListener('click', function() {
-  const sidenav = document.getElementById('sidenav');
-  const container = document.querySelector('.container');
-  container.classList.toggle('show-nav');
-});
-
 const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext('2d');
-const screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 let step = 0;
 
 if (screenWidth > 400){
