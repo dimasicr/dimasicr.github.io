@@ -90,7 +90,7 @@
      text-align: center;
      width: 80%;
 }
- .btn:hover, .btn.is-selected, #download-btn:hover {
+ .btn:hover, .btn.is-selected, #download-btn:hover, #refresh-btn:hover {
      color: #28a2a2;
      border-color: #28a2a2;
 }
