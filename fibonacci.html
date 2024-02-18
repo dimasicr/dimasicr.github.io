@@ -55,20 +55,32 @@
          </figure>
          
          <article style="width: 80%; text-align: center; margin: auto;">
-         <h3 style="text-align: justify;"> Description </h3>
+         <h2 style="text-align: justify; color: #493118; font-weight: bold;"> Description </h2>
          <p style="text-align: justify;"> Motive inspired by traditional Indonesian motive <i> Kawung </i>  decorated with traditional <i> isen cecek</i>, arranged as Fibonacci Spiral. Fibonacci spiral is spiral made from Fibonacci sequence. Fibonacci sequence is a sequence in which each number  is the sum of two preceeding ones.</p>
          <p style="text-align: justify;"> Fibonacci sequence is named after Leonardo of Pisa, also known as Fibonacci, who introduced the sequence to Western Europen mathematics in his 1202 book <i> Liber Abaci </i> </p>
-         <h3 style="text-align: justify;"> Math Concept </h3>
+         <h2 style="text-align: justify; color: #493118; font-weight: bold;"> Math Concept </h2>
          <p style="text-align: justify;"> The Fibonacci sequence can be defined as:  </p>
          <p style=" overflow-x: scroll;"> \(F_0 = 0 , F_1 = 1 \) , and for n > 0: </p>
          <p style=" overflow-x: scroll;"> \(F_n = F_n-1 + F_n-2 \) </p>
+
+         <h2 style="text-align: justify; color: #493118; font-weight: bold;"> How to Draw </h2>
+         <div style="text-align: center;">
+              <canvas id="myCanvas" style="display: block; margin: auto;"></canvas>
+         </div>
+         <button id="refresh-btn"> <i class="fa fa-refresh"></i>  Replay Animation </span> </button>
+         <p style="text-align: justify;"> 1. Given square ABCD, draw circle centered at O with radius equal to half of of the square side length  </p>
+         <p style="text-align: justify;"> 2. Draw a quarter of circle, centered at vertex A, with same radius.  </p>
+         <p style="text-align: justify;"> 3. Repeat step #2 3 times, centered at vertices B, C, and D </p>
+            
          </article>
          </div>
       </div>
       <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
       <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-      <script src="batikgeometry.js"></script>
-      <script src="fibonacci.js"> </script>
-      <script src="js/main-ui.js"></script> 
+      <script src="js/batikGeometry.js"></script>
+      <script src="js/fibonacci.js"> </script>
+      <script src="js/mainUI.js"></script> 
+      <script src="js/animationToolkit.js"></script>
+      <script src="js/animationFibonacci.js"></script>
    </body>
 </html>
