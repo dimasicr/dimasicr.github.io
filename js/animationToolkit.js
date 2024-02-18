@@ -53,7 +53,7 @@ function animateBezier(x1, y1, xcp, ycp, x2, y2, step, run = false){
   }
   if (run){
     for (let i =0; i < 9; i++){
-      animateLine(x1 + i * (xcp - x1) / 10 , y1 + i * (ycp - x1) / 10, xcp + i *  (x2 - xcp) / 10, ycp + i *  (y2 - ycp) / 10, step, true );
+      animateLine(x1 + i * (xcp - x1) / 10 , y1 + i * (ycp - y1) / 10, xcp + i *  (x2 - xcp) / 10, ycp + i *  (y2 - ycp) / 10, step, true );
     }
   }
 }
