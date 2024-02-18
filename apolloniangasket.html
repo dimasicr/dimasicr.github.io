@@ -51,6 +51,7 @@
             <div style="text-align: center;">
               <canvas id="myCanvas" style="display: block; margin: auto;"></canvas>
             </div>
+         <button id="refresh-btn"> <i class="fa fa-refresh"></i>  Replay Animation </span> </button>
          
          <article style="width: 80%; text-align: center; margin: auto;">
             <p> Apollonian Gasket Calculator </p>
@@ -124,14 +125,22 @@
       </div>
       <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
       <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script src="js/batikGeometry.js"></script>
       <script src="js/animationToolkit.js"></script>      
       <script>
- // JavaScript to toggle the side navigation bar
-      document.getElementById('toggleButton').addEventListener('click', function() {
-              const sidenav = document.getElementById('sidenav');
-              const container = document.querySelector('.container');
-              container.classList.toggle('show-nav');
-      });
+
+
+   // Part 1: JavaScript to toggle the side navigation bar
+document.getElementById('toggleButton').addEventListener('click', function() {
+    const sidenav = document.getElementById('sidenav');
+    const container = document.querySelector('.container');
+    container.classList.toggle('show-nav');
+});
+
+const refreshBtn = document.getElementById("refresh-btn");
+refreshBtn.addEventListener("click", () => {
+    step = 0;
+});
        
    var numberInput = document.getElementById("quantity");
    numberInput.addEventListener("input", updateTable);
