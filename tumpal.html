@@ -54,19 +54,28 @@
          </figure>
          
          <article style="width: 80%; text-align: center; margin: auto;">
-         <h3 style="text-align: justify;"> Description </h3>
+         <h2 style="text-align: justify;"> Description </h2>
          <p style="text-align: justify;"> Motive inspired by traditional Indonesian motive <i> Tumpal </i> tiled using {3,6} tesselation. Each individual triangle is decorated with wave like pattern as the <i> isen </i>. This tumpal triangle is equilateral, different from the usual isosceles triangle. We can also see Sierpinski like fractal emerge from this tesselation.   </p>
-         <h3 style="text-align: justify;"> Math Concept </h3>
+         <h2 style="text-align: justify;"> Math Concept </h2>
          <p style="text-align: justify;"> This work use 6 triangles, rotated around a vertices to make a hexagonal grid. The grid is then filled with wave like <i> isen </i>.</p>
-
-
+         
+         <div style="text-align: center;">
+              <canvas id="myCanvas" style="display: block; margin: auto;"></canvas>
+         </div>
+         <button id="refresh-btn"> <i class="fa fa-refresh"></i>  Replay Animation </span> </button>
+         <p style="text-align: justify;"> 1. Draw perpendicular bisector of AB  </p>
+         <p style="text-align: justify;"> 2. Draw perpendicular bisector of BC  </p>
+         <p style="text-align: justify;"> 3. Draw perpendicular bisector of CA. The intersection of perpendicular bisector is the center of circle circumscribing the triangle </p>
+         <p style="text-align: justify;"> 4. Draw N-Leaf Kawung, based on quadratic bezier curve. We can start at (0,0), mid point between vertrices and control point, and the vertices  as the end point.  </p>
          </article>
          </div>
       </div>
       <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
       <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-      <script src="batikgeometry.js"></script>
-      <script src="tumpal.js"> </script>
-      <script src="js/main-ui.js"></script>
+      <script src="js/batikGeometry.js"></script>
+      <script src="js/tumpal.js"> </script>
+      <script src="js/mainUI.js"></script>
+      <script src="js/animationToolkit.js"></script>
+      <script src="js/animationTumpal.js"></script>
    </body>
 </html>
