@@ -57,8 +57,9 @@
          <h2 style="text-align: justify;"> Description </h2>
          <p style="text-align: justify;"> This design is inspired by the traditional Indonesian Tumpal motive, which is tiled using {3,6} tessellation. Each individual triangle is adorned with a wave-like pattern known as "isen." This intricate wave pattern is crafted using a combination of cubic Bezier curves and spirals. Specifically, the spiral component is designed in such a way that the curve is tangent to the perimeter of the triangle, adding a dynamic and harmonious element to the overall motif.  </p>
          <h2 style="text-align: justify;"> Math Concept </h2>
-         <p style="text-align: justify;"> This work use 6 triangles, rotated around a vertices to make a hexagonal grid. The grid is then filled with wave like <i> isen </i>.</p>
-
+         <p style="text-align: justify;"> This piece employs six triangles, rotated around their vertices to form a hexagonal grid. The grid is subsequently filled with a wave-like pattern of isen. This wave-like isen is crafted through a combination of a spiral and a cubic Bezier curve. The spiral is meticulously arranged to be tangent to the perimeter of each triangle. The equation defining the center of the spiral can be expressed as:</p>
+         <p style=" overflow-x: scroll;"> \( x_c = 0.5 w -  \frac{R}{tan(\theta/2)}    \) </p>
+         <p style=" overflow-x: scroll;"> \( y_c = R   \) </p>
          <h2 style="text-align: justify;"> How to Draw </h2>
          <div style="text-align: center;">
               <canvas id="myCanvas" style="display: block; margin: auto;"></canvas>
