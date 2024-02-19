@@ -53,10 +53,11 @@
          
          <article style="width: 80%; text-align: center; margin: auto;">
          <h2 style="text-align: justify;"> Description </h2>
-         <p style="text-align: justify;"> Motive inspired by traditional Indonesian motive <i> Kawung </i> tiled in Poincare Disk. is a model of 2-dimensional hyperbolic geometry in which all points are inside the unit disk, and straight lines are either circular arcs contained within the disk that are orthogonal to the unit circle or diameters of the unit circle.</p>
-         <p style="text-align: justify;"> This work is inspired by M.C Escher Circle Limit, but modified to use traditional Indonesia pattern. </i> </p>
+         <p style="text-align: justify;"> 
+The design is inspired by the traditional Indonesian motif Kawung, meticulously arranged in a <a href="https://en.wikipedia.org/wiki/Poincar%C3%A9_disk_model">Poincaré Disk</a>. This disk serves as a model for 2-dimensional hyperbolic geometry, where all points reside within the confines of the unit disk. In this unique geometry, straight lines manifest as either circular arcs nestled within the disk, maintaining orthogonality to the unit circle, or as diameters spanning the unit circle. </p>
+         <p style="text-align: justify;"> This work is inspired by <a href="https://en.wikipedia.org/wiki/Circle_Limit_III">M.C Escher Circle Limit</a>, but modified to use traditional Indonesia pattern. </i> </p>
          <h2 style="text-align: justify;"> Math Concept </h2>
-         <p style="text-align: justify;"> We can determine whether {n,k}  tessellation (Note: polygon n degree will meet k number of other polygon at each vertex ) will be tesselation in Euclidean plane, the hyperbolic plane, or the elliptic plane by using this formula:  </p>
+         <p style="text-align: justify;"> We can ascertain whether the {n, k} tessellation (Note: a polygon with n sides meeting k other polygons at each vertex) will form a tessellation in the Euclidean plane, the hyperbolic plane, or the elliptic plane by utilizing the following formula:  </p>
          <p style=" overflow-x: scroll;"> For Euclidean tessellation,  \( \frac{1}{n} + \frac{1}{k} = \frac{1}{2}  \) </p>
          <p style=" overflow-x: scroll;"> For Hyperbolic tessellation,  \( \frac{1}{n} + \frac{1}{k} < \frac{1}{2}  \) </p>
          <p style=" overflow-x: scroll;"> For Elliptical tessellation,  \( \frac{1}{n} + \frac{1}{k} > \frac{1}{2}  \) </p>
@@ -67,10 +68,17 @@
               <canvas id="myCanvas" style="display: block; margin: auto;"></canvas>
          </div>
          <button id="refresh-btn"> <i class="fa fa-refresh"></i>  Replay Animation </span> </button>
-         <p style="text-align: justify;"> 1. Given any polygon, we can draw any n-leaf polygon using simple algorithm </p>
-         <p style="text-align: justify;"> 2. First, we determine the center of polygon.  </p>
-         <p style="text-align: justify;"> 3. Second, we draw bezier curve from polygon center, mid point of polygon verticex, and the vertices.</p>
-
+         <ol>
+         <li><p style="text-align: justify;"> Any polygon can be transformed into an n-leaf polygon using a straightforward algorithm </p></li>
+         <li><p style="text-align: justify;"> Initially, we identify the polygon's center by computing the average of the x-coordinates and y-coordinates of its points. This provides us with the coordinates for the center of the polygon. </p> </li>
+         <li><p style="text-align: justify;"> Subsequently, a Quadratic Bezier curve is drawn, commencing from the polygon's center as the starting point, utilizing the midpoints of the polygon's vertices as control points, and concluding at the vertices themselves</p> </li>
+         <li><p style="text-align: justify;"> This process is reiterated by repeating step #3 for each subsequent vertex.</p> </li>
+         </ol>
+         <h2 style="text-align: justify; color: #493118; font-weight: bold;"> References </h2>
+         <ul>
+         <li><p style="text-align: justify;"> <a href="http://aleph0.clarku.edu/~djoyce/poincare/poincare.html">Hyperbolic Tessellation</a> </p></li>
+         <li><p style="text-align: justify;"> <a href="https://codegolf.stackexchange.com/questions/55848/plot-a-hyperbolic-plane-tessellation"> Don Hatch's code for hyperbolic plane tessellation </a> </p> </li>
+         </ul>
          </article>
          </div>
       </div>
