@@ -2,7 +2,7 @@ function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.width);
       ctx.save();
       ctx.translate(canvas.width/2, canvas.width/2);
-      r = canvas.width * 0.27;
+      r = canvas.width * 0.35;
 
       Ax = Math.cos(2 * Math.PI/ 3 - Math.PI /2) * r;
       Ay = Math.sin(2 * Math.PI/ 3 - Math.PI /2) * r;
@@ -20,18 +20,13 @@ function draw() {
       ctx.beginPath();
       ctx.arc(Cx, Cy, 0.025 * r, 0, 2 * Math.PI);
       ctx.fill();
+
+
+      // ctx.strokeStyle = 'black'; ctx.setLineDash([]);ctx.lineWidth = 0.8;
+      ctx.strokeStyle = 'gray'; ctx.setLineDash([3, 3]);ctx.fillStype = 'gray';
       ctx.font = "20px Arial";
       ctx.fillText('α', Ax - 0.3 * r, Ay - 0.1 * r);
       ctx.fillText('β', Bx + 0.25 * r, By - 0.1 * r);
-      ctx.beginPath();
-      ctx.arc(Ax,Ay, 0.25 * Math.abs(Bx - Ax), 1 * Math.PI, 1.34 * Math.PI);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.arc(Bx,By, 0.25 * Math.abs(Bx - Ax), 1.67 * Math.PI, 2 * Math.PI);
-      ctx.stroke();
-
-      // ctx.strokeStyle = 'black'; ctx.setLineDash([]);ctx.lineWidth = 0.8;
-      ctx.strokeStyle = 'gray'; ctx.setLineDash([3, 3]);
       animateLine(Ax, Ay, Bx, By, step, step > 0 );
       animateArc(Bx,By, Math.abs(Bx - Ax), 1.6 * Math.PI, 1.7 * Math.PI, step - 20, step - 20 > 0);
       animateArc(Ax,Ay, Math.abs(Bx - Ax), 1.3 * Math.PI, 1.4 * Math.PI, step - 40, step - 40 > 0);
