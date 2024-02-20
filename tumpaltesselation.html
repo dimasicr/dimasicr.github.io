@@ -56,11 +56,11 @@
          </figure>
          
          <article style="width: 80%; text-align: center; margin: auto;">
-         <h3 style="text-align: justify;"> Description </h3>
-         <p style="text-align: justify;"> Motive inspired by traditional Indonesian motive <i> Tumpal </i>  decorated with traditional <i> isen cecek</i>, arranged in regular tessellation and semiregular tesselation grid</p>
+         <h2 style="text-align: justify;"> Description </h2>
+         <p style="text-align: justify;"> This design draws inspiration from the traditional Indonesian Tumpal motif, which is tiled and arranged using {4.4} tessellation, ${3, 6}$ tessellation, and octagon square semiregular tessellation. Additional shapes such as squares and octagons are constructed from smaller rectangles. Each individual triangle in the design is embellished with a wave-like pattern known as "isen." The intricate wave pattern is meticulously crafted using a combination of cubic Bezier curves and spirals. Notably, the spiral component is designed to ensure that the curve is tangent to the perimeter of the triangle, contributing a dynamic and harmonious element to the overall motif.</p>
          <p style="text-align: justify;"> Tumpal is triangle shaped pattern, usually filled with isen. In this motive, Tumpal is decorated with wave like pattern that is tangent to the triangle Outline.</p>
-         <h3 style="text-align: justify;"> Math Concept </h3>
-         <p style="text-align: justify;"> Coordinate and radius of circle tangent to the triangles can be described as:  </p>
+         <h2 style="text-align: justify;"> Math Concept </h2>
+         <p style="text-align: justify;"> This wave-like isen is crafted through a combination of a spiral and a cubic Bezier curve. The spiral is meticulously arranged to be tangent to the perimeter of each triangle. The equation defining the center of the spiral can be expressed as:  </p>
          <p style=" overflow-x: scroll;"> \( x_c = 0.5 w -  \frac{R}{tan(\theta/2)}    \) </p>
          <p style=" overflow-x: scroll;"> \( y_c = R   \) </p>
          </details>
@@ -70,10 +70,18 @@
               <canvas id="myCanvas" style="display: block; margin: auto;"></canvas>
          </div>
          <button id="refresh-btn"> <i class="fa fa-refresh"></i>  Replay Animation </span> </button>
-         <p style="text-align: justify;"> 1. Draw perpendicular bisector of AB  </p>
-         <p style="text-align: justify;"> 2. Draw perpendicular bisector of BC  </p>
-         <p style="text-align: justify;"> 3. Draw perpendicular bisector of CA. The intersection of perpendicular bisector is the center of circle circumscribing the triangle </p>
-         <p style="text-align: justify;"> 4. Draw N-Leaf Kawung, based on quadratic bezier curve. We can start at (0,0), mid point between vertrices and control point, and the vertices  as the end point.  </p>
+         <ol>
+            <li> <p style="text-align: justify;"> Given triangle ABC, draw an angular bisector line that divides angle &alpha; into two equal parts </p> </li>
+            <li> <p style="text-align: justify;"> Draw a semicircle centered on any point of the angular bisector line. The radius of the semicircle is the distance between the points and the base. </p> </li>
+            <li> <p style="text-align: justify;"> Draw another semicircle centered at the same X-coordinate but half of the Y-coordinate. The radius should be half of the previous semicircle. </p> </li>
+            <li> <p style="text-align: justify;"> Draw a curvy wave to the origin </p> </li>
+         </ol>
+
+         <h2 style="text-align: justify;"> References </h2>
+         <ul>
+               <li> <p style="text-align: justify;"> <a href="https://thirdspacelearning.com/gcse-maths/geometry-and-measure/tangent-of-a-circle/"> Circle tangent to line theorem </a> </p> </li>   
+               <li> <p style="text-align: justify;"> <a href="https://en.wikipedia.org/wiki/Tessellation#:~:text=A%20tessellation%20or%20tiling%20is,no%20overlaps%20and%20no%20gaps."> Tessellation </a> </p></li> 
+         </ul>
          </article>
          </div>
       </div>
