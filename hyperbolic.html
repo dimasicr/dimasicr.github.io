@@ -58,7 +58,7 @@
          
          <article style="width: 80%; text-align: center; margin: auto;">
          <h2 style="text-align: justify;"> Description </h2>
-         <p style="text-align: justify;"> Motive inspired by traditional Indonesian motive <i> kawung </i> mapped conformally from poincare disk to square. Inspired by great paper "Analytical Methods for Squaring the Disc" written by Chamberlain Fong   </p>
+         <p style="text-align: justify;"> This motif is a variation of Poincaré Kawung, where the Kawung pattern tiled in the Poincaré disk is conformally mapped to a square. Conformal mapping is a function that preserves angles while not necessarily maintaining lengths. Through conformal mapping, the transition between two common shapes, a square and a circle, can be achieved bidirectionally—either from a circle to a square or from a square to a circle. This artistic endeavor is inspired by the pioneering work of Chamberlain Fong in "Analytical Methods for Squaring the Disc". </p>
          <h2 style="text-align: justify;"> Math Concept </h2>
          <p style="text-align: justify;"> We can use this formula to map from circle to square: </p>
          <p> \( x =  Re(  \frac{1-i}{-K_e} F(cos ^{-1}(\frac{1+i}{\sqrt{2}} (u + vi)), \frac{1}{\sqrt{2}}))  + 1  \) </p>
@@ -69,10 +69,17 @@
               <canvas id="myCanvas" style="display: block; margin: auto;"></canvas>
          </div>
          <button id="refresh-btn"> <i class="fa fa-refresh"></i>  Replay Animation </span> </button>
-         <p style="text-align: justify;"> 1. Given any polygon, we can draw any n-leaf polygon using simple algorithm </p>
-         <p style="text-align: justify;"> 2. First, we determine the center of polygon.  </p>
-         <p style="text-align: justify;"> 3. Second, we draw bezier curve from polygon center, mid point of polygon verticex, and the vertices.</p>
-
+         <ol>
+         <li><p style="text-align: justify;"> Any polygon can be transformed into an n-leaf polygon using a straightforward algorithm </p></li>
+         <li><p style="text-align: justify;"> Initially, we identify the polygon's center by computing the average of the x-coordinates and y-coordinates of its points. This provides us with the coordinates for the center of the polygon. </p> </li>
+         <li><p style="text-align: justify;"> Subsequently, a Quadratic Bezier curve is drawn, commencing from the polygon's center as the starting point, utilizing the midpoints of the polygon's vertices as control points, and concluding at the vertices themselves</p> </li>
+         <li><p style="text-align: justify;"> This process is reiterated by repeating step #3 for each subsequent vertex.</p> </li>
+         </ol>
+         <ul>
+            <li> <p style="text-align: justify;"> <a href="https://arxiv.org/abs/1509.06344"> Paper by Chamberlain Fong </a> </p> </li>
+            <li> <p style="text-align: justify;"> <a href="https://squircular.blogspot.com/"> Blog about squircle by Chamberlain Fong </a> </p> </li>
+         </ul>
+            
          </article>
          </div>
       </div>
