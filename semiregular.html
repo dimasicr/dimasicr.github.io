@@ -64,6 +64,136 @@
                </select>
                <button id="download-btn"> <i class="fa fa-download"></i>  Download SVG </span> </button>
             </details>
+            <div style="text-align: center; margin-top: 10px;">
+                    <button id="left-button" onclick="if (selectBox.value === 'dodecagon_hexagon_square' && selectMotive.value === 'single') {
+          selectBox.value = 'hexagon_triangle';
+          selectMotive.value = 'tesselation';
+        } 
+        else if (selectBox.value === 'hexagon_triangle' && selectMotive.value === 'tesselation') {
+          selectBox.value = 'hexagon_triangle';
+          selectMotive.value = 'single';
+        } 
+        else if (selectBox.value === 'hexagon_triangle' && selectMotive.value === 'single') {
+          selectBox.value = 'hexagon_square_triangle';
+          selectMotive.value = 'tesselation';
+        } 
+        else if (selectBox.value === 'hexagon_square_triangle' && selectMotive.value === 'tesselation') {
+          selectBox.value = 'hexagon_square_triangle';
+          selectMotive.value = 'single';
+        } 
+        else if (selectBox.value === 'hexagon_square_triangle' && selectMotive.value === 'single') {
+          selectBox.value = 'square_triangle_complex';
+          selectMotive.value = 'tesselation';
+        } 
+        else if (selectBox.value === 'square_triangle_complex' && selectMotive.value === 'tesselation') {
+          selectBox.value = 'square_triangle_complex';
+          selectMotive.value = 'single';
+        } 
+        else if (selectBox.value === 'square_triangle_complex' && selectMotive.value === 'single') {
+          selectBox.value = 'square_triangle';
+          selectMotive.value = 'tesselation';
+        } 
+        else if (selectBox.value === 'square_triangle' && selectMotive.value === 'tesselation') {
+          selectBox.value = 'square_triangle';
+          selectMotive.value = 'single';
+        } 
+        else if (selectBox.value === 'square_triangle' && selectMotive.value === 'single') {
+          selectBox.value = 'hexagon_triangle_complex';
+          selectMotive.value = 'tesselation';
+        } 
+        else if (selectBox.value === 'hexagon_triangle_complex' && selectMotive.value === 'tesselation') {
+          selectBox.value = 'hexagon_triangle_complex';
+          selectMotive.value = 'single';
+        } 
+        else if (selectBox.value === 'hexagon_triangle_complex' && selectMotive.value === 'single') {
+          selectBox.value = 'dodecagon_triangle';
+          selectMotive.value = 'tesselation';
+        }
+        else if (selectBox.value === 'dodecagon_triangle' && selectMotive.value === 'tesselation') {
+          selectBox.value = 'dodecagon_triangle';
+          selectMotive.value = 'single';
+        } 
+        else if (selectBox.value === 'dodecagon_triangle' && selectMotive.value === 'single') {
+          selectBox.value = 'octagon_square';
+          selectMotive.value = 'tesselation';
+        } 
+        else if (selectBox.value === 'octagon_square' && selectMotive.value === 'tesselation') {
+          selectBox.value = 'octagon_square';
+          selectMotive.value = 'single';
+        }
+        else if (selectBox.value === 'octagon_square' && selectMotive.value === 'single') {
+          selectBox.value = 'dodecagon_hexagon_square';
+          selectMotive.value = 'tesselation';
+        } 
+        else if (selectBox.value === 'dodecagon_hexagon_square' && selectMotive.value === 'tesselation') {
+          selectBox.value = 'dodecagon_hexagon_square';
+          selectMotive.value = 'single';
+        } redraw();"><</button>
+                    <button id="right-button" onclick="if (selectBox.value === 'dodecagon_hexagon_square' &&  selectMotive.value === 'single') {
+          selectMotive.value = 'tesselation';
+        } 
+        else if (selectBox.value === 'dodecagon_hexagon_square' && selectMotive.value === 'tesselation') {
+          selectBox.value = 'octagon_square';
+          selectMotive.value = 'single';
+        } 
+        else if (selectBox.value === 'octagon_square' && selectMotive.value === 'single') {
+          selectBox.value = 'octagon_square';
+          selectMotive.value = 'tesselation';
+        } 
+        else if (selectBox.value === 'octagon_square' && selectMotive.value === 'tesselation') {
+          selectBox.value = 'dodecagon_triangle';
+          selectMotive.value = 'single';
+        } 
+        else if (selectBox.value === 'dodecagon_triangle' && selectMotive.value === 'single') {
+          selectBox.value = 'dodecagon_triangle';
+          selectMotive.value = 'tesselation';
+        } 
+        else if (selectBox.value === 'dodecagon_triangle' && selectMotive.value === 'tesselation') {
+          selectBox.value = 'hexagon_triangle_complex';
+          selectMotive.value = 'single';
+        } 
+        else if (selectBox.value === 'hexagon_triangle_complex' && selectMotive.value === 'single') {
+          selectBox.value = 'hexagon_triangle_complex';
+          selectMotive.value = 'tesselation';
+          console.log("chiho")
+        } 
+        else if (selectBox.value === 'hexagon_triangle_complex' && selectMotive.value === 'tesselation') {
+          selectBox.value = 'square_triangle';
+          selectMotive.value = 'single';
+        } 
+        else if (selectBox.value === 'square_triangle' && selectMotive.value === 'single') {
+          selectBox.value = 'square_triangle';
+          selectMotive.value = 'tesselation';
+        } 
+        else if (selectBox.value === 'square_triangle' && selectMotive.value === 'tesselation') {
+          selectBox.value = 'square_triangle_complex';
+          selectMotive.value = 'single';
+        } 
+        else if (selectBox.value === 'square_triangle_complex' && selectMotive.value === 'single') {
+          selectBox.value = 'square_triangle_complex';
+          selectMotive.value = 'tesselation';
+        } 
+        else if (selectBox.value === 'square_triangle_complex' && selectMotive.value === 'tesselation') {
+          selectBox.value = 'hexagon_square_triangle';
+          selectMotive.value = 'single';
+        } 
+        else if (selectBox.value === 'hexagon_square_triangle' && selectMotive.value === 'single') {
+          selectBox.value = 'hexagon_square_triangle';
+          selectMotive.value = 'tesselation';
+        } 
+        else if (selectBox.value === 'hexagon_square_triangle' && selectMotive.value === 'tesselation') {
+          selectBox.value = 'hexagon_triangle';
+          selectMotive.value = 'single';
+        } 
+        else if (selectBox.value === 'hexagon_triangle' && selectMotive.value === 'single') {
+          selectBox.value = 'hexagon_triangle';
+          selectMotive.value = 'tesselation';
+        } 
+        else if (selectBox.value === 'hexagon_triangle' && selectMotive.value === 'tesselation') {
+          selectBox.value = 'dodecagon_hexagon_square';
+          selectMotive.value = 'single';
+        }  redraw();">></button>
+               </div>
          </figure>
          
          <article style="width: 80%; text-align: center; margin: auto;">
