@@ -11,6 +11,14 @@
      display: flex;
      height: 100%;
 }
+
+#left-button, #right-button {
+     background: none;
+     border: 1px solid #bfbfbf;
+     color: #585858;
+}
+
+
 /* Style for the side navigation bar */
  .sidenav {
      width: 250px;
