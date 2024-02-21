@@ -33,7 +33,31 @@
          <h1 > Apollonian Kawung</h1>
          
             <div id="svg-container"></div>
-               <div style="text-align: center; margin-top: 10px;">
+         <figure>
+            <details style="margin-top: 5px;">
+               <summary style="text-align: center;"> <span> Interactive Image  </span> </summary>  
+               <select name="Motives" id="motives" class="btns" style="margin-top: 10px;" >
+                  <option value="symmetric">Symmetric</option>
+                  <option value="asymmetric">Asymmetric</option>
+                  <option value="triplet">Triplet</option>
+               </select>
+               <select name="theme" id="themes" class="btns" >
+                  <option value="oldJava">Old Java </option>
+                  <option value="tetradiac">Nusantara </option>
+                  <option value="batavia">Batavia </option>
+               </select>
+               <select name="Paddings" id="paddings" class="btns" >
+                  <option value="false" selected >No Padding</option>
+                  <option value="true">Padding</option>
+               </select>
+               <select name="recursion_threshold" id="recursion_threshold" class="btns" >
+                  <option value="1"> Detail </option>
+                  <option value="3.5" selected> Normal </option>
+                  <option value="5"> Rough </option>
+               </select>
+               <button id="download-btn"> <i class="fa fa-download"></i>  Download SVG </span> </button>
+            </details>
+            <div style="text-align: center; margin-top: 10px;">
                     <button id="left-button" onclick="if (currentPattern === 'symmetric') {
           currentPattern = 'asymmetric';
           selectBox.value = 'asymmetric';
@@ -59,30 +83,6 @@
           selectBox.value = 'symmetric';
         } redraw();">→</button>
                </div>
-         <figure>
-            <details style="margin-top: 5px;">
-               <summary style="text-align: center;"> <span> Interactive Image  </span> </summary>  
-               <select name="Motives" id="motives" class="btns" style="margin-top: 10px;" >
-                  <option value="symmetric">Symmetric</option>
-                  <option value="asymmetric">Asymmetric</option>
-                  <option value="triplet">Triplet</option>
-               </select>
-               <select name="theme" id="themes" class="btns" >
-                  <option value="oldJava">Old Java </option>
-                  <option value="tetradiac">Nusantara </option>
-                  <option value="batavia">Batavia </option>
-               </select>
-               <select name="Paddings" id="paddings" class="btns" >
-                  <option value="false" selected >No Padding</option>
-                  <option value="true">Padding</option>
-               </select>
-               <select name="recursion_threshold" id="recursion_threshold" class="btns" >
-                  <option value="1"> Detail </option>
-                  <option value="3.5" selected> Normal </option>
-                  <option value="5"> Rough </option>
-               </select>
-               <button id="download-btn"> <i class="fa fa-download"></i>  Download SVG </span> </button>
-            </details>
          </figure>
          
          <article style="width: 80%; text-align: center; margin: auto;">
