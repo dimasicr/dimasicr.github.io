@@ -49,6 +49,33 @@
                </select>
                <button id="download-btn"> <i class="fa fa-download"></i>  Download SVG </span> </button>
             </details>
+            <div style="text-align: center; margin-top: 10px;">
+                    <button id="left-button" onclick="if (currentPattern === 'pentagonFourVertices') {
+          currentPattern = 'hexagonFourVertices';
+          selectBox.value = 'hexagonFourVertices';
+        } 
+        else if (currentPattern === 'squareFiveVertices') {
+          currentPattern = 'pentagonFourVertices';
+          selectBox.value = 'pentagonFourVertices';
+        } 
+        else if (currentPattern === 'hexagonFourVertices') {
+          currentPattern = 'squareFiveVertices';
+          selectBox.value = 'squareFiveVertices';
+        }  redraw();"><</button>
+         <button id="right-button" onclick="
+        if (currentPattern === 'pentagonFourVertices') {
+          currentPattern = 'squareFiveVertices';
+          selectBox.value = 'squareFiveVertices';
+        } 
+        else if (currentPattern === 'squareFiveVertices') {
+          currentPattern = 'hexagonFourVertices';
+          selectBox.value = 'hexagonFourVertices';
+        } 
+        else if (currentPattern === 'hexagonFourVertices') {
+          currentPattern = 'pentagonFourVertices';
+          selectBox.value = 'pentagonFourVertices';
+        }  redraw();">></button>
+               </div>
          </figure>
          
          <article style="width: 80%; text-align: center; margin: auto;">
