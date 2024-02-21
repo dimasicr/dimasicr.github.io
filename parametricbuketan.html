@@ -55,6 +55,48 @@
                </select>
                <button id="download-btn"> <i class="fa fa-download"></i>  Download SVG </span> </button>
             </details>
+            <div style="text-align: center; margin-top: 10px;">
+                    <button id="left-button" onclick="if (currentPattern === '4') {
+          currentPattern = '3.5';
+          selectBox.value = '3.5';
+        } 
+        else if (currentPattern === '3.5') {
+          currentPattern = '3';
+          selectBox.value = '3';
+        } 
+        else if (currentPattern === '3') {
+          currentPattern = '2.5';
+          selectBox.value = '2.5';
+        } 
+        else if (currentPattern === '2.5') {
+          currentPattern = '2';
+          selectBox.value = '2';
+        } 
+        else if (currentPattern === '2') {
+          currentPattern = '4';
+          selectBox.value = '4';
+        }  redraw();"><</button>
+                    <button id="right-button" onclick="if (currentPattern === '3') {
+          currentPattern = '3.5';
+          selectBox.value = '3.5';
+        } 
+        else if (currentPattern === '3.5') {
+          currentPattern = '4';
+          selectBox.value = '4';
+        } 
+        else if (currentPattern === '4') {
+          currentPattern = '2';
+          selectBox.value = '2';
+        } 
+        else if (currentPattern === '2') {
+          currentPattern = '2.5';
+          selectBox.value = '2.5';
+        }
+        else if (currentPattern === '2.5') {
+          currentPattern = '3';
+          selectBox.value = '3';
+        } redraw();">></button>
+               </div>
          </figure>
          
          <article style="width: 80%; text-align: center; margin: auto;">
