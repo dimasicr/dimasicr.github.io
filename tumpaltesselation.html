@@ -53,6 +53,32 @@
                </select>
                <button id="download-btn"> <i class="fa fa-download"></i>  Download SVG </span> </button>
             </details>
+            <div style="text-align: center; margin-top: 10px;">
+                    <button id="left-button" onclick="if (currentPattern === 'square') {
+          currentPattern = 'octagon';
+          selectBox.value = 'octagon';
+        } 
+        else if (currentPattern === 'octagon') {
+          currentPattern = 'hexagon';
+          selectBox.value = 'hexagon';
+        } 
+        else if (currentPattern === 'hexagon') {
+          currentPattern = 'square';
+          selectBox.value = 'square';
+        }  redraw();"><</button>
+                    <button id="right-button" onclick="if (currentPattern === 'square') {
+          currentPattern = 'hexagon';
+          selectBox.value = 'hexagon';
+        } 
+        else if (currentPattern === 'hexagon') {
+          currentPattern = 'octagon';
+          selectBox.value = 'octagon';
+        } 
+        else if (currentPattern === 'octagon') {
+          currentPattern = 'square';
+          selectBox.value = 'square';
+        } redraw();">></button>
+               </div>
          </figure>
          
          <article style="width: 80%; text-align: center; margin: auto;">
