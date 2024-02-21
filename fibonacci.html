@@ -51,6 +51,23 @@
                </select>
                <button id="download-btn"> <i class="fa fa-download"></i>  Download SVG </span> </button>
             </details>
+            <button id="left-button" onclick="if (currentPattern === 'rect_diamond') {
+          currentPattern = 'square';
+          selectBox.value = 'square';
+        } 
+        else if (currentPattern === 'square') {
+          currentPattern = 'rect_diamond';
+          selectBox.value = 'rect_diamond';
+        }  redraw();"><</button>
+                    
+         <button id="right-button" onclick="if (currentPattern === 'rect_diamond') {
+          currentPattern = 'square';
+          selectBox.value = 'square';
+        } 
+        else if (currentPattern === 'square') {
+          currentPattern = 'rect_diamond';
+          selectBox.value = 'rect_diamond';
+        } redraw();">></button>
          </figure>
          
          <article style="width: 80%; text-align: center; margin: auto;">
