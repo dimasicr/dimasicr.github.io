@@ -51,6 +51,25 @@
                </select>
                <button id="download-btn"> <i class="fa fa-download"></i>  Download SVG </span> </button>
             </details>
+            <div style="text-align: center; margin-top: 10px;">
+            <button id="left-button" onclick="if (currentPattern === 'tesselation') {
+          currentPattern = 'single';
+          selectBox.value = 'single';
+        } 
+        else if (currentPattern === 'single') {
+          currentPattern = 'tesselation';
+          selectBox.value = 'tesselation';
+        }   redraw();"><</button>
+                    
+         <button id="right-button" onclick="if (currentPattern === 'single') {
+          currentPattern = 'tesselation';
+          selectBox.value = 'tesselation';
+        } 
+        else if (currentPattern === 'tesselation') {
+          currentPattern = 'single';
+          selectBox.value = 'single';
+        }  redraw();">></button>
+            </div>
          </figure>
          
          <article style="width: 80%; text-align: center; margin: auto;">
