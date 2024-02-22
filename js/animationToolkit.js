@@ -39,7 +39,8 @@ function createFlowerPath(x, y, n, A, b = 0.3) {
       let x = r * Math.cos( theta * (2 * Math.PI) / 360);
       let y = r * Math.sin( theta * (2 * Math.PI) / 360);
       path.push([x, y]);
-  }  
+  }
+  return path;
 }
     
 function animateLine(x1, y1, x2, y2, step, run= false){
