@@ -78,9 +78,9 @@ function animateBezier(x1, y1, xcp, ycp, x2, y2, step, run = false){
 }
 
 function animatePath(path, step, run= false){
-  if (step > 40){
-    step = 40;
-  }
+  // if (step > 40){
+  //   step = 40;
+  // }
   if (run){
     for (let i=0; i < step; i++){
       ctx.beginPath();
