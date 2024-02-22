@@ -92,6 +92,9 @@ function animatePath(path, step, run= false){
 }
 
 function animatePathFull(path, step, run= false){
+  if (step >= 360){
+    step = 360;
+  }
   if (run){
     for (let i=0; i < step; i++){
       ctx.beginPath();
