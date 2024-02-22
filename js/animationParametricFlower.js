@@ -7,7 +7,7 @@ function draw() {
 
       path_list = createFlowerPath(0, 0, 3, r, 0.3)
       ctx.strokeStyle = 'black'; ctx.setLineDash([]);
-      animatePath(path_list, step - 20, step - 20 > 0);
+      animatePathFull(path_list, step - 20, step - 20 > 0);
       ctx.restore();
       step += 1;
       requestAnimationFrame(draw);
