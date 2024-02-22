@@ -2,7 +2,7 @@ function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.width);
       ctx.save();
       ctx.translate(canvas.width/2, canvas.width/2);
-      r = canvas.width * 0.35;
+      r = canvas.width * 0.32;
 
 
       path_list = createFlowerPath(0, 0, 3, r, 0.3)
