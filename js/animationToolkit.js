@@ -23,6 +23,24 @@ function create_path(x1, y1, x2, y2, x3, y3, x4, y4){
   }
   return path;
 }
+
+
+function createFlowerPath(x, y, n, A, b = 0.3) {
+  path = [];
+  maxR = 0;
+  maxTheta = -1000;
+
+  for(let theta = 0; theta <= 360; theta++){
+      let r = A * Math.pow(Math.abs(Math.sin(  (n*theta) * (2 * Math.PI) / 360 )), b)  - 0.25 * A * Math.pow(Math.abs(Math.sin( (2*n*theta) * (2 * Math.PI) / 360    )), b) + 0.3 * A;
+      if (Math.abs(r) > Math.abs(maxR) ){
+        maxR = r;
+        maxTheta = theta;
+      }
+      let x = r * Math.cos( theta * (2 * Math.PI) / 360);
+      let y = r * Math.sin( theta * (2 * Math.PI) / 360);
+      path.push([x, y]);
+  }  
+}
     
 function animateLine(x1, y1, x2, y2, step, run= false){
   if(step > 20){
