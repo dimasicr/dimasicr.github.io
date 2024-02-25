@@ -45,6 +45,14 @@
      margin-top: 20px;
 }
 
+img {
+     display: flex;
+     justify-content: center;
+     height: 400px;
+     width: 300px;
+     margin-top: 20px;
+}
+
 
 /* Toggle button for small screens */
  .toggle-button {
