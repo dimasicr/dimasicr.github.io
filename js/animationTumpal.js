@@ -28,16 +28,23 @@ function draw() {
       // ctx.strokeStyle = 'black'; ctx.setLineDash([]);ctx.lineWidth = 0.8;
       ctx.strokeStyle = "#7e9572";  ctx.fillStyle="white"; ctx.lineWidth = 1.1;
       ctx.font = "20px Arial";
+      ctx.beginPath();
+      ctx.moveTo(Ax, Ay);
+      ctx.lineTo(Bx, By);
+      ctx.stroke();
       ctx.fillText('A', Ax, Ay + 0.1 * r);
       ctx.fillText('B', Bx, By + 0.1 * r);
+      animateLine(Ax, Ay, Bx, By, step, step > 0 );
       // ctx.fillText('α', Ax - 0.3 * r, Ay - 0.1 * r);
       // ctx.fillText('β', Bx + 0.25 * r, By - 0.1 * r);
-      animateLine(Ax, Ay, Bx, By, step, step > 0 );
-      animateArc(Bx,By, Math.abs(Bx - Ax), 2 * Math.PI, 1.7 * Math.PI, step - 20, step - 20 > 0);
-      animateArc(Ax,Ay, Math.abs(Bx - Ax), 1.3 * Math.PI, 1.4 * Math.PI, step - 40, step - 40 > 0);
+      // animateLine(Ax, Ay, Bx, By, step, step > 0 );
+      ctx.strokeStyle = "yellow";
+      animateArc(Bx,By, Math.abs(Bx - Ax), 2 * Math.PI, 1.4 * Math.PI, step, step > 0);
+      animateArc(Ax,Ay, Math.abs(Bx - Ax), 1 * Math.PI, 1.6 * Math.PI, step - 20, step - 20 > 0);
       // ctx.strokeStyle = 'black'; ctx.setLineDash([]);
-      animateLine(Bx, By, Cx, Cy, step - 60, step - 60 > 0 );
-      animateLine(Cx, Cy, Ax, Ay, step - 80, step - 80 > 0 );
+      ctx.strokeStyle = "#7e9572";
+      animateLine(Bx, By, Cx, Cy, step - 40, step - 40 > 0 );
+      animateLine(Ax, Ay, Cx, Cy, step - 60, step - 60 > 0 );
       
       // animateArc(Ax,Ay, 0.25 * Math.abs(Bx - Ax), 1 * Math.PI, 1.3 * Math.PI, step - 100, step - 100 > 0);
       // animateArc(Ax - 0.25 * Math.abs(Bx - Ax),Ay, 0.8 * Math.abs(Bx - Ax), 1.15 * Math.PI, 1.25 * Math.PI, step - 120, step - 120 > 0);
