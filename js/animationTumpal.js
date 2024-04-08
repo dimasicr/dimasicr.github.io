@@ -1,5 +1,8 @@
 function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.width);
+      ctx.fillStyle = "#000000";
+      ctx.strokeStyle = "white";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.save();
       ctx.translate(canvas.width/2, canvas.width/2);
       r = canvas.width * 0.35;
@@ -23,10 +26,12 @@ function draw() {
 
 
       // ctx.strokeStyle = 'black'; ctx.setLineDash([]);ctx.lineWidth = 0.8;
-      ctx.strokeStyle = 'gray'; ctx.setLineDash([3, 3]);ctx.fillStype = 'gray';
+      ctx.strokeStyle = "#7e9572"; ctx.setLineDash([3, 3]);
       ctx.font = "20px Arial";
-      ctx.fillText('α', Ax - 0.3 * r, Ay - 0.1 * r);
-      ctx.fillText('β', Bx + 0.25 * r, By - 0.1 * r);
+      ctx.fillText('A', Ax, Ay + 0.1 * r);
+      ctx.fillText('B', Bx, By + 0.1 * r);
+      // ctx.fillText('α', Ax - 0.3 * r, Ay - 0.1 * r);
+      // ctx.fillText('β', Bx + 0.25 * r, By - 0.1 * r);
       animateLine(Ax, Ay, Bx, By, step, step > 0 );
       animateArc(Bx,By, Math.abs(Bx - Ax), 1.6 * Math.PI, 1.7 * Math.PI, step - 20, step - 20 > 0);
       animateArc(Ax,Ay, Math.abs(Bx - Ax), 1.3 * Math.PI, 1.4 * Math.PI, step - 40, step - 40 > 0);
