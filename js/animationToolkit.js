@@ -60,9 +60,17 @@ function animateArc(x,y, r, startAngle, endAngle, step, run = false){
     step = 20;
   }
   if(run){
-    ctx.beginPath();
-    ctx.arc(x, y, r, startAngle, startAngle + (endAngle - startAngle)/ 20 * step);
-    ctx.stroke();
+    if (startAngle < endAngle) {
+      ctx.beginPath();
+      ctx.arc(x, y, r, startAngle, startAngle + (endAngle - startAngle)/ 20 * step);
+      ctx.stroke();
+    }
+    else {
+      ctx.beginPath();
+      ctx.arc(x, y, r, startAngle, startAngle + (endAngle - startAngle)/ 20 * step, true);
+      ctx.stroke();
+    }
+    
   }
 }
 
