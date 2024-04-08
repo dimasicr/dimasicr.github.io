@@ -26,14 +26,14 @@ function draw() {
 
 
       // ctx.strokeStyle = 'black'; ctx.setLineDash([]);ctx.lineWidth = 0.8;
-      ctx.strokeStyle = "#7e9572";  ctx.fillStyle="white";
+      ctx.strokeStyle = "#7e9572";  ctx.fillStyle="white"; ctx.lineWidth = 1.1;
       ctx.font = "20px Arial";
       ctx.fillText('A', Ax, Ay + 0.1 * r);
       ctx.fillText('B', Bx, By + 0.1 * r);
       // ctx.fillText('α', Ax - 0.3 * r, Ay - 0.1 * r);
       // ctx.fillText('β', Bx + 0.25 * r, By - 0.1 * r);
       animateLine(Ax, Ay, Bx, By, step, step > 0 );
-      animateArc(Bx,By, Math.abs(Bx - Ax), 0 * Math.PI, 1.7 * Math.PI, step - 20, step - 20 > 0);
+      animateArc(Bx,By, Math.abs(Bx - Ax), 2 * Math.PI, 1.7 * Math.PI, step - 20, step - 20 > 0);
       animateArc(Ax,Ay, Math.abs(Bx - Ax), 1.3 * Math.PI, 1.4 * Math.PI, step - 40, step - 40 > 0);
       // ctx.strokeStyle = 'black'; ctx.setLineDash([]);
       animateLine(Bx, By, Cx, Cy, step - 60, step - 60 > 0 );
