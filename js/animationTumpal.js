@@ -28,7 +28,7 @@ function draw() {
 
       // ctx.strokeStyle = 'black'; ctx.setLineDash([]);ctx.lineWidth = 0.8;
       ctx.strokeStyle = "#7e9572";  ctx.fillStyle="white"; ctx.lineWidth = 2;
-      ctx.font = "20px Arial";
+      ctx.font = "18px Arial";
       ctx.beginPath();
       ctx.moveTo(Ax, Ay);
       ctx.lineTo(Bx, By);
@@ -68,13 +68,14 @@ function draw() {
       
       
       ctx.strokeStyle = "#7e9572";
-      ctx.fillStyle = "rgba(87,94,133, 0.5)";
+      ctx.fillStyle = "rgba(87,94,133, 0.7)";
       animateArc(Xc ,Ay - R, R, 0 * Math.PI, 2 * Math.PI, step - 240, step - 240 > 0, true);
 
       ctx.strokeStyle = "white";
       ctx.fillStyle = "white";
-      animateText(Xc, Ay - R, "O'", step - 260, step - 260 > 0 );
-      animateLine(Xc, Ay - R, Xc, Ay, step - 280, step - 280 > 0 );
+      animateLine(Xc, Ay - R, Xc, Ay, step - 260, step - 260 > 0 );
+      animateText(Xc, Ay - R, "O", step - 280, step - 280 > 0 );
+      
       
       // animateArc(Xc ,Ay - R, R, 1.5 * Math.PI, 2.5 * Math.PI, step - 240, step - 240 > 0);
       // animateArc(Xc ,Ay - 0.5 * R, 0.5 * R, 0.5 * Math.PI, 1.5 * Math.PI, step - 260, step - 260 > 0);
