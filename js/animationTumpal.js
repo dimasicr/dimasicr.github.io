@@ -3,6 +3,7 @@ function draw() {
       ctx.fillStyle = "#000000";
       ctx.strokeStyle = "white";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.lineWidth = 2;
       ctx.save();
       ctx.translate(canvas.width/2, canvas.width/2);
       r = canvas.width * 0.35;
@@ -26,7 +27,7 @@ function draw() {
 
 
       // ctx.strokeStyle = 'black'; ctx.setLineDash([]);ctx.lineWidth = 0.8;
-      ctx.strokeStyle = "#7e9572";  ctx.fillStyle="white"; ctx.lineWidth = 1.1;
+      ctx.strokeStyle = "#7e9572";  ctx.fillStyle="white"; ctx.lineWidth = 2;
       ctx.font = "20px Arial";
       ctx.beginPath();
       ctx.moveTo(Ax, Ay);
@@ -47,9 +48,10 @@ function draw() {
       animateLine(Bx, By, Cx, Cy, step - 60, step - 60 > 0 );
       animateLine(Ax, Ay, Cx, Cy, step - 80, step - 80 > 0 );
       
-      // animateArc(Ax,Ay, 0.25 * Math.abs(Bx - Ax), 1 * Math.PI, 1.3 * Math.PI, step - 100, step - 100 > 0);
-      // animateArc(Ax - 0.25 * Math.abs(Bx - Ax),Ay, 0.8 * Math.abs(Bx - Ax), 1.15 * Math.PI, 1.25 * Math.PI, step - 120, step - 120 > 0);
-      // animateArc(Ax  - Math.cos(Math.PI/3) * 0.25 * Math.abs(Bx - Ax),Ay - Math.sin(Math.PI/3) * 0.25 * Math.abs(Bx - Ax), 0.8 * Math.abs(Bx - Ax), 1.05 * Math.PI, 1.15 * Math.PI, step - 140, step - 140 > 0);
+      animateArc(Ax,Ay, 0.25 * Math.abs(Bx - Ax), 1 * Math.PI, 1.3 * Math.PI, step - 100, step - 100 > 0);
+      animateArc(Ax - 0.25 * Math.abs(Bx - Ax),Ay, 0.8 * Math.abs(Bx - Ax), 1.15 * Math.PI, 1.25 * Math.PI, step - 120, step - 120 > 0);
+      animateArc(Ax  - Math.cos(Math.PI/3) * 0.25 * Math.abs(Bx - Ax),Ay - Math.sin(Math.PI/3) * 0.25 * Math.abs(Bx - Ax), 0.8 * Math.abs(Bx - Ax), 1.05 * Math.PI, 1.15 * Math.PI, step - 140, step - 140 > 0);
+      
       // animateLine(Ax, Ay, Ax - Math.cos(Math.PI/6) * Math.abs(Bx - Ax) * 1, By - Math.sin(Math.PI/6) * Math.abs(Bx - Ax) * 1, step - 160, step - 160 > 0 );
       // s =  Math.sqrt((Bx - Ax)**2 + (By - Ay)**2 );
       // R = s / 10;
