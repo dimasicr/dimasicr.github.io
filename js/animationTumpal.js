@@ -65,16 +65,17 @@ function draw() {
       R = s / 10;
       Xc = Ax - R / Math.tan(0.5 * 60/360 * 2 * Math.PI);
       // ctx.strokeStyle = 'black'; ctx.setLineDash([]);
-      
-      
-      ctx.strokeStyle = "#7e9572";
-      ctx.fillStyle = "rgba(87,94,133, 0.7)";
-      animateArc(Xc ,Ay - R, R, 0 * Math.PI, 2 * Math.PI, step - 240, step - 240 > 0, true);
 
       ctx.strokeStyle = "white";
       ctx.fillStyle = "white";
-      animateLine(Xc, Ay - R, Xc, Ay, step - 260, step - 260 > 0 );
-      animateText(Xc, Ay - R, "O", step - 280, step - 280 > 0 );
+      animateLine(Xc, Ay - R, Xc, Ay, step - 240, step - 240 > 0 );
+      animateText(Xc, Ay - R, "O", step - 260, step - 260 > 0 );
+      
+      ctx.strokeStyle = "#7e9572";
+      ctx.fillStyle = "rgba(87,94,133, 0.7)";
+      animateArc(Xc ,Ay - R, R, 0 * Math.PI, 2 * Math.PI, step - 280, step - 280 > 0, true);
+
+
       
       
       // animateArc(Xc ,Ay - R, R, 1.5 * Math.PI, 2.5 * Math.PI, step - 240, step - 240 > 0);
