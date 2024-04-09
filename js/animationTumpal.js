@@ -47,15 +47,15 @@ function draw() {
       ctx.strokeStyle = "#7e9572";
       animateLine(Bx, By, Cx, Cy, step - 60, step - 60 > 0 );
       animateLine(Ax, Ay, Cx, Cy, step - 80, step - 80 > 0 );
-      
+
+      ctx.strokeStyle = "yellow";
       animateArc(Ax,Ay, 0.25 * Math.abs(Bx - Ax), 1 * Math.PI, 1.34 * Math.PI, step - 100, step - 100 > 0);
       animateText(Ax - 0.25 * Math.abs(Bx - Ax),Ay + 0.1 * r, "X", step - 120, step - 120 > 0 );
-      animateText(Ax  - Math.cos(Math.PI/3) * 0.25 * Math.abs(Bx - Ax),Ay - Math.sin(Math.PI/3) * 0.25 * Math.abs(Bx - Ax) + 0.1 * r, "Y", step - 140, step - 140 > 0 );
-      
+      animateText(Ax  - Math.cos(Math.PI/3) * 0.25 * Math.abs(Bx - Ax),Ay - Math.sin(Math.PI/3) * 0.25 * Math.abs(Bx - Ax) + 0.15 * r, "Y", step - 140, step - 140 > 0 );
       animateArc(Ax - 0.25 * Math.abs(Bx - Ax),Ay, 0.8 * Math.abs(Bx - Ax), 1.15 * Math.PI, 1.25 * Math.PI, step - 160, step - 160 > 0);
       animateArc(Ax  - Math.cos(Math.PI/3) * 0.25 * Math.abs(Bx - Ax),Ay - Math.sin(Math.PI/3) * 0.25 * Math.abs(Bx - Ax), 0.8 * Math.abs(Bx - Ax), 1.05 * Math.PI, 1.15 * Math.PI, step - 180, step - 180 > 0);
+      animateLine(Ax, Ay, Ax - Math.cos(Math.PI/6) * Math.abs(Bx - Ax) * 1, By - Math.sin(Math.PI/6) * Math.abs(Bx - Ax) * 1, step - 180, step - 180 > 0 );
       
-      // animateLine(Ax, Ay, Ax - Math.cos(Math.PI/6) * Math.abs(Bx - Ax) * 1, By - Math.sin(Math.PI/6) * Math.abs(Bx - Ax) * 1, step - 160, step - 160 > 0 );
       // s =  Math.sqrt((Bx - Ax)**2 + (By - Ay)**2 );
       // R = s / 10;
       // Xc = Ax - R / Math.tan(0.5 * 60/360 * 2 * Math.PI);
