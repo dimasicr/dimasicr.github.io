@@ -99,6 +99,17 @@ function animatePath(path, step, run= false){
   }
 }
 
+function animateText(x, y, txt, step, run = false){
+  if (step > 20){
+    step = 20;
+  }
+  if (run){
+    ctx.fillText(txt, x, y);
+  }
+}
+
+
+
 function animatePathFull(path, step, run= false){
   if (step >= 360){
     step = 360;
