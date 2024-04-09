@@ -48,7 +48,7 @@ function draw() {
       animateLine(Bx, By, Cx, Cy, step - 60, step - 60 > 0 );
       animateLine(Ax, Ay, Cx, Cy, step - 80, step - 80 > 0 );
       
-      animateArc(Ax,Ay, 0.25 * Math.abs(Bx - Ax), 1 * Math.PI, 1.35 * Math.PI, step - 100, step - 100 > 0);
+      animateArc(Ax,Ay, 0.25 * Math.abs(Bx - Ax), 1 * Math.PI, 1.34 * Math.PI, step - 100, step - 100 > 0);
       animateText(Ax - 0.25 * Math.abs(Bx - Ax),Ay + 0.1 * r, "X", step - 120, step - 120 > 0 );
       animateText(Ax  - Math.cos(Math.PI/3) * 0.25 * Math.abs(Bx - Ax),Ay - Math.sin(Math.PI/3) * 0.25 * Math.abs(Bx - Ax) + 0.1 * r, "Y", step - 140, step - 140 > 0 );
       
