@@ -39,12 +39,13 @@ function draw() {
       // ctx.fillText('β', Bx + 0.25 * r, By - 0.1 * r);
       // animateLine(Ax, Ay, Bx, By, step, step > 0 );
       ctx.strokeStyle = "yellow";
-      animateArc(Bx,By, Math.abs(Bx - Ax), 2 * Math.PI, 1.4 * Math.PI, step, step > 0);
-      animateArc(Ax,Ay, Math.abs(Bx - Ax), 1 * Math.PI, 1.6 * Math.PI, step - 20, step - 20 > 0);
+      animateArc(Bx,By, Math.abs(Bx - Ax), 2 * Math.PI, 1.6 * Math.PI, step, step > 0);
+      animateArc(Ax,Ay, Math.abs(Bx - Ax), 1 * Math.PI, 1.4 * Math.PI, step - 20, step - 20 > 0);
+      animateText(Cx + 0.1 * r, Cy, "C", step - 40, step - 40 > 0 )
       // ctx.strokeStyle = 'black'; ctx.setLineDash([]);
       ctx.strokeStyle = "#7e9572";
-      animateLine(Bx, By, Cx, Cy, step - 40, step - 40 > 0 );
-      animateLine(Ax, Ay, Cx, Cy, step - 60, step - 60 > 0 );
+      animateLine(Bx, By, Cx, Cy, step - 60, step - 60 > 0 );
+      animateLine(Ax, Ay, Cx, Cy, step - 80, step - 80 > 0 );
       
       // animateArc(Ax,Ay, 0.25 * Math.abs(Bx - Ax), 1 * Math.PI, 1.3 * Math.PI, step - 100, step - 100 > 0);
       // animateArc(Ax - 0.25 * Math.abs(Bx - Ax),Ay, 0.8 * Math.abs(Bx - Ax), 1.15 * Math.PI, 1.25 * Math.PI, step - 120, step - 120 > 0);
