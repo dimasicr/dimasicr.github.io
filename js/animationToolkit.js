@@ -59,8 +59,10 @@ function animateArc(x,y, r, startAngle, endAngle, step, run = false, fill=false)
   if(step > 20){
     step = 20;
     if (fill){
+      ctx.beginPath();
+      ctx.arc(x, y, r, startAngle, endAngle, true);
       ctx.fill();
-      console.log("chiho!");
+      ctx.stroke();
     }
   }
   if(run){
