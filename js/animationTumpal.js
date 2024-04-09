@@ -63,10 +63,13 @@ function draw() {
       Xc = Ax - R / Math.tan(0.5 * 60/360 * 2 * Math.PI);
       // ctx.strokeStyle = 'black'; ctx.setLineDash([]);
       ctx.strokeStyle = "#7e9572";
-      animateArc(Xc ,Ay - R, R, 1.5 * Math.PI, 2.5 * Math.PI, step - 240, step - 240 > 0);
-      animateArc(Xc ,Ay - 0.5 * R, 0.5 * R, 0.5 * Math.PI, 1.5 * Math.PI, step - 260, step - 260 > 0);
-      path_list = create_path(Xc, Ay - 2 * R, 0.5 * (Ax + Bx) + 0.5 *  (Xc - 0.5 * (Ax + Bx)) , Ay - 2 * R , 0.5 * (Ax + Bx) + 0.5 *  (Xc - 0.5 * (Ax + Bx)), Ay, 0.5 * (Ax + Bx), Ay);
-      animatePath(path_list, step - 280, step - 280 > 0);
+      ctx.fillStyle = "#57857e";
+      animateArc(Xc ,Ay - R, R, 0 * Math.PI, 2 * Math.PI, step - 240, step - 240 > 0, true);
+      
+      // animateArc(Xc ,Ay - R, R, 1.5 * Math.PI, 2.5 * Math.PI, step - 240, step - 240 > 0);
+      // animateArc(Xc ,Ay - 0.5 * R, 0.5 * R, 0.5 * Math.PI, 1.5 * Math.PI, step - 260, step - 260 > 0);
+      // path_list = create_path(Xc, Ay - 2 * R, 0.5 * (Ax + Bx) + 0.5 *  (Xc - 0.5 * (Ax + Bx)) , Ay - 2 * R , 0.5 * (Ax + Bx) + 0.5 *  (Xc - 0.5 * (Ax + Bx)), Ay, 0.5 * (Ax + Bx), Ay);
+      // animatePath(path_list, step - 280, step - 280 > 0);
       
       // path_list = create_path(Xc, Ay -  R, 0.5 * (Ax + Bx) + 0.5 *  (Xc - 0.5 * (Ax + Bx)) , Ay -  R , 0.5 * (Ax + Bx) + 0.5 *  (Xc - 0.5 * (Ax + Bx)), Ay, 0.5 * (Ax + Bx), Ay);
       // animatePath(path_list, step - 260, step - 260 > 0);
