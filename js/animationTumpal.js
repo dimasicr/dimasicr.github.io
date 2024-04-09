@@ -49,8 +49,8 @@ function draw() {
       animateLine(Ax, Ay, Cx, Cy, step - 80, step - 80 > 0 );
       
       animateArc(Ax,Ay, 0.25 * Math.abs(Bx - Ax), 1 * Math.PI, 1.35 * Math.PI, step - 100, step - 100 > 0);
-      animateText(Ax - 0.25 * Math.abs(Bx - Ax),Ay, "X", step - 120, step - 120 > 0 );
-      animateText(Ax  - Math.cos(Math.PI/3) * 0.25 * Math.abs(Bx - Ax), "Y", step - 140, step - 140 > 0 );
+      animateText(Ax - 0.25 * Math.abs(Bx - Ax),Ay + 0.1 * r, "X", step - 120, step - 120 > 0 );
+      animateText(Ax  - Math.cos(Math.PI/3) * 0.25 * Math.abs(Bx - Ax),Ay - Math.sin(Math.PI/3) * 0.25 * Math.abs(Bx - Ax) + 0.1 * r, "Y", step - 140, step - 140 > 0 );
       
       animateArc(Ax - 0.25 * Math.abs(Bx - Ax),Ay, 0.8 * Math.abs(Bx - Ax), 1.15 * Math.PI, 1.25 * Math.PI, step - 160, step - 160 > 0);
       animateArc(Ax  - Math.cos(Math.PI/3) * 0.25 * Math.abs(Bx - Ax),Ay - Math.sin(Math.PI/3) * 0.25 * Math.abs(Bx - Ax), 0.8 * Math.abs(Bx - Ax), 1.05 * Math.PI, 1.15 * Math.PI, step - 180, step - 180 > 0);
