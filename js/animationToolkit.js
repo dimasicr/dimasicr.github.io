@@ -58,7 +58,9 @@ function animateLine(x1, y1, x2, y2, step, run= false){
 function animateArc(x,y, r, startAngle, endAngle, step, run = false, fill=false){
   if(step > 20){
     step = 20;
-    ctx.fill();
+    if (fill){
+      ctx.fill();
+    }
   }
   if(run){
     if (startAngle < endAngle) {
