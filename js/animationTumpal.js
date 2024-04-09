@@ -52,10 +52,12 @@ function draw() {
       animateArc(Ax,Ay, 0.25 * Math.abs(Bx - Ax), 1 * Math.PI, 1.34 * Math.PI, step - 100, step - 100 > 0);
       animateText(Ax - 0.25 * Math.abs(Bx - Ax),Ay + 0.1 * r, "X", step - 120, step - 120 > 0 );
       animateText(Ax  - Math.cos(Math.PI/3) * 0.25 * Math.abs(Bx - Ax) + 0.1 * r,Ay - Math.sin(Math.PI/3) * 0.25 * Math.abs(Bx - Ax), "Y", step - 140, step - 140 > 0 );
+      ctx.setLineDash([]);
       animateArc(Ax - 0.25 * Math.abs(Bx - Ax),Ay, 0.8 * Math.abs(Bx - Ax), 1.15 * Math.PI, 1.25 * Math.PI, step - 160, step - 160 > 0);
       animateArc(Ax  - Math.cos(Math.PI/3) * 0.25 * Math.abs(Bx - Ax),Ay - Math.sin(Math.PI/3) * 0.25 * Math.abs(Bx - Ax), 0.8 * Math.abs(Bx - Ax), 1.05 * Math.PI, 1.15 * Math.PI, step - 180, step - 180 > 0);
-
-      animateText(Ax - Math.cos(Math.PI/6) * Math.abs(Bx - Ax) * 1, By - Math.sin(Math.PI/6) * Math.abs(Bx - Ax) * 1, "A'", step - 200, step - 200 > 0 );
+      
+      ctx.setLineDash([3, 3]);
+      animateText(Ax - Math.cos(Math.PI/6) * Math.abs(Bx - Ax) * 1 - 0.1 * r, By - Math.sin(Math.PI/6) * Math.abs(Bx - Ax) * 1, "A'", step - 200, step - 200 > 0 );
       animateLine(Ax, Ay, Ax - Math.cos(Math.PI/6) * Math.abs(Bx - Ax) * 1, By - Math.sin(Math.PI/6) * Math.abs(Bx - Ax) * 1, step - 220, step - 220 > 0 );
 
       ctx.setLineDash([]);
@@ -63,9 +65,16 @@ function draw() {
       R = s / 10;
       Xc = Ax - R / Math.tan(0.5 * 60/360 * 2 * Math.PI);
       // ctx.strokeStyle = 'black'; ctx.setLineDash([]);
+      
+      
       ctx.strokeStyle = "#7e9572";
-      ctx.fillStyle = "#57857e";
+      ctx.fillStyle = "rgba(87,94,133, 0.5)";
       animateArc(Xc ,Ay - R, R, 0 * Math.PI, 2 * Math.PI, step - 240, step - 240 > 0, true);
+
+      ctx.strokeStyle = "white";
+      ctx.fillStyle = "white";
+      animateText(Xc, Ay - R, "O'", step - 260, step - 260 > 0 );
+      animateLine(Xc, Ay - R, Xc, Ay, step - 280, step - 280 > 0 );
       
       // animateArc(Xc ,Ay - R, R, 1.5 * Math.PI, 2.5 * Math.PI, step - 240, step - 240 > 0);
       // animateArc(Xc ,Ay - 0.5 * R, 0.5 * R, 0.5 * Math.PI, 1.5 * Math.PI, step - 260, step - 260 > 0);
