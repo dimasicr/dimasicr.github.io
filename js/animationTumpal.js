@@ -54,16 +54,20 @@ function draw() {
       animateText(Ax  - Math.cos(Math.PI/3) * 0.25 * Math.abs(Bx - Ax),Ay - Math.sin(Math.PI/3) * 0.25 * Math.abs(Bx - Ax) + 0.15 * r, "Y", step - 140, step - 140 > 0 );
       animateArc(Ax - 0.25 * Math.abs(Bx - Ax),Ay, 0.8 * Math.abs(Bx - Ax), 1.15 * Math.PI, 1.25 * Math.PI, step - 160, step - 160 > 0);
       animateArc(Ax  - Math.cos(Math.PI/3) * 0.25 * Math.abs(Bx - Ax),Ay - Math.sin(Math.PI/3) * 0.25 * Math.abs(Bx - Ax), 0.8 * Math.abs(Bx - Ax), 1.05 * Math.PI, 1.15 * Math.PI, step - 180, step - 180 > 0);
-      animateLine(Ax, Ay, Ax - Math.cos(Math.PI/6) * Math.abs(Bx - Ax) * 1, By - Math.sin(Math.PI/6) * Math.abs(Bx - Ax) * 1, step - 180, step - 180 > 0 );
+
+      animateText(Ax - Math.cos(Math.PI/6) * Math.abs(Bx - Ax) * 1, By - Math.sin(Math.PI/6) * Math.abs(Bx - Ax) * 1, "A'", step - 200, step - 200 > 0 );
+      animateLine(Ax, Ay, Ax - Math.cos(Math.PI/6) * Math.abs(Bx - Ax) * 1, By - Math.sin(Math.PI/6) * Math.abs(Bx - Ax) * 1, step - 220, step - 220 > 0 );
       
-      // s =  Math.sqrt((Bx - Ax)**2 + (By - Ay)**2 );
-      // R = s / 10;
-      // Xc = Ax - R / Math.tan(0.5 * 60/360 * 2 * Math.PI);
+      s =  Math.sqrt((Bx - Ax)**2 + (By - Ay)**2 );
+      R = s / 10;
+      Xc = Ax - R / Math.tan(0.5 * 60/360 * 2 * Math.PI);
       // ctx.strokeStyle = 'black'; ctx.setLineDash([]);
-      // animateArc(Xc ,Ay - R, R, 1.5 * Math.PI, 2.5 * Math.PI, step - 180, step - 180 > 0);
-      // animateArc(Xc ,Ay - 0.5 * R, 0.5 * R, 0.5 * Math.PI, 1.5 * Math.PI, step - 200, step - 200 > 0);
-      // path_list = create_path(Xc, Ay - 2 * R, 0.5 * (Ax + Bx) + 0.5 *  (Xc - 0.5 * (Ax + Bx)) , Ay - 2 * R , 0.5 * (Ax + Bx) + 0.5 *  (Xc - 0.5 * (Ax + Bx)), Ay, 0.5 * (Ax + Bx), Ay);
-      // animatePath(path_list, step - 220, step - 220 > 0);
+      ctx.strokeStyle = "#7e9572";
+      animateArc(Xc ,Ay - R, R, 1.5 * Math.PI, 2.5 * Math.PI, step - 240, step - 240 > 0);
+      animateArc(Xc ,Ay - 0.5 * R, 0.5 * R, 0.5 * Math.PI, 1.5 * Math.PI, step - 260, step - 260 > 0);
+      path_list = create_path(Xc, Ay - 2 * R, 0.5 * (Ax + Bx) + 0.5 *  (Xc - 0.5 * (Ax + Bx)) , Ay - 2 * R , 0.5 * (Ax + Bx) + 0.5 *  (Xc - 0.5 * (Ax + Bx)), Ay, 0.5 * (Ax + Bx), Ay);
+      animatePath(path_list, step - 280, step - 280 > 0);
+      
       // path_list = create_path(Xc, Ay -  R, 0.5 * (Ax + Bx) + 0.5 *  (Xc - 0.5 * (Ax + Bx)) , Ay -  R , 0.5 * (Ax + Bx) + 0.5 *  (Xc - 0.5 * (Ax + Bx)), Ay, 0.5 * (Ax + Bx), Ay);
       // animatePath(path_list, step - 260, step - 260 > 0);
       // ctx.strokeStyle = 'gray'; ctx.setLineDash([3, 3]);
