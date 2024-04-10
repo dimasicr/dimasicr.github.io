@@ -218,11 +218,11 @@ refreshBtn.addEventListener("click", () => {
       // Draw Square Outline
       // ctx.strokeStyle = 'black'; ctx.setLineDash([]);ctx.lineWidth = 0.8;
       // animateLine(Ax, Ay, Bx, By, step, step > 0 );
-      ctx.strokeStyle = 'gray'; ctx.setLineDash([2, 2]); ctx.lineWidth = 0.5;
-       ctx.fillStyle = "#86bdde";
+      ctx.fillStyle = "#86bdde";
       animateLine(-r, 0,   r, 0, step, step > 0 );
       animateArc(0,0, r, 0 * Math.PI, 2 * Math.PI, step - 20, step - 20 > 0);
-      ctx.strokeStyle = 'black'; ctx.setLineDash([]);ctx.lineWidth = 0.8;
+       
+      ctx.strokeStyle = '#86bdde'; ctx.setLineDash([]);ctx.lineWidth = 0.8;
       animateArc(-0.5 * r,0, 0.5 * r, 0 * Math.PI, 2 * Math.PI, step - 40, step - 40 > 0);
       animateArc(0 * r, -0.5 * r, 0.5 * r, 0.5 * Math.PI, 1 * Math.PI, step - 60, step - 60 > 0);
       animateArc(0 * r, 0.5 * r, 0.5 * r, 1 * Math.PI, 1.5 * Math.PI, step - 80, step - 80 > 0);
