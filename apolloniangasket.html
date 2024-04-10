@@ -223,122 +223,122 @@ refreshBtn.addEventListener("click", () => {
       animateArc(0,0, r, 0 * Math.PI, 2 * Math.PI, step - 20, step - 20 > 0);
        
       ctx.strokeStyle = '#86bdde'; ctx.setLineDash([]);ctx.lineWidth = 0.8;
-      animateArc(-0.5 * r,0, 0.5 * r, 0 * Math.PI, 2 * Math.PI, step - 40, step - 40 > 0);
+      animateArc(-0.5 * r,0, 0.5 * r, 0 * Math.PI, 2 * Math.PI, step - 40, step - 40 > 0, true, true);
       animateArc(0 * r, -0.5 * r, 0.5 * r, 0.5 * Math.PI, 1 * Math.PI, step - 60, step - 60 > 0);
       animateArc(0 * r, 0.5 * r, 0.5 * r, 1 * Math.PI, 1.5 * Math.PI, step - 80, step - 80 > 0);
       animateArc(- r, 0.5 * r, 0.5 * r, 1.5 * Math.PI, 2 * Math.PI, step - 100, step - 100 > 0);
       animateArc(- r, -0.5 * r, 0.5 * r, 0 * Math.PI, 0.5 * Math.PI, step - 120, step - 120 > 0);
 
       animateArc(0.5 * r,0, 0.5 * r, 0 * Math.PI, 2 * Math.PI, step - 140, step - 140 > 0);
-      animateArc(r, -0.5 * r, 0.5 * r, 0.5 * Math.PI, 1 * Math.PI, step - 160, step - 160 > 0);
+      animateArc(r, -0.5 * r, 0.5 * r, 0.5 * Math.PI, 1 * Math.PI, step - 160, step - 160 > 0, true, true);
       animateArc(r, 0.5 * r, 0.5 * r, 1 * Math.PI, 1.5 * Math.PI, step - 180, step - 180 > 0);
       animateArc(0, 0.5 * r, 0.5 * r, 1.5 * Math.PI, 2 * Math.PI, step - 200, step - 200 > 0);
       animateArc(0, -0.5 * r, 0.5 * r, 0 * Math.PI, 0.5 * Math.PI, step - 220, step - 220 > 0);
 
       animateArc(0,- 2 * r / 3, r/3, 0 * Math.PI, 2 * Math.PI, step - 240, step - 240 > 0);
-      animateArc(0 + r /3, -2 * r /3  - r /3, r/3, 0.5 * Math.PI, 1 * Math.PI, step - 260, step - 260 > 0);
+      animateArc(0 + r /3, -2 * r /3  - r /3, r/3, 0.5 * Math.PI, 1 * Math.PI, step - 260, step - 260 > 0, true, true);
       animateArc(0 + r /3, -2 * r /3  + r /3, r/3, 1 * Math.PI, 1.5 * Math.PI, step - 280, step - 280 > 0);
       animateArc(0 - r /3, -2 * r /3  + r /3, r/3, 1.5 * Math.PI, 2 * Math.PI, step - 300, step - 300 > 0);
       animateArc(0 - r /3, -2 * r /3  - r /3, r/3, 0 * Math.PI, 0.5 * Math.PI, step - 320, step - 320 > 0);
 
       animateArc(0, 2 * r / 3, r/3, 0 * Math.PI, 2 * Math.PI, step - 340, step - 340 > 0);
-      animateArc(0 + r /3, 2 * r /3  - r /3, r/3, 0.5 * Math.PI, 1 * Math.PI, step - 360, step - 360 > 0);
+      animateArc(0 + r /3, 2 * r /3  - r /3, r/3, 0.5 * Math.PI, 1 * Math.PI, step - 360, step - 360 > 0, true, true);
       animateArc(0 + r /3, 2 * r /3  + r /3, r/3, 1 * Math.PI, 1.5 * Math.PI, step - 380, step - 380 > 0);
       animateArc(0 - r /3, 2 * r /3  + r /3, r/3, 1.5 * Math.PI, 2 * Math.PI, step - 400, step - 400 > 0);
       animateArc(0 - r /3, 2 * r /3  - r /3, r/3, 0 * Math.PI, 0.5 * Math.PI, step - 420, step - 420 > 0);
 
       animateArc(-0.5 * r, -2 * r / 3, r/6, 0 * Math.PI, 2 * Math.PI, step - 440, step - 440 > 0);
-      animateArc(-0.5 * r + r/6, -2 * r /3  - r /6, r/6, 0.5 * Math.PI, 1 * Math.PI, step - 460, step - 460 > 0);
+      animateArc(-0.5 * r + r/6, -2 * r /3  - r /6, r/6, 0.5 * Math.PI, 1 * Math.PI, step - 460, step - 460 > 0, true, true);
       animateArc(-0.5 * r + r/6, -2 * r /3  + r /6, r/6, 1 * Math.PI, 1.5 * Math.PI, step - 480, step - 480 > 0);
       animateArc(-0.5 * r - r/6, -2 * r /3  + r /6, r/6, 1.5 * Math.PI, 2 * Math.PI, step - 500, step - 500 > 0);
       animateArc(-0.5 * r - r/6, -2 * r /3  - r /6, r/6, 0 * Math.PI, 0.5 * Math.PI, step - 520, step - 520 > 0);
 
       animateArc(0.5 * r, -2 * r / 3, r/6, 0 * Math.PI, 2 * Math.PI, step - 540, step - 540 > 0);
-      animateArc(0.5 * r + r/6, -2 * r /3  - r /6, r/6, 0.5 * Math.PI, 1 * Math.PI, step - 560, step - 560 > 0);
+      animateArc(0.5 * r + r/6, -2 * r /3  - r /6, r/6, 0.5 * Math.PI, 1 * Math.PI, step - 560, step - 560 > 0, true, true);
       animateArc(0.5 * r + r/6, -2 * r /3  + r /6, r/6, 1 * Math.PI, 1.5 * Math.PI, step - 580, step - 580 > 0);
       animateArc(0.5 * r - r/6, -2 * r /3  + r /6, r/6, 1.5 * Math.PI, 2 * Math.PI, step - 600, step - 600 > 0);
       animateArc(0.5 * r - r/6, -2 * r /3  - r /6, r/6, 0 * Math.PI, 0.5 * Math.PI, step - 620, step - 620 > 0);
 
       animateArc(0.5 * r, 2 * r / 3, r/6, 0 * Math.PI, 2 * Math.PI, step - 640, step - 640 > 0);
-      animateArc(0.5 * r + r/6, 2 * r /3  - r /6, r/6, 0.5 * Math.PI, 1 * Math.PI, step - 660, step - 660 > 0);
+      animateArc(0.5 * r + r/6, 2 * r /3  - r /6, r/6, 0.5 * Math.PI, 1 * Math.PI, step - 660, step - 660 > 0, true, true);
       animateArc(0.5 * r + r/6, 2 * r /3  + r /6, r/6, 1 * Math.PI, 1.5 * Math.PI, step - 680, step - 680 > 0);
       animateArc(0.5 * r - r/6, 2 * r /3  + r /6, r/6, 1.5 * Math.PI, 2 * Math.PI, step - 700, step - 700 > 0);
       animateArc(0.5 * r - r/6, 2 * r /3  - r /6, r/6, 0 * Math.PI, 0.5 * Math.PI, step - 720, step - 720 > 0);
 
       animateArc(-0.5 * r, 2 * r / 3, r/6, 0 * Math.PI, 2 * Math.PI, step - 740, step - 740 > 0);
-      animateArc(-0.5 * r + r/6, 2 * r /3  - r /6, r/6, 0.5 * Math.PI, 1 * Math.PI, step - 760, step - 760 > 0);
+      animateArc(-0.5 * r + r/6, 2 * r /3  - r /6, r/6, 0.5 * Math.PI, 1 * Math.PI, step - 760, step - 760 > 0, true, true);
       animateArc(-0.5 * r + r/6, 2 * r /3  + r /6, r/6, 1 * Math.PI, 1.5 * Math.PI, step - 780, step - 780 > 0);
       animateArc(-0.5 * r - r/6, 2 * r /3  + r /6, r/6, 1.5 * Math.PI, 2 * Math.PI, step - 800, step - 800 > 0);
       animateArc(-0.5 * r - r/6, 2 * r /3  - r /6, r/6, 0 * Math.PI, 0.5 * Math.PI, step - 820, step - 820 > 0);
 
       animateArc(-0.73 * r, -0.55 * r, r/11, 0 * Math.PI, 2 * Math.PI, step - 840, step - 840 > 0);
-      animateArc(-0.73 * r + r/11, -0.55 * r  - r /11, r/11, 0.5 * Math.PI, 1 * Math.PI, step - 860, step - 860 > 0);
+      animateArc(-0.73 * r + r/11, -0.55 * r  - r /11, r/11, 0.5 * Math.PI, 1 * Math.PI, step - 860, step - 860 > 0, true);
       animateArc(-0.73 * r + r/11, -0.55 * r  + r /11, r/11, 1 * Math.PI, 1.5 * Math.PI, step - 880, step - 880 > 0);
       animateArc(-0.73 * r - r/11, -0.55 * r  + r /11, r/11, 1.5 * Math.PI, 2 * Math.PI, step - 900, step - 900 > 0);
       animateArc(-0.73 * r - r/11, -0.55 * r  - r /11, r/11, 0 * Math.PI, 0.5 * Math.PI, step - 920, step - 920 > 0);
 
       animateArc(0.73 * r, -0.55 * r, r/11, 0 * Math.PI, 2 * Math.PI, step - 940, step - 940 > 0);
-      animateArc(0.73 * r + r/11, -0.55 * r  - r /11, r/11, 0.5 * Math.PI, 1 * Math.PI, step - 960, step - 960 > 0);
+      animateArc(0.73 * r + r/11, -0.55 * r  - r /11, r/11, 0.5 * Math.PI, 1 * Math.PI, step - 960, step - 960 > 0, true);
       animateArc(0.73 * r + r/11, -0.55 * r  + r /11, r/11, 1 * Math.PI, 1.5 * Math.PI, step - 980, step - 980 > 0);
       animateArc(0.73 * r - r/11, -0.55 * r  + r /11, r/11, 1.5 * Math.PI, 2 * Math.PI, step - 1000, step - 1000 > 0);
       animateArc(0.73 * r - r/11, -0.55 * r  - r /11, r/11, 0 * Math.PI, 0.5 * Math.PI, step - 1020, step - 1020 > 0);
 
       animateArc(0.73 * r, 0.55 * r, r/11, 0 * Math.PI, 2 * Math.PI, step - 1040, step - 1040 > 0);
-      animateArc(0.73 * r + r/11, 0.55 * r  - r /11, r/11, 0.5 * Math.PI, 1 * Math.PI, step - 1060, step - 1060 > 0);
+      animateArc(0.73 * r + r/11, 0.55 * r  - r /11, r/11, 0.5 * Math.PI, 1 * Math.PI, step - 1060, step - 1060 > 0, true);
       animateArc(0.73 * r + r/11, 0.55 * r  + r /11, r/11, 1 * Math.PI, 1.5 * Math.PI, step - 1080, step - 1080 > 0);
       animateArc(0.73 * r - r/11, 0.55 * r  + r /11, r/11, 1.5 * Math.PI, 2 * Math.PI, step - 1100, step - 1100 > 0);
       animateArc(0.73 * r - r/11, 0.55 * r  - r /11, r/11, 0 * Math.PI, 0.5 * Math.PI, step - 1120, step - 1120 > 0);
 
       animateArc(-0.73 * r, 0.55 * r, r/11, 0 * Math.PI, 2 * Math.PI, step - 1140, step - 1140 > 0);
-      animateArc(-0.73 * r + r/11, 0.55 * r  - r /11, r/11, 0.5 * Math.PI, 1 * Math.PI, step - 1160, step - 1160 > 0);
+      animateArc(-0.73 * r + r/11, 0.55 * r  - r /11, r/11, 0.5 * Math.PI, 1 * Math.PI, step - 1160, step - 1160 > 0, true);
       animateArc(-0.73 * r + r/11, 0.55 * r  + r /11, r/11, 1 * Math.PI, 1.5 * Math.PI, step - 1180, step - 1180 > 0);
       animateArc(-0.73 * r - r/11, 0.55 * r  + r /11, r/11, 1.5 * Math.PI, 2 * Math.PI, step - 1200, step - 1200 > 0);
       animateArc(-0.73 * r - r/11, 0.55 * r  - r /11, r/11, 0 * Math.PI, 0.5 * Math.PI, step - 1220, step - 1220 > 0);
 
       animateArc(-0.36 * r, -0.86 * r, r/14, 0 * Math.PI, 2 * Math.PI, step - 1240, step - 1240 > 0);
-      animateArc(-0.36 * r + r/14, -0.86 * r  - r /14, r/14, 0.5 * Math.PI, 1 * Math.PI, step - 1260, step - 1260 > 0);
+      animateArc(-0.36 * r + r/14, -0.86 * r  - r /14, r/14, 0.5 * Math.PI, 1 * Math.PI, step - 1260, step - 1260 > 0, true);
       animateArc(-0.36 * r + r/14, -0.86 * r  + r /14, r/14, 1 * Math.PI, 1.5 * Math.PI, step - 1280, step - 1280 > 0);
       animateArc(-0.36 * r - r/14, -0.86 * r  + r /14, r/14, 1.5 * Math.PI, 2 * Math.PI, step - 1300, step - 1300 > 0);
       animateArc(-0.36 * r - r/14, -0.86 * r  - r /14, r/14, 0 * Math.PI, 0.5 * Math.PI, step - 1320, step - 1320 > 0);
 
       animateArc(0.36 * r, -0.86 * r, r/14, 0 * Math.PI, 2 * Math.PI, step - 1340, step - 1340 > 0);
-      animateArc(0.36 * r + r/14, -0.86 * r  - r /14, r/14, 0.5 * Math.PI, 1 * Math.PI, step - 1360, step - 1360 > 0);
+      animateArc(0.36 * r + r/14, -0.86 * r  - r /14, r/14, 0.5 * Math.PI, 1 * Math.PI, step - 1360, step - 1360 > 0, true);
       animateArc(0.36 * r + r/14, -0.86 * r  + r /14, r/14, 1 * Math.PI, 1.5 * Math.PI, step - 1380, step - 1380 > 0);
       animateArc(0.36 * r - r/14, -0.86 * r  + r /14, r/14, 1.5 * Math.PI, 2 * Math.PI, step - 1400, step - 1400 > 0);
       animateArc(0.36 * r - r/14, -0.86 * r  - r /14, r/14, 0 * Math.PI, 0.5 * Math.PI, step - 1420, step - 1420 > 0);
 
       animateArc(0.36 * r, 0.86 * r, r/14, 0 * Math.PI, 2 * Math.PI, step - 1440, step - 1440 > 0);
-      animateArc(0.36 * r + r/14, 0.86 * r  - r /14, r/14, 0.5 * Math.PI, 1 * Math.PI, step - 1460, step - 1460 > 0);
+      animateArc(0.36 * r + r/14, 0.86 * r  - r /14, r/14, 0.5 * Math.PI, 1 * Math.PI, step - 1460, step - 1460 > 0, true);
       animateArc(0.36 * r + r/14, 0.86 * r  + r /14, r/14, 1 * Math.PI, 1.5 * Math.PI, step - 1480, step - 1480 > 0);
       animateArc(0.36 * r - r/14, 0.86 * r  + r /14, r/14, 1.5 * Math.PI, 2 * Math.PI, step - 1500, step - 1500 > 0);
       animateArc(0.36 * r - r/14, 0.86 * r  - r /14, r/14, 0 * Math.PI, 0.5 * Math.PI, step - 1520, step - 1520 > 0);
 
       animateArc(-0.36 * r, 0.86 * r, r/14, 0 * Math.PI, 2 * Math.PI, step - 1540, step - 1540 > 0);
-      animateArc(-0.36 * r + r/14, 0.86 * r  - r /14, r/14, 0.5 * Math.PI, 1 * Math.PI, step - 1560, step - 1560 > 0);
+      animateArc(-0.36 * r + r/14, 0.86 * r  - r /14, r/14, 0.5 * Math.PI, 1 * Math.PI, step - 1560, step - 1560 > 0, true);
       animateArc(-0.36 * r + r/14, 0.86 * r  + r /14, r/14, 1 * Math.PI, 1.5 * Math.PI, step - 1580, step - 1580 > 0);
       animateArc(-0.36 * r - r/14, 0.86 * r  + r /14, r/14, 1.5 * Math.PI, 2 * Math.PI, step - 1600, step - 1600 > 0);
       animateArc(-0.36 * r - r/14, 0.86 * r  - r /14, r/14, 0 * Math.PI, 0.5 * Math.PI, step - 1620, step - 1620 > 0);
 
       animateArc(-0.83 * r, 0.44 * r, r/18, 0 * Math.PI, 2 * Math.PI, step - 1640, step - 1640 > 0);
-      animateArc(-0.83 * r + r/18, 0.44 * r  - r /18, r/18, 0.5 * Math.PI, 1 * Math.PI, step - 1660, step - 1660 > 0);
+      animateArc(-0.83 * r + r/18, 0.44 * r  - r /18, r/18, 0.5 * Math.PI, 1 * Math.PI, step - 1660, step - 1660 > 0, true);
       animateArc(-0.83 * r + r/18, 0.44 * r  + r /18, r/18, 1 * Math.PI, 1.5 * Math.PI, step - 1680, step - 1680 > 0);
       animateArc(-0.83 * r - r/18, 0.44 * r  + r /18, r/18, 1.5 * Math.PI, 2 * Math.PI, step - 1700, step - 1700 > 0);
       animateArc(-0.83 * r - r/18, 0.44 * r  - r /18, r/18, 0 * Math.PI, 0.5 * Math.PI, step - 1720, step - 1720 > 0);
 
       animateArc(-0.83 * r, -0.44 * r, r/18, 0 * Math.PI, 2 * Math.PI, step - 1740, step - 1740 > 0);
-      animateArc(-0.83 * r + r/18, -0.44 * r  - r /18, r/18, 0.5 * Math.PI, 1 * Math.PI, step - 1760, step - 1760 > 0);
+      animateArc(-0.83 * r + r/18, -0.44 * r  - r /18, r/18, 0.5 * Math.PI, 1 * Math.PI, step - 1760, step - 1760 > 0, true);
       animateArc(-0.83 * r + r/18, -0.44 * r  + r /18, r/18, 1 * Math.PI, 1.5 * Math.PI, step - 1780, step - 1780 > 0);
       animateArc(-0.83 * r - r/18, -0.44 * r  + r /18, r/18, 1.5 * Math.PI, 2 * Math.PI, step - 1800, step - 1800 > 0);
       animateArc(-0.83 * r - r/18, -0.44 * r  - r /18, r/18, 0 * Math.PI, 0.5 * Math.PI, step - 1820, step - 1820 > 0);
 
       animateArc(0.83 * r, -0.44 * r, r/18, 0 * Math.PI, 2 * Math.PI, step - 1840, step - 1840 > 0);
-      animateArc(0.83 * r + r/18, -0.44 * r  - r /18, r/18, 0.5 * Math.PI, 1 * Math.PI, step - 1860, step - 1860 > 0);
+      animateArc(0.83 * r + r/18, -0.44 * r  - r /18, r/18, 0.5 * Math.PI, 1 * Math.PI, step - 1860, step - 1860 > 0, true);
       animateArc(0.83 * r + r/18, -0.44 * r  + r /18, r/18, 1 * Math.PI, 1.5 * Math.PI, step - 1880, step - 1880 > 0);
       animateArc(0.83 * r - r/18, -0.44 * r  + r /18, r/18, 1.5 * Math.PI, 2 * Math.PI, step - 1900, step - 1900 > 0);
       animateArc(0.83 * r - r/18, -0.44 * r  - r /18, r/18, 0 * Math.PI, 0.5 * Math.PI, step - 1920, step - 1920 > 0);
 
       animateArc(0.83 * r, 0.44 * r, r/18, 0 * Math.PI, 2 * Math.PI, step - 1940, step - 1940 > 0);
-      animateArc(0.83 * r + r/18, 0.44 * r  - r /18, r/18, 0.5 * Math.PI, 1 * Math.PI, step - 1960, step - 1960 > 0);
+      animateArc(0.83 * r + r/18, 0.44 * r  - r /18, r/18, 0.5 * Math.PI, 1 * Math.PI, step - 1960, step - 1960 > 0, true);
       animateArc(0.83 * r + r/18, 0.44 * r  + r /18, r/18, 1 * Math.PI, 1.5 * Math.PI, step - 1980, step - 1980 > 0);
       animateArc(0.83 * r - r/18, 0.44 * r  + r /18, r/18, 1.5 * Math.PI, 2 * Math.PI, step - 2000, step - 2000 > 0);
       animateArc(0.83 * r - r/18, 0.44 * r  - r /18, r/18, 0 * Math.PI, 0.5 * Math.PI, step - 2020, step - 2020 > 0);
