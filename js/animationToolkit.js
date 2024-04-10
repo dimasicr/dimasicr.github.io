@@ -60,10 +60,10 @@ function animateArc(x,y, r, startAngle, endAngle, step, run = false, fill=false,
     step = 20;
     if (fill){
       ctx.beginPath();
-      ctx.arc(x, y, r, startAngle, endAngle, true);
+      ctx.arc(x, y, r, startAngle, endAngle);
       if (kawung && startAngle === 0.5 * Math.PI && endAngle === 1 * Math.PI) {
         console.log("chiho");
-        ctx.arc(x-r, y+r, r, 1.5 * Math.PI, 2 * Math.PI, true);
+        ctx.arc(x-r, y+r, r, 1.5 * Math.PI, 2 * Math.PI);
       }
       ctx.fill();
       ctx.stroke();
