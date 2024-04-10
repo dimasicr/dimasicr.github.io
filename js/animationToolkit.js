@@ -55,12 +55,16 @@ function animateLine(x1, y1, x2, y2, step, run= false){
   }
 }
 
-function animateArc(x,y, r, startAngle, endAngle, step, run = false, fill=false){
+function animateArc(x,y, r, startAngle, endAngle, step, run = false, fill=false, kawung = true){
   if(step > 20){
     step = 20;
     if (fill){
       ctx.beginPath();
       ctx.arc(x, y, r, startAngle, endAngle, true);
+      if (kawung && startAngle === 0.5 * Math.PI && endAngle === 1 * Math.PI) {
+        console.log("chiho");
+        ctx.arc(x-r, y+r, r, 1.5 * Math.PI, 2 * Math.PI, true);
+      }
       ctx.fill();
       ctx.stroke();
     }
