@@ -200,7 +200,7 @@ refreshBtn.addEventListener("click", () => {
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.width);
       ctx.fillStyle = "#000000";
-      ctx.strokeStyle = "white";
+      ctx.strokeStyle = "yellow";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.save();
       ctx.translate(canvas.width/2, canvas.width/2);
@@ -218,13 +218,12 @@ refreshBtn.addEventListener("click", () => {
       // Draw Square Outline
       // ctx.strokeStyle = 'black'; ctx.setLineDash([]);ctx.lineWidth = 0.8;
       // animateLine(Ax, Ay, Bx, By, step, step > 0 );
-      ctx.fillStyle = "#86bdde";
       animateLine(-r, 0,   r, 0, step, step > 0 );
       animateArc(0,0, r, 0 * Math.PI, 2 * Math.PI, step - 20, step - 20 > 0);
        
-      ctx.strokeStyle = '#86bdde'; ctx.setLineDash([]);ctx.lineWidth = 0.8;
-      animateArc(-0.5 * r,0, 0.5 * r, 0 * Math.PI, 2 * Math.PI, step - 40, step - 40 > 0, true, true);
-      animateArc(0 * r, -0.5 * r, 0.5 * r, 0.5 * Math.PI, 1 * Math.PI, step - 60, step - 60 > 0);
+      ctx.strokeStyle = 'white'; ctx.setLineDash([]);ctx.lineWidth = 1;
+      animateArc(-0.5 * r,0, 0.5 * r, 0 * Math.PI, 2 * Math.PI, step - 40, step - 40 > 0);
+      animateArc(0 * r, -0.5 * r, 0.5 * r, 0.5 * Math.PI, 1 * Math.PI, step - 60, step - 60 > 0 , true, true);
       animateArc(0 * r, 0.5 * r, 0.5 * r, 1 * Math.PI, 1.5 * Math.PI, step - 80, step - 80 > 0);
       animateArc(- r, 0.5 * r, 0.5 * r, 1.5 * Math.PI, 2 * Math.PI, step - 100, step - 100 > 0);
       animateArc(- r, -0.5 * r, 0.5 * r, 0 * Math.PI, 0.5 * Math.PI, step - 120, step - 120 > 0);
