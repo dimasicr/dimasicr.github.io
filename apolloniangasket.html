@@ -199,6 +199,9 @@ refreshBtn.addEventListener("click", () => {
 
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.width);
+      ctx.fillStyle = "#000000";
+      ctx.strokeStyle = "white";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.save();
       ctx.translate(canvas.width/2, canvas.width/2);
       r = canvas.width * 0.5;
@@ -216,6 +219,7 @@ refreshBtn.addEventListener("click", () => {
       // ctx.strokeStyle = 'black'; ctx.setLineDash([]);ctx.lineWidth = 0.8;
       // animateLine(Ax, Ay, Bx, By, step, step > 0 );
       ctx.strokeStyle = 'gray'; ctx.setLineDash([2, 2]); ctx.lineWidth = 0.5;
+       ctx.fillStyle = "#86bdde";
       animateLine(-r, 0,   r, 0, step, step > 0 );
       animateArc(0,0, r, 0 * Math.PI, 2 * Math.PI, step - 20, step - 20 > 0);
       ctx.strokeStyle = 'black'; ctx.setLineDash([]);ctx.lineWidth = 0.8;
