@@ -55,11 +55,16 @@
                <button id="download-btn"> <i class="fa fa-download"></i>  Download SVG </span> </button>
             </details>
             <div style="text-align: center; margin-top: 10px;">
-                    <button id="left-button" onclick="if (currentPattern === 'square') {
+                    <button id="left-button" onclick="
+        if (currentPattern === 'square') {
           currentPattern = 'octagon';
           selectBox.value = 'octagon';
         } 
         else if (currentPattern === 'octagon') {
+          currentPattern = 'triangle';
+          selectBox.value = 'triangle';
+        } 
+        else if (currentPattern === 'triangle') {
           currentPattern = 'hexagon';
           selectBox.value = 'hexagon';
         } 
@@ -67,11 +72,16 @@
           currentPattern = 'square';
           selectBox.value = 'square';
         }  redraw();"><</button>
-                    <button id="right-button" onclick="if (currentPattern === 'square') {
+                    <button id="right-button" onclick="
+       if (currentPattern === 'square') {
           currentPattern = 'hexagon';
           selectBox.value = 'hexagon';
         } 
         else if (currentPattern === 'hexagon') {
+          currentPattern = 'triangle';
+          selectBox.value = 'triangle';
+        } 
+      else if (currentPattern === 'triangle') {
           currentPattern = 'octagon';
           selectBox.value = 'octagon';
         } 
