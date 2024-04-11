@@ -743,8 +743,15 @@ function drawTumpal(x, y, isen='tumpal', s = 200, trig_degree = 45, rotDeg= 0, m
         container.appendChild(outline);
     }
 
-    R = s / 10;
+    if (trig_degree === 30) {
+        R = s /15;
+    }
+    else {
+        R = s / 10;
+    }
+
     Xc = 0.5 * s - R / Math.tan(0.5 * trig_degree/360 * 2 * Math.PI)
+    
     tpl_pth = `M0 ${h}  C ${Xc * 0.5} ${h}  ${Xc * 0.5} ${h - 2*R} ${Xc} ${h - 2* R}, A${R} ${R} 0 0 1 ${Xc} ${h}, A ${0.5 * R} ${0.5* R} 0 0 1 ${Xc} ${h - R}, C${Xc - R} ${h - R} ${Xc - R} ${h}  ${Xc - 2 * R} ${h} Z`;
     tpl = document.createElementNS(svgURI, "path");
     tpl.setAttribute("d", tpl_pth);
@@ -760,11 +767,11 @@ function drawTumpal(x, y, isen='tumpal', s = 200, trig_degree = 45, rotDeg= 0, m
 
     tpl3 = tpl.cloneNode(true);
     tpl3.setAttribute("transform", `rotate(90 0 ${h}) scale(-1 1)`);
-    container.appendChild(tpl3);
+    
 
     tpl4 = tpl.cloneNode(true);
     tpl4.setAttribute("transform", `rotate(-90 0 ${h})`);
-    container.appendChild(tpl4);
+
 
 
     if (isen === 'tumpal'){
@@ -777,12 +784,39 @@ function drawTumpal(x, y, isen='tumpal', s = 200, trig_degree = 45, rotDeg= 0, m
         else if (trig_degree === 67.5) {
             R_new = 2.5 * R;
         }
-        tpl5 = tpl.cloneNode(true);
-        tpl5.setAttribute("d", `M 0 0 C 0 ${ 0.5 * (h - Xc - R - 0.4 * R_new) } ${0.4 * R_new}  ${ 0.5 * (h - Xc - R - 0.4 * R_new) } ${0.4 * R_new} ${h - Xc - R - 0.4 * R_new} A${0.2 * R_new} ${0.2 * R_new} 0 0 0 ${0} ${h - Xc - R - 0.4 * R_new} A${0.4 * R_new} ${0.4 * R_new} 0 0 0 ${0.8 * R_new} ${ h - Xc - R - 0.4 * R_new} C${0.8 * R_new} ${0.5 * (h - Xc - R - 0.4 * R_new) } ${0} ${0.5 * (h - Xc - R - 0.4 * R_new)} 0 0`);
-        container.appendChild(tpl5);
-        tpl6 = tpl5.cloneNode(true);
-        tpl6.setAttribute("transform", `scale(-1, 1)`);
-        container.appendChild(tpl6);
+        // else if (trig_degree === 30) {
+        //     R_new = 1 * R;
+        // }
+
+        if (trig_degree !== 30){
+            container.appendChild(tpl3);
+            container.appendChild(tpl4);
+            tpl5 = tpl.cloneNode(true);
+            tpl5.setAttribute("d", `M 0 0 C 0 ${ 0.5 * (h - Xc - R - 0.4 * R_new) } ${0.4 * R_new}  ${ 0.5 * (h - Xc - R - 0.4 * R_new) } ${0.4 * R_new} ${h - Xc - R - 0.4 * R_new} A${0.2 * R_new} ${0.2 * R_new} 0 0 0 ${0} ${h - Xc - R - 0.4 * R_new} A${0.4 * R_new} ${0.4 * R_new} 0 0 0 ${0.8 * R_new} ${ h - Xc - R - 0.4 * R_new} C${0.8 * R_new} ${0.5 * (h - Xc - R - 0.4 * R_new) } ${0} ${0.5 * (h - Xc - R - 0.4 * R_new)} 0 0`);
+            container.appendChild(tpl5);
+            tpl6 = tpl5.cloneNode(true);
+            tpl6.setAttribute("transform", `scale(-1, 1)`);
+            container.appendChild(tpl6);
+        }
+        else {
+            tpl3 = tpl.cloneNode(true);
+            tpl3.setAttribute("d", `M ${0} ${h} C ${0} ${h- 0.3 * (2 * R + s/30)} ${s/30} ${h- 0.3 * (2 * R + s/30)}  ${s/30} ${h-2 * R + s/30} A ${s/60} ${s/60} 0 0 1 ${0} ${h-2 * R + s /30} A${s/30} ${s/30} 0 0 1 ${2 * s/30} ${h-2 * R + s /30} C${2 * s/30} ${h- 0.3 * (2 * R + s/30)} ${0} ${h- 0.3 * (2 * R + s/30)} ${0} ${h} `);
+            container.appendChild(tpl3);
+
+            tpl4 = tpl3.cloneNode(true);
+            tpl4.setAttribute("transform", `scale(-1, 1)`);
+            container.appendChild(tpl4);  
+
+
+            tpl5 = tpl.cloneNode(true);
+            tpl5.setAttribute("d", `M ${0} ${0} C ${0} ${0.5 *  (h-2 * R - s /30) }  ${s/30}  ${0.5 *  (h-2 * R - s /30) }  ${s/30}  ${h-2 * R - s /30} A${s / 60} ${s / 60} 0 0 0 ${0} ${h-2 * R - s /30} A${s / 30} ${s / 30} 0 0 0 ${2 * s / 30} ${h-2 * R - s /30} C ${2 * s / 30} ${ 0.5 *  (h-2 * R - s /30) } ${0} ${ 0.5 *  (h-2 * R - s /30) }   ${0} ${0}`);
+            container.appendChild(tpl5);
+
+            tpl6 = tpl5.cloneNode(true);
+            tpl6.setAttribute("transform", `scale(-1, 1)`);
+            container.appendChild(tpl6);  
+        }
+
     }
 
     else if (isen === 'kawung'){
