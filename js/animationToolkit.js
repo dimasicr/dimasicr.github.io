@@ -65,13 +65,13 @@ function animateArc(x,y, r, startAngle, endAngle, step, run = false, fill=false,
         ctx.arc(x-r, y+r, r, 1.5 * Math.PI, 2 * Math.PI);
       }
       else if (kawung && startAngle === 1 * Math.PI && endAngle === 1.5 * Math.PI) {
-        ctx.arc(x, y, r, 0 * Math.PI, 0.5 * Math.PI);
+        ctx.arc(x-r, y-r, r, 0 * Math.PI, 0.5 * Math.PI);
       }
       else if (kawung && startAngle === 1.5 * Math.PI && endAngle === 2 * Math.PI) {
-        ctx.arc(x, y, r, 0.5 * Math.PI, 1 * Math.PI);
+        ctx.arc(x+r, y-r, r, 0.5 * Math.PI, 1 * Math.PI);
       }
       else if (kawung && startAngle === 0 * Math.PI && endAngle === 0.5 * Math.PI) {
-        ctx.arc(x, y, r, 2 * Math.PI, 1.5 * Math.PI);
+        ctx.arc(x+r, y + r, r, 2 * Math.PI, 1.5 * Math.PI);
       }
       ctx.fill();
       ctx.stroke();
