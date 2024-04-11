@@ -21,6 +21,10 @@ function handleSwipe() {
           selectBox.value = 'hexagon';
         } 
         else if (currentPattern === 'hexagon') {
+          currentPattern = 'triangle';
+          selectBox.value = 'triangle';
+        } 
+        else if (currentPattern === 'triangle') {
           currentPattern = 'octagon';
           selectBox.value = 'octagon';
         } 
@@ -36,6 +40,10 @@ function handleSwipe() {
           selectBox.value = 'octagon';
         } 
         else if (currentPattern === 'octagon') {
+          currentPattern = 'triangle';
+          selectBox.value = 'triangle';
+        } 
+        else if (currentPattern === 'triangle') {
           currentPattern = 'hexagon';
           selectBox.value = 'hexagon';
         } 
@@ -88,6 +96,33 @@ function redraw(){
       }
     }
   }
+else if (selectBox.value === 'triangle'){
+
+    for (let i = 0; i <6; i+=2){
+      for (let j =-1; j<6; j++){
+        drawTumpal(0.25 * w + 0.5 * w *j, 0.25 * w + 0.5 * 0.866 * w * i, selectIsens.value, w * 0.5, 30, 0, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
+        drawTumpal(0.25 * w + 0.5 * w *j, 0.25 * w + 0.5 * 0.866 * w * i, selectIsens.value, w * 0.5, 30, 120, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
+        drawTumpal(0.25 * w + 0.5 * w *j, 0.25 * w + 0.5 * 0.866 * w * i, selectIsens.value, w * 0.5, 30, 240, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
+
+        drawTumpal(0.5 * w + 0.5 * w *j, 0.25 * w + 0.5 * 0.866 *  w * i - 0.33 * 0.866 * 0.5 * w, selectIsens.value, w * 0.5, 30, 180, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
+        drawTumpal(0.5 * w + 0.5 * w *j, 0.25 * w + 0.5 * 0.866 *  w * i - 0.33 * 0.866 * 0.5 * w, selectIsens.value, w * 0.5, 30, 300, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
+        drawTumpal(0.5 * w + 0.5 * w *j, 0.25 * w + 0.5 * 0.866 *  w * i - 0.33 * 0.866 * 0.5 * w, selectIsens.value, w * 0.5, 30, 420, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
+      }
+    }
+
+    for (let i = 0; i <4; i+=2){
+      for (let j =-1; j<6; j++){
+        drawTumpal(0 * w + 0.5 * w *j, 0.25 * w + 0.5 * 0.866 * w + 0.5 * 0.866 * w * i , selectIsens.value, w * 0.5, 30, 0, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
+        drawTumpal(0 * w + 0.5 * w *j, 0.25 * w + 0.5 * 0.866 * w + 0.5 * 0.866 * w * i , selectIsens.value, w * 0.5, 30, 120, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
+        drawTumpal(0 * w + 0.5 * w *j, 0.25 * w + 0.5 * 0.866 * w + 0.5 * 0.866 * w * i , selectIsens.value, w * 0.5, 30, 240, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
+
+        drawTumpal(0.25 * w + 0.5 * w *j, 0.25 * w + 0.5 * 0.866 * w + 0.5 * 0.866 *  w * i - 0.33 * 0.866 * 0.5 * w, selectIsens.value, w * 0.5, 30, 180, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
+        drawTumpal(0.25 * w + 0.5 * w *j, 0.25 * w + 0.5 * 0.866 * w + 0.5 * 0.866 *  w * i - 0.33 * 0.866 * 0.5 * w, selectIsens.value, w * 0.5, 30, 300, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
+        drawTumpal(0.25 * w + 0.5 * w *j, 0.25 * w + 0.5 * 0.866 * w + 0.5 * 0.866 *  w * i - 0.33 * 0.866 * 0.5 * w, selectIsens.value, w * 0.5, 30, 420, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
+      }
+    }
+
+  }  
   else if (selectBox.value === 'hexagon'){
 
 
