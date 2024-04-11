@@ -200,7 +200,7 @@ refreshBtn.addEventListener("click", () => {
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.width);
       ctx.fillStyle = "#000000";
-      ctx.strokeStyle = "yellow";
+      ctx.strokeStyle = "white";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.save();
       ctx.translate(canvas.width/2, canvas.width/2);
@@ -218,7 +218,8 @@ refreshBtn.addEventListener("click", () => {
       // Draw Square Outline
       // ctx.strokeStyle = 'black'; ctx.setLineDash([]);ctx.lineWidth = 0.8;
       // animateLine(Ax, Ay, Bx, By, step, step > 0 );
-      animateLine(-r, 0,   r, 0, step, step > 0 );
+      // animateLine(-r, 0,   r, 0, step, step > 0 );
+       ctx.setLineDash([2,2]);
       animateArc(0,0, r, 0 * Math.PI, 2 * Math.PI, step - 20, step - 20 > 0);
 
        ctx.strokeStyle = '#4a6374'; ctx.setLineDash([]);ctx.lineWidth = 1.5;
