@@ -35,6 +35,13 @@ const themes = {
         strokeColor: "black",
         strokeWidth: 0.5
     }
+    ,"pastel": {
+        mainColor: "#b49084",
+        secondaryColor: "#38445a",
+        isenColor: "#e8eadd",
+        strokeColor: "gold",
+        strokeWidth: 0.5
+    }
 };
 
 
@@ -735,7 +742,7 @@ function drawTumpal(x, y, isen='tumpal', s = 200, trig_degree = 45, rotDeg= 0, m
 
     h = Math.tan(trig_degree/360 * 2 * Math.PI) * (0.5 * s);
     let outline = document.createElementNS(svgURI, "path");
-    outline_sentence = `M0 0  ${0.5 * s}, ${h}  ${-0.5 * s}, ${h} Z`;
+    outline_sentence = `M0 0  ${0.5 * s} ${h}  ${-0.5 * s} ${h} Z`;
     outline.setAttribute("d", outline_sentence);
     outline.setAttribute("fill", "none");
     outline.setAttribute("stroke", strokeColor);
@@ -752,7 +759,7 @@ function drawTumpal(x, y, isen='tumpal', s = 200, trig_degree = 45, rotDeg= 0, m
 
     Xc = 0.5 * s - R / Math.tan(0.5 * trig_degree/360 * 2 * Math.PI)
     
-    tpl_pth = `M0 ${h}  C ${Xc * 0.5} ${h}  ${Xc * 0.5} ${h - 2*R} ${Xc} ${h - 2* R}, A${R} ${R} 0 0 1 ${Xc} ${h}, A ${0.5 * R} ${0.5* R} 0 0 1 ${Xc} ${h - R}, C${Xc - R} ${h - R} ${Xc - R} ${h}  ${Xc - 2 * R} ${h} Z`;
+    tpl_pth = `M0 ${h}  C ${Xc * 0.5} ${h}  ${Xc * 0.5} ${h - 2*R} ${Xc} ${h - 2* R} A${R} ${R} 0 0 1 ${Xc} ${h} A ${0.5 * R} ${0.5* R} 0 0 1 ${Xc} ${h - R} C${Xc - R} ${h - R} ${Xc - R} ${h}  ${Xc - 2 * R} ${h} Z`;
     tpl = document.createElementNS(svgURI, "path");
     tpl.setAttribute("d", tpl_pth);
     tpl.setAttribute("fill", mainColor);
@@ -767,10 +774,23 @@ function drawTumpal(x, y, isen='tumpal', s = 200, trig_degree = 45, rotDeg= 0, m
 
     tpl3 = tpl.cloneNode(true);
     tpl3.setAttribute("transform", `rotate(90 0 ${h}) scale(-1 1)`);
-    
-
     tpl4 = tpl.cloneNode(true);
     tpl4.setAttribute("transform", `rotate(-90 0 ${h})`);
+
+    if (mainColor === "#b49084") {
+        tpl3.setAttribute("fill", "#e8eadd");
+        tpl4.setAttribute("fill", "#e8eadd");
+    }
+    
+
+        // mainColor: ,
+        // secondaryColor: "#38445a",
+        // isenColor: "#e8eadd",
+        // strokeColor: "gold",
+        // strokeWidth: 0.5
+    
+
+    
 
 
 
@@ -782,6 +802,9 @@ function drawTumpal(x, y, isen='tumpal', s = 200, trig_degree = 45, rotDeg= 0, m
             R_new = R;
         }
         else if (trig_degree === 67.5) {
+            R_new = 2.5 * R;
+        }
+        else if (trig_degree === 75) {
             R_new = 2.5 * R;
         }
         // else if (trig_degree === 30) {
@@ -801,11 +824,19 @@ function drawTumpal(x, y, isen='tumpal', s = 200, trig_degree = 45, rotDeg= 0, m
         else {
             tpl3 = tpl.cloneNode(true);
             tpl3.setAttribute("d", `M ${0} ${h} C ${0} ${h- 0.3 * (2 * R + s/30)} ${s/30} ${h- 0.3 * (2 * R + s/30)}  ${s/30} ${h-2 * R + s/30} A ${s/60} ${s/60} 0 0 1 ${0} ${h-2 * R + s /30} A${s/30} ${s/30} 0 0 1 ${2 * s/30} ${h-2 * R + s /30} C${2 * s/30} ${h- 0.3 * (2 * R + s/30)} ${0} ${h- 0.3 * (2 * R + s/30)} ${0} ${h} `);
-            container.appendChild(tpl3);
+            
 
             tpl4 = tpl3.cloneNode(true);
             tpl4.setAttribute("transform", `scale(-1, 1)`);
+
+            if (mainColor === "#b49084") {
+                tpl3.setAttribute("fill", "#e8eadd");
+                tpl4.setAttribute("fill", "#e8eadd");
+            }
+            
+            container.appendChild(tpl3);
             container.appendChild(tpl4);  
+
 
 
             tpl5 = tpl.cloneNode(true);
