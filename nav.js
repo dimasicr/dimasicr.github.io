@@ -4,7 +4,7 @@ document.write(
     '<li><a href="index.html">Apollonian Kawung</a></li>' +
     '<li><a href="fibonacci.html">Fibonacci Kawung</a></li>' +
     '<li><a href="poincare.html">Poincare Kawung</a></li>' +
-    '<li><a href="tumpal.html">Sierpinski Tumpal</a></li>' +
+    // '<li><a href="tumpal.html">Sierpinski Tumpal</a></li>' +
     '<li><a href="semiregular.html">Tesselation of Kawung</a></li>' +
     '<li><a href="hyperbolic.html">Hyperbolic Kawung</a></li>' +
     '<li><a href="parametricbuketan.html">Parametric Buketan</a></li>' +
