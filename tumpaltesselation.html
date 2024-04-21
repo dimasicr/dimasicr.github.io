@@ -39,39 +39,78 @@
                <summary style="text-align: center;"> <span> Interactive Image  </span> </summary>  
                <select name="Motives" id="motives" class="btns" style="margin-top: 10px;" >
                   <option value="square">Square</option>
-                  <option value="triangle">Triangle</option>
                   <option value="hexagon">Hexagon</option>
-                  <option value="octagon">Octagon</option>
+                  <option value="triangle" >Triangle</option>
+                  <option value="hexagon_triangle">Hexagon Triangle</option>
+                  <option value="hexagon_square_triangle" >Hexagon Square Triangle</option>
+                  <option value="two_hexagons_two_triangles"> Two Hexagons Two Triangles </option>
+                  <option value="dodecagon_triangle"> Dodecagon Triangle </option>
+                  <option value="dodecagon_hexagon_square" selected > Dodecagon Hexagon Square </option>
+                  <option value="two_squares_three_triangles"> Two Squares Three Triangles </option>
+                  <option value="two_squares_three_triangles_complex"> Two Squares Three Triangles Complex </option>
+                  <option value="octagon_square"> Two Octagons 1 Square </option>
                </select>
                
                <select name="Isens" id="Isens" class="btns" style="margin-top: 10px;" >
                   <option value="tumpal">Tumpal</option>
-                  <option value="kawung">Kawung</option>
+<!--                   <option value="kawung">Kawung</option> -->
                </select>
                <select name="theme" id="themes" class="btns" >
                   <option value="oldJava">Old Java </option>
                   <option value="batavia">Batavia </option>
+                  <option value="pastel" selected> Pastel </option>
                </select>
                <button id="download-btn"> <i class="fa fa-download"></i>  Download SVG </span> </button>
             </details>
             <div style="text-align: center; margin-top: 10px;">
                     <button id="left-button" onclick="
-        if (currentPattern === 'square') {
-          currentPattern = 'octagon';
-          selectBox.value = 'octagon';
-        } 
-        else if (currentPattern === 'octagon') {
-          currentPattern = 'triangle';
-          selectBox.value = 'triangle';
+        if (currentPattern === 'hexagon') {
+          currentPattern = 'square';
+          selectBox.value = 'square';
         } 
         else if (currentPattern === 'triangle') {
           currentPattern = 'hexagon';
           selectBox.value = 'hexagon';
         } 
-        else if (currentPattern === 'hexagon') {
-          currentPattern = 'square';
-          selectBox.value = 'square';
-        }  redraw();"><</button>
+        else if (currentPattern === 'hexagon_triangle') {
+          currentPattern = 'triangle';
+          selectBox.value = 'triangle';
+        } 
+        else if (currentPattern === 'hexagon_square_triangle') {
+          currentPattern = 'hexagon_triangle';
+          selectBox.value = 'hexagon_triangle';
+        }  
+        else if (currentPattern === 'two_hexagons_two_triangles') {
+          currentPattern = 'hexagon_square_triangle';
+          selectBox.value = 'hexagon_square_triangle';
+        }                         
+        else if (currentPattern === 'dodecagon_triangle') {
+          currentPattern = 'two_hexagons_two_triangles';
+          selectBox.value = 'two_hexagons_two_triangles';
+        }                         
+         else if (currentPattern === 'dodecagon_hexagon_square') {
+          currentPattern = 'dodecagon_triangle';
+          selectBox.value = 'dodecagon_triangle';
+        }                      
+         else if (currentPattern === 'two_squares_three_triangles') {
+          currentPattern = 'dodecagon_hexagon_square';
+          selectBox.value = 'dodecagon_hexagon_square';
+        }
+         else if (currentPattern === 'two_squares_three_triangles_complex') {
+          currentPattern = 'two_squares_three_triangles';
+          selectBox.value = 'two_squares_three_triangles';
+        }                       
+         else if (currentPattern === 'octagon_square') {
+          currentPattern = 'two_squares_three_triangles_complex';
+          selectBox.value = 'two_squares_three_triangles_complex';
+        }                         
+         else if (currentPattern === 'square') {
+          currentPattern = 'octagon_square';
+          selectBox.value = 'octagon_square';
+        }                       
+                       redraw();"><</button>
+
+               
                     <button id="right-button" onclick="
        if (currentPattern === 'square') {
           currentPattern = 'hexagon';
@@ -81,14 +120,42 @@
           currentPattern = 'triangle';
           selectBox.value = 'triangle';
         } 
-      else if (currentPattern === 'triangle') {
-          currentPattern = 'octagon';
-          selectBox.value = 'octagon';
+        else if (currentPattern === 'triangle') {
+          currentPattern = 'hexagon_triangle';
+          selectBox.value = 'hexagon_triangle';
         } 
-        else if (currentPattern === 'octagon') {
+        else if (currentPattern === 'hexagon_triangle') {
+          currentPattern = 'hexagon_square_triangle';
+          selectBox.value = 'hexagon_square_triangle';
+        }  
+        else if (currentPattern === 'hexagon_square_triangle') {
+          currentPattern = 'two_hexagons_two_triangles';
+          selectBox.value = 'two_hexagons_two_triangles';
+        }                         
+        else if (currentPattern === 'two_hexagons_two_triangles') {
+          currentPattern = 'dodecagon_triangle';
+          selectBox.value = 'dodecagon_triangle';
+        }                         
+         else if (currentPattern === 'dodecagon_triangle') {
+          currentPattern = 'dodecagon_hexagon_square';
+          selectBox.value = 'dodecagon_hexagon_square';
+        }                      
+         else if (currentPattern === 'dodecagon_hexagon_square') {
+          currentPattern = 'two_squares_three_triangles';
+          selectBox.value = 'two_squares_three_triangles';
+        }
+         else if (currentPattern === 'two_squares_three_triangles') {
+          currentPattern = 'two_squares_three_triangles_complex';
+          selectBox.value = 'two_squares_three_triangles_complex';
+        }                       
+         else if (currentPattern === 'two_squares_three_triangles_complex') {
+          currentPattern = 'octagon_square';
+          selectBox.value = 'octagon_square';
+        }                         
+         else if (currentPattern === 'octagon_square') {
           currentPattern = 'square';
           selectBox.value = 'square';
-        } redraw();">></button>
+        }  redraw();">></button>
                </div>
          </figure>
          
