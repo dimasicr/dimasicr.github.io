@@ -500,6 +500,146 @@ else if (motive === 'triplet'){
   }
 }
 
+function getSideLength(n, r){
+  theta = (2* Math.PI) / n;
+  x2 = Math.cos(2 * theta) * r;
+  x1 = Math.cos(theta) * r;
+  y2 = Math.sin(2 * theta) * r;
+  y1 = Math.sin(theta) * r;
+  return Math.sqrt((x2- x1) ** 2 + (y2 - y1) ** 2);
+}
+
+function drawApollonianTumpal(x,y, r, motive='symmetric', theme='oldJava', mainColor = themes["oldJava"].mainColor, secondaryColor= themes["oldJava"].secondaryColor, strokeColor = themes["oldJava"].strokeColor, isen='cecek', tanahan='rect_diamond', padding=false ){
+  circles = [];
+  if (motive === 'symmetric'){
+    c1r = -r;
+    c1center = new Complex(x,y);
+    c1 = new Circle(c1r, c1center, "#616f82");
+    circles.push(c1);
+    
+    c2r = Math.abs(c1r/2);
+    c2center = new Complex(x - c2r, y);
+    c2 = new Circle(c2r, c2center, "#d19f5b");
+    circles.push(c2);
+    
+    c3r = Math.abs(c1r/2);
+    c3center = new Complex(x+ c3r, y);
+    c3 = new Circle(c3r, c3center, "#87895d");
+    circles.push(c3);
+    drawGasket(circles[0], circles[1], circles[2]);
+
+    newCircles = circles.filter(function(element) {
+      return element.r !==  c1r;
+    });
+
+    
+    newCircles.forEach(function(e) {
+        if (theme === 'tetradiac') {
+       s = getSideLength(12, r);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 0, mainColor, secondaryColor, strokeColor,   false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 30, mainColor, secondaryColor, strokeColor,  false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 60, mainColor, secondaryColor, strokeColor,  false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 90, mainColor, secondaryColor, strokeColor,  false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 120, mainColor, secondaryColor, strokeColor, false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 150, mainColor, secondaryColor, strokeColor, false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 180, mainColor, secondaryColor, strokeColor, false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 210, mainColor, secondaryColor, strokeColor, false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 240, mainColor, secondaryColor, strokeColor, false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 270, mainColor, secondaryColor, strokeColor, false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 300, mainColor, secondaryColor, strokeColor, false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 330, mainColor, secondaryColor, strokeColor, false);
+        }
+        else {
+       s = getSideLength(12, r);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 0, mainColor, secondaryColor, strokeColor,   false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 30, mainColor, secondaryColor, strokeColor,  false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 60, mainColor, secondaryColor, strokeColor,  false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 90, mainColor, secondaryColor, strokeColor,  false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 120, mainColor, secondaryColor, strokeColor, false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 150, mainColor, secondaryColor, strokeColor, false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 180, mainColor, secondaryColor, strokeColor, false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 210, mainColor, secondaryColor, strokeColor, false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 240, mainColor, secondaryColor, strokeColor, false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 270, mainColor, secondaryColor, strokeColor, false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 300, mainColor, secondaryColor, strokeColor, false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 330, mainColor, secondaryColor, strokeColor, false);
+            
+        }
+    });
+    
+
+
+  }
+ else if (motive === 'asymmetric'){
+    c1r = -r;
+    c1center = new Complex(x, y);
+    let c1 = new Circle(c1r, c1center, "#616f82");
+    
+    let c2r = 0.63 * r;
+    let c2center = new Complex(x, y + c1r + c2r);
+    let c2 = new Circle(c2r, c2center, "#d19f5b");
+    
+    let c3r = Math.abs(c1.r) - c2.r;
+    let c3x = c2.center.re;
+    let c3y = c2.center.im + c2.r + c3r;
+    let c3center = new Complex(c3x, c3y);
+    let c3 = new Circle(c3r, c3center, "#87895d");
+    
+    circles.push(c1);
+    circles.push(c2);
+    circles.push(c3);
+    drawGasket(circles[0], circles[1], circles[2]);
+    newCircles = circles.filter(function(element) {
+      return element.r !==  c1r;
+    });
+    newCircles.forEach(function(e) {
+        if (theme === 'tetradiac') {
+            drawKawung(e.center.re, e.center.im, e.r, e.color, "#493118", strokeColor , isen, tanahan, padding);
+        }
+        else {
+            drawKawung(e.center.re, e.center.im, e.r, mainColor, secondaryColor, strokeColor , isen, tanahan, padding);
+        }
+    });
+
+
+  }
+
+else if (motive === 'triplet'){
+    //https://www.quora.com/If-three-tangent-circles-of-equal-radius-are-inscribed-in-a-circle-of-radius-3-what-are-their-radii-What-is-r-in-the-picture-and-how-do-you-calculate-it
+    let c1r = -r;
+    let c1center = new Complex(x,y);
+    let c1 = new Circle(c1r, c1center, "#616f82");
+    
+    let c2r =  0.464 * Math.abs(c1r) ;
+    let c2center = new Complex(x + c2r , y +  c2r * Math.sqrt(3) / 3);
+    let c2 = new Circle(c2r, c2center, "#d19f5b");
+    
+    let c3r = c2r;
+    let c3center = new Complex(x - c2r , y +  c2r * Math.sqrt(3) / 3);
+    let c3 = new Circle(c3r, c3center, "#87895d");
+    
+    circles.push(c1);
+    circles.push(c2);
+    circles.push(c3);
+    drawGasket(circles[0], circles[1], circles[2]);
+    newCircles = circles.filter(function(element) {
+      return element.r !==  c1r;
+    });
+    newCircles.forEach(function(e) {
+        if (theme === 'tetradiac') {
+            drawKawung(e.center.re, e.center.im, e.r, e.color, "#493118", strokeColor , isen, tanahan, padding);
+        }
+        else {
+            drawKawung(e.center.re, e.center.im, e.r, mainColor, secondaryColor, strokeColor , isen, tanahan, padding);
+        }
+    });
+
+
+
+  }
+}
+
+
 function drawArbitraryKawung(Points, x, y, r =200, rotDeg= 0, mainColor=themes["oldJava"].mainColor, secondaryColor=themes["oldJava"].secondaryColor, strokeColor = themes["oldJava"].strokeColor, use_outline=false){  
     let container = document.createElementNS(svgURI, "g");
     container.setAttribute("transform", `translate(${x}, ${y}) rotate(${rotDeg}) scale(${r/200} , ${r/200})`);
