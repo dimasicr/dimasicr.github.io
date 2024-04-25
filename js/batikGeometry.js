@@ -535,34 +535,34 @@ function drawApollonianTumpal(x,y, r, motive='symmetric', theme='oldJava', mainC
     
     newCircles.forEach(function(e) {
         if (theme === 'tetradiac') {
-       s = getSideLength(12, r);
-       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 0, mainColor, secondaryColor, strokeColor,   false);
-       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 30, mainColor, secondaryColor, strokeColor,  false);
-       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 60, mainColor, secondaryColor, strokeColor,  false);
-       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 90, mainColor, secondaryColor, strokeColor,  false);
-       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 120, mainColor, secondaryColor, strokeColor, false);
-       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 150, mainColor, secondaryColor, strokeColor, false);
-       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 180, mainColor, secondaryColor, strokeColor, false);
-       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 210, mainColor, secondaryColor, strokeColor, false);
-       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 240, mainColor, secondaryColor, strokeColor, false);
-       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 270, mainColor, secondaryColor, strokeColor, false);
-       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 300, mainColor, secondaryColor, strokeColor, false);
-       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 330, mainColor, secondaryColor, strokeColor, false);
+       s = getSideLength(12, e.r);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', s, 75, 0, mainColor, secondaryColor, strokeColor,   false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', s, 75, 30, mainColor, secondaryColor, strokeColor,  false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', s, 75, 60, mainColor, secondaryColor, strokeColor,  false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', s, 75, 90, mainColor, secondaryColor, strokeColor,  false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', s, 75, 120, mainColor, secondaryColor, strokeColor, false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', s, 75, 150, mainColor, secondaryColor, strokeColor, false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', s, 75, 180, mainColor, secondaryColor, strokeColor, false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', s, 75, 210, mainColor, secondaryColor, strokeColor, false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', s, 75, 240, mainColor, secondaryColor, strokeColor, false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', s, 75, 270, mainColor, secondaryColor, strokeColor, false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', s, 75, 300, mainColor, secondaryColor, strokeColor, false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', s, 75, 330, mainColor, secondaryColor, strokeColor, false);
         }
         else {
-       s = getSideLength(12, r);
-       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 0, mainColor, secondaryColor, strokeColor,   false);
-       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 30, mainColor, secondaryColor, strokeColor,  false);
-       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 60, mainColor, secondaryColor, strokeColor,  false);
-       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 90, mainColor, secondaryColor, strokeColor,  false);
-       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 120, mainColor, secondaryColor, strokeColor, false);
-       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 150, mainColor, secondaryColor, strokeColor, false);
-       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 180, mainColor, secondaryColor, strokeColor, false);
-       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 210, mainColor, secondaryColor, strokeColor, false);
-       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 240, mainColor, secondaryColor, strokeColor, false);
-       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 270, mainColor, secondaryColor, strokeColor, false);
-       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 300, mainColor, secondaryColor, strokeColor, false);
-       drawTumpal(e.center.re, e.center.im, 'tumpal', e.r, 75, 330, mainColor, secondaryColor, strokeColor, false);
+       s = getSideLength(12, e.r);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', s, 75, 0, mainColor, secondaryColor, strokeColor,   false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', s, 75, 30, mainColor, secondaryColor, strokeColor,  false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', s, 75, 60, mainColor, secondaryColor, strokeColor,  false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', s, 75, 90, mainColor, secondaryColor, strokeColor,  false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', s, 75, 120, mainColor, secondaryColor, strokeColor, false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', s, 75, 150, mainColor, secondaryColor, strokeColor, false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', s, 75, 180, mainColor, secondaryColor, strokeColor, false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', s, 75, 210, mainColor, secondaryColor, strokeColor, false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', s, 75, 240, mainColor, secondaryColor, strokeColor, false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', s, 75, 270, mainColor, secondaryColor, strokeColor, false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', s, 75, 300, mainColor, secondaryColor, strokeColor, false);
+       drawTumpal(e.center.re, e.center.im, 'tumpal', s, 75, 330, mainColor, secondaryColor, strokeColor, false);
             
         }
     });
