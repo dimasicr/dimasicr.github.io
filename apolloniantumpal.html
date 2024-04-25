@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Karsadera </title>
+      <link rel="icon" href="logo.svg" type="image/svg+xml">
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200&display=swap" rel="stylesheet">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <link rel="stylesheet" href="main.css">
+   </head>
+   <body>
+      <div class="container">
+         <!-- Toggle button for small screens -->
+         <div class="toggle-button" id="toggleButton">
+            <img src="asset/tumpalLogo.svg" alt="SVG Image Description">
+            <span style="margin-left: auto; margin-right: auto;"> Geometry of Batik </span>
+            <span style="margin-left: auto; margin-right: 20px;"> &#9776; </span> 
+         </div>
+         <!-- Side Navigation Bar -->
+         <div class="sidenav" id="sidenav">
+            <div style= "display: flex; font-size: 24px;">
+               <img src="asset/tumpalLogo.svg" alt="SVG Image Description">
+               <span style="margin-left: 10px;"> Geometry of Batik  <span>
+            </div>
+            <hr>
+            <script src="nav.js"></script>
+         </div>
+         <!-- Main Content Area -->
+         <div class="main-content">
+         <h1 > Apollonian Kawung</h1>
+         
+            <div id="svg-container"></div>
+         <figure>
+            <details style="margin-top: 5px;">
+               <summary style="text-align: center;"> <span> Interactive Image  </span> </summary>  
+               <select name="Motives" id="motives" class="btns" style="margin-top: 10px;" >
+                  <option value="symmetric">Symmetric</option>
+                  <option value="asymmetric">Asymmetric</option>
+                  <option value="triplet">Triplet</option>
+               </select>
+               <select name="theme" id="themes" class="btns" >
+                  <option value="oldJava">Old Java </option>
+                  <option value="tetradiac">Nusantara </option>
+                  <option value="batavia">Batavia </option>
+               </select>
+               <select name="Paddings" id="paddings" class="btns" >
+                  <option value="false" selected >No Padding</option>
+                  <option value="true">Padding</option>
+               </select>
+               <select name="recursion_threshold" id="recursion_threshold" class="btns" >
+                  <option value="1"> Detail </option>
+                  <option value="3.5" selected> Normal </option>
+                  <option value="5"> Rough </option>
+               </select>
+               <button id="download-btn"> <i class="fa fa-download"></i>  Download SVG </span> </button>
+            </details>
+            <div style="text-align: center; margin-top: 10px;">
+                    <button id="left-button" onclick="if (currentPattern === 'symmetric') {
+          currentPattern = 'asymmetric';
+          selectBox.value = 'asymmetric';
+        } 
+        else if (currentPattern === 'asymmetric') {
+          currentPattern = 'triplet';
+          selectBox.value = 'triplet';
+        } 
+        else if (currentPattern === 'triplet') {
+          currentPattern = 'symmetric';
+          selectBox.value = 'symmetric';
+        } redraw();"><</button>
+                    <button id="right-button" onclick="if (currentPattern === 'symmetric') {
+          currentPattern = 'triplet';
+          selectBox.value = 'triplet';
+        } 
+        else if (currentPattern === 'triplet') {
+          currentPattern = 'asymmetric';
+          selectBox.value = 'asymmetric';
+        } 
+        else if (currentPattern === 'asymmetric') {
+          currentPattern = 'symmetric';
+          selectBox.value = 'symmetric';
+        } redraw();">></button>
+               </div>
+         </figure>
+         
+         <article style="width: 80%; text-align: center; margin: auto;">
+         <h2 style="text-align: justify; color: #493118; font-weight: bold;"> Description </h2>
+         <p style="text-align: justify;"> The motive is inspired by the traditional Indonesian <i><a href="https://en.wikipedia.org/wiki/Batik_kawung">Kawung</a></i> pattern, adorned with the classic <i> isen cecek </i> design, arranged in the form of an Apollonian Gasket. <a href="https://en.wikipedia.org/wiki/Apollonian_gasket">The Apollonian Gasket</a> is a fractal pattern comprising circles that are mutually tangent, with their arrangement governed by a specific mathematical equation initially described by the renowned French philosopher and mathematician, René Descartes </p>
+         <p style="text-align: justify;"> Both the Kawung motif and the Apollonian Gasket hold historical significance, representing some of the oldest known patterns. In Indonesia, the Kawung motif dates back to the 13th century, evident in the artifacts from the Singosari Kingdom, such as the Mahakala statue. René Descartes, the eminent French philosopher and mathematician, expounded that for every set of four kissing circles, the radii of these circles satisfy a particular quadratic equation. By considering Kawung as a circle and applying Descartes' theorem, we can skillfully draw the captivating Apollonian Kawung Gasket.  </p>
+         <h2 style="text-align: justify; color: #493118; font-weight: bold;"> Math Concept </h2>
+         <p style="text-align: justify;"> <a href="https://en.wikipedia.org/wiki/Descartes%27_theorem#">Descartes theorem</a> states that curvature k ( 1 / radius) of four mutually tangent circles can be described as:  </p>
+         <p style=" overflow-x: scroll;"> \( (k_1 + k_2 + k_3 + k_4)^2  = 2 \cdot (2k_1 ^2 + k_2 ^2+ k_3 ^2 + k_4 ^2)  \) </p>
+         <p style="text-align: justify;"> To get location of circle center, we can use complex Descartes theorem:  </p>
+         <p style=" overflow-x: scroll;"> \( (k_1 z_1 + k_2 z_2 + k_3 z_3 + k_4 z_4)^2  = 2 \cdot (2k_1 ^2 z_1 ^ 2+ k_2 ^2 z_2^2+ k_3 ^2 z_3 ^ 2 + k_4 ^2 z_4 ^ 2)  \) </p>         </details>
+         <h2 style="text-align: justify; color: #493118; font-weight: bold;"> How to Draw </h2>
+         <div style="text-align: center;">
+              <canvas id="myCanvas" style="display: block; margin: auto;"></canvas>
+         </div>
+         <button id="refresh-btn"> <i class="fa fa-refresh"></i>  Replay Animation </span> </button>
+         <ol>
+            <li> <p style="text-align: justify;"> Given square ABCD, draw a circle centered at O with a radius equal to half of the square side length. </p> </li>
+            <li> <p style="text-align: justify;"> Draw a quarter circle centered at vertex A, using the same radius. </p> </li>
+            <li> <p style="text-align: justify;"> Repeat step #2 three times, centering the quarter circles at vertices B, C, and D, respectively. </p> </li>
+         </ol>
+
+         <h2 style="text-align: justify; color: #493118; font-weight: bold;"> Exhibit </h2>
+            
+         <img src="asset/imgNecklaceApollonian.png" alt="Apollonian Kawung Necklace" style="display: flex;
+     justify-content: center;
+     height: 400px;
+     width: 300px;
+     margin: auto;" >
+         <p style="text-align: justify;"> Presenting the Apollonian Kawung Necklace by The Geometry of Batik Team. With the mathematical model in hand, creating a 3D model becomes a straightforward process. The resulting 3D model serves as the foundation for crafting this necklace using the lost wax casting method in our exhibit. To enhance its appearance, the Apollonian Kawung is coated with rhodium, providing a brilliant and shiny effect. </p>
+            
+         <h2 style="text-align: justify; color: #493118; font-weight: bold;"> References </h2>
+         <ul>
+            <li> <p style="text-align: justify;"> <a href="https://codepen.io/pimskie/pen/QKjBEV"> Codepen by pimskie </a> </p> </li>
+            <li> <p style="text-align: justify;"> <a href="https://www.youtube.com/watch?v=T647CGsuOVU"> Complex Video Series by Welch Labs </a> </p> </li>
+         </ul>
+            
+         </article>
+         </div>
+      </div>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script src="js/complex.js"></script>
+      <script src="js/batikGeometry.js"></script>
+      <script src="js/apollonianGasketTumpal.js"> </script>
+      <script src="js/mainUI.js"></script> 
+      <script src="js/animationToolkit.js"></script>
+      <script src="js/animationCircularKawung.js"></script>
+   </body>
+</html>
