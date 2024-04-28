@@ -27,7 +27,7 @@ function draw() {
 
 
       // ctx.strokeStyle = 'black'; ctx.setLineDash([]);ctx.lineWidth = 0.8;
-      ctx.strokeStyle = "#7e9572";  ctx.fillStyle="black"; ctx.lineWidth = 2;
+      ctx.strokeStyle = "#7e9572";  ctx.fillStyle="none"; ctx.lineWidth = 2;
       ctx.font = "18px Arial";
       ctx.beginPath();
       ctx.moveTo(Ax, Ay);
@@ -66,8 +66,8 @@ function draw() {
       Xc = Ax - R / Math.tan(0.5 * 60/360 * 2 * Math.PI);
       // ctx.strokeStyle = 'black'; ctx.setLineDash([]);
 
-      ctx.strokeStyle = "white";
-      ctx.fillStyle = "white";
+      ctx.strokeStyle = "black";
+      ctx.fillStyle = "black";
       animateLine(Xc, Ay - R, Xc, Ay, step - 240, step - 240 > 0 );
       animateText(Xc, Ay - R, "O", step - 260, step - 260 > 0 );
       
