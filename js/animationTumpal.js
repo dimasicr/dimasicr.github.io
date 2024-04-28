@@ -1,6 +1,6 @@
 function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.width);
-      ctx.fillStyle = "none";
+      ctx.fillStyle = "white";
       ctx.strokeStyle = "black";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.lineWidth = 2;
@@ -27,7 +27,7 @@ function draw() {
 
 
       // ctx.strokeStyle = 'black'; ctx.setLineDash([]);ctx.lineWidth = 0.8;
-      ctx.strokeStyle = "#7e9572";  ctx.fillStyle="none"; ctx.lineWidth = 2;
+      ctx.strokeStyle = "#7e9572";  ctx.fillStyle="white"; ctx.lineWidth = 2;
       ctx.font = "18px Arial";
       ctx.beginPath();
       ctx.moveTo(Ax, Ay);
