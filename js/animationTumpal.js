@@ -27,7 +27,7 @@ function draw() {
 
 
       // ctx.strokeStyle = 'black'; ctx.setLineDash([]);ctx.lineWidth = 0.8;
-      ctx.strokeStyle = "#7e9572";  ctx.fillStyle="white"; ctx.lineWidth = 2;
+      ctx.strokeStyle = "black";  ctx.fillStyle="white"; ctx.lineWidth = 2;
       ctx.font = "18px Arial";
       ctx.beginPath();
       ctx.moveTo(Ax, Ay);
@@ -39,7 +39,7 @@ function draw() {
       // ctx.fillText('α', Ax - 0.3 * r, Ay - 0.1 * r);
       // ctx.fillText('β', Bx + 0.25 * r, By - 0.1 * r);
       // animateLine(Ax, Ay, Bx, By, step, step > 0 );
-      ctx.strokeStyle = "yellow";
+      ctx.strokeStyle = "red";
       animateArc(Bx,By, Math.abs(Bx - Ax), 2 * Math.PI, 1.6 * Math.PI, step, step > 0);
       animateArc(Ax,Ay, Math.abs(Bx - Ax), 1 * Math.PI, 1.4 * Math.PI, step - 20, step - 20 > 0);
       animateText(Cx + 0.1 * r, Cy, "C", step - 40, step - 40 > 0 );
