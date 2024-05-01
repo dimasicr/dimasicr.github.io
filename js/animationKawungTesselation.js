@@ -11,25 +11,33 @@ function draw() {
       Cx = Math.cos(3 * 2 * Math.PI/ 3 - Math.PI /2) * r;
       Cy = Math.sin(3 * 2 * Math.PI/ 3 - Math.PI /2) * r;
 
+      ctx.fillStyle="black"
+
+
       ctx.strokeStyle = 'black'; ctx.setLineDash([]);ctx.lineWidth = 0.8;
       animateLine(Ax, Ay, Bx, By, step, step > 0 );
+      animateText(Ax, Ay + 0.1 * r, "A", step - 20, step - 20 > 0 );
+      animateText(Bx, By + 0.1 * r, "B", step - 20, step - 20 > 0 );
       ctx.strokeStyle = 'gray'; ctx.setLineDash([3, 3]);
       animateArc(Bx,By, Math.abs(Bx - Ax), 1.6 * Math.PI, 1.7 * Math.PI, step - 20, step - 20 > 0);
       animateArc(Ax,Ay, Math.abs(Bx - Ax), 1.3 * Math.PI, 1.4 * Math.PI, step - 40, step - 40 > 0);
+      
 
       ctx.strokeStyle = 'black'; ctx.setLineDash([]);
       animateLine(Bx, By, Cx, Cy, step - 60, step - 60 > 0 );
+      animateText(Cx + 0.1 * r, Cy , "C", step - 60, step - 60 > 0 );
       animateLine(Cx, Cy, Ax, Ay, step - 80, step - 80 > 0 );
       ctx.strokeStyle = 'gray'; ctx.setLineDash([3, 3]);
       animateLine(Cx, Cy, (Ax + Bx)/2, Ay, step - 100, step - 100 > 0 );
 
+      ctx.strokeStyle = "red"; 
       animateArc(Cx,Cy, Math.abs(Bx - Ax),1.95 * Math.PI, 2.05 * Math.PI, step - 120, step - 120 > 0);
       animateArc(Ax,Ay, Math.abs(Bx - Ax), 1.6 * Math.PI, 1.7 * Math.PI, step - 140, step - 140 > 0);
 
       animateArc(Bx,By, Math.abs(Bx - Ax),1.3 * Math.PI, 1.4 * Math.PI, step - 160, step - 160 > 0);
       animateArc(Cx,Cy, Math.abs(Bx - Ax),0.95 * Math.PI, 1.05 * Math.PI, step - 180, step - 180 > 0);
 
-      // ctx.strokeStyle = 'black';ctx.setLineDash([]);
+      ctx.strokeStyle = 'black';ctx.setLineDash([]);
       animateLine(Bx, By, (Cx + Ax) /2, (Cy + Ay) /2, step - 200, step - 200 > 0 );
       ctx.strokeStyle = 'gray'; ctx.setLineDash([3, 3]);
       animateLine((Cx + Ax) /2, (Cy + Ay) /2, (Cx + Ax) + Math.abs(Bx), (Cy + Ay) - By, step - 220, step - 220 > 0 );
