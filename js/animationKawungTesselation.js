@@ -18,7 +18,7 @@ function draw() {
       animateLine(Ax, Ay, Bx, By, step, step > 0 );
       animateText(Ax, Ay + 0.1 * r, "A", step - 20, step - 20 > 0 );
       animateText(Bx, By + 0.1 * r, "B", step - 20, step - 20 > 0 );
-      ctx.strokeStyle = 'gray'; ctx.setLineDash([3, 3]);
+      ctx.strokeStyle = "red"; 
       animateArc(Bx,By, Math.abs(Bx - Ax), 1.6 * Math.PI, 1.7 * Math.PI, step - 20, step - 20 > 0);
       animateArc(Ax,Ay, Math.abs(Bx - Ax), 1.3 * Math.PI, 1.4 * Math.PI, step - 40, step - 40 > 0);
       
@@ -30,7 +30,7 @@ function draw() {
       ctx.strokeStyle = 'gray'; ctx.setLineDash([3, 3]);
       animateLine(Cx, Cy, (Ax + Bx)/2, Ay, step - 100, step - 100 > 0 );
 
-      ctx.strokeStyle = "red"; 
+      ctx.strokeStyle = "red"; ctx.setLineDash([]);
       animateArc(Cx,Cy, Math.abs(Bx - Ax),1.95 * Math.PI, 2.05 * Math.PI, step - 120, step - 120 > 0);
       animateArc(Ax,Ay, Math.abs(Bx - Ax), 1.6 * Math.PI, 1.7 * Math.PI, step - 140, step - 140 > 0);
 
