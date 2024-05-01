@@ -254,6 +254,9 @@ function draw_polygon(n, x,y, r, rot_deg){
     new_x2 = midpoint(vertices[0][0],vertices[ind][0]);
     new_y2 = midpoint(vertices[0][1], vertices[ind][1]);
 
+    xc = (0 + new_x2 + vertices[0][0] + new_x) / 4;
+    yc = (0 + new_y2 + vertices[0][1] + new_y) / 4;
+
     // Quadratic Bezier Curve
     kawung_part = document.createElementNS("http://www.w3.org/2000/svg", "path");
     kawung_part.setAttribute('transform', `rotate(${ j * 360 / n})`)
