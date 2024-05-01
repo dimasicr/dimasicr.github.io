@@ -31,11 +31,10 @@ function draw() {
       animateLine(Cx, Cy, (Ax + Bx)/2, Ay, step - 100, step - 100 > 0 );
 
       ctx.strokeStyle = "red"; ctx.setLineDash([]);
-      animateArc(Cx,Cy, Math.abs(Bx - Ax),1.7 * Math.PI, 2.3 * Math.PI, step - 120, step - 120 > 0);
-      animateArc(Ax,Ay, Math.abs(Bx - Ax), 1.5 * Math.PI, 2 * Math.PI, step - 140, step - 140 > 0);
-
-      animateArc(Bx,By, Math.abs(Bx - Ax),1 * Math.PI, 1.5 * Math.PI, step - 160, step - 160 > 0);
-      animateArc(Cx,Cy, Math.abs(Bx - Ax),0.6 * Math.PI, 1.2 * Math.PI, step - 180, step - 180 > 0);
+      animateArc(Cx,Cy, Math.abs(Bx - Ax),1.95 * Math.PI, 2.05 * Math.PI, step - 120, step - 120 > 0);
+      animateArc(Ax,Ay, Math.abs(Bx - Ax), 1.6 * Math.PI, 1.7 * Math.PI, step - 140, step - 140 > 0);
+      animateArc(Bx,By, Math.abs(Bx - Ax),1.3 * Math.PI, 1.4 * Math.PI, step - 160, step - 160 > 0);
+      animateArc(Cx,Cy, Math.abs(Bx - Ax),0.95 * Math.PI, 1.05 * Math.PI, step - 180, step - 180 > 0);
 
       ctx.strokeStyle = 'gray'; ctx.setLineDash([3, 3]);
       animateLine(Bx, By, (Cx + Ax) /2, (Cy + Ay) /2, step - 200, step - 200 > 0 );
