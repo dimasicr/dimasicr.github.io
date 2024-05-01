@@ -42,6 +42,13 @@ const themes = {
         strokeColor: "gold",
         strokeWidth: 0.5
     }
+    ,"sketch": {
+        mainColor: "none",
+        secondaryColor: "none",
+        isenColor: "none",
+        strokeColor: "black",
+        strokeWidth: 0.5
+    }
 };
 
 
