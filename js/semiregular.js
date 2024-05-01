@@ -261,6 +261,11 @@ function draw_polygon(n, x,y, r, rot_deg){
     kawung_part.setAttribute("fill", mainColor);
     // kawung_part.setAttribute("stroke", 'black');
 
+    kawung_part_inside = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    kawung_part_inside.setAttribute('transform', `rotate(${ j * 360 / n})`)
+    kawung_part_inside.setAttribute("d", `M${ xc - (xc-0) * 0.85 } ${ yc - (yc-0) * 0.85} Q${xc - (xc-new_x2) * 0.85} ${yc - (yc-new_y2) * 0.85} ${xc - (xc-vertices[0][0]) * 0.85} ${yc - (yc-vertices[0][1]) * 0.85} Q${xc - (xc-new_x) * 0.85} ${yc - (yc-new_y) * 0.85} ${xc - (xc-0) * 0.85} ${yc - (yc-0) * 0.85}Z`);
+    kawung_part_inside.setAttribute("fill", mainColor);
+
     // Isen Circle
     isen_circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
     isen_circle.setAttribute("cx", vertices[j][0] * 0.8);
@@ -269,6 +274,7 @@ function draw_polygon(n, x,y, r, rot_deg){
     isen_circle.setAttribute("fill", secondaryColor);
     group.appendChild(kawung_part);
     group.appendChild(isen_circle);
+    group.appendChild(kawung_part_inside);
 
 
     // isen_circle2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
