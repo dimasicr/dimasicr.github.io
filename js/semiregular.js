@@ -276,8 +276,9 @@ function draw_polygon(n, x,y, r, rot_deg){
     isen_circle.setAttribute("r", r / 17.5);
     isen_circle.setAttribute("fill", secondaryColor);
     group.appendChild(kawung_part);
-    group.appendChild(isen_circle);
     group.appendChild(kawung_part_inside);
+    group.appendChild(isen_circle);
+    
 
 
     // isen_circle2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
