@@ -99,7 +99,7 @@ function redraw(){
             drawArbitraryKawung(hexagonFourVertices[i], cX, cY, cX, 90 * j, themes[useTheme].mainColor[i%4], themes[useTheme].secondaryColor, '#4D0900');
           }
           else {
-            drawArbitraryKawung(hexagonFourVertices[i], cX, cY, cX, 90 * j, themes[useTheme].mainColor, themes[useTheme].secondaryColor, themes[useTheme].strokeColor);
+            drawArbitraryKawung(hexagonFourVertices[i], cX, cY, cX, 90 * j, themes[useTheme].mainColor, themes[useTheme].isenColor, themes[useTheme].strokeColor);
             for (k=0; k < hexagonFourVertices[i].length; k++){
               if (k===0){
                 sentence = `M ${hexagonFourVertices[i][k][0]} ${ hexagonFourVertices[i][k][1]}`;
