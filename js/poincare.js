@@ -187,8 +187,8 @@ function redraw(){
   p = document.createElementNS(svgURI, "path");
   p.setAttribute("d", sentence);
   p.setAttribute("fill", "none");
-  p.setAttribute("stroke", themes[useTheme].strokeColor);
-  p.setAttribute('stroke-width', 0.1);
+  p.setAttribute("stroke", themes[useTheme].tertiaryColor);
+  p.setAttribute('stroke-width', 0.05);
   p.setAttribute("transform", `translate(${cX} , ${cY})`);
   svg.appendChild(p);
   }
@@ -207,7 +207,7 @@ function redraw(){
   p = document.createElementNS(svgURI, "path");
   p.setAttribute("d", `M ${cX + x1} ${cY + y1} L${cX + x2} ${cY + y2}  ${cX + x3} ${cY + y3} ${cX + x4} ${cY + y4} Z`);
   p.setAttribute("fill", themes[useTheme].mainColor);
-  p.setAttribute("stroke", themes[useTheme].strokeColor);
+  p.setAttribute("stroke", themes[useTheme].secondaryColor);
   svg.appendChild(p);
    console.log("chiho");
 }
