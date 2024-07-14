@@ -13,12 +13,14 @@ const themes = {
     "batavia": {
         mainColor: "#F7F0F5",
         secondaryColor: "#333",
+        tertiaryColor: "#F0F7F2",
         strokeColor: "black",
         strokeWidth: 0
     },
     "oldJava": {
         mainColor: "#e4d5b7",
         secondaryColor: "#493118",
+        tertiaryColor: "gray",
         strokeColor: "brown",
         strokeWidth: 0.5
     }
@@ -42,6 +44,22 @@ const themes = {
         strokeColor: "gold",
         strokeWidth: 0.5
     }
+    ,"goldenSunset": {
+        mainColor: "rgb(214,164,85)",
+        secondaryColor: "rgb(105,43,45)",
+        tertiaryColor: "rgb(247,235,213)",
+        isenColor: "white",
+        strokeColor: "rgb(189,53,37)",
+        strokeWidth: 0.1
+    }   
+    ,"green": {
+        mainColor: "rgb(83,168,162)",
+        secondaryColor: "rgb(0,77,90)",
+        tertiaryColor: "rgb(255,253,241)",
+        isenColor: "white",
+        strokeColor: "rgb(238,134,154)",
+        strokeWidth: 0.1
+    }  
 };
 
 
@@ -734,10 +752,10 @@ function drawFlower(x, y, n, A, b = 0.3,  mainColor=themes["batavia"].mainColor,
   }
 }
 
-function drawTumpal(x, y, isen='tumpal', s = 200, trig_degree = 45, rotDeg= 0, mainColor=themes["oldJava"].mainColor, secondaryColor=themes["oldJava"].secondaryColor, strokeColor = themes["oldJava"].strokeColor, use_outline=false){  
+function drawTumpal(x, y, isen='tumpal', s = 200, trig_degree = 45, rotDeg= 0, mainColor=themes["oldJava"].mainColor, secondaryColor=themes["oldJava"].secondaryColor, strokeColor = themes["oldJava"].strokeColor, use_outline=false, tertiaryColor = themes["goldenSunset"].tertiaryColor){  
     let container = document.createElementNS(svgURI, "g");
     container.setAttribute("transform", `translate(${x}, ${y}) rotate(${rotDeg})`);
-    container.setAttribute("stroke-width", 0.25);
+    container.setAttribute("stroke-width", 0.15);
     svg.appendChild(container);
 
     h = Math.tan(trig_degree/360 * 2 * Math.PI) * (0.5 * s);
@@ -776,6 +794,9 @@ function drawTumpal(x, y, isen='tumpal', s = 200, trig_degree = 45, rotDeg= 0, m
     tpl3.setAttribute("transform", `rotate(90 0 ${h}) scale(-1 1)`);
     tpl4 = tpl.cloneNode(true);
     tpl4.setAttribute("transform", `rotate(-90 0 ${h})`);
+
+    tpl3.setAttribute("fill", tertiaryColor);
+    tpl4.setAttribute("fill", tertiaryColor);
 
     if (mainColor === "#b49084") {
         tpl3.setAttribute("fill", "#e8eadd");
@@ -828,6 +849,9 @@ function drawTumpal(x, y, isen='tumpal', s = 200, trig_degree = 45, rotDeg= 0, m
 
             tpl4 = tpl3.cloneNode(true);
             tpl4.setAttribute("transform", `scale(-1, 1)`);
+
+            tpl3.setAttribute("fill", tertiaryColor);
+            tpl4.setAttribute("fill", tertiaryColor);
 
             if (mainColor === "#b49084") {
                 tpl3.setAttribute("fill", "#e8eadd");
