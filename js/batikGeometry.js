@@ -13,12 +13,14 @@ const themes = {
     "batavia": {
         mainColor: "#F7F0F5",
         secondaryColor: "#333",
+        tertiaryColor:"#E5E4E2",
         strokeColor: "black",
         strokeWidth: 0
     },
     "oldJava": {
         mainColor: "#e4d5b7",
         secondaryColor: "#493118",
+        tertiaryColor: "rgb(247,235,213)",
         strokeColor: "brown",
         strokeWidth: 0.5
     }
