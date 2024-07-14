@@ -145,10 +145,10 @@ function redraw(){
   if (selectBox.value === 'square') {
     for (let i = 0; i <4; i++){
       for (let j =0; j<4; j++){
-        drawTumpal(0.25 * w + 0.5 * w *j, 0.25 * w + 0.5 * w * i, selectIsens.value, w * 0.5, 45, 0, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
-        drawTumpal(0.25 * w + 0.5 * w *j, 0.25 * w + 0.5 * w * i, selectIsens.value, w * 0.5, 45, 90, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
-        drawTumpal(0.25 * w + 0.5 * w *j, 0.25 * w + 0.5 * w * i, selectIsens.value, w * 0.5, 45, 180, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
-        drawTumpal(0.25 * w + 0.5 * w *j, 0.25 * w + 0.5 * w * i, selectIsens.value, w * 0.5, 45, 270, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false); 
+        drawTumpal(0.25 * w + 0.5 * w *j, 0.25 * w + 0.5 * w * i, selectIsens.value, w * 0.5, 45, 0, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);  
+        drawTumpal(0.25 * w + 0.5 * w *j, 0.25 * w + 0.5 * w * i, selectIsens.value, w * 0.5, 45, 90, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);  
+        drawTumpal(0.25 * w + 0.5 * w *j, 0.25 * w + 0.5 * w * i, selectIsens.value, w * 0.5, 45, 180, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);  
+        drawTumpal(0.25 * w + 0.5 * w *j, 0.25 * w + 0.5 * w * i, selectIsens.value, w * 0.5, 45, 270, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor); 
       }
     }
   }
@@ -160,35 +160,35 @@ function redraw(){
 
     for (let i = 0; i <2; i++){
       for (let j =-1; j<4; j++){
-        drawTumpal(0.25 * w + 0.5 * w *j, 0.25 * w + i * spacing_Y, selectIsens.value, w * 0.5, 45, 0, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
-        drawTumpal(0.25 * w + 0.5 * w *j, 0.25 * w + i * spacing_Y, selectIsens.value, w * 0.5, 45, 90, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
-        drawTumpal(0.25 * w + 0.5 * w *j, 0.25 * w + i * spacing_Y, selectIsens.value, w * 0.5, 45, 180, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
-        drawTumpal(0.25 * w + 0.5 * w *j, 0.25 * w + i * spacing_Y, selectIsens.value, w * 0.5, 45, 270, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false); 
+        drawTumpal(0.25 * w + 0.5 * w *j, 0.25 * w + i * spacing_Y, selectIsens.value, w * 0.5, 45, 0, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);  
+        drawTumpal(0.25 * w + 0.5 * w *j, 0.25 * w + i * spacing_Y, selectIsens.value, w * 0.5, 45, 90, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);  
+        drawTumpal(0.25 * w + 0.5 * w *j, 0.25 * w + i * spacing_Y, selectIsens.value, w * 0.5, 45, 180, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);  
+        drawTumpal(0.25 * w + 0.5 * w *j, 0.25 * w + i * spacing_Y, selectIsens.value, w * 0.5, 45, 270, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor); 
 
-        drawTumpal(0.25 * w + 0.5 * w *j,  0.5 * w + 0.334 * 0.5 * 0.866 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 60, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
-        drawTumpal(0.25 * w + 0.5 * w *j,  0.5 * w + 0.334 * 0.5 * 0.866 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 180, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
-        drawTumpal(0.25 * w + 0.5 * w *j,  0.5 * w + 0.334 * 0.5 * 0.866 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 300, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);
+        drawTumpal(0.25 * w + 0.5 * w *j,  0.5 * w + 0.334 * 0.5 * 0.866 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 60, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);  
+        drawTumpal(0.25 * w + 0.5 * w *j,  0.5 * w + 0.334 * 0.5 * 0.866 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 180, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);  
+        drawTumpal(0.25 * w + 0.5 * w *j,  0.5 * w + 0.334 * 0.5 * 0.866 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 300, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);
 
-        drawTumpal(0.5 * w + 0.5 * w *j,  0.5 * w + 0.667 * 0.5 * 0.866 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 0, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
-        drawTumpal(0.5 * w + 0.5 * w *j,  0.5 * w + 0.667 * 0.5 * 0.866 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 120, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);
-        drawTumpal(0.5 * w + 0.5 * w *j,  0.5 * w + 0.667 * 0.5 * 0.866 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 240, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);
+        drawTumpal(0.5 * w + 0.5 * w *j,  0.5 * w + 0.667 * 0.5 * 0.866 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 0, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);  
+        drawTumpal(0.5 * w + 0.5 * w *j,  0.5 * w + 0.667 * 0.5 * 0.866 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 120, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);
+        drawTumpal(0.5 * w + 0.5 * w *j,  0.5 * w + 0.667 * 0.5 * 0.866 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 240, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);
 
       }
     }
 
       for (let j =-1; j<4; j++){
-        drawTumpal(0.25 * w + 0.25 * w + 0.5 * w *j, 0.5 * w + 0.866 * 0.5 * w +  0.25 * w, selectIsens.value, w * 0.5, 45, 0, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
-        drawTumpal(0.25 * w + 0.25 * w + 0.5 * w *j, 0.5 * w + 0.866 * 0.5 * w +  0.25 * w, selectIsens.value, w * 0.5, 45, 90, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
-        drawTumpal(0.25 * w + 0.25 * w + 0.5 * w *j, 0.5 * w + 0.866 * 0.5 * w +  0.25 * w, selectIsens.value, w * 0.5, 45, 180, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
-        drawTumpal(0.25 * w + 0.25 * w + 0.5 * w *j, 0.5 * w + 0.866 * 0.5 * w +  0.25 * w, selectIsens.value, w * 0.5, 45, 270, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false); 
+        drawTumpal(0.25 * w + 0.25 * w + 0.5 * w *j, 0.5 * w + 0.866 * 0.5 * w +  0.25 * w, selectIsens.value, w * 0.5, 45, 0, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);  
+        drawTumpal(0.25 * w + 0.25 * w + 0.5 * w *j, 0.5 * w + 0.866 * 0.5 * w +  0.25 * w, selectIsens.value, w * 0.5, 45, 90, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);  
+        drawTumpal(0.25 * w + 0.25 * w + 0.5 * w *j, 0.5 * w + 0.866 * 0.5 * w +  0.25 * w, selectIsens.value, w * 0.5, 45, 180, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);  
+        drawTumpal(0.25 * w + 0.25 * w + 0.5 * w *j, 0.5 * w + 0.866 * 0.5 * w +  0.25 * w, selectIsens.value, w * 0.5, 45, 270, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor); 
 
-        drawTumpal(0.25 * w + 0.25 * w + 0.5 * w *j, 0.5 * w + 0.866 * 0.5 * w +  0.5 * w + 0.334 * 0.5 * 0.866 * w, selectIsens.value, w * 0.5, 30, 60, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
-        drawTumpal(0.25 * w + 0.25 * w + 0.5 * w *j, 0.5 * w + 0.866 * 0.5 * w +  0.5 * w + 0.334 * 0.5 * 0.866 * w, selectIsens.value, w * 0.5, 30, 180, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
-        drawTumpal(0.25 * w + 0.25 * w + 0.5 * w *j, 0.5 * w + 0.866 * 0.5 * w +  0.5 * w + 0.334 * 0.5 * 0.866 * w, selectIsens.value, w * 0.5, 30, 300, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);
+        drawTumpal(0.25 * w + 0.25 * w + 0.5 * w *j, 0.5 * w + 0.866 * 0.5 * w +  0.5 * w + 0.334 * 0.5 * 0.866 * w, selectIsens.value, w * 0.5, 30, 60, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);  
+        drawTumpal(0.25 * w + 0.25 * w + 0.5 * w *j, 0.5 * w + 0.866 * 0.5 * w +  0.5 * w + 0.334 * 0.5 * 0.866 * w, selectIsens.value, w * 0.5, 30, 180, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);  
+        drawTumpal(0.25 * w + 0.25 * w + 0.5 * w *j, 0.5 * w + 0.866 * 0.5 * w +  0.5 * w + 0.334 * 0.5 * 0.866 * w, selectIsens.value, w * 0.5, 30, 300, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);
 
-        drawTumpal(0.25 * w + 0.5 * w + 0.5 * w *j,  0.5 * w + 0.866 * 0.5 * w +  0.5 * w + 0.667 * 0.5 * 0.866 * w, selectIsens.value, w * 0.5, 30, 0, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
-        drawTumpal(0.25 * w + 0.5 * w + 0.5 * w *j,  0.5 * w + 0.866 * 0.5 * w +  0.5 * w + 0.667 * 0.5 * 0.866 * w, selectIsens.value, w * 0.5, 30, 120, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);
-        drawTumpal(0.25 * w + 0.5 * w + 0.5 * w *j,  0.5 * w + 0.866 * 0.5 * w +  0.5 * w + 0.667 * 0.5 * 0.866 * w, selectIsens.value, w * 0.5, 30, 240, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);
+        drawTumpal(0.25 * w + 0.5 * w + 0.5 * w *j,  0.5 * w + 0.866 * 0.5 * w +  0.5 * w + 0.667 * 0.5 * 0.866 * w, selectIsens.value, w * 0.5, 30, 0, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);  
+        drawTumpal(0.25 * w + 0.5 * w + 0.5 * w *j,  0.5 * w + 0.866 * 0.5 * w +  0.5 * w + 0.667 * 0.5 * 0.866 * w, selectIsens.value, w * 0.5, 30, 120, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);
+        drawTumpal(0.25 * w + 0.5 * w + 0.5 * w *j,  0.5 * w + 0.866 * 0.5 * w +  0.5 * w + 0.667 * 0.5 * 0.866 * w, selectIsens.value, w * 0.5, 30, 240, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);
 
       }
 
@@ -201,42 +201,42 @@ function redraw(){
       spacing_Y = 0.5 * 0.5 * w;
 
       for(let i = -1; i <2; i++) {
-          drawTumpal(cX + i * spacing_X, cY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 0, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
-          drawTumpal(cX + i * spacing_X, cY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 90, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
-          drawTumpal(cX + i * spacing_X, cY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 180, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
-          drawTumpal(cX + i * spacing_X, cY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 270, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false); 
+          drawTumpal(cX + i * spacing_X, cY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 0, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);  
+          drawTumpal(cX + i * spacing_X, cY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 90, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);  
+          drawTumpal(cX + i * spacing_X, cY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 180, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);  
+          drawTumpal(cX + i * spacing_X, cY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 270, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor); 
   
-          drawTumpal(cX + i * spacing_X, cY -  0.5 * 0.5 * w - 0.334 * 0.866 * 0.5 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 0, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false); 
-          drawTumpal(cX + i * spacing_X, cY -  0.5 * 0.5 * w - 0.334 * 0.866 * 0.5 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 120, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);
-          drawTumpal(cX + i * spacing_X, cY -  0.5 * 0.5 * w - 0.334 * 0.866 * 0.5 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 240, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);
+          drawTumpal(cX + i * spacing_X, cY -  0.5 * 0.5 * w - 0.334 * 0.866 * 0.5 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 0, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor); 
+          drawTumpal(cX + i * spacing_X, cY -  0.5 * 0.5 * w - 0.334 * 0.866 * 0.5 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 120, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);
+          drawTumpal(cX + i * spacing_X, cY -  0.5 * 0.5 * w - 0.334 * 0.866 * 0.5 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 240, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);
   
-          drawTumpal(cX + 0.5 * 0.5 * w + i * spacing_X, cY -  0.5 * 0.5 * w - 0.667 * 0.866 * 0.5 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 60, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false); 
-          drawTumpal(cX + 0.5 * 0.5 * w + i * spacing_X, cY -  0.5 * 0.5 * w - 0.667 * 0.866 * 0.5 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 180, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);
-          drawTumpal(cX + 0.5 * 0.5 * w + i * spacing_X, cY -  0.5 * 0.5 * w - 0.667 * 0.866 * 0.5 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 300, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);
+          drawTumpal(cX + 0.5 * 0.5 * w + i * spacing_X, cY -  0.5 * 0.5 * w - 0.667 * 0.866 * 0.5 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 60, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor); 
+          drawTumpal(cX + 0.5 * 0.5 * w + i * spacing_X, cY -  0.5 * 0.5 * w - 0.667 * 0.866 * 0.5 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 180, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);
+          drawTumpal(cX + 0.5 * 0.5 * w + i * spacing_X, cY -  0.5 * 0.5 * w - 0.667 * 0.866 * 0.5 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 300, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);
   
-          drawTumpal(cX - 0.5 * 0.5 * w + i * spacing_X, cY +  0.5 * 0.5 * w + 0.667 * 0.866 * 0.5 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 0, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false); 
-          drawTumpal(cX - 0.5 * 0.5 * w + i * spacing_X, cY +  0.5 * 0.5 * w + 0.667 * 0.866 * 0.5 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 120, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
-          drawTumpal(cX - 0.5 * 0.5 * w + i * spacing_X, cY +  0.5 * 0.5 * w + 0.667 * 0.866 * 0.5 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 240, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);
+          drawTumpal(cX - 0.5 * 0.5 * w + i * spacing_X, cY +  0.5 * 0.5 * w + 0.667 * 0.866 * 0.5 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 0, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor); 
+          drawTumpal(cX - 0.5 * 0.5 * w + i * spacing_X, cY +  0.5 * 0.5 * w + 0.667 * 0.866 * 0.5 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 120, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);  
+          drawTumpal(cX - 0.5 * 0.5 * w + i * spacing_X, cY +  0.5 * 0.5 * w + 0.667 * 0.866 * 0.5 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 240, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);
   
-          drawTumpal(cX + i * spacing_X, cY +  0.5 * 0.5 * w + 0.334 * 0.866 * 0.5 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 60, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false); 
-          drawTumpal(cX + i * spacing_X, cY +  0.5 * 0.5 * w + 0.334 * 0.866 * 0.5 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 180, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
-          drawTumpal(cX + i * spacing_X, cY +  0.5 * 0.5 * w + 0.334 * 0.866 * 0.5 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 300, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);
+          drawTumpal(cX + i * spacing_X, cY +  0.5 * 0.5 * w + 0.334 * 0.866 * 0.5 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 60, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor); 
+          drawTumpal(cX + i * spacing_X, cY +  0.5 * 0.5 * w + 0.334 * 0.866 * 0.5 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 180, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);  
+          drawTumpal(cX + i * spacing_X, cY +  0.5 * 0.5 * w + 0.334 * 0.866 * 0.5 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 300, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);
   
-          drawTumpal(cX +  0.5 * 0.5 * w + 0.334 * 0.866 * 0.5 * w + i * spacing_X, cY + i * spacing_Y, selectIsens.value, w * 0.5, 30, -30, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);
-          drawTumpal(cX +  0.5 * 0.5 * w + 0.334 * 0.866 * 0.5 * w + i * spacing_X, cY + i * spacing_Y , selectIsens.value, w * 0.5, 30, 90, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
-          drawTumpal(cX +  0.5 * 0.5 * w + 0.334 * 0.866 * 0.5 * w + i * spacing_X, cY + i * spacing_Y , selectIsens.value, w * 0.5, 30, 210, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);
+          drawTumpal(cX +  0.5 * 0.5 * w + 0.334 * 0.866 * 0.5 * w + i * spacing_X, cY + i * spacing_Y, selectIsens.value, w * 0.5, 30, -30, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);
+          drawTumpal(cX +  0.5 * 0.5 * w + 0.334 * 0.866 * 0.5 * w + i * spacing_X, cY + i * spacing_Y , selectIsens.value, w * 0.5, 30, 90, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);  
+          drawTumpal(cX +  0.5 * 0.5 * w + 0.334 * 0.866 * 0.5 * w + i * spacing_X, cY + i * spacing_Y , selectIsens.value, w * 0.5, 30, 210, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);
   
-          drawTumpal(cX +  0.5 * 0.5 * w + 0.667 * 0.866 * 0.5 * w + i * spacing_X, cY + 0.5 * 0.5 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 30, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);
-          drawTumpal(cX +  0.5 * 0.5 * w + 0.667 * 0.866 * 0.5 * w + i * spacing_X, cY + 0.5 * 0.5 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 150, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);
-          drawTumpal(cX +  0.5 * 0.5 * w + 0.667 * 0.866 * 0.5 * w + i * spacing_X, cY + 0.5 * 0.5 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 270, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);
+          drawTumpal(cX +  0.5 * 0.5 * w + 0.667 * 0.866 * 0.5 * w + i * spacing_X, cY + 0.5 * 0.5 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 30, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);
+          drawTumpal(cX +  0.5 * 0.5 * w + 0.667 * 0.866 * 0.5 * w + i * spacing_X, cY + 0.5 * 0.5 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 150, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);
+          drawTumpal(cX +  0.5 * 0.5 * w + 0.667 * 0.866 * 0.5 * w + i * spacing_X, cY + 0.5 * 0.5 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 270, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);
   
-          drawTumpal(cX -  0.5 * 0.5 * w - 0.334 * 0.866 * 0.5 * w + i * spacing_X, cY + i * spacing_Y , selectIsens.value, w * 0.5, 30, 30, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);
-          drawTumpal(cX -  0.5 * 0.5 * w - 0.334 * 0.866 * 0.5 * w + i * spacing_X, cY + i * spacing_Y , selectIsens.value, w * 0.5, 30, 150, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
-          drawTumpal(cX -  0.5 * 0.5 * w - 0.334 * 0.866 * 0.5 * w + i * spacing_X, cY + i * spacing_Y , selectIsens.value, w * 0.5, 30, 270, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);
+          drawTumpal(cX -  0.5 * 0.5 * w - 0.334 * 0.866 * 0.5 * w + i * spacing_X, cY + i * spacing_Y , selectIsens.value, w * 0.5, 30, 30, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);
+          drawTumpal(cX -  0.5 * 0.5 * w - 0.334 * 0.866 * 0.5 * w + i * spacing_X, cY + i * spacing_Y , selectIsens.value, w * 0.5, 30, 150, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);  
+          drawTumpal(cX -  0.5 * 0.5 * w - 0.334 * 0.866 * 0.5 * w + i * spacing_X, cY + i * spacing_Y , selectIsens.value, w * 0.5, 30, 270, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);
   
-          drawTumpal(cX -  0.5 * 0.5 * w - 0.667 * 0.866 * 0.5 * w + i * spacing_X, cY - 0.5 * 0.5 * w + i * spacing_Y , selectIsens.value, w * 0.5, 30, 90, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);
-          drawTumpal(cX -  0.5 * 0.5 * w - 0.667 * 0.866 * 0.5 * w + i * spacing_X, cY - 0.5 * 0.5 * w + i * spacing_Y , selectIsens.value, w * 0.5, 30, 210, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
-          drawTumpal(cX -  0.5 * 0.5 * w - 0.667 * 0.866 * 0.5 * w + i * spacing_X, cY - 0.5 * 0.5 * w + i * spacing_Y , selectIsens.value, w * 0.5, 30, -30, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);
+          drawTumpal(cX -  0.5 * 0.5 * w - 0.667 * 0.866 * 0.5 * w + i * spacing_X, cY - 0.5 * 0.5 * w + i * spacing_Y , selectIsens.value, w * 0.5, 30, 90, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);
+          drawTumpal(cX -  0.5 * 0.5 * w - 0.667 * 0.866 * 0.5 * w + i * spacing_X, cY - 0.5 * 0.5 * w + i * spacing_Y , selectIsens.value, w * 0.5, 30, 210, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);  
+          drawTumpal(cX -  0.5 * 0.5 * w - 0.667 * 0.866 * 0.5 * w + i * spacing_X, cY - 0.5 * 0.5 * w + i * spacing_Y , selectIsens.value, w * 0.5, 30, -30, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);
 
           x1 = cX + 0.5 * w; 
           y1 = cY - 0.5 * 0.5* w - 0.866 * 0.5 * w;
@@ -245,10 +245,10 @@ function redraw(){
           mX = 0.5 * (x1 + x2);
           mY = 0.5 * (y1 + y2);
   
-          drawTumpal(mX + i * spacing_X, mY + i * spacing_Y , selectIsens.value, w * 0.5, 45, 30, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
-          drawTumpal(mX + i * spacing_X, mY + i * spacing_Y , selectIsens.value, w * 0.5, 45, 120, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
-          drawTumpal(mX + i * spacing_X, mY + i * spacing_Y , selectIsens.value, w * 0.5, 45, 210, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
-          drawTumpal(mX + i * spacing_X, mY + i * spacing_Y , selectIsens.value, w * 0.5, 45, 300, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false); 
+          drawTumpal(mX + i * spacing_X, mY + i * spacing_Y , selectIsens.value, w * 0.5, 45, 30, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);  
+          drawTumpal(mX + i * spacing_X, mY + i * spacing_Y , selectIsens.value, w * 0.5, 45, 120, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);  
+          drawTumpal(mX + i * spacing_X, mY + i * spacing_Y , selectIsens.value, w * 0.5, 45, 210, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);  
+          drawTumpal(mX + i * spacing_X, mY + i * spacing_Y , selectIsens.value, w * 0.5, 45, 300, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor); 
   
           x1 = cX + 0.5 * 0.5 * w + 0.866 * 0.5 * w;
           y1 = cY + 0.5 * w;
@@ -257,10 +257,10 @@ function redraw(){
           mX = 0.5 * (x1 + x2);
           mY = 0.5 * (y1 + y2);
   
-          drawTumpal(mX + i * spacing_X, mY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 30, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
-          drawTumpal(mX + i * spacing_X, mY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 120, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
-          drawTumpal(mX + i * spacing_X, mY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 210, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
-          drawTumpal(mX + i * spacing_X, mY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 300, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false); 
+          drawTumpal(mX + i * spacing_X, mY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 30, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);  
+          drawTumpal(mX + i * spacing_X, mY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 120, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);  
+          drawTumpal(mX + i * spacing_X, mY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 210, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);  
+          drawTumpal(mX + i * spacing_X, mY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 300, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor); 
   
           x1 = cX - 0.5 * 0.5 * w - 0.866 * 0.5 * w;
           y1 = cY;
@@ -269,10 +269,10 @@ function redraw(){
           mX = 0.5 * (x1 + x2);
           mY = 0.5 * (y1 + y2);
   
-          drawTumpal(mX + i * spacing_X, mY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 30, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
-          drawTumpal(mX + i * spacing_X, mY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 120, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
-          drawTumpal(mX + i * spacing_X, mY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 210, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
-          drawTumpal(mX + i * spacing_X, mY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 300, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false); 
+          drawTumpal(mX + i * spacing_X, mY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 30, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);  
+          drawTumpal(mX + i * spacing_X, mY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 120, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);  
+          drawTumpal(mX + i * spacing_X, mY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 210, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);  
+          drawTumpal(mX + i * spacing_X, mY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 300, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor); 
   
           x1 = cX - 0.5 * 0.5 * w - 0.866 * 0.5 * w;
           y1 = cY - 0.5 * w;
@@ -281,10 +281,10 @@ function redraw(){
           mX = 0.5 * (x1 + x2);
           mY = 0.5 * (y1 + y2);
   
-          drawTumpal(mX + i * spacing_X, mY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 30, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
-          drawTumpal(mX + i * spacing_X, mY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 120, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
-          drawTumpal(mX + i * spacing_X, mY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 210, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
-          drawTumpal(mX + i * spacing_X, mY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 300, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false); 
+          drawTumpal(mX + i * spacing_X, mY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 30, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);  
+          drawTumpal(mX + i * spacing_X, mY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 120, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);  
+          drawTumpal(mX + i * spacing_X, mY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 210, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);  
+          drawTumpal(mX + i * spacing_X, mY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 300, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor); 
       }
 
 
@@ -293,14 +293,14 @@ function redraw(){
 
 
       for(let i = -1; i <2; i++) {
-          drawTumpal(cX + i * spacing_X, cY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 0, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
-          drawTumpal(cX + i * spacing_X, cY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 90, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
-          drawTumpal(cX + i * spacing_X, cY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 180, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);  
-          drawTumpal(cX + i * spacing_X, cY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 270, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false); 
+          drawTumpal(cX + i * spacing_X, cY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 0, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);  
+          drawTumpal(cX + i * spacing_X, cY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 90, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);  
+          drawTumpal(cX + i * spacing_X, cY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 180, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);  
+          drawTumpal(cX + i * spacing_X, cY + i * spacing_Y, selectIsens.value, w * 0.5, 45, 270, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor); 
   
-          drawTumpal(cX + i * spacing_X, cY -  0.5 * 0.5 * w - 0.334 * 0.866 * 0.5 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 0, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false); 
-          drawTumpal(cX + i * spacing_X, cY -  0.5 * 0.5 * w - 0.334 * 0.866 * 0.5 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 120, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);
-          drawTumpal(cX + i * spacing_X, cY -  0.5 * 0.5 * w - 0.334 * 0.866 * 0.5 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 240, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);
+          drawTumpal(cX + i * spacing_X, cY -  0.5 * 0.5 * w - 0.334 * 0.866 * 0.5 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 0, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor); 
+          drawTumpal(cX + i * spacing_X, cY -  0.5 * 0.5 * w - 0.334 * 0.866 * 0.5 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 120, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);
+          drawTumpal(cX + i * spacing_X, cY -  0.5 * 0.5 * w - 0.334 * 0.866 * 0.5 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 240, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false, themes[selectThemes.value].tertiaryColor);
   
           drawTumpal(cX + 0.5 * 0.5 * w + i * spacing_X, cY -  0.5 * 0.5 * w - 0.667 * 0.866 * 0.5 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 60, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false); 
           drawTumpal(cX + 0.5 * 0.5 * w + i * spacing_X, cY -  0.5 * 0.5 * w - 0.667 * 0.866 * 0.5 * w + i * spacing_Y, selectIsens.value, w * 0.5, 30, 180, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);
