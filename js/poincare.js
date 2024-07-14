@@ -163,5 +163,6 @@ function redraw(){
   p.setAttribute("stroke", themes[useTheme].strokeColor);
   svg.appendChild(p);
 }
+}
 
 redraw();
