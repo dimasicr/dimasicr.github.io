@@ -902,7 +902,7 @@ function drawFlower(x, y, n, A, b = 0.3,  mainColor=themes["batavia"].mainColor,
 function drawTumpal(x, y, isen='tumpal', s = 200, trig_degree = 45, rotDeg= 0, mainColor=themes["oldJava"].mainColor, secondaryColor=themes["oldJava"].secondaryColor, strokeColor = themes["oldJava"].strokeColor, use_outline=false, tertiaryColor = themes["goldenSunset"].tertiaryColor){  
     let container = document.createElementNS(svgURI, "g");
     container.setAttribute("transform", `translate(${x}, ${y}) rotate(${rotDeg})`);
-    container.setAttribute("stroke-width", 0.25);
+    container.setAttribute("stroke-width", 0.1);
     svg.appendChild(container);
 
     h = Math.tan(trig_degree/360 * 2 * Math.PI) * (0.5 * s);
