@@ -9,6 +9,7 @@ document.write(
     '<li><a href="hyperbolic.html">Hyperbolic Kawung</a></li>' +
     '<li><a href="parametricbuketan.html">Parametric Buketan</a></li>' +
     '<li><a href="tumpaltesselation.html">Tesselation of Tumpal</a></li>' +
+    '<li><a href="starrynight.html"> Starry Night </a></li>' +
   '</ul>'
 );
 
