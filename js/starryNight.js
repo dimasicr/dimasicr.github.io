@@ -5,7 +5,14 @@ let touchStartX = 0;
 let touchEndX = 0;
 let currentPattern = selectBox.value;
 
-const wp = 0.14 * w;
+
+
+function redraw(){
+  setup(400, 400, themes[selectThemes.value].secondaryColor);
+  cX = svg.getAttribute("width")/2;
+  cY = svg.getAttribute("height")/2;
+  w = svg.getAttribute("width") * 0.5 ;
+  const wp = 0.14 * w;
 const decagonHeight = Math.tan(72/360 * 2 * Math.PI) * 0.5 * wp;;
 const pentagonHeight = Math.tan(54/360 * 2 * Math.PI) * 0.5 * wp;
 const rDecagon = getRadius(wp,10);
@@ -30,12 +37,6 @@ const pentacleFusedDecagondist  = Math.sqrt(dpfdx**2 + dpfdy**2 );
 const dpfdx2 = cX - (cX - Math.abs(dx3) - 0.5 *wp - wp - 2 * rDecagon);
 const dpfdDeg2 = Math.atan(dpfdy/ dpfdx2) + Math.PI/2;
 const pentacleDecagon2dist  = Math.sqrt(dpfdx2**2 + dpfdy**2 );
-
-function redraw(){
-  setup(400, 400, themes[selectThemes.value].secondaryColor);
-  cX = svg.getAttribute("width")/2;
-  cY = svg.getAttribute("height")/2;
-  w = svg.getAttribute("width") * 0.5 ;
   
 for(let k=0; k <5; k++){ // Five fold symmetry loop
   // Draw Decagon
