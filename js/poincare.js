@@ -114,7 +114,7 @@ function redraw(){
               p.setAttribute("stroke", themes[useTheme].strokeColor);
               p.setAttribute('stroke-width', 0.05);
               p.setAttribute("transform", `translate(${cX} , ${cY}) rotate(${j * 90})`);
-              svg.appendChild(p);       
+              // svg.appendChild(p);       
           
           
           }
@@ -150,7 +150,7 @@ function redraw(){
               p.setAttribute("stroke", themes[useTheme].strokeColor);
               p.setAttribute('stroke-width', 0.05);
               p.setAttribute("transform", `translate(${cX} , ${cY}) rotate(${j * 90})`);
-              svg.appendChild(p);
+              // svg.appendChild(p);
           }
         }
     }
@@ -182,7 +182,7 @@ function redraw(){
               p.setAttribute("stroke", themes[useTheme].strokeColor);
               p.setAttribute('stroke-width', 0.3);
               p.setAttribute("transform", `translate(${cX} , ${cY})`);
-              svg.appendChild(p);
+              // svg.appendChild(p);
           drawArbitraryKawung(squareFiveVertices[i], cX, cY, cX,0, themes[useTheme].mainColor, themes[useTheme].isenColor, themes[useTheme].strokeColor);
         }
      }
