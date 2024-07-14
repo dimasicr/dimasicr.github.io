@@ -1283,5 +1283,133 @@ function drawParang(xStart,yStart, xEnd, yEnd,h, rotDeg =0, mainColor = themes["
 
 }
 
+function drawTumpalInner(x, y, isen='tumpal', s = 200, trig_degree = 45, rotDeg= 0, mainColor=themes["oldJava"].mainColor, secondaryColor=themes["oldJava"].secondaryColor, strokeColor = themes["oldJava"].strokeColor, use_outline=false){  
+    let container = document.createElementNS(svgURI, "g");
+    container.setAttribute("transform", `translate(${x}, ${y}) rotate(${rotDeg})`);
+    container.setAttribute("stroke-width", 0.25);
+    svg.appendChild(container);
+
+    h = Math.tan(trig_degree/360 * 2 * Math.PI) * (0.5 * s);
+    let outline = document.createElementNS(svgURI, "path");
+    outline_sentence = `M0 0  ${0.5 * s} ${h}  ${-0.5 * s} ${h} Z`;
+    outline.setAttribute("d", outline_sentence);
+    outline.setAttribute("fill", "none");
+    outline.setAttribute("stroke", strokeColor);
+    if (use_outline){
+        container.appendChild(outline);
+    }
+
+    if (trig_degree === 30) {
+        R = s /15;
+    }
+    else {
+        R = s / 10;
+    }
+
+    Xc = 0.5 * s - R / Math.tan(0.5 * trig_degree/360 * 2 * Math.PI)
+    
+    tpl_pth = `M0 ${h}  C ${Xc * 0.5} ${h}  ${Xc * 0.5} ${h - 2*R} ${Xc} ${h - 2* R} A${R} ${R} 0 0 1 ${Xc} ${h} A ${0.5 * R} ${0.5* R} 0 0 1 ${Xc} ${h - R} C${Xc - R} ${h - R} ${Xc - R} ${h}  ${Xc - 2 * R} ${h} Z`;
+    tpl = document.createElementNS(svgURI, "path");
+    tpl.setAttribute("d", tpl_pth);
+    tpl.setAttribute("fill", mainColor);
+    tpl.setAttribute("stroke", strokeColor);
+    // container.appendChild(tpl);
+
+
+    tpl2 = tpl.cloneNode(false);
+    tpl2.setAttribute("transform", "scale(-1 1)");
+    // container.appendChild(tpl2);
+
+
+    tpl3 = tpl.cloneNode(false);
+    tpl3.setAttribute("transform", `rotate(90 0 ${h}) scale(-1 1)`);
+    tpl4 = tpl.cloneNode(false);
+    tpl4.setAttribute("transform", `rotate(-90 0 ${h})`);
+
+    if (mainColor === "#b49084") {
+        tpl3.setAttribute("fill", "#e8eadd");
+        tpl4.setAttribute("fill", "#e8eadd");
+    }
+    
+
+
+
+
+    if (isen === 'tumpal'){
+        if (trig_degree === 60) {
+            R_new = 2 * R;
+        }
+        else if (trig_degree === 45) {
+            R_new = R;
+        }
+        else if (trig_degree === 67.5) {
+            R_new = 2.5 * R;
+        }
+        else if (trig_degree === 75) {
+            R_new = 2.5 * R;
+        }
+
+        else if (trig_degree === 54) {
+            R_new = 1.5  * R;
+        }
+
+        else if (trig_degree === 72) {
+            R_new = 2.5  * R;
+        }
+        
+
+        // else if (trig_degree === 30) {
+        //     R_new = 1 * R;
+        // }
+
+        if (trig_degree !== 30){
+            // container.appendChild(tpl3);
+            // container.appendChild(tpl4);
+            tpl5 = tpl.cloneNode(false);
+            tpl5.setAttribute("d", `M 0 0 C 0 ${ 0.5 * (h - Xc - R - 0.4 * R_new) } ${0.4 * R_new}  ${ 0.5 * (h - Xc - R - 0.4 * R_new) } ${0.4 * R_new} ${h - Xc - R - 0.4 * R_new} A${0.2 * R_new} ${0.2 * R_new} 0 0 0 ${0} ${h - Xc - R - 0.4 * R_new} A${0.4 * R_new} ${0.4 * R_new} 0 0 0 ${0.8 * R_new} ${ h - Xc - R - 0.4 * R_new} C${0.8 * R_new} ${0.5 * (h - Xc - R - 0.4 * R_new) } ${0} ${0.5 * (h - Xc - R - 0.4 * R_new)} 0 0`);
+            container.appendChild(tpl5);
+            tpl6 = tpl5.cloneNode(false);
+            tpl6.setAttribute("transform", `scale(-1, 1)`);
+            container.appendChild(tpl6);
+        }
+        else {
+            tpl3 = tpl.cloneNode(false);
+            tpl3.setAttribute("d", `M ${0} ${h} C ${0} ${h- 0.3 * (2 * R + s/30)} ${s/30} ${h- 0.3 * (2 * R + s/30)}  ${s/30} ${h-2 * R + s/30} A ${s/60} ${s/60} 0 0 1 ${0} ${h-2 * R + s /30} A${s/30} ${s/30} 0 0 1 ${2 * s/30} ${h-2 * R + s /30} C${2 * s/30} ${h- 0.3 * (2 * R + s/30)} ${0} ${h- 0.3 * (2 * R + s/30)} ${0} ${h} `);
+            
+
+            tpl4 = tpl3.cloneNode(false);
+            tpl4.setAttribute("transform", `scale(-1, 1)`);
+
+            if (mainColor === "#b49084") {
+                tpl3.setAttribute("fill", "#e8eadd");
+                tpl4.setAttribute("fill", "#e8eadd");
+            }
+            
+            // container.appendChild(tpl3);
+            // container.appendChild(tpl4);  
+
+
+
+            tpl5 = tpl.cloneNode(false);
+            tpl5.setAttribute("d", `M ${0} ${0} C ${0} ${0.5 *  (h-2 * R - s /30) }  ${s/30}  ${0.5 *  (h-2 * R - s /30) }  ${s/30}  ${h-2 * R - s /30} A${s / 60} ${s / 60} 0 0 0 ${0} ${h-2 * R - s /30} A${s / 30} ${s / 30} 0 0 0 ${2 * s / 30} ${h-2 * R - s /30} C ${2 * s / 30} ${ 0.5 *  (h-2 * R - s /30) } ${0} ${ 0.5 *  (h-2 * R - s /30) }   ${0} ${0}`);
+            container.appendChild(tpl5);
+
+            tpl6 = tpl5.cloneNode(false);
+            tpl6.setAttribute("transform", `scale(-1, 1)`);
+            container.appendChild(tpl6);  
+        }
+
+    }
+
+    else if (isen === 'kawung'){
+        tpl5 = tpl.cloneNode(false);
+        tpl5.setAttribute("d", `M0 0 Q${0} ${h - Xc - R}, ${( h - Xc - R) / h * 0.5 * s} ${h - Xc - R}`);
+        container.appendChild(tpl5);
+        tpl6 = tpl5.cloneNode(false);
+        tpl6.setAttribute("transform", `scale(-1, 1)`);
+        container.appendChild(tpl6);
+    }
+}
+
 
  
