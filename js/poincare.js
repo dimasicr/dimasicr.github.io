@@ -1,13 +1,15 @@
 // https://codegolf.stackexchange.com/questions/55848/plot-a-hyperbolic-plane-tessellation
 
+const selectThemes = document.getElementById('themes');
+const selectBox = document.getElementById('motives');
+
 useTheme = selectThemes.value;
 
-const selectBox = document.getElementById('motives');
 selectBox.addEventListener('change', function() {
   redraw();
 });
 
-const selectThemes = document.getElementById('themes');
+
 selectThemes.addEventListener('change', function() {
   useTheme = selectThemes.value;
   redraw();
