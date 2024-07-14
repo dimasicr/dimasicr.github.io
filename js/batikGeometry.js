@@ -980,6 +980,14 @@ function drawTumpal(x, y, isen='tumpal', s = 200, trig_degree = 45, rotDeg= 0, m
             R_new = 2.5 * R;
         }
 
+        else if (trig_degree === 54) {
+            R_new = 1.5  * R;
+        }
+
+        else if (trig_degree === 72) {
+            R_new = 2.5  * R;
+        }
+
         if (trig_degree !== 30){
             container.appendChild(tpl3);
             container.appendChild(tpl4);
