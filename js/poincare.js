@@ -80,9 +80,16 @@ svg.addEventListener("mouseup", (event) => {
 
 
 function redraw(){
-  setup(400, 400, themes[useTheme].secondaryColor);
+  setup(400, 400, "none");
   cX = svg.getAttribute("width")/2;
   cY = svg.getAttribute("height")/2;
+  circle = document.createElementNS(svgURI, "circle");
+  circle.setAttribute("cx", cX);
+  circle.setAttribute("cy", cY);
+  circle.setAttribute("r", svg.getAttribute("width")/2);
+  circle.setAttribute("fill", themes[useTheme].secondaryColor);
+  svg.appendChild(circle);
+  
   if (selectBox.value === 'hexagonFourVertices'){
     for(let i=0; i < hexagonFourVertices.length; i++){
         for (let j=0; j < 4; j++){
@@ -94,6 +101,13 @@ function redraw(){
           }
         }
     }
+    p = document.createElementNS(svgURI, "path");
+    p.setAttribute("d", sentence);
+    p.setAttribute("fill", "none");
+    p.setAttribute("stroke", themes[useTheme].strokeColor);
+    p.setAttribute('stroke-width', 0.1);
+    p.setAttribute("transform", `translate(${cX} , ${cY})`);
+    svg.appendChild(p);
   }
   else if (selectBox.value === 'pentagonFourVertices') {
     for(let i=0; i < pentagonFourVertices.length; i++){
@@ -106,6 +120,13 @@ function redraw(){
           }
         }
     }
+    p = document.createElementNS(svgURI, "path");
+    p.setAttribute("d", sentence);
+    p.setAttribute("fill", "none");
+    p.setAttribute("stroke", themes[useTheme].strokeColor);
+    p.setAttribute('stroke-width', 0.1);
+    p.setAttribute("transform", `translate(${cX} , ${cY})`);
+    svg.appendChild(p);
   }
   else if (selectBox.value === 'squareFiveVertices') {
      for(let i=0; i < squareFiveVertices.length; i++){
@@ -116,7 +137,31 @@ function redraw(){
           drawArbitraryKawung(squareFiveVertices[i], cX, cY, cX,0, themes[useTheme].mainColor, themes[useTheme].secondaryColor, '#4D0900');
         }
      }
+  p = document.createElementNS(svgURI, "path");
+  p.setAttribute("d", sentence);
+  p.setAttribute("fill", "none");
+  p.setAttribute("stroke", themes[useTheme].strokeColor);
+  p.setAttribute('stroke-width', 0.1);
+  p.setAttribute("transform", `translate(${cX} , ${cY})`);
+  svg.appendChild(p);
   }
+   n = 100;
+ r = cY;
+ for (let i =0; i <n; i++){
+  x1 = Math.cos(2 * Math.PI/n * i) * r;
+  y1 = Math.sin(2 * Math.PI/n * i) * r;
+  x2 = Math.cos(2 * Math.PI/n * (i+1)) * r;
+  y2 = Math.sin(2 * Math.PI/n * (i+1)) * r;
+  x3 = Math.cos(2 * Math.PI/n * (i+1)) * 0.97 * r;
+  y3 = Math.sin(2 * Math.PI/n * (i+1)) * 0.97 * r;
+  x4 = Math.cos(2 * Math.PI/n * i) * 0.97 * r;
+  y4 = Math.sin(2 * Math.PI/n * i) * 0.97 * r;
+
+  p = document.createElementNS(svgURI, "path");
+  p.setAttribute("d", `M ${cX + x1} ${cY + y1} L${cX + x2} ${cY + y2}  ${cX + x3} ${cY + y3} ${cX + x4} ${cY + y4} Z`);
+  p.setAttribute("fill", themes[useTheme].mainColor);
+  p.setAttribute("stroke", themes[useTheme].strokeColor);
+  svg.appendChild(p);
 }
 
 redraw();
