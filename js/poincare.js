@@ -98,6 +98,23 @@ function redraw(){
           }
           else {
             drawArbitraryKawung(hexagonFourVertices[i], cX, cY, cX, 90 * j, themes[useTheme].mainColor, themes[useTheme].secondaryColor, '#4D0900');
+            for (k=0; k < hexagonFourVertices[i].length; k++){
+              if (k===0){
+                sentence = `M ${hexagonFourVertices[i][k][0]} ${ hexagonFourVertices[i][k][1]}`;
+              }
+              else {
+                sentence += `L ${ hexagonFourVertices[i][k][0]} ${hexagonFourVertices[i][k][1]}`;
+              }
+            }
+              p = document.createElementNS(svgURI, "path");
+              p.setAttribute("d", sentence);
+              p.setAttribute("fill", "none");
+              p.setAttribute("stroke", themes[useTheme].strokeColor);
+              p.setAttribute('stroke-width', 0.1);
+              p.setAttribute("transform", `translate(${cX} , ${cY}) rotate(${j * 90})`);
+              svg.appendChild(p);       
+          
+          
           }
         }
     }
@@ -117,6 +134,21 @@ function redraw(){
           }
           else {
             drawArbitraryKawung(pentagonFourVertices[i], cX, cY, cX, 90 * j, themes[useTheme].mainColor, themes[useTheme].secondaryColor, '#4D0900');
+            for (k=0; k < pentagonFourVertices[i].length; k++){
+              if (k===0){
+                sentence = `M ${pentagonFourVertices[i][k][0]} ${ pentagonFourVertices[i][k][1]}`;
+              }
+              else {
+                sentence += `L ${ pentagonFourVertices[i][k][0]} ${pentagonFourVertices[i][k][1]}`;
+              }
+            }
+              p = document.createElementNS(svgURI, "path");
+              p.setAttribute("d", sentence);
+              p.setAttribute("fill", "none");
+              p.setAttribute("stroke", themes[useTheme].strokeColor);
+              p.setAttribute('stroke-width', 0.1);
+              p.setAttribute("transform", `translate(${cX} , ${cY}) rotate(${j * 90})`);
+              svg.appendChild(p);
           }
         }
     }
@@ -134,7 +166,22 @@ function redraw(){
           drawArbitraryKawung(squareFiveVertices[i], cX, cY, cX,0, themes[useTheme].mainColor[i%4], themes[useTheme].secondaryColor, '#4D0900');
         }
         else {
-          drawArbitraryKawung(squareFiveVertices[i], cX, cY, cX,0, themes[useTheme].mainColor, themes[useTheme].secondaryColor, '#4D0900');
+          for (k=0; k < squareFiveVertices[i].length; k++){
+              if (k===0){
+                sentence = `M ${squareFiveVertices[i][k][0]} ${ squareFiveVertices[i][k][1]}`;
+              }
+              else {
+                sentence += `L ${ squareFiveVertices[i][k][0]} ${squareFiveVertices[i][k][1]}`;
+              }
+            }
+              p = document.createElementNS(svgURI, "path");
+              p.setAttribute("d", sentence);
+              p.setAttribute("fill", "none");
+              p.setAttribute("stroke", themes[useTheme].strokeColor);
+              p.setAttribute('stroke-width', 0.3);
+              p.setAttribute("transform", `translate(${cX} , ${cY})`);
+              svg.appendChild(p);
+          drawArbitraryKawung(squareFiveVertices[i], cX, cY, cX,0, themes[useTheme].mainColor, themes[useTheme].secondaryColor, themes[useTheme].strokeColor);
         }
      }
   p = document.createElementNS(svgURI, "path");
