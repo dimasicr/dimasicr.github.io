@@ -1,6 +1,6 @@
 // https://codegolf.stackexchange.com/questions/55848/plot-a-hyperbolic-plane-tessellation
 
-useTheme = 'oldJava';
+useTheme = selectThemes.value;
 
 const selectBox = document.getElementById('motives');
 selectBox.addEventListener('change', function() {
@@ -110,7 +110,7 @@ function redraw(){
               p.setAttribute("d", sentence);
               p.setAttribute("fill", "none");
               p.setAttribute("stroke", themes[useTheme].strokeColor);
-              p.setAttribute('stroke-width', 0.1);
+              p.setAttribute('stroke-width', 0.05);
               p.setAttribute("transform", `translate(${cX} , ${cY}) rotate(${j * 90})`);
               svg.appendChild(p);       
           
@@ -122,7 +122,7 @@ function redraw(){
     p.setAttribute("d", sentence);
     p.setAttribute("fill", "none");
     p.setAttribute("stroke", themes[useTheme].strokeColor);
-    p.setAttribute('stroke-width', 0.1);
+    p.setAttribute('stroke-width', 0.05);
     p.setAttribute("transform", `translate(${cX} , ${cY})`);
     svg.appendChild(p);
   }
@@ -146,7 +146,7 @@ function redraw(){
               p.setAttribute("d", sentence);
               p.setAttribute("fill", "none");
               p.setAttribute("stroke", themes[useTheme].strokeColor);
-              p.setAttribute('stroke-width', 0.1);
+              p.setAttribute('stroke-width', 0.05);
               p.setAttribute("transform", `translate(${cX} , ${cY}) rotate(${j * 90})`);
               svg.appendChild(p);
           }
@@ -209,7 +209,6 @@ function redraw(){
   p.setAttribute("fill", themes[useTheme].mainColor);
   p.setAttribute("stroke", themes[useTheme].secondaryColor);
   svg.appendChild(p);
-   console.log("chiho");
 }
 }
 
