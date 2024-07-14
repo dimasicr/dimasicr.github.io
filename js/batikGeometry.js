@@ -66,7 +66,15 @@ const themes = {
         isenColor: "white",
         strokeColor: "rgb(238,134,154)",
         strokeWidth: 0.1
-    }  
+    }
+    ,"megaMendung": {
+        mainColor: "#6ca1d2",
+        secondaryColor: "#02084b",
+        tertiaryColor: "#6c9fd0",
+        isenColor: "white",
+        strokeColor: "white",
+        strokeWidth: 0.5
+    }
 };
 
 
