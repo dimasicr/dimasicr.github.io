@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title> Starry Night </title>
+      <link rel="icon" href="logo.svg" type="image/svg+xml">
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200&display=swap" rel="stylesheet">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <link rel="stylesheet" href="main.css">
+   </head>
+   <body>
+      <div class="container">
+         <!-- Toggle button for small screens -->
+         <div class="toggle-button" id="toggleButton">
+            <img src="asset/tumpalLogo.svg" alt="SVG Image Description">
+            <span style="margin-left: auto; margin-right: auto;"> Geometry of Batik </span>
+            <span style="margin-left: auto; margin-right: 20px;"> &#9776; </span> 
+         </div>
+         <!-- Side Navigation Bar -->
+         <div class="sidenav" id="sidenav">
+            <div style= "display: flex; font-size: 24px;">
+                <img src="asset/tumpalLogo.svg" alt="SVG Image Description">
+               <span style="margin-left: 10px;"> Geometry of Batik  
+               <span>
+            </div>
+            <hr>
+            <script src="nav.js"></script>
+         </div>
+         <!-- Main Content Area -->
+         <div class="main-content">
+         <h1 > Kepler's Monster Batik Tumpal </h1>
+         
+            <div id="svg-container"></div>
+         <figure>
+            <details style="margin-top: 5px;">
+               <summary style="text-align: center;"> <span> Interactive Image  </span> </summary>  
+               <select name="Motives" id="motives" class="btns" style="margin-top: 10px;" >
+                  <option value="square">Square</option>
+                  <option value="hexagon">Hexagon</option>
+                  <option value="triangle" >Triangle</option>
+                  <option value="hexagon_triangle">Hexagon Triangle</option>
+                  <option value="hexagon_square_triangle" >Hexagon Square Triangle</option>
+                  <option value="two_hexagons_two_triangles"> Two Hexagons Two Triangles </option>
+                  <option value="dodecagon_triangle"> Dodecagon Triangle </option>
+                  <option value="dodecagon_hexagon_square" selected > Dodecagon Hexagon Square </option>
+                  <option value="two_squares_three_triangles"> Two Squares Three Triangles </option>
+                  <option value="two_squares_three_triangles_complex"> Two Squares Three Triangles Complex </option>
+                  <option value="octagon_square"> Two Octagons 1 Square </option>
+               </select>
+               
+               <select name="Isens" id="Isens" class="btns" style="margin-top: 10px;" >
+                  <option value="tumpal">Tumpal</option>
+<!--                   <option value="kawung">Kawung</option> -->
+               </select>
+               <select name="theme" id="themes" class="btns" >
+                  <option value="oldJava">Old Java </option>
+                  <option value="batavia">Batavia </option>
+                  <option value="pastel" selected> Pastel </option>
+               </select>
+               <button id="download-btn"> <i class="fa fa-download"></i>  Download SVG </span> </button>
+            </details>
+            <div style="text-align: center; margin-top: 10px;">
+                    <button id="left-button" onclick="
+        if (currentPattern === 'hexagon') {
+          currentPattern = 'square';
+          selectBox.value = 'square';
+        } 
+        else if (currentPattern === 'triangle') {
+          currentPattern = 'hexagon';
+          selectBox.value = 'hexagon';
+        } 
+        else if (currentPattern === 'hexagon_triangle') {
+          currentPattern = 'triangle';
+          selectBox.value = 'triangle';
+        } 
+        else if (currentPattern === 'hexagon_square_triangle') {
+          currentPattern = 'hexagon_triangle';
+          selectBox.value = 'hexagon_triangle';
+        }  
+        else if (currentPattern === 'two_hexagons_two_triangles') {
+          currentPattern = 'hexagon_square_triangle';
+          selectBox.value = 'hexagon_square_triangle';
+        }                         
+        else if (currentPattern === 'dodecagon_triangle') {
+          currentPattern = 'two_hexagons_two_triangles';
+          selectBox.value = 'two_hexagons_two_triangles';
+        }                         
+         else if (currentPattern === 'dodecagon_hexagon_square') {
+          currentPattern = 'dodecagon_triangle';
+          selectBox.value = 'dodecagon_triangle';
+        }                      
+         else if (currentPattern === 'two_squares_three_triangles') {
+          currentPattern = 'dodecagon_hexagon_square';
+          selectBox.value = 'dodecagon_hexagon_square';
+        }
+         else if (currentPattern === 'two_squares_three_triangles_complex') {
+          currentPattern = 'two_squares_three_triangles';
+          selectBox.value = 'two_squares_three_triangles';
+        }                       
+         else if (currentPattern === 'octagon_square') {
+          currentPattern = 'two_squares_three_triangles_complex';
+          selectBox.value = 'two_squares_three_triangles_complex';
+        }                         
+         else if (currentPattern === 'square') {
+          currentPattern = 'octagon_square';
+          selectBox.value = 'octagon_square';
+        }                       
+                       redraw();"><</button>
+
+               
+                    <button id="right-button" onclick="
+       if (currentPattern === 'square') {
+          currentPattern = 'hexagon';
+          selectBox.value = 'hexagon';
+        } 
+        else if (currentPattern === 'hexagon') {
+          currentPattern = 'triangle';
+          selectBox.value = 'triangle';
+        } 
+        else if (currentPattern === 'triangle') {
+          currentPattern = 'hexagon_triangle';
+          selectBox.value = 'hexagon_triangle';
+        } 
+        else if (currentPattern === 'hexagon_triangle') {
+          currentPattern = 'hexagon_square_triangle';
+          selectBox.value = 'hexagon_square_triangle';
+        }  
+        else if (currentPattern === 'hexagon_square_triangle') {
+          currentPattern = 'two_hexagons_two_triangles';
+          selectBox.value = 'two_hexagons_two_triangles';
+        }                         
+        else if (currentPattern === 'two_hexagons_two_triangles') {
+          currentPattern = 'dodecagon_triangle';
+          selectBox.value = 'dodecagon_triangle';
+        }                         
+         else if (currentPattern === 'dodecagon_triangle') {
+          currentPattern = 'dodecagon_hexagon_square';
+          selectBox.value = 'dodecagon_hexagon_square';
+        }                      
+         else if (currentPattern === 'dodecagon_hexagon_square') {
+          currentPattern = 'two_squares_three_triangles';
+          selectBox.value = 'two_squares_three_triangles';
+        }
+         else if (currentPattern === 'two_squares_three_triangles') {
+          currentPattern = 'two_squares_three_triangles_complex';
+          selectBox.value = 'two_squares_three_triangles_complex';
+        }                       
+         else if (currentPattern === 'two_squares_three_triangles_complex') {
+          currentPattern = 'octagon_square';
+          selectBox.value = 'octagon_square';
+        }                         
+         else if (currentPattern === 'octagon_square') {
+          currentPattern = 'square';
+          selectBox.value = 'square';
+        }  redraw();">></button>
+               </div>
+         </figure>
+         
+         <article style="width: 80%; text-align: center; margin: auto;">
+         <h2 style="text-align: justify;"> Description </h2>
+         <p style="text-align: justify;"> This design draws inspiration from the traditional Indonesian Tumpal motif, which is tiled and arranged using {4.4} tessellation, ${3, 6}$ tessellation, and octagon square semiregular tessellation. Additional shapes such as squares and octagons are constructed from smaller rectangles. Each individual triangle in the design is embellished with a wave-like pattern known as "isen." The intricate wave pattern is meticulously crafted using a combination of cubic Bezier curves and spirals. Notably, the spiral component is designed to ensure that the curve is tangent to the perimeter of the triangle, contributing a dynamic and harmonious element to the overall motif.</p>
+         <p style="text-align: justify;"> Tumpal is triangle shaped pattern, usually filled with isen. In this motive, Tumpal is decorated with wave like pattern that is tangent to the triangle Outline.</p>
+         <h2 style="text-align: justify;"> Math Concept </h2>
+         <p style="text-align: justify;"> This wave-like isen is crafted through a combination of a spiral and a cubic Bezier curve. The spiral is meticulously arranged to be tangent to the perimeter of each triangle. The equation defining the center of the spiral can be expressed as:  </p>
+         <p style=" overflow-x: scroll;"> \( x_c = 0.5 w -  \frac{R}{tan(\theta/2)}    \) </p>
+         <p style=" overflow-x: scroll;"> \( y_c = R   \) </p>
+         </details>
+
+         <h2 style="text-align: justify;"> How to Draw </h2>
+         <div style="text-align: center;">
+              <canvas id="myCanvas" style="display: block; margin: auto;"></canvas>
+         </div>
+         <button id="refresh-btn"> <i class="fa fa-refresh"></i>  Replay Animation </span> </button>
+         <ol>
+            <li> <p style="text-align: justify;"> Given triangle ABC, draw an angular bisector line that divides angle &alpha; into two equal parts </p> </li>
+            <li> <p style="text-align: justify;"> Draw a semicircle centered on any point of the angular bisector line. The radius of the semicircle is the distance between the points and the base. </p> </li>
+            <li> <p style="text-align: justify;"> Draw another semicircle centered at the same X-coordinate but half of the Y-coordinate. The radius should be half of the previous semicircle. </p> </li>
+            <li> <p style="text-align: justify;"> Draw a curvy wave to the origin </p> </li>
+         </ol>
+
+          <h2 style="text-align: justify; color: #493118; font-weight: bold;"> Exhibit </h2>
+            
+         <img src="asset/jewelryTumpalRing.jpeg" alt="TumpalRing" style="display: flex;
+     justify-content: center;
+     height: 300px;
+     width: 300px;
+     margin: auto;" >
+         <p style="text-align: justify;"> Presenting the Tumpal Ring by The Geometry of Batik Team. With the mathematical model in hand, creating a 3D model becomes a straightforward process. The resulting 3D model serves as the foundation for crafting this necklace using the lost wax casting method in our exhibit </p>
+            
+
+         <h2 style="text-align: justify;"> References </h2>
+         <ul>
+               <li> <p style="text-align: justify;"> <a href="https://thirdspacelearning.com/gcse-maths/geometry-and-measure/tangent-of-a-circle/"> Circle tangent to line theorem </a> </p> </li>   
+               <li> <p style="text-align: justify;"> <a href="https://en.wikipedia.org/wiki/Tessellation#:~:text=A%20tessellation%20or%20tiling%20is,no%20overlaps%20and%20no%20gaps."> Tessellation </a> </p></li> 
+         </ul>
+         </article>
+         </div>
+      </div>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script src="js/batikGeometry.js"></script>
+      <script src="js/starryNight.js"> </script>
+      <script src="js/mainUI.js"></script>
+      <script src="js/animationToolkit.js"></script>
+      <script src="js/animationTumpal.js"></script>
+   </body>
+</html>
