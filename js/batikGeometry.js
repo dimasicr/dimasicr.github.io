@@ -83,6 +83,13 @@ function midpoint(x1, x2) {
   return (x1 + x2) / 2;
 }
 
+function getRadius(side_length, n){
+  theta = (2* Math.PI) / n;
+  a = (Math.cos(2 * theta) - Math.cos(theta))** 2;
+  b = (Math.sin(2 * theta) - Math.sin(theta))** 2;
+  return side_length / Math.sqrt(a + b);
+}
+
 // Function to calculate the angle of a point with respect to the center point
 function getClockwiseAngle(p, center) {
     return (Math.atan2(p[1] - center[1], p[0] - center[0]) * 180 / Math.PI + 360) % 360;
