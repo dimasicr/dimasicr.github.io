@@ -162,6 +162,7 @@ function redraw(){
   p.setAttribute("fill", themes[useTheme].mainColor);
   p.setAttribute("stroke", themes[useTheme].strokeColor);
   svg.appendChild(p);
+   console.log("chiho");
 }
 }
 
