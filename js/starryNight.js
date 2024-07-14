@@ -31,7 +31,12 @@ const dpfdx2 = cX - (cX - Math.abs(dx3) - 0.5 *wp - wp - 2 * rDecagon);
 const dpfdDeg2 = Math.atan(dpfdy/ dpfdx2) + Math.PI/2;
 const pentacleDecagon2dist  = Math.sqrt(dpfdx2**2 + dpfdy**2 );
 
-
+function redraw(){
+  setup(400, 400, themes[selectThemes.value].secondaryColor);
+  cX = svg.getAttribute("width")/2;
+  cY = svg.getAttribute("height")/2;
+  w = svg.getAttribute("width") * 0.5 ;
+  
 for(let k=0; k <5; k++){ // Five fold symmetry loop
   // Draw Decagon
   for (let i=0; i<10; i++){
@@ -57,4 +62,8 @@ for(let k=0; k <5; k++){ // Five fold symmetry loop
           drawTumpal(cX - pentacleFusedDecagondist * Math.sin(dpfdDeg + k*72/360 * 2 * Math.PI) + decagonPentagondist * Math.sin(j*36/360 * 2 * Math.PI), cY + pentacleFusedDecagondist * Math.cos(dpfdDeg + k*72/360 * 2 * Math.PI)  - decagonPentagondist * Math.cos(j*36/360 * 2 * Math.PI), selectIsens.value, wp, 54, 36*j+72 * i, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, true, themes[selectThemes.value].tertiaryColor);
         }
       }
+  }
 }
+}
+
+redraw();
