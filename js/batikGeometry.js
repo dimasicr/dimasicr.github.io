@@ -75,6 +75,13 @@ const themes = {
         strokeColor: "white",
         strokeWidth: 0.5
     }
+    ,"goldenRed": {
+        mainColor: "#daaf71",
+        secondaryColor: "#793f32",
+        isenColor: "white",
+        strokeColor: "#F2E4CF",
+        strokeWidth: 0.5
+    }
 };
 
 
