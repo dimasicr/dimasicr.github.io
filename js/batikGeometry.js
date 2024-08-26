@@ -205,7 +205,7 @@ function drawKawung(x, y, r, mainColor=themes["batavia"].mainColor, secondaryCol
     group.appendChild(tanahanKawung);
     group.appendChild(tanahanKawung2);
     group.setAttribute("stroke", strokeColor);
-    group.setAttribute("stroke-width", 0.5);
+    group.setAttribute("stroke-width", 0.2);
     tanahanKawung2.setAttribute("fill", mainColor);
     tanahanKawung.setAttribute("transform", "rotate(45)");
     tanahanKawung.setAttribute("fill", mainColor);
