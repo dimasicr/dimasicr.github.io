@@ -483,12 +483,12 @@ else if (motive === 'five'){
     c1 = new Circle(c1r, c1center, "#616f82");
     circles.push(c1);
     
-    c2r = Math.abs(c1r * 4 / 10);
+    c2r = Math.abs(c1r / (Math.sqrt(2) + 1));
     c2center = new Complex(x - r + c2r, y);
     c2 = new Circle(c2r, c2center, "#d19f5b");
     circles.push(c2);
     
-    c3r = Math.abs(c1r * 4 / 10);
+    c3r = Math.abs(c1r / (Math.sqrt(2) + 1));
     c3center = new Complex(x, y - r + c3r);
     c3 = new Circle(c3r, c3center, "#87895d");
     circles.push(c3);
