@@ -489,7 +489,7 @@ else if (motive === 'five'){
     circles.push(c2);
     
     c3r = Math.abs(c1r * 4 / 10);
-    c3center = new Complex(xr, y - 4 + c3r);
+    c3center = new Complex(x, y - r + c3r);
     c3 = new Circle(c3r, c3center, "#87895d");
     circles.push(c3);
     drawGasket(circles[0], circles[1], circles[2]);
