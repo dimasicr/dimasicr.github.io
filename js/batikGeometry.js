@@ -474,10 +474,45 @@ function drawApollonianKawung(x,y, r, motive='symmetric', theme='oldJava', mainC
             drawKawung(e.center.re, e.center.im, e.r, mainColor, secondaryColor, strokeColor , isen, tanahan, padding);
         }
     });
+
+  }
+
+else if (motive === 'five'){
+    c1r = -r;
+    c1center = new Complex(x,y);
+    c1 = new Circle(c1r, c1center, "#616f82");
+    circles.push(c1);
     
+    c2r = Math.abs(c1r * 4 / 10);
+    c2center = new Complex(x - r + c2r, y);
+    c2 = new Circle(c2r, c2center, "#d19f5b");
+    circles.push(c2);
+    
+    c3r = Math.abs(c1r * 4 / 10);
+    c3center = new Complex(xr, y - 4 + c3r);
+    c3 = new Circle(c3r, c3center, "#87895d");
+    circles.push(c3);
+    drawGasket(circles[0], circles[1], circles[2]);
+
+    newCircles = circles.filter(function(element) {
+      return element.r !==  c1r;
+    });
+
+    
+    newCircles.forEach(function(e) {
+        if (theme === 'tetradiac') {
+            drawKawung(e.center.re, e.center.im, e.r, e.color, "#493118", strokeColor , isen, tanahan, padding);
+        }
+        else {
+            drawKawung(e.center.re, e.center.im, e.r, mainColor, secondaryColor, strokeColor , isen, tanahan, padding);
+        }
+    });
 
 
   }
+
+
+      
  else if (motive === 'asymmetric'){
     c1r = -r;
     c1center = new Complex(x, y);
