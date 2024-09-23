@@ -534,9 +534,23 @@ else if (motive === 'five'){
       return element.r !==  c1r;
     });
 
-    newCircles3 = newCircles3.filter(circle => (circle.center.re > x + r * (Math.sqrt(2)-1) && circle.center.im > y - r * (Math.sqrt(2)-1)));
+    newCircles3 = newCircles3.filter(circle => (circle.center.re > x + r * (Math.sqrt(2)-1) && circle.center.im > y + r * (Math.sqrt(2)-1)));
     newCircles3.push(c5);
     newCircles.push(...newCircles3);
+
+    circles = [];
+    circles.push(c1);
+    circles.push(c5);
+    circles.push(c2);
+    drawGasket(circles[0], circles[1], circles[2]);
+
+    newCircles4 = circles.filter(function(element) {
+      return element.r !==  c1r;
+    });
+
+    newCircles4 = newCircles4.filter(circle => (circle.center.re < x - r * (Math.sqrt(2)-1) && circle.center.im > y + r * (Math.sqrt(2)-1)));
+    newCircles4.push(c5);
+    newCircles.push(...newCircles4);
 
 
     
