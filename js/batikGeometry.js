@@ -558,6 +558,15 @@ else if (motive === 'five'){
 
     newCircles.push(c6);
 
+    circles = [c2, c3, c6];
+    drawGasket(circles[0], circles[1], circles[2]);
+    newCircles5 = circles.filter(circle => (circle.r > 0 ));
+    newCircles.push(...newCircles5);
+
+    
+
+    
+
 
     
     newCircles.forEach(function(e) {
