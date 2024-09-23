@@ -574,7 +574,7 @@ else if (motive === 'five'){
     newCircles7 = circles.filter(circle => (circle.r > 0 ));
     newCircles.push(...newCircles7);
 
-    circles = [c1, c5, c6];
+    circles = [c2, c5, c6];
     drawGasket(circles[0], circles[1], circles[2]);
     newCircles8 = circles.filter(circle => (circle.r > 0 ));
     newCircles.push(...newCircles8);
