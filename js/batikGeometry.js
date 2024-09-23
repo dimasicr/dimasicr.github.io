@@ -498,8 +498,7 @@ else if (motive === 'five'){
       return element.r !==  c1r;
     });
 
-    newCircles = newCircles.filter(circle => (circle.center.re < x - r * (Math.sqrt(2)-1) && circle.center.im > y < r * (Math.sqrt(2)-1)));
-    newCircles.push(c1);
+    newCircles = newCircles.filter(circle => (circle.center.re < x - r * (Math.sqrt(2)-1) && circle.center.im < y - r * (Math.sqrt(2)-1)));
     newCircles.push(c2);
     newCircles.push(c3);
 
