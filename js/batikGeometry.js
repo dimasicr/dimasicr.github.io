@@ -498,7 +498,7 @@ else if (motive === 'five'){
       return element.r !==  c1r;
     });
 
-    newCircles = newCircles.filter(circle => (circle.center.re < x - r * (Math.sqrt(2)-1) && circle.center.im < y - r * (Math.sqrt(2)-1)));
+    newCircles = newCircles.filter(circle => (circle.center.re < x - 0.5 * r * (Math.sqrt(2)-1) && circle.center.im < y - 0.5 * r * (Math.sqrt(2)-1)));
     newCircles.push(c2);
     newCircles.push(c3);
 
@@ -516,7 +516,7 @@ else if (motive === 'five'){
       return element.r !==  c1r;
     });
 
-    newCircles2 = newCircles2.filter(circle => (circle.center.re > x + r * (Math.sqrt(2)-1) && circle.center.im < y - r * (Math.sqrt(2)-1)));
+    newCircles2 = newCircles2.filter(circle => (circle.center.re > x + 0.5 * r * (Math.sqrt(2)-1) && circle.center.im < y - 0.5 * r * (Math.sqrt(2)-1)));
     newCircles2.push(c4);
     newCircles.push(...newCircles2);
 
@@ -534,7 +534,7 @@ else if (motive === 'five'){
       return element.r !==  c1r;
     });
 
-    newCircles3 = newCircles3.filter(circle => (circle.center.re > x + r * (Math.sqrt(2)-1) && circle.center.im > y + r * (Math.sqrt(2)-1)));
+    newCircles3 = newCircles3.filter(circle => (circle.center.re > x + 0.5 * r * (Math.sqrt(2)-1) && circle.center.im > y + 0.5 * r * (Math.sqrt(2)-1)));
     newCircles3.push(c5);
     newCircles.push(...newCircles3);
 
@@ -548,7 +548,7 @@ else if (motive === 'five'){
       return element.r !==  c1r;
     });
 
-    newCircles4 = newCircles4.filter(circle => (circle.center.re < x - r * (Math.sqrt(2)-1) && circle.center.im > y + r * (Math.sqrt(2)-1)));
+    newCircles4 = newCircles4.filter(circle => (circle.center.re < x - 0.5 * r * (Math.sqrt(2)-1) && circle.center.im > y + 0.5 * r * (Math.sqrt(2)-1)));
     newCircles4.push(c5);
     newCircles.push(...newCircles4);
 
