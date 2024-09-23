@@ -502,6 +502,25 @@ else if (motive === 'five'){
     newCircles.push(c2);
     newCircles.push(c3);
 
+    c4r = Math.abs(c1r / (Math.sqrt(2) + 1));
+    c4center = new Complex(x + r - c3r, y );
+    c4 = new Circle(c4r, c4center, "#87895d");
+    circles.push(c4);
+
+    circlesRight = [];
+    circlesRight.push(c1);
+    circlesRight.push(c3);
+    circlesRight.push(c4);
+    drawGasket(circlesRight[0], circlesRight[1], circlesRight[2]);
+
+    newCircles2 = circlesRight.filter(function(element) {
+      return element.r !==  c1r;
+    });
+
+    newCircles2 = newCircles2.filter(circle => (circle.center.re > x + r * (Math.sqrt(2)-1) && circle.center.im < y - r * (Math.sqrt(2)-1)));
+    newCircles2.push(c4);
+    newCircles.push(...newCircles2);
+
 
     
     newCircles.forEach(function(e) {
