@@ -552,6 +552,12 @@ else if (motive === 'five'){
     newCircles4.push(c5);
     newCircles.push(...newCircles4);
 
+    c6r = Math.abs((c1r / (Math.sqrt(2) + 1)) * (Math.sqrt(2) - 1));
+    c6center = new Complex(x, y);
+    c6 = new Circle(c6r, c6center, "#87895d");
+
+    newCircles.push(c6);
+
 
     
     newCircles.forEach(function(e) {
