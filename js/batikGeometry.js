@@ -601,12 +601,12 @@ else if (motive === 'five'){
     let c1 = new Circle(c1r, c1center, "#616f82");
     
     let c2r = 0.63 * r;
-    let c2center = new Complex(x, y + c1r + c2r);
+    let c2center = new Complex(x + c1r + c2r, y );
     let c2 = new Circle(c2r, c2center, "#d19f5b");
     
     let c3r = Math.abs(c1.r) - c2.r;
-    let c3x = c2.center.re;
-    let c3y = c2.center.im + c2.r + c3r;
+    let c3x = c2.center.re + c2.r + c3r;
+    let c3y = c2.center.im;
     let c3center = new Complex(c3x, c3y);
     let c3 = new Circle(c3r, c3center, "#87895d");
     
