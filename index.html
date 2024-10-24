@@ -115,6 +115,38 @@
      width: 300px;
      margin: auto;" >
          <p style="text-align: justify;"> Presenting the Apollonian Kawung Necklace by The Geometry of Batik Team. With the mathematical model in hand, creating a 3D model becomes a straightforward process. The resulting 3D model serves as the foundation for crafting this necklace using the lost wax casting method in our exhibit. To enhance its appearance, the Apollonian Kawung is coated with rhodium, providing a brilliant and shiny effect. </p>
+
+
+<div id="modelViewer" style="width: 600px; height: 400px;"></div>
+
+    <script>
+        // Set up the scene
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize(600, 400);
+        document.getElementById("modelViewer").appendChild(renderer.domElement);
+
+        // Load STL model from GitHub Pages
+        var loader = new THREE.STLLoader();
+        loader.load('https://dimasicr.github.io/stl/jewelryApollonianNecklacev4.stl', function (geometry) {
+            var material = new THREE.MeshNormalMaterial();
+            var mesh = new THREE.Mesh(geometry, material);
+            scene.add(mesh);
+            camera.position.z = 5;
+
+            // Animation loop
+            function animate() {
+                requestAnimationFrame(animate);
+                mesh.rotation.x += 0.01;
+                mesh.rotation.y += 0.01;
+                renderer.render(scene, camera);
+            }
+
+            animate();
+        });
+    </script>
+
             
          <h2 style="text-align: justify; color: #493118; font-weight: bold;"> References </h2>
          <ul>
@@ -132,7 +164,8 @@
       <script src="js/mainUI.js"></script> 
       <script src="js/animationToolkit.js"></script>
       <script src="js/animationCircularKawung.js"></script>
-      <script src="https://embed.github.com/view/3d/dimasicr/dimasicr.github.io/blob/master/stl/jewelryApollonianNecklacev4.stl">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+      <script src="https://threejs.org/examples/js/loaders/STLLoader.js"></script>
          
       </script>
    </body>
