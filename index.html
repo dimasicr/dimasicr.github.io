@@ -121,31 +121,68 @@
 
 <div id="modelViewer" style="width: 600px; height: 400px;"></div>
 
-    <script>
-        // Set up the scene
-        var scene = new THREE.Scene();
-        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        var renderer = new THREE.WebGLRenderer();
-        renderer.setSize(600, 400);
-        document.getElementById("modelViewer").appendChild(renderer.domElement);
+            <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Scene setup
+            var scene = new THREE.Scene();
 
-        // Load STL model from GitHub Pages
-        var loader = new THREE.STLLoader();
-        loader.load('https://raw.githubusercontent.com/dimasicr/dimasicr.github.io/master/stl/apolloniankawung.stl', function (geometry) {
-            var material = new THREE.MeshNormalMaterial();
-            var mesh = new THREE.Mesh(geometry, material);
-            scene.add(mesh);
-            camera.position.z = 5;
+            // Camera setup
+            var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 20, 100);  // Move the camera back and slightly above the object to center
 
-            // Animation loop
-            function animate() {
-                requestAnimationFrame(animate);
-                mesh.rotation.x += 0.01;
-                mesh.rotation.y += 0.01;
-                renderer.render(scene, camera);
-            }
+            // Renderer setup
+            var renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.getElementById("modelViewer").appendChild(renderer.domElement);
 
-            animate();
+            // Lights setup for a shiny, metallic look
+            var ambientLight = new THREE.AmbientLight(0xaaaaaa, 0.5); // Soft ambient light
+            scene.add(ambientLight);
+
+            var pointLight1 = new THREE.PointLight(0xffffff, 0.9);
+            pointLight1.position.set(50, 50, 50);  // Top-right light
+            scene.add(pointLight1);
+
+            var pointLight2 = new THREE.PointLight(0xffffff, 0.9);
+            pointLight2.position.set(-50, 50, 50);  // Top-left light
+            scene.add(pointLight2);
+
+            // Load STL model from GitHub Pages
+            var loader = new THREE.STLLoader();
+            loader.load('https://raw.githubusercontent.com/dimasicr/dimasicr.github.io/master/stl/apolloniankawung.stl', function (geometry) {
+                // Silvery material
+                var material = new THREE.MeshStandardMaterial({
+                    color: 0xaaaaaa,       // Light gray color to mimic silver
+                    metalness: 1.0,        // High metalness for shiny, reflective surface
+                    roughness: 0.3         // Lower roughness to make it glossy
+                });
+
+                // Create the mesh and center it
+                var mesh = new THREE.Mesh(geometry, material);
+                mesh.geometry.computeBoundingBox();
+                var center = new THREE.Vector3();
+                mesh.geometry.boundingBox.getCenter(center);
+                mesh.geometry.center();  // Center the object at the origin
+                scene.add(mesh);
+
+                // Animation loop: Rotate the object smoothly
+                function animate() {
+                    requestAnimationFrame(animate);
+                    mesh.rotation.y += 0.01;  // Rotate around the Y-axis
+                    renderer.render(scene, camera);
+                }
+
+                animate();
+            });
+
+            // Resize handling
+            window.addEventListener('resize', function () {
+                var width = window.innerWidth;
+                var height = window.innerHeight;
+                renderer.setSize(width, height);
+                camera.aspect = width / height;
+                camera.updateProjectionMatrix();
+            });
         });
     </script>
 
