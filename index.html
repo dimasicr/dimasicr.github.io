@@ -127,7 +127,7 @@
 
             // Camera setup
             var camera = new THREE.PerspectiveCamera(75, 400 / 300, 0.1, 1000);
-            camera.position.set(0, 0, 5);
+            camera.position.set(0, 5, 10);
 
             // Renderer setup with a light background color
             var renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -153,7 +153,7 @@
                 // Silvery material
                 var material = new THREE.MeshStandardMaterial({
                     color: 0xaaaaaa,       // Light gray color to mimic silver
-                    metalness: 1.0,        // High metalness for shiny, reflective surface
+                    metalness: 0.6,        // High metalness for shiny, reflective surface
                     roughness: 0.3         // Lower roughness to make it glossy
                 });
 
