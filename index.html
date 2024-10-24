@@ -131,7 +131,7 @@
 
         // Load STL model from GitHub Pages
         var loader = new THREE.STLLoader();
-        loader.load('https://dimasicr.github.io/stl/apolloniankawung.stl', function (geometry) {
+        loader.load('https://raw.githubusercontent.com/dimasicr/dimasicr.github.io/master/stl/apolloniankawung.stl', function (geometry) {
             var material = new THREE.MeshNormalMaterial();
             var mesh = new THREE.Mesh(geometry, material);
             scene.add(mesh);
