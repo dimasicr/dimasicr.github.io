@@ -12,6 +12,71 @@
       <link rel="stylesheet" href="main.css">
       <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
       <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/js/loaders/STLLoader.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/loaders/TextureLoader.js"></script>
+      <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Scene setup
+        var scene = new THREE.Scene();
+
+        // Camera setup
+        var camera = new THREE.PerspectiveCamera(75, 400 / 300, 0.1, 1000);
+        camera.position.set(0, 0, 8);
+
+        // Renderer setup with a light background color
+        var renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(400, 300);
+        renderer.setClearColor(0xf5f5f5, 1); // Light gray background
+        document.getElementById("modelViewer").appendChild(renderer.domElement);
+
+        // Add soft, warm lighting to create natural effect
+        var hemisphereLight = new THREE.HemisphereLight(0xffe4b5, 0x8B4513, 1); // Warm wood tones
+        scene.add(hemisphereLight);
+
+        var ambientLight = new THREE.AmbientLight(0xffffff, 0.6); // General light
+        scene.add(ambientLight);
+
+        var pointLight = new THREE.PointLight(0xffffff, 1.5);
+        pointLight.position.set(10, 10, 10);
+        scene.add(pointLight);
+
+        // Load wood texture for a natural appearance
+        var textureLoader = new THREE.TextureLoader();
+        var woodTexture = textureLoader.load('https://threejs.org/examples/textures/wood.jpg');
+
+        // Load STL model and apply wood material
+        var stlLoader = new THREE.STLLoader();
+        stlLoader.load('https://raw.githubusercontent.com/dimasicr/dimasicr.github.io/master/stl/jewelryFibonacciRing.stl', function (geometry) {
+            var material = new THREE.MeshStandardMaterial({
+                map: woodTexture,      // Wood texture
+                color: 0x8b5a2b,       // Brownish tint for warmth
+                metalness: 0.2,        // Minimal metalness for wood
+                roughness: 0.7         // High roughness for a matte finish
+            });
+
+            // Center the object and add it to the scene
+            var mesh = new THREE.Mesh(geometry, material);
+            mesh.geometry.center();
+            scene.add(mesh);
+
+            // Animation loop: Rotate the object smoothly
+            function animate() {
+                requestAnimationFrame(animate);
+                mesh.rotation.y += 0.01;  // Rotate around the Y-axis
+                renderer.render(scene, camera);
+            }
+
+            animate();
+        });
+
+        // Resize handling
+        window.addEventListener('resize', function () {
+            renderer.setSize(400, 300);
+            camera.aspect = 400 / 300;
+            camera.updateProjectionMatrix();
+        });
+    });
+</script>
+
    </head>
    <body>
       <div class="container">
@@ -102,82 +167,7 @@
      margin: auto;" >
          <p style="text-align: justify;"> Presenting the Kawung Ring by The Geometry of Batik Team. With the mathematical model in hand, creating a 3D model becomes a straightforward process. The resulting 3D model serves as the foundation for crafting this necklace using the lost wax casting method in our exhibit </p>
 <div id="modelViewer" style="width: 400px; height: 300px; margin: 50px auto;"></div>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Scene setup
-        var scene = new THREE.Scene();
 
-        // Camera setup
-        var camera = new THREE.PerspectiveCamera(75, 400 / 300, 0.1, 1000);
-        camera.position.set(0, 0, 8);
-
-        // Renderer setup with a brighter background color
-        var renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(350, 300); // Set the renderer size to match the #modelViewer
-        renderer.setClearColor(0xffffff, 1); // Set background to white for contrast
-        document.getElementById("modelViewer").appendChild(renderer.domElement);
-
-        var hemisphereLight = new THREE.HemisphereLight(0xffe4b5, 0x333333, 1.2); // Warm gold on top, soft shadow below
-        scene.add(hemisphereLight);
-
-        // Enhanced lighting setup for a more dramatic metallic look
-        var ambientLight = new THREE.AmbientLight(0xffffff, 1.5); // Strong ambient light
-        scene.add(ambientLight);
-
-        var pointLight1 = new THREE.PointLight(0xffffff, 3.0); // Very bright light from top-right
-        pointLight1.position.set(30, 30, 30);
-        scene.add(pointLight1);
-
-        var pointLight2 = new THREE.PointLight(0xffffff, 2.8); // Very bright light from top-left
-        pointLight2.position.set(-30, 30, 30);
-        scene.add(pointLight2);
-
-        var pointLight3 = new THREE.PointLight(0xffffff, 2.5); // Bright light from below
-        pointLight3.position.set(0, -30, 30);
-        scene.add(pointLight3);
-
-        var directionalLight = new THREE.DirectionalLight(0xffffff, 2.5); // Extra-strong directional light
-        directionalLight.position.set(0, 50, 50);
-        scene.add(directionalLight);
-
-        // Load STL model from GitHub Pages
-        var loader = new THREE.STLLoader();
-        loader.load('https://raw.githubusercontent.com/dimasicr/dimasicr.github.io/master/stl/jewelryFibonacciRing.stl', function (geometry) {
-            // Gold material with extreme settings for reflectivity
-            var material = new THREE.MeshStandardMaterial({
-                color: 0xffd700,       // Gold color (hex for gold)
-                metalness: 1.0,        // Maximum metalness for shiny, reflective surface
-                roughness: 0.05        // Very low roughness for high gloss
-            });
-
-            // Create the mesh and center it
-            var mesh = new THREE.Mesh(geometry, material);
-            mesh.geometry.computeBoundingBox();
-            var center = new THREE.Vector3();
-            mesh.geometry.boundingBox.getCenter(center);
-            mesh.geometry.center();  // Center the object at the origin
-            scene.add(mesh);
-
-            // Animation loop: Rotate the object smoothly
-            function animate() {
-                requestAnimationFrame(animate);
-                mesh.rotation.y += 0.01;  // Rotate around the Y-axis
-                renderer.render(scene, camera);
-            }
-
-            animate();
-        });
-
-        // Resize handling (update this for your frame size)
-        window.addEventListener('resize', function () {
-            var width = 350; // Fixed width
-            var height = 300; // Fixed height
-            renderer.setSize(width, height);
-            camera.aspect = width / height;
-            camera.updateProjectionMatrix();
-        });
-    });
-</script>
             
          <h2 style="text-align: justify; color: #493118; font-weight: bold;"> References </h2>
          <ul>
