@@ -69,10 +69,11 @@ const themes = {
     }
     ,"megaMendung": {
         mainColor: "#6ca1d2",
-        secondaryColor: "#02084b",
+        // secondaryColor: "#02084b",
+        secondaryColor: "#315c85",
         tertiaryColor: "#6c9fd0",
         isenColor: "white",
-        strokeColor: "white",
+        strokeColor: "#cddae8",
         strokeWidth: 0.5
     }
     ,"goldenRed": {
@@ -1038,6 +1039,56 @@ function drawFlower(x, y, n, A, b = 0.3,  mainColor=themes["batavia"].mainColor,
   }
 }
 
+function drawTumpalOuter(x, y, isen='tumpal', s = 200, trig_degree = 45, rotDeg= 0, mainColor=themes["oldJava"].mainColor, secondaryColor=themes["oldJava"].secondaryColor, strokeColor = themes["oldJava"].strokeColor, use_outline=false, tertiaryColor = themes["goldenSunset"].tertiaryColor, use_middle_upper=true){  
+    let container = document.createElementNS(svgURI, "g");
+    container.setAttribute("transform", `translate(${x}, ${y}) rotate(${rotDeg})`);
+    container.setAttribute("stroke-width", 0.15);
+    svg.appendChild(container);
+
+    h = Math.tan(trig_degree/360 * 2 * Math.PI) * (0.5 * s);
+    let outline = document.createElementNS(svgURI, "path");
+    outline_sentence = `M0 0  ${0.5 * s} ${h}  ${-0.5 * s} ${h} Z`;
+    outline.setAttribute("d", outline_sentence);
+    outline.setAttribute("fill", "none");
+    outline.setAttribute("stroke", strokeColor);
+    if (use_outline){
+        container.appendChild(outline);
+    }
+
+    if (trig_degree === 30) {
+        R = s /15;
+    }
+    else if (trig_degree === 18){
+        R = s / 20;
+    }
+    else if (trig_degree === 15){
+        R = s / 25;
+    }
+    else if (trig_degree === 22.5){
+        R = s / 20;
+    }
+    else {
+        R = s / 10;
+    }
+
+    Xc = 0.5 * s - R / Math.tan(0.5 * trig_degree/360 * 2 * Math.PI)
+    
+    tpl_pth = `M0 ${h}  C ${Xc * 0.5} ${h}  ${Xc * 0.5} ${h - 2*R} ${Xc} ${h - 2* R} A${R} ${R} 0 0 1 ${Xc} ${h} A ${0.5 * R} ${0.5* R} 0 0 1 ${Xc} ${h - R} C${Xc - R} ${h - R} ${Xc - R} ${h}  ${Xc - 2 * R} ${h} Z`;
+    tpl = document.createElementNS(svgURI, "path");
+    tpl.setAttribute("d", tpl_pth);
+    tpl.setAttribute("fill", mainColor);
+    tpl.setAttribute("stroke", strokeColor);
+    container.appendChild(tpl);
+
+
+    tpl2 = tpl.cloneNode(true);
+    tpl2.setAttribute("transform", "scale(-1 1)");
+    container.appendChild(tpl2);
+
+
+
+}
+
 function drawTumpal(x, y, isen='tumpal', s = 200, trig_degree = 45, rotDeg= 0, mainColor=themes["oldJava"].mainColor, secondaryColor=themes["oldJava"].secondaryColor, strokeColor = themes["oldJava"].strokeColor, use_outline=false, tertiaryColor = themes["goldenSunset"].tertiaryColor){  
     let container = document.createElementNS(svgURI, "g");
     container.setAttribute("transform", `translate(${x}, ${y}) rotate(${rotDeg})`);
@@ -1088,6 +1139,15 @@ function drawTumpal(x, y, isen='tumpal', s = 200, trig_degree = 45, rotDeg= 0, m
         tpl3.setAttribute("fill", "#e8eadd");
         tpl4.setAttribute("fill", "#e8eadd");
     }
+    else if (mainColor === "#b49084") {
+        tpl3.setAttribute("fill", "#e8eadd");
+        tpl4.setAttribute("fill", "#e8eadd");
+    }
+
+    else if (mainColor === "#6ca1d2") {
+        tpl3.setAttribute("fill", "#cddae8");
+        tpl4.setAttribute("fill", "#cddae8");
+    }
 
 
     if (isen === 'tumpal'){
@@ -1136,6 +1196,10 @@ function drawTumpal(x, y, isen='tumpal', s = 200, trig_degree = 45, rotDeg= 0, m
             if (mainColor === "#b49084") {
                 tpl3.setAttribute("fill", "#e8eadd");
                 tpl4.setAttribute("fill", "#e8eadd");
+            }
+            else if (mainColor === "#6ca1d2") {
+                tpl3.setAttribute("fill", "#cddae8");
+                tpl4.setAttribute("fill", "#cddae8");
             }
             
             container.appendChild(tpl3);
