@@ -195,7 +195,7 @@ function redraw(){
   }
 
 
-  else if (selectBox.value === 'koch_flake'){
+  else if (selectBox.value === 'koch_snowflake'){
 const wp = 0.4 * w;
 
   function getheight(wp){
