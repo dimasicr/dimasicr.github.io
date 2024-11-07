@@ -1470,7 +1470,7 @@ for (let obj of objList3){
 
 
 abc = new HexagonTumpal(cX, cY,    w, 'square',0);
-abc.draw();
+// abc.draw();
 
 
 
@@ -1517,9 +1517,9 @@ for (let obj of objList2){
   objList3.push(new HexagonTriangleTumpal(obj.cx, obj.cy, obj.l /3, 'hexagon'));
 }
 
-// for (let obj of objList3){
-//   obj.draw();
-// }
+for (let obj of objList3){
+  obj.draw();
+}
 
 
 objList4 = [];
