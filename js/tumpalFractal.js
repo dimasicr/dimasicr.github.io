@@ -842,35 +842,152 @@ function drawHexagonTriangle(x,y, w){
     // drawTumpal(250, 171.13, selectIsens.value, 100, 30, 300, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
     // drawTumpal(250, 171.13, selectIsens.value, 100, 30, 420, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
   }  
-  else if (selectBox.value === 'hexagon'){
-
-
-    for (let i=-1; i<2; i++){
-      drawTumpal(cX, cY + 2 * i * 0.5 * Math.sqrt(3) * 0.5 * w, selectIsens.value, 0.5 * w, 60, 0, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-      drawTumpal(cX, cY + 2 * i * 0.5 * Math.sqrt(3) * 0.5 * w, selectIsens.value, 0.5 * w, 60, 60, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-      drawTumpal(cX, cY + 2 * i * 0.5 * Math.sqrt(3) * 0.5 * w, selectIsens.value, 0.5 * w, 60, 120, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-      drawTumpal(cX, cY + 2 * i * 0.5 * Math.sqrt(3) * 0.5 * w, selectIsens.value, 0.5 * w, 60, 180, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-      drawTumpal(cX, cY + 2 * i * 0.5 * Math.sqrt(3) * 0.5 * w, selectIsens.value, 0.5 * w, 60, 240, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-      drawTumpal(cX, cY + 2 * i * 0.5 * Math.sqrt(3) * 0.5 * w, selectIsens.value, 0.5 * w, 60, 300, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-    }
-
-  for (let i=-1; i<3; i++){
-    drawTumpal(cX + 0.75 * w, cY - 1 * 0.5 * Math.sqrt(3) * 0.5 * w + 2 * i * 0.5 * Math.sqrt(3) * 0.5 * w, selectIsens.value, 0.5 * w, 60, 0, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-    drawTumpal(cX + 0.75 * w, cY - 1 * 0.5 * Math.sqrt(3) * 0.5 * w + 2 * i * 0.5 * Math.sqrt(3) * 0.5 * w, selectIsens.value, 0.5 * w, 60, 60, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-    drawTumpal(cX + 0.75 * w, cY - 1 * 0.5 * Math.sqrt(3) * 0.5 * w + 2 * i * 0.5 * Math.sqrt(3) * 0.5 * w, selectIsens.value, 0.5 * w, 60, 120, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-    drawTumpal(cX + 0.75 * w, cY - 1 * 0.5 * Math.sqrt(3) * 0.5 * w + 2 * i * 0.5 * Math.sqrt(3) * 0.5 * w, selectIsens.value, 0.5 * w, 60, 180, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-    drawTumpal(cX + 0.75 * w, cY - 1 * 0.5 * Math.sqrt(3) * 0.5 * w + 2 * i * 0.5 * Math.sqrt(3) * 0.5 * w, selectIsens.value, 0.5 * w, 60, 240, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-    drawTumpal(cX + 0.75 * w, cY - 1 * 0.5 * Math.sqrt(3) * 0.5 * w + 2 * i * 0.5 * Math.sqrt(3) * 0.5 * w, selectIsens.value, 0.5 * w, 60, 300, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
+   else if (selectBox.value === 'penta_flake'){
+  
+  function getRadius(side_length, n){
+    theta = (2* Math.PI) / n;
+    a = (Math.cos(2 * theta) - Math.cos(theta))** 2;
+    b = (Math.sin(2 * theta) - Math.sin(theta))** 2;
+    return side_length / Math.sqrt(a + b);
+  }
+  function getSideLength(n, r){
+    theta = (2* Math.PI) / n;
+    x2 = Math.cos(2 * theta) * r;
+    x1 = Math.cos(theta) * r;
+    y2 = Math.sin(2 * theta) * r;
+    y1 = Math.sin(theta) * r;
+    return Math.sqrt((x2- x1) ** 2 + (y2 - y1) ** 2);
   }
 
-  for (let i=-1; i<3; i++){
-    drawTumpal(cX - 0.75 * w, cY - 1 * 0.5 * Math.sqrt(3) * 0.5 * w + 2 * i * 0.5 * Math.sqrt(3) * 0.5 * w, selectIsens.value, 0.5 * w, 60, 0, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-    drawTumpal(cX - 0.75 * w, cY - 1 * 0.5 * Math.sqrt(3) * 0.5 * w + 2 * i * 0.5 * Math.sqrt(3) * 0.5 * w, selectIsens.value, 0.5 * w, 60, 60, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-    drawTumpal(cX - 0.75 * w, cY - 1 * 0.5 * Math.sqrt(3) * 0.5 * w + 2 * i * 0.5 * Math.sqrt(3) * 0.5 * w, selectIsens.value, 0.5 * w, 60, 120, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-    drawTumpal(cX - 0.75 * w, cY - 1 * 0.5 * Math.sqrt(3) * 0.5 * w + 2 * i * 0.5 * Math.sqrt(3) * 0.5 * w, selectIsens.value, 0.5 * w, 60, 180, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-    drawTumpal(cX - 0.75 * w, cY - 1 * 0.5 * Math.sqrt(3) * 0.5 * w + 2 * i * 0.5 * Math.sqrt(3) * 0.5 * w, selectIsens.value, 0.5 * w, 60, 240, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-    drawTumpal(cX - 0.75 * w, cY - 1 * 0.5 * Math.sqrt(3) * 0.5 * w + 2 * i * 0.5 * Math.sqrt(3) * 0.5 * w, selectIsens.value, 0.5 * w, 60, 300, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
+
+    class PentagonTumpal {
+        constructor(cx, cy, l, motive) {
+          this.cx = cx;
+          this.cy = cy;
+          this.l = l;
+          this.motive = motive;
+          this.pentagonHeight = Math.tan(54/360 * 2 * Math.PI) * 0.5 * l;
+        }
+        
+          draw() {
+            for(let i=0; i<5; i++){
+              if (this.motive === 'pentagon'){
+                drawTumpal(this.cx, this.cy, selectIsens.value, this.l, 54,  72 * i, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, true);
+              }
+              else if (this.motive === 'pentagon_downward'){
+                drawTumpal(this.cx, this.cy, selectIsens.value, this.l, 54,  180 + 72 * i, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, true);
+              }
+            }
+          }
   }
+
+      abc = new PentagonTumpal(cX, cY, 1.1 *  w, 'pentagon');
+      // abc.draw();
+
+      let objList = [];
+      objList.push(abc);
+
+
+      objList2 = [];
+
+      
+
+
+      for (let obj of objList){
+        let r = getRadius(obj.l * 2, 5);
+        let r_small = r - Math.tan(54/360 * 2 * Math.PI) * obj.l;
+        let new_l = getSideLength(5, r_small);
+        let dist = Math.tan(54/360 * 2 * Math.PI) * new_l
+
+        if (obj.motive === 'pentagon'){
+          objList2.push(new PentagonTumpal(obj.cx, obj.cy, new_l, 'pentagon_downward'));
+          objList2.push(new PentagonTumpal(obj.cx + dist * Math.sin(2 * Math.PI/5 * 0), obj.cy - dist * Math.cos(2 * Math.PI/5 * 0), new_l, 'pentagon'));
+          objList2.push(new PentagonTumpal(obj.cx + dist * Math.sin(2 * Math.PI/5 * 1), obj.cy - dist * Math.cos(2 * Math.PI/5 * 1), new_l, 'pentagon'));
+          objList2.push(new PentagonTumpal(obj.cx + dist * Math.sin(2 * Math.PI/5 * 2), obj.cy - dist * Math.cos(2 * Math.PI/5 * 2), new_l, 'pentagon'));
+          objList2.push(new PentagonTumpal(obj.cx + dist * Math.sin(2 * Math.PI/5 * 3), obj.cy - dist * Math.cos(2 * Math.PI/5 * 3), new_l, 'pentagon'));
+          objList2.push(new PentagonTumpal(obj.cx + dist * Math.sin(2 * Math.PI/5 * 4), obj.cy - dist * Math.cos(2 * Math.PI/5 * 4), new_l, 'pentagon'));
+        }
+        else if (obj.motive === 'pentagon_downward'){
+          objList2.push(new PentagonTumpal(obj.cx, obj.cy, new_l, 'pentagon'));
+          objList2.push(new PentagonTumpal(obj.cx + dist * Math.sin(2 * Math.PI/5 * 0), obj.cy + dist * Math.cos(2 * Math.PI/5 * 0), new_l, 'pentagon_downward'));
+          objList2.push(new PentagonTumpal(obj.cx + dist * Math.sin(2 * Math.PI/5 * 1), obj.cy + dist * Math.cos(2 * Math.PI/5 * 1), new_l, 'pentagon_downward'));
+          objList2.push(new PentagonTumpal(obj.cx + dist * Math.sin(2 * Math.PI/5 * 2), obj.cy + dist * Math.cos(2 * Math.PI/5 * 2), new_l, 'pentagon_downward'));
+          objList2.push(new PentagonTumpal(obj.cx + dist * Math.sin(2 * Math.PI/5 * 3), obj.cy + dist * Math.cos(2 * Math.PI/5 * 3), new_l, 'pentagon_downward'));
+          objList2.push(new PentagonTumpal(obj.cx + dist * Math.sin(2 * Math.PI/5 * 4), obj.cy + dist * Math.cos(2 * Math.PI/5 * 4), new_l, 'pentagon_downward'));
+        }
+      }
+
+
+
+      // for (let obj of objList2){
+      //   obj.draw();
+      // }
+
+
+      objList3 = [];
+
+      for (let obj of objList2){
+        let r = getRadius(obj.l * 2, 5);
+        let r_small = r - Math.tan(54/360 * 2 * Math.PI) * obj.l;
+        let new_l = getSideLength(5, r_small);
+        let dist = Math.tan(54/360 * 2 * Math.PI) * new_l
+
+        if (obj.motive === 'pentagon'){
+          objList3.push(new PentagonTumpal(obj.cx, obj.cy, new_l, 'pentagon_downward'));
+          objList3.push(new PentagonTumpal(obj.cx + dist * Math.sin(2 * Math.PI/5 * 0), obj.cy - dist * Math.cos(2 * Math.PI/5 * 0), new_l, 'pentagon'));
+          objList3.push(new PentagonTumpal(obj.cx + dist * Math.sin(2 * Math.PI/5 * 1), obj.cy - dist * Math.cos(2 * Math.PI/5 * 1), new_l, 'pentagon'));
+          objList3.push(new PentagonTumpal(obj.cx + dist * Math.sin(2 * Math.PI/5 * 2), obj.cy - dist * Math.cos(2 * Math.PI/5 * 2), new_l, 'pentagon'));
+          objList3.push(new PentagonTumpal(obj.cx + dist * Math.sin(2 * Math.PI/5 * 3), obj.cy - dist * Math.cos(2 * Math.PI/5 * 3), new_l, 'pentagon'));
+          objList3.push(new PentagonTumpal(obj.cx + dist * Math.sin(2 * Math.PI/5 * 4), obj.cy - dist * Math.cos(2 * Math.PI/5 * 4), new_l, 'pentagon'));
+        }
+        else if (obj.motive === 'pentagon_downward'){
+          objList3.push(new PentagonTumpal(obj.cx, obj.cy, new_l, 'pentagon'));
+          objList3.push(new PentagonTumpal(obj.cx + dist * Math.sin(2 * Math.PI/5 * 0), obj.cy + dist * Math.cos(2 * Math.PI/5 * 0), new_l, 'pentagon_downward'));
+          objList3.push(new PentagonTumpal(obj.cx + dist * Math.sin(2 * Math.PI/5 * 1), obj.cy + dist * Math.cos(2 * Math.PI/5 * 1), new_l, 'pentagon_downward'));
+          objList3.push(new PentagonTumpal(obj.cx + dist * Math.sin(2 * Math.PI/5 * 2), obj.cy + dist * Math.cos(2 * Math.PI/5 * 2), new_l, 'pentagon_downward'));
+          objList3.push(new PentagonTumpal(obj.cx + dist * Math.sin(2 * Math.PI/5 * 3), obj.cy + dist * Math.cos(2 * Math.PI/5 * 3), new_l, 'pentagon_downward'));
+          objList3.push(new PentagonTumpal(obj.cx + dist * Math.sin(2 * Math.PI/5 * 4), obj.cy + dist * Math.cos(2 * Math.PI/5 * 4), new_l, 'pentagon_downward'));
+        }
+      }
+
+
+
+      for (let obj of objList3){
+        obj.draw();
+      }
+
+      objList4 = [];
+
+      for (let obj of objList3){
+        let r = getRadius(obj.l * 2, 5);
+        let r_small = r - Math.tan(54/360 * 2 * Math.PI) * obj.l;
+        let new_l = getSideLength(5, r_small);
+        let dist = Math.tan(54/360 * 2 * Math.PI) * new_l
+
+        if (obj.motive === 'pentagon'){
+          objList4.push(new PentagonTumpal(obj.cx, obj.cy, new_l, 'pentagon_downward'));
+          objList4.push(new PentagonTumpal(obj.cx + dist * Math.sin(2 * Math.PI/5 * 0), obj.cy - dist * Math.cos(2 * Math.PI/5 * 0), new_l, 'pentagon'));
+          objList4.push(new PentagonTumpal(obj.cx + dist * Math.sin(2 * Math.PI/5 * 1), obj.cy - dist * Math.cos(2 * Math.PI/5 * 1), new_l, 'pentagon'));
+          objList4.push(new PentagonTumpal(obj.cx + dist * Math.sin(2 * Math.PI/5 * 2), obj.cy - dist * Math.cos(2 * Math.PI/5 * 2), new_l, 'pentagon'));
+          objList4.push(new PentagonTumpal(obj.cx + dist * Math.sin(2 * Math.PI/5 * 3), obj.cy - dist * Math.cos(2 * Math.PI/5 * 3), new_l, 'pentagon'));
+          objList4.push(new PentagonTumpal(obj.cx + dist * Math.sin(2 * Math.PI/5 * 4), obj.cy - dist * Math.cos(2 * Math.PI/5 * 4), new_l, 'pentagon'));
+        }
+        else if (obj.motive === 'pentagon_downward'){
+          objList4.push(new PentagonTumpal(obj.cx, obj.cy, new_l, 'pentagon'));
+          objList4.push(new PentagonTumpal(obj.cx + dist * Math.sin(2 * Math.PI/5 * 0), obj.cy + dist * Math.cos(2 * Math.PI/5 * 0), new_l, 'pentagon_downward'));
+          objList4.push(new PentagonTumpal(obj.cx + dist * Math.sin(2 * Math.PI/5 * 1), obj.cy + dist * Math.cos(2 * Math.PI/5 * 1), new_l, 'pentagon_downward'));
+          objList4.push(new PentagonTumpal(obj.cx + dist * Math.sin(2 * Math.PI/5 * 2), obj.cy + dist * Math.cos(2 * Math.PI/5 * 2), new_l, 'pentagon_downward'));
+          objList4.push(new PentagonTumpal(obj.cx + dist * Math.sin(2 * Math.PI/5 * 3), obj.cy + dist * Math.cos(2 * Math.PI/5 * 3), new_l, 'pentagon_downward'));
+          objList4.push(new PentagonTumpal(obj.cx + dist * Math.sin(2 * Math.PI/5 * 4), obj.cy + dist * Math.cos(2 * Math.PI/5 * 4), new_l, 'pentagon_downward'));
+        }
+      }
+
+
+
+      // for (let obj of objList4){
+      //   obj.draw();
+      // }
+
 
   }
 
