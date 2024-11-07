@@ -1398,85 +1398,242 @@ for (let obj of objList3){
 
   }
 
-   else if (selectBox.value === 'two_hexagons_two_triangles'){
+  else if (selectBox.value === 'exterior_snowflake'){
 
-      spacing_X = 0.7 * w;
-      spacing_Y = 2 * 2 * Math.sqrt(3) * 0.5 * 0.35 *  w;
+    const wp = 0.1 * w;
 
-      for (let i = -1; i < 2; i++) {
-        for (let j=-1; j <2; j++){
-          drawTumpal(cX + i * spacing_X, cY + 2 * 0 * 0.5 * Math.sqrt(3) * 0.5 * w + j * spacing_Y, selectIsens.value, 0.35 * w, 60, 0, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-          drawTumpal(cX + i * spacing_X, cY + 2 * 0 * 0.5 * Math.sqrt(3) * 0.5 * w + j * spacing_Y, selectIsens.value, 0.35 * w, 60, 60, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-          drawTumpal(cX + i * spacing_X, cY + 2 * 0 * 0.5 * Math.sqrt(3) * 0.5 * w + j * spacing_Y, selectIsens.value, 0.35 * w, 60, 120, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-          drawTumpal(cX + i * spacing_X, cY + 2 * 0 * 0.5 * Math.sqrt(3) * 0.5 * w + j * spacing_Y, selectIsens.value, 0.35 * w, 60, 180, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-          drawTumpal(cX + i * spacing_X, cY + 2 * 0 * 0.5 * Math.sqrt(3) * 0.5 * w + j * spacing_Y, selectIsens.value, 0.35 * w, 60, 240, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-          drawTumpal(cX + i * spacing_X, cY + 2 * 0 * 0.5 * Math.sqrt(3) * 0.5 * w + j * spacing_Y, selectIsens.value, 0.35 * w, 60, 300, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-  
-          drawTumpal(cX + i * spacing_X, cY - 1 * Math.sqrt(3) * 0.5 * 0.35 *  w - 0.34 * Math.sqrt(3) * 0.5 * 0.35 *  w + j * spacing_Y, selectIsens.value, w * 0.35, 30,0, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor); 
-          drawTumpal(cX + i * spacing_X, cY - 1 * Math.sqrt(3) * 0.5 * 0.35 *  w - 0.34 * Math.sqrt(3) * 0.5 * 0.35 *  w + j * spacing_Y, selectIsens.value, w * 0.35, 30, 120, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor); 
-          drawTumpal(cX + i * spacing_X, cY - 1 * Math.sqrt(3) * 0.5 * 0.35 *  w - 0.34 * Math.sqrt(3) * 0.5 * 0.35 *  w + j * spacing_Y, selectIsens.value, w * 0.35, 30, 240, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-  
-          drawTumpal(cX + i * spacing_X, cY + 1 * Math.sqrt(3) * 0.5 * 0.35 *  w + 0.34 * Math.sqrt(3) * 0.5 * 0.35 *  w + j * spacing_Y, selectIsens.value, w * 0.35, 30,60, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-          drawTumpal(cX + i * spacing_X, cY + 1 * Math.sqrt(3) * 0.5 * 0.35 *  w + 0.34 * Math.sqrt(3) * 0.5 * 0.35 *  w + j * spacing_Y, selectIsens.value, w * 0.35, 30,180, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-          drawTumpal(cX + i * spacing_X, cY + 1 * Math.sqrt(3) * 0.5 * 0.35 *  w + 0.34 * Math.sqrt(3) * 0.5 * 0.35 *  w + j * spacing_Y, selectIsens.value, w * 0.35, 30,300, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-  
-          drawTumpal(cX + 0.35 * w + i * spacing_X, cY -  0.67 * Math.sqrt(3) * 0.5 * 0.35 *  w + j * spacing_Y, selectIsens.value, w * 0.35, 30,60, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-          drawTumpal(cX + 0.35 * w + i * spacing_X, cY -  0.67 * Math.sqrt(3) * 0.5 * 0.35 *  w + j * spacing_Y, selectIsens.value, w * 0.35, 30,180, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-          drawTumpal(cX + 0.35 * w + i * spacing_X, cY -  0.67 * Math.sqrt(3) * 0.5 * 0.35 *  w + j * spacing_Y, selectIsens.value, w * 0.35, 30,300, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-  
-          drawTumpal(cX - 0.35 * w + i * spacing_X, cY -  0.67 * Math.sqrt(3) * 0.5 * 0.35 *  w + j * spacing_Y, selectIsens.value, w * 0.35, 30,60, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-          drawTumpal(cX - 0.35 * w + i * spacing_X, cY -  0.67 * Math.sqrt(3) * 0.5 * 0.35 *  w + j * spacing_Y, selectIsens.value, w * 0.35, 30,180, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-          drawTumpal(cX - 0.35 * w + i * spacing_X, cY -  0.67 * Math.sqrt(3) * 0.5 * 0.35 *  w + j * spacing_Y, selectIsens.value, w * 0.35, 30,300, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-  
-          drawTumpal(cX - 0.35 * w + i * spacing_X, cY +  0.67 * Math.sqrt(3) * 0.5 * 0.35 *  w + j * spacing_Y, selectIsens.value, w * 0.35, 30,0, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-          drawTumpal(cX - 0.35 * w + i * spacing_X, cY +  0.67 * Math.sqrt(3) * 0.5 * 0.35 *  w + j * spacing_Y, selectIsens.value, w * 0.35, 30,120, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-          drawTumpal(cX - 0.35 * w + i * spacing_X, cY +  0.67 * Math.sqrt(3) * 0.5 * 0.35 *  w + j * spacing_Y, selectIsens.value, w * 0.35, 30,240, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-  
-          drawTumpal(cX + 0.35 * w + i * spacing_X, cY +  0.67 * Math.sqrt(3) * 0.5 * 0.35 *  w + j * spacing_Y, selectIsens.value, w * 0.35, 30,0, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-          drawTumpal(cX + 0.35 * w + i * spacing_X, cY +  0.67 * Math.sqrt(3) * 0.5 * 0.35 *  w + j * spacing_Y, selectIsens.value, w * 0.35, 30,120, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-          drawTumpal(cX + 0.35 * w + i * spacing_X, cY +  0.67 * Math.sqrt(3) * 0.5 * 0.35 *  w + j * spacing_Y, selectIsens.value, w * 0.35, 30,240, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-       }
-      }
+  function getheight(wp){
+     return Math.sin(60 * 2 * Math.PI/ 360) * wp;
+  }
 
-      cX2 = cX - 0.35 * w;
-      cY2 = cY - 2 * Math.sqrt(3) * 0.5 * 0.35 *  w;
-
-      
-
-      for (let i = -1; i < 3; i++) {
-        for (let j=0; j <2; j++){
-          drawTumpal(cX2 + i * spacing_X, cY2 + 2 * 0 * 0.5 * Math.sqrt(3) * 0.5 * w + j * spacing_Y, selectIsens.value, 0.35 * w, 60, 0, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-          drawTumpal(cX2 + i * spacing_X, cY2 + 2 * 0 * 0.5 * Math.sqrt(3) * 0.5 * w + j * spacing_Y, selectIsens.value, 0.35 * w, 60, 60, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-          drawTumpal(cX2 + i * spacing_X, cY2 + 2 * 0 * 0.5 * Math.sqrt(3) * 0.5 * w + j * spacing_Y, selectIsens.value, 0.35 * w, 60, 120, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-          drawTumpal(cX2 + i * spacing_X, cY2 + 2 * 0 * 0.5 * Math.sqrt(3) * 0.5 * w + j * spacing_Y, selectIsens.value, 0.35 * w, 60, 180, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-          drawTumpal(cX2 + i * spacing_X, cY2 + 2 * 0 * 0.5 * Math.sqrt(3) * 0.5 * w + j * spacing_Y, selectIsens.value, 0.35 * w, 60, 240, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-          drawTumpal(cX2 + i * spacing_X, cY2 + 2 * 0 * 0.5 * Math.sqrt(3) * 0.5 * w + j * spacing_Y, selectIsens.value, 0.35 * w, 60, 300, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-  
-          drawTumpal(cX2 + i * spacing_X, cY2 - 1 * Math.sqrt(3) * 0.5 * 0.35 *  w - 0.34 * Math.sqrt(3) * 0.5 * 0.35 *  w + j * spacing_Y, selectIsens.value, w * 0.35, 30,0, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor); 
-          drawTumpal(cX2 + i * spacing_X, cY2 - 1 * Math.sqrt(3) * 0.5 * 0.35 *  w - 0.34 * Math.sqrt(3) * 0.5 * 0.35 *  w + j * spacing_Y, selectIsens.value, w * 0.35, 30, 120, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor); 
-          drawTumpal(cX2 + i * spacing_X, cY2 - 1 * Math.sqrt(3) * 0.5 * 0.35 *  w - 0.34 * Math.sqrt(3) * 0.5 * 0.35 *  w + j * spacing_Y, selectIsens.value, w * 0.35, 30, 240, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-  
-          drawTumpal(cX2 + i * spacing_X, cY2 + 1 * Math.sqrt(3) * 0.5 * 0.35 *  w + 0.34 * Math.sqrt(3) * 0.5 * 0.35 *  w + j * spacing_Y, selectIsens.value, w * 0.35, 30,60, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-          drawTumpal(cX2 + i * spacing_X, cY2 + 1 * Math.sqrt(3) * 0.5 * 0.35 *  w + 0.34 * Math.sqrt(3) * 0.5 * 0.35 *  w + j * spacing_Y, selectIsens.value, w * 0.35, 30,180, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-          drawTumpal(cX2 + i * spacing_X, cY2 + 1 * Math.sqrt(3) * 0.5 * 0.35 *  w + 0.34 * Math.sqrt(3) * 0.5 * 0.35 *  w + j * spacing_Y, selectIsens.value, w * 0.35, 30,300, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-  
-          drawTumpal(cX2 + 0.35 * w + i * spacing_X, cY2 -  0.67 * Math.sqrt(3) * 0.5 * 0.35 *  w + j * spacing_Y , selectIsens.value, w * 0.35, 30,60, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-          drawTumpal(cX2 + 0.35 * w + i * spacing_X, cY2 -  0.67 * Math.sqrt(3) * 0.5 * 0.35 *  w + j * spacing_Y , selectIsens.value, w * 0.35, 30,180, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-          drawTumpal(cX2 + 0.35 * w + i * spacing_X, cY2 -  0.67 * Math.sqrt(3) * 0.5 * 0.35 *  w + j * spacing_Y , selectIsens.value, w * 0.35, 30,300, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-  
-          drawTumpal(cX2 - 0.35 * w + i * spacing_X, cY2 -  0.67 * Math.sqrt(3) * 0.5 * 0.35 *  w + j * spacing_Y, selectIsens.value, w * 0.35, 30,60, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-          drawTumpal(cX2 - 0.35 * w + i * spacing_X, cY2 -  0.67 * Math.sqrt(3) * 0.5 * 0.35 *  w + j * spacing_Y, selectIsens.value, w * 0.35, 30,180, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-          drawTumpal(cX2 - 0.35 * w + i * spacing_X, cY2 -  0.67 * Math.sqrt(3) * 0.5 * 0.35 *  w + j * spacing_Y, selectIsens.value, w * 0.35, 30,300, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-  
-          drawTumpal(cX2 - 0.35 * w + i * spacing_X, cY2 +  0.67 * Math.sqrt(3) * 0.5 * 0.35 *  w + j * spacing_Y, selectIsens.value, w * 0.35, 30,0, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-          drawTumpal(cX2 - 0.35 * w + i * spacing_X, cY2 +  0.67 * Math.sqrt(3) * 0.5 * 0.35 *  w + j * spacing_Y, selectIsens.value, w * 0.35, 30,120, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-          drawTumpal(cX2 - 0.35 * w + i * spacing_X, cY2 +  0.67 * Math.sqrt(3) * 0.5 * 0.35 *  w + j * spacing_Y, selectIsens.value, w * 0.35, 30,240, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-  
-          drawTumpal(cX2 + 0.35 * w + i * spacing_X, cY2 +  0.67 * Math.sqrt(3) * 0.5 * 0.35 *  w + j * spacing_Y, selectIsens.value, w * 0.35, 30,0, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-          drawTumpal(cX2 + 0.35 * w + i * spacing_X, cY2 +  0.67 * Math.sqrt(3) * 0.5 * 0.35 *  w + j * spacing_Y, selectIsens.value, w * 0.35, 30,120, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
-          drawTumpal(cX2 + 0.35 * w + i * spacing_X, cY2 +  0.67 * Math.sqrt(3) * 0.5 * 0.35 *  w + j * spacing_Y, selectIsens.value, w * 0.35, 30,240, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false,themes[selectThemes.value].tertiaryColor);
+  class TriangleTumpal {
+        constructor(cx, cy, l, motive) {
+          this.cx = cx;
+          this.cy = cy;
+          this.l = l;
+          this.motive = motive;
         }
-      }
+          draw() {
+            if (this.motive === 'triangle') {
+                for (let j=0; j<3; j++){
+                  drawTumpal(this.cx, this.cy, 'tumpal', this.l, 30,  120 * j, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, true);
+                }
+            }
+            else if (this.motive === 'triangle_downward') {
+                for (let j=0; j<3; j++){
+                  drawTumpal(this.cx, this.cy, 'tumpal', this.l, 30,  180 + 120 * j, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, true);
+                }
+            }
+
+            }
+    }
+
+
+ class HexagonTumpal {
+        constructor(cx, cy, l, motive) {
+          this.cx = cx;
+          this.cy = cy;
+          this.l = l;
+          this.motive = motive;
+        }
+          draw() {
+                for (let j=0; j<6; j++){
+                  drawTumpal(this.cx, this.cy, 'tumpal', this.l, 60,  60 * j, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, true);
+                }
+
+            }
+    }
+
+
+
+  class HexagonTriangleTumpal {
+        constructor(cx, cy, l, motive) {
+          this.cx = cx;
+          this.cy = cy;
+          this.l = l;
+          this.motive = motive;
+        }
+          draw() {
+            for (let j=0; j<3; j++){
+              drawTumpal(this.cx, this.cy + getheight(this.l) * 2/3, 'tumpal', this.l, 30,   120 * j, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, true);
+              drawTumpal(this.cx - this.l * 0.5, this.cy - getheight(this.l) * 1/3, 'tumpal', this.l, 30,   120 * j, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, true);
+              drawTumpal(this.cx + this.l * 0.5, this.cy - getheight(this.l) * 1/3, 'tumpal', this.l, 30,   120 * j, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, true);
+              drawTumpal(this.cx, this.cy - getheight(this.l) * 2/3, 'tumpal', this.l, 30,   180 + 120 * j, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, true);
+              drawTumpal(this.cx + this.l * 0.5, this.cy + getheight(this.l) * 1/3, 'tumpal', this.l, 30,   180 + 120 * j, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, true);
+              drawTumpal(this.cx - this.l * 0.5, this.cy + getheight(this.l) * 1/3, 'tumpal', this.l, 30,   180 + 120 * j, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, true);
+
+            }
+
+            }
+    }
+
+
+
+abc = new HexagonTumpal(cX, cY,    w, 'square',0);
+abc.draw();
+
+
+
+let objList = [];
+objList.push(abc);
+
+
+objList2 = [];
+for (let obj of objList){
+  objList2.push(new HexagonTumpal(obj.cx - 2 * obj.l  /3, obj.cy, obj.l /3, 'hexagon'));
+  objList2.push(new HexagonTumpal(obj.cx + 2 * obj.l  /3, obj.cy, obj.l /3, 'hexagon'));
+  objList2.push(new HexagonTumpal(obj.cx - 1 * obj.l  /3, obj.cy - 2 * getheight(obj.l/3), obj.l /3, 'hexagon'));
+  objList2.push(new HexagonTumpal(obj.cx + 1 * obj.l  /3, obj.cy - 2 * getheight(obj.l/3), obj.l /3, 'hexagon'));
+  objList2.push(new HexagonTumpal(obj.cx - 1 * obj.l  /3, obj.cy + 2 * getheight(obj.l/3), obj.l /3, 'hexagon'));
+  objList2.push(new HexagonTumpal(obj.cx + 1 * obj.l  /3, obj.cy + 2 * getheight(obj.l/3), obj.l /3, 'hexagon'));
+  objList2.push(new TriangleTumpal(obj.cx, obj.cy - getheight(obj.l/3) * 4 /3, obj.l /3, 'triangle'));
+  objList2.push(new TriangleTumpal(obj.cx, obj.cy + getheight(obj.l/3) * 4 /3, obj.l /3, 'triangle_downward'));
+  objList2.push(new TriangleTumpal(obj.cx + obj.l/3, obj.cy + getheight(obj.l/3) * 2 /3, obj.l /3, 'triangle'));
+  objList2.push(new TriangleTumpal(obj.cx - obj.l/3, obj.cy + getheight(obj.l/3) * 2 /3, obj.l /3, 'triangle'));
+  objList2.push(new TriangleTumpal(obj.cx + obj.l/3, obj.cy - getheight(obj.l/3) * 2 /3, obj.l /3, 'triangle_downward'));
+  objList2.push(new TriangleTumpal(obj.cx - obj.l/3, obj.cy - getheight(obj.l/3) * 2 /3, obj.l /3, 'triangle_downward'));
+  objList2.push(new HexagonTriangleTumpal(obj.cx, obj.cy, obj.l /3, 'hexagon'));
+}
+
+// for (let obj of objList2){
+//   obj.draw();
+// }
+
+objList3 = [];
+
+for (let obj of objList2){
+  objList3.push(new HexagonTumpal(obj.cx - 2 * obj.l  /3, obj.cy, obj.l /3, 'hexagon'));
+  objList3.push(new HexagonTumpal(obj.cx + 2 * obj.l  /3, obj.cy, obj.l /3, 'hexagon'));
+  objList3.push(new HexagonTumpal(obj.cx - 1 * obj.l  /3, obj.cy - 2 * getheight(obj.l/3), obj.l /3, 'hexagon'));
+  objList3.push(new HexagonTumpal(obj.cx + 1 * obj.l  /3, obj.cy - 2 * getheight(obj.l/3), obj.l /3, 'hexagon'));
+  objList3.push(new HexagonTumpal(obj.cx - 1 * obj.l  /3, obj.cy + 2 * getheight(obj.l/3), obj.l /3, 'hexagon'));
+  objList3.push(new HexagonTumpal(obj.cx + 1 * obj.l  /3, obj.cy + 2 * getheight(obj.l/3), obj.l /3, 'hexagon'));
+  objList3.push(new TriangleTumpal(obj.cx, obj.cy - getheight(obj.l/3) * 4 /3, obj.l /3, 'triangle'));
+  objList3.push(new TriangleTumpal(obj.cx, obj.cy + getheight(obj.l/3) * 4 /3, obj.l /3, 'triangle_downward'));
+  objList3.push(new TriangleTumpal(obj.cx + obj.l/3, obj.cy + getheight(obj.l/3) * 2 /3, obj.l /3, 'triangle'));
+  objList3.push(new TriangleTumpal(obj.cx - obj.l/3, obj.cy + getheight(obj.l/3) * 2 /3, obj.l /3, 'triangle'));
+  objList3.push(new TriangleTumpal(obj.cx + obj.l/3, obj.cy - getheight(obj.l/3) * 2 /3, obj.l /3, 'triangle_downward'));
+  objList3.push(new TriangleTumpal(obj.cx - obj.l/3, obj.cy - getheight(obj.l/3) * 2 /3, obj.l /3, 'triangle_downward'));
+  objList3.push(new HexagonTriangleTumpal(obj.cx, obj.cy, obj.l /3, 'hexagon'));
+}
+
+// for (let obj of objList3){
+//   obj.draw();
+// }
+
+
+objList4 = [];
+
+for (let obj of objList3){
+  objList4.push(new HexagonTumpal(obj.cx - 2 * obj.l  /3, obj.cy, obj.l /3, 'hexagon'));
+  objList4.push(new HexagonTumpal(obj.cx + 2 * obj.l  /3, obj.cy, obj.l /3, 'hexagon'));
+  objList4.push(new HexagonTumpal(obj.cx - 1 * obj.l  /3, obj.cy - 2 * getheight(obj.l/3), obj.l /3, 'hexagon'));
+  objList4.push(new HexagonTumpal(obj.cx + 1 * obj.l  /3, obj.cy - 2 * getheight(obj.l/3), obj.l /3, 'hexagon'));
+  objList4.push(new HexagonTumpal(obj.cx - 1 * obj.l  /3, obj.cy + 2 * getheight(obj.l/3), obj.l /3, 'hexagon'));
+  objList4.push(new HexagonTumpal(obj.cx + 1 * obj.l  /3, obj.cy + 2 * getheight(obj.l/3), obj.l /3, 'hexagon'));
+  objList4.push(new TriangleTumpal(obj.cx, obj.cy - getheight(obj.l/3) * 4 /3, obj.l /3, 'triangle'));
+  objList4.push(new TriangleTumpal(obj.cx, obj.cy + getheight(obj.l/3) * 4 /3, obj.l /3, 'triangle_downward'));
+  objList4.push(new TriangleTumpal(obj.cx + obj.l/3, obj.cy + getheight(obj.l/3) * 2 /3, obj.l /3, 'triangle'));
+  objList4.push(new TriangleTumpal(obj.cx - obj.l/3, obj.cy + getheight(obj.l/3) * 2 /3, obj.l /3, 'triangle'));
+  objList4.push(new TriangleTumpal(obj.cx + obj.l/3, obj.cy - getheight(obj.l/3) * 2 /3, obj.l /3, 'triangle_downward'));
+  objList4.push(new TriangleTumpal(obj.cx - obj.l/3, obj.cy - getheight(obj.l/3) * 2 /3, obj.l /3, 'triangle_downward'));
+  objList4.push(new HexagonTriangleTumpal(obj.cx, obj.cy, obj.l /3, 'hexagon'));
+}
+
+// for (let obj of objList4){
+//   obj.draw();
+// }
+
+
+
+
+
+  function drawHexagram(x, y, w){
+    // for (let i = 0; i < 6; i++){
+    //   drawTumpal(x, y, selectIsens.value, w, 60,60 * i, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, true); 
+    // }
+    for (let i = 0; i < 3; i++){
+      drawTumpal(x - 0.5 * w, y - 1/3 * getheight(w), selectIsens.value, w, 30, 120 * i, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, true); 
+      drawTumpal(x + 0.5 * w, y - 1/3 * getheight(w), selectIsens.value, w, 30, 120 * i, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, true); 
+      drawTumpal(x, y + 2/3 * getheight(w), selectIsens.value, w, 30, 120 * i, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, true); 
+      drawTumpal(x, y - 2/3 * getheight(w), selectIsens.value, w, 30, 60 +  120 * i, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, true); 
+      drawTumpal(x - 0.5 * w, y + 1/3 * getheight(w), selectIsens.value, w, 30, 60 + 120 * i, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, true); 
+      drawTumpal(x + 0.5 * w, y + 1/3 * getheight(w), selectIsens.value, w, 30, 60 + 120 * i, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, true); 
+
+
+
+      drawTumpal(x, y - 4/3 * getheight(w), selectIsens.value, w, 30, 120 * i, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, true); 
+      drawTumpal(x - w, y + 2/3 * getheight(w), selectIsens.value, w, 30, 120 * i, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, true); 
+      drawTumpal(x + w, y + 2/3 * getheight(w), selectIsens.value, w, 30, 120 * i, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, true); 
+
+      drawTumpal(x, y + 4/3 * getheight(w), selectIsens.value, w, 30, 60 + 120 * i, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, true); 
+      drawTumpal(x - w, y - 2/3 * getheight(w), selectIsens.value, w, 30, 60 + 120 * i, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, true); 
+      drawTumpal(x + w, y - 2/3 * getheight(w), selectIsens.value, w, 30, 60 + 120 * i, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, true); 
+
+    }
+
+  }
+
+  function drawHexagon(x,y, w){
+    for (let i = 0; i < 6; i++){
+      drawTumpal(x, y, selectIsens.value, w, 60,60 * i, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, true); 
+    }
+  }
+
+  function drawHexagonTriangle(x,y, w){
+    for (let k=0; k<3; k++){
+       drawTumpal(x , y + 2/3 * getheight(w), selectIsens.value, w, 30,120 * k, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, true); 
+       drawTumpal(x - 0.5 * w , y - 1/3 * getheight(w), selectIsens.value, w, 30,120 * k, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, true); 
+       drawTumpal(x + 0.5 * w , y - 1/3 * getheight(w), selectIsens.value, w, 30,120 * k, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, true); 
+       drawTumpal(x , y - 2/3 * getheight(w), selectIsens.value, w, 30,60 + 120 * k, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, true); 
+       drawTumpal(x - 0.5 * w , y + 1/3 * getheight(w), selectIsens.value, w, 30,60 + 120 * k, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, true); 
+       drawTumpal(x + 0.5 * w , y + 1/3 * getheight(w), selectIsens.value, w, 30,60 + 120 * k, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, true); 
+
+
+
+      // drawTumpal(x , y - 4/3 * getheight(w), selectIsens.value, w, 30,120 * k, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, true); 
+      // drawTumpal(x - w , y + 2/3 * getheight(w), selectIsens.value, w, 30,120 * k, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, true); 
+      // drawTumpal(x + w , y + 2/3 * getheight(w), selectIsens.value, w, 30,120 * k, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, true); 
+    }
+  }
+
+
+// function drawRosetta(x,y, w){
+//   drawHexagram(x, y, w);
+//   drawHexagon(x - 2 * w, y, w);
+//   drawHexagon(x + 2 * w, y, w);
+//   drawHexagon(x - 1 * w, y - 2 * getheight(w), w);
+//   drawHexagon(x - 1 * w, y + 2 * getheight(w), w);
+//   drawHexagon(x + 1 * w, y - 2 * getheight(w), w);
+//   drawHexagon(x + 1 * w, y + 2 * getheight(w), w);
+// }
+  
+//   drawRosetta(cX, cY, wp);
+//   drawRosetta(cX - 6 * wp, cY, wp);
+//   drawRosetta(cX + 6 * wp, cY, wp);
+
+//   drawRosetta(cX - 3 * wp, cY - 6 * getheight(wp), wp);
+//   drawRosetta(cX + 3 * wp, cY - 6 * getheight(wp), wp);
+//   drawRosetta(cX - 3 * wp, cY + 6 * getheight(wp), wp);
+//   drawRosetta(cX + 3 * wp, cY + 6 * getheight(wp), wp);
+
+//   drawHexagram(cX,cY - getheight(wp) * 4, wp);
+//   drawHexagram(cX,cY + getheight(wp) * 4, wp);
+
+//   drawHexagram(cX - 3 * wp,cY - getheight(wp) * 2, wp);
+//   drawHexagram(cX + 3 * wp,cY - getheight(wp) * 2, wp);
+//   drawHexagram(cX - 3 * wp,cY + getheight(wp) * 2, wp);
+//   drawHexagram(cX + 3 * wp,cY + getheight(wp) * 2, wp);
+
+
+// drawArbitraryKawung([[-10,0], [10,0] , [0, -10]], cX, cY, 800, 0, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);
+// drawArbitraryKawung([[-10,-20], [10,-20] , [0, -10]], cX, cY, 800, 0, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);
+// drawArbitraryKawung([[-10,-20], [-10,0] , [0, -10]], cX, cY, 800, 0, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);
+// drawArbitraryKawung([[10,-20], [10,0] , [0, -10]], cX, cY, 800, 0, themes[selectThemes.value].mainColor, themes[selectThemes.value].secondaryColor, themes[selectThemes.value].strokeColor, false);
+
+
+
+
 
   }
 
