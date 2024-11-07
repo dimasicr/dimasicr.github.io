@@ -10,6 +10,7 @@ document.write(
     '<li><a href="parametricbuketan.html">Parametric Buketan</a></li>' +
     '<li><a href="tumpaltesselation.html">Tesselation of Tumpal</a></li>' +
     '<li><a href="starrynight.html"> Starry Night </a></li>' +
+    '<li><a href="tumpalfractal.html"> Fractal of Tumpal </a></li>' +
   '</ul>'
 );
 
