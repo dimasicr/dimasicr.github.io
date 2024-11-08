@@ -110,50 +110,28 @@
 
                
                     <button id="right-button" onclick="
-       if (currentPattern === 'square') {
-          currentPattern = 'hexagon';
-          selectBox.value = 'hexagon';
+       if (currentPattern === 'koch_snowflake') {
+          currentPattern = 'sierpinski_carpet';
+          selectBox.value = 'sierpinski_carpet';
         } 
-        else if (currentPattern === 'hexagon') {
-          currentPattern = 'triangle';
-          selectBox.value = 'triangle';
+        else if (currentPattern === 'sierpinski_carpet') {
+          currentPattern = 'penta_flake';
+          selectBox.value = 'penta_flake';
         } 
-        else if (currentPattern === 'triangle') {
-          currentPattern = 'hexagon_triangle';
-          selectBox.value = 'hexagon_triangle';
+        else if (currentPattern === 'penta_flake') {
+          currentPattern = 'hexagram_fractal';
+          selectBox.value = 'hexagram_fractal';
         } 
-        else if (currentPattern === 'hexagon_triangle') {
-          currentPattern = 'hexagon_square_triangle';
-          selectBox.value = 'hexagon_square_triangle';
+        else if (currentPattern === 'hexagram_fractal') {
+          currentPattern = 'exterior_snowflake';
+          selectBox.value = 'exterior_snowflake';
         }  
-        else if (currentPattern === 'hexagon_square_triangle') {
-          currentPattern = 'two_hexagons_two_triangles';
-          selectBox.value = 'two_hexagons_two_triangles';
+        else if (currentPattern === 'exterior_snowflake') {
+          currentPattern = 'koch_snowflake';
+          selectBox.value = 'koch_snowflake';
         }                         
-        else if (currentPattern === 'two_hexagons_two_triangles') {
-          currentPattern = 'dodecagon_triangle';
-          selectBox.value = 'dodecagon_triangle';
-        }                         
-         else if (currentPattern === 'dodecagon_triangle') {
-          currentPattern = 'dodecagon_hexagon_square';
-          selectBox.value = 'dodecagon_hexagon_square';
-        }                      
-         else if (currentPattern === 'dodecagon_hexagon_square') {
-          currentPattern = 'two_squares_three_triangles';
-          selectBox.value = 'two_squares_three_triangles';
-        }
-         else if (currentPattern === 'two_squares_three_triangles') {
-          currentPattern = 'two_squares_three_triangles_complex';
-          selectBox.value = 'two_squares_three_triangles_complex';
-        }                       
-         else if (currentPattern === 'two_squares_three_triangles_complex') {
-          currentPattern = 'octagon_square';
-          selectBox.value = 'octagon_square';
-        }                         
-         else if (currentPattern === 'octagon_square') {
-          currentPattern = 'square';
-          selectBox.value = 'square';
-        }  redraw();">></button>
+       
+                       redraw();">></button>
                </div>
          </figure>
          
