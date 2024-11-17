@@ -18,10 +18,12 @@ const themes = {
         strokeWidth: 0
     },
     "oldJava": {
-        mainColor: "#e4d5b7",
+        // mainColor: "#e4d5b7",
+        mainColor: "#d7c093",
         secondaryColor: "#493118",
         tertiaryColor: "rgb(247,235,213)",
-        strokeColor: "brown",
+        // strokeColor: "brown",
+        strokeColor: "gold",
         strokeWidth: 0.5
     }
     ,"rajaampat": {
