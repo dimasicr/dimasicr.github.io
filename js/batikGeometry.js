@@ -9,20 +9,25 @@ const themes = {
         secondaryColor: "rgb(170, 130, 75)",
         strokeColor: "peru",
         strokeWidth: 0.5
-    },
-    "batavia": {
+    }
+    ,"batavia": {
         mainColor: "#F7F0F5",
         secondaryColor: "#333",
         tertiaryColor:"#E5E4E2",
         strokeColor: "black",
         strokeWidth: 0
-    },
-    "oldJava": {
-        // mainColor: "#e4d5b7",
+    }
+    ,"oldJava": {
+        mainColor: "#e4d5b7",
+        secondaryColor: "#493118",
+        tertiaryColor: "rgb(247,235,213)",
+        strokeColor: "brown",
+        strokeWidth: 0.5
+    }
+    ,"oldJava2": {
         mainColor: "#d7c093",
         secondaryColor: "#493118",
         tertiaryColor: "rgb(247,235,213)",
-        // strokeColor: "brown",
         strokeColor: "gold",
         strokeWidth: 0.5
     }
