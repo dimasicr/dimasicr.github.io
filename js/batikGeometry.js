@@ -24,7 +24,7 @@ const themes = {
         tertiaryColor: "#F0F7F2",
         strokeColor: "none",
         strokeWidth: 0
-    },
+    }
     ,"oldJava": {
         mainColor: "#e4d5b7",
         secondaryColor: "#493118",
