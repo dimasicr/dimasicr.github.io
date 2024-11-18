@@ -109,8 +109,21 @@ function redraw(){
   border_stripe.setAttribute("fill", themes[useTheme].mainColor);
 
   svg.appendChild(container);
-  container.appendChild(border);
-  container.appendChild(border_stripe);
+  // container.appendChild(border);
+  // container.appendChild(border_stripe);
+
+  for (let i= 0; i< 10; i++){
+    const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    rect.setAttribute("x", -0.5 * svg.getAttribute("width") + i * svg.getAttribute("width") / 10);       // X position
+    rect.setAttribute("y", -0.5 * svg.getAttribute("height"));       // Y position
+    rect.setAttribute("width", svg.getAttribute("width") / 10);  // Width of the rectangle
+    rect.setAttribute("height", svg.getAttribute("width") / 30); // Height of the rectangle
+    rect.setAttribute("fill", themes[useTheme].mainColor); // Fill color
+    rect.setAttribute("stroke", themes[useTheme].strokeColor); // Border color
+    rect.setAttribute("stroke-width", 2); // Border thickness
+    container.appendChild(rect);
+
+  }
 
   container2 = container.cloneNode(true);
   container2.setAttribute("transform", `translate(${cX}, ${cY}) rotate(90)`)
