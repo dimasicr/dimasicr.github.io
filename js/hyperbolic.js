@@ -117,7 +117,7 @@ function redraw(){
     rect.setAttribute("x", -0.5 * svg.getAttribute("width") + i * svg.getAttribute("width") / 10);       // X position
     rect.setAttribute("y", -0.5 * svg.getAttribute("height"));       // Y position
     rect.setAttribute("width", svg.getAttribute("width") / 10);  // Width of the rectangle
-    rect.setAttribute("height", svg.getAttribute("width") / 30); // Height of the rectangle
+    rect.setAttribute("height", svg.getAttribute("width") / 40); // Height of the rectangle
     rect.setAttribute("fill", themes[useTheme].mainColor); // Fill color
     rect.setAttribute("stroke", themes[useTheme].strokeColor); // Border color
     rect.setAttribute("stroke-width", 2); // Border thickness
