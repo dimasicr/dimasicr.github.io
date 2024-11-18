@@ -10,13 +10,21 @@ const themes = {
         strokeColor: "peru",
         strokeWidth: 0.5
     }
+    // ,"batavia": {
+    //     mainColor: "#F7F0F5",
+    //     secondaryColor: "#333",
+    //     tertiaryColor:"#E5E4E2",
+    //     strokeColor: "black",
+    //     strokeWidth: 0
+    // }
+
     ,"batavia": {
-        mainColor: "#F7F0F5",
+        mainColor: "#c8c8cf",
         secondaryColor: "#333",
-        tertiaryColor:"#E5E4E2",
-        strokeColor: "black",
+        tertiaryColor: "#F0F7F2",
+        strokeColor: "none",
         strokeWidth: 0
-    }
+    },
     ,"oldJava": {
         mainColor: "#e4d5b7",
         secondaryColor: "#493118",
@@ -1156,6 +1164,11 @@ function drawTumpal(x, y, isen='tumpal', s = 200, trig_degree = 45, rotDeg= 0, m
         tpl4.setAttribute("fill", "#cddae8");
     }
 
+    else if (mainColor === "#c8c8cf") {
+        tpl3.setAttribute("fill", "#F7F0F5");
+        tpl4.setAttribute("fill", "#F7F0F5");
+    }
+
 
     if (isen === 'tumpal'){
         if (trig_degree === 60) {
@@ -1207,6 +1220,10 @@ function drawTumpal(x, y, isen='tumpal', s = 200, trig_degree = 45, rotDeg= 0, m
             else if (mainColor === "#6ca1d2") {
                 tpl3.setAttribute("fill", "#cddae8");
                 tpl4.setAttribute("fill", "#cddae8");
+            }
+            else if (mainColor === "#c8c8cf") {
+                tpl3.setAttribute("fill", "#F7F0F5");
+                tpl4.setAttribute("fill", "#F7F0F5");
             }
             
             container.appendChild(tpl3);
