@@ -67,4 +67,20 @@ for(let k=0; k <5; k++){ // Five fold symmetry loop
 }
 }
 
+// Add an event listener to the select input
+selectBox.addEventListener('change', function() {
+  redraw();
+});
+
+// Add an event listener to the select input
+selectIsens.addEventListener('change', function() {
+  redraw();
+});
+
+// Add an event listener to the select input
+selectThemes.addEventListener('change', function() {
+  redraw();
+});
+
+
 redraw();
