@@ -22,7 +22,7 @@ const themes = {
         mainColor: "#c8c8cf",
         secondaryColor: "#333",
         tertiaryColor: "#F0F7F2",
-        strokeColor: "none",
+        strokeColor: "white",
         strokeWidth: 0
     }
     ,"oldJava": {
