@@ -91,6 +91,14 @@ const themes = {
         strokeColor: "#cddae8",
         strokeWidth: 0.5
     }
+    ,"megaMendung2": {
+        mainColor: "#6ca1d2",
+        secondaryColor: "#02084b",
+        tertiaryColor: "#6c9fd0",
+        isenColor: "white",
+        strokeColor: "#cddae8",
+        strokeWidth: 0.5
+    }
     ,"goldenRed": {
         mainColor: "#daaf71",
         secondaryColor: "#793f32",
