@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Play Test 1 </title>
+  <style>
+    body {
+      margin: 0;
+      background: white;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+  </style>
+</head>
+<body>
+  <!-- SVG Canvas -->
+  <svg id="game" width="400" height="600" style="background: #38445a;"></svg>
+  <script>
+    const svgNS = "http://www.w3.org/2000/svg";
+    const svgURI = 'http://www.w3.org/2000/svg';
+    const svg = document.getElementById("game");
+    let life = true;
+
+
+    function removeSvgChildById(svgContainer, targetId) {
+    // Get all child elements
+    const children = svgContainer.children;
+    // Loop through children in reverse and remove the ones with the matching ID
+    for (let i = children.length - 1; i >= 0; i--) {
+      if (children[i].getAttribute("id") === targetId) {
+        svgContainer.removeChild(children[i]);
+      }
+    }
+  }
+
+    function getRadius(side_length, n){
+      theta = (2* Math.PI) / n;
+      a = (Math.cos(2 * theta) - Math.cos(theta))** 2;
+      b = (Math.sin(2 * theta) - Math.sin(theta))** 2;
+      return side_length / Math.sqrt(a + b);
+    }
+
+function hasSameEdge(square, hexagon) {
+  // Helper function to check if two edges are within a tolerance
+  function isSameEdge(edge1, edge2, epsilon = 0.5) {
+    // Edge1: [[x1, y1], [x2, y2]]
+    // Edge2: [[x3, y3], [x4, y4]]
+    const [[x1, y1], [x2, y2]] = edge1;
+    const [[x3, y3], [x4, y4]] = edge2;
+
+    const arePointsClose = (x1, y1, x2, y2) =>
+      Math.abs(x1 - x2) <= epsilon && Math.abs(y1 - y2) <= epsilon;
+
+    return (
+      (arePointsClose(x1, y1, x3, y3) && arePointsClose(x2, y2, x4, y4)) || // Same direction
+      (arePointsClose(x1, y1, x4, y4) && arePointsClose(x2, y2, x3, y3))    // Reversed direction
+    );
+  }
+
+  // Extract edges from both objects
+  // function getEdges(vertices) {
+  //   const edges = [];
+  //   for (let i = 0; i < vertices.length; i++) {
+  //     const start = vertices[i];
+  //     const end = vertices[(i + 1) % vertices.length];
+  //     edges.push([start, end]);
+  //   }
+  //   return edges;
+  // }
+
+  // const squareEdges = getEdges(square.vertices);
+  // const hexagonEdges = getEdges(hexagon.vertices);
+
+  squareEdges = square.edges;
+  hexagonEdges = hexagon.edges;
+
+  // Check for common edges with tolerance
+  for (const squareEdge of squareEdges) {
+    for (const hexEdge of hexagonEdges) {
+      if (isSameEdge(squareEdge, hexEdge)) {
+        return true; // A matching edge within tolerance was found
+      }
+    }
+  }
+
+  return false; // No matching edges
+}
+
+function getOverlappingEdge(square, hexagon) {
+  // Helper function to check if two edges are within a tolerance
+  function isSameEdge(edge1, edge2, epsilon = 0.5) {
+    // Edge1: [[x1, y1], [x2, y2]]
+    // Edge2: [[x3, y3], [x4, y4]]
+    const [[x1, y1], [x2, y2]] = edge1;
+    const [[x3, y3], [x4, y4]] = edge2;
+
+    const arePointsClose = (x1, y1, x2, y2) =>
+      Math.abs(x1 - x2) <= epsilon && Math.abs(y1 - y2) <= epsilon;
+
+    return (
+      (arePointsClose(x1, y1, x3, y3) && arePointsClose(x2, y2, x4, y4)) || // Same direction
+      (arePointsClose(x1, y1, x4, y4) && arePointsClose(x2, y2, x3, y3))    // Reversed direction
+    );
+  }
+
+  // Directly using edges from objects
+  const squareEdges = square.edges;
+  const hexagonEdges = hexagon.edges;
+
+  // Check for common edges with tolerance
+  for (const squareEdge of squareEdges) {
+    for (const hexEdge of hexagonEdges) {
+      if (isSameEdge(squareEdge, hexEdge)) {
+        return squareEdge; // Return the overlapping edge
+      }
+    }
+  }
+
+  return null; // No overlapping edges found
+}
+
+
+
+
+function edgesIntersect(edge1, edge2) {
+  const [p1, q1] = edge1; // First edge points
+  const [p2, q2] = edge2; // Second edge points
+
+  // Helper to find orientation of ordered triplet (p, q, r)
+  function orientation(p, q, r) {
+    const val = (q[1] - p[1]) * (r[0] - q[0]) - (q[0] - p[0]) * (r[1] - q[1]);
+    if (val === 0) return 0; // Collinear
+    return val > 0 ? 1 : 2; // Clockwise or Counterclockwise
+  }
+
+  // Helper to check if point q lies on segment pr
+  function onSegment(p, q, r) {
+    return (
+      q[0] >= Math.min(p[0], r[0]) && q[0] <= Math.max(p[0], r[0]) &&
+      q[1] >= Math.min(p[1], r[1]) && q[1] <= Math.max(p[1], r[1])
+    );
+  }
+
+  const o1 = orientation(p1, q1, p2);
+  const o2 = orientation(p1, q1, q2);
+  const o3 = orientation(p2, q2, p1);
+  const o4 = orientation(p2, q2, q1);
+
+  // General case: If orientations are different, the edges intersect
+  if (o1 !== o2 && o3 !== o4) return true;
+
+  // Special cases: Check if any point of one segment lies on the other segment
+  // if (o1 === 0 && onSegment(p1, p2, q1)) return true;
+  // if (o2 === 0 && onSegment(p1, q2, q1)) return true;
+  // if (o3 === 0 && onSegment(p2, p1, q2)) return true;
+  // if (o4 === 0 && onSegment(p2, q1, q2)) return true;
+
+  // No intersection
+  return false;
+}
+
+
+function drawHint(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, mainColor="#b49084", secondaryColor="#586b8c", strokeColor = "gold", use_outline=false, tertiaryColor = "gold"){  
+      let container = document.createElementNS(svgURI, "g");
+      container.setAttribute("transform", `translate(${x}, ${y}) rotate(${rotDeg})`);
+      container.setAttribute("stroke-width", 0.5);
+      container.setAttribute("id", id);
+      svg.appendChild(container);
+      const h = Math.tan(trig_degree/360 * 2 * Math.PI) * (0.5 * s);
+      let outline = document.createElementNS(svgURI, "path");
+      outline_sentence = `M0 0  ${0.5 * s} ${h}  ${-0.5 * s} ${h} Z`;
+      outline.setAttribute("d", outline_sentence);
+      outline.setAttribute("fill", secondaryColor);
+      outline.setAttribute("stroke", strokeColor);
+      container.appendChild(outline);
+}
+
+
+    function drawHexagon(x, y, id = 123, s = 200, trig_degree = 60, rotDeg= 0, mainColor="#b49084", secondaryColor="#38445a", strokeColor = "gold", use_outline=false, tertiaryColor = "gold", use_middle_upper=true){  
+      let container = document.createElementNS(svgURI, "g");
+      container.setAttribute("transform", `translate(${x}, ${y}) rotate(${rotDeg})`);
+      container.setAttribute("stroke-width", 0.01);
+      container.setAttribute("id", id);
+      svg.appendChild(container);
+      const h = Math.tan(trig_degree/360 * 2 * Math.PI) * (0.5 * s);
+      let outline = document.createElementNS(svgURI, "path");
+      outline_sentence = `M0 0  ${0.5 * s} ${h}  ${-0.5 * s} ${h} Z`;
+      outline.setAttribute("d", outline_sentence);
+      outline.setAttribute("fill", "none");
+      outline.setAttribute("stroke", strokeColor);
+      if (use_outline){
+          container.appendChild(outline);
+      }
+      
+      R = s / 10;
+      Xc = 0.5 * s - R / Math.tan(0.5 * trig_degree/360 * 2 * Math.PI);
+      R_new = 2 * R;
+      tpl_pth = `M0 ${h}  C ${Xc * 0.5} ${h}  ${Xc * 0.5} ${h - 2*R} ${Xc} ${h - 2* R} A${R} ${R} 0 0 1 ${Xc} ${h} A ${0.5 * R} ${0.5* R} 0 0 1 ${Xc} ${h - R} C${Xc - R} ${h - R} ${Xc - R} ${h}  ${Xc - 2 * R} ${h} Z`;
+      tpl = document.createElementNS(svgURI, "path");
+      tpl.setAttribute("d", tpl_pth);
+      tpl.setAttribute("fill", mainColor);
+      tpl.setAttribute("stroke", strokeColor);
+      container.appendChild(tpl);
+      tpl2 = tpl.cloneNode(true);
+      tpl2.setAttribute("transform", "scale(-1 1)");
+      container.appendChild(tpl2);
+      tpl3 = tpl.cloneNode(true);
+      tpl3_pth = `M${0} ${h}  C ${0} ${h - Xc * 0.5}  ${2 * R} ${h - Xc * 0.5} ${2 * R} ${h - Xc}  A${R} ${R} 0 0 0 ${0} ${h - Xc} A${0.5 * R} ${0.5 * R} 0 0 0 ${R} ${h - Xc} C ${R}  ${h - 0.6 * Xc} ${0}  ${h - 0.6 * Xc}  ${0}  ${h -0.2 *  Xc} `;
+      tpl3.setAttribute("d", tpl3_pth);
+      tpl3.setAttribute("fill", "#e8eadd");
+      tpl4 = tpl.cloneNode(true);
+      tpl4.setAttribute("transform", `rotate(-90 0 ${h})`);
+      tpl4.setAttribute("fill", "#e8eadd");
+      container.appendChild(tpl3);
+      container.appendChild(tpl4);
+      tpl5 = tpl.cloneNode(true);
+      tpl5.setAttribute("d", `M 0 0 C 0 ${ 0.5 * (h - Xc - R - 0.4 * R_new) } ${0.4 * R_new}  ${ 0.5 * (h - Xc - R - 0.4 * R_new) } ${0.4 * R_new} ${h - Xc - R - 0.4 * R_new} A${0.2 * R_new} ${0.2 * R_new} 0 0 0 ${0} ${h - Xc - R - 0.4 * R_new} A${0.4 * R_new} ${0.4 * R_new} 0 0 0 ${0.8 * R_new} ${ h - Xc - R - 0.4 * R_new} C${0.8 * R_new} ${0.5 * (h - Xc - R - 0.4 * R_new) } ${0} ${0.5 * (h - Xc - R - 0.4 * R_new)} 0 0`);
+      tpl6 = tpl5.cloneNode(true);
+      tpl6.setAttribute("transform", `scale(-1, 1)`);
+      container.appendChild(tpl5);
+      container.appendChild(tpl6);
+
+      for (let i = 1; i <= 6; i++) {
+        const tplClone = tpl.cloneNode(true); // Clone the element
+        const rotation = 60 * i; // Calculate the rotation degree
+        tplClone.setAttribute("transform", `rotate(${rotation})`); // Set the rotation
+        container.appendChild(tplClone); // Append the cloned and transformed element to the container
+        const tpl2Clone = tpl.cloneNode(true); // Clone the element
+        tpl2Clone.setAttribute("transform", `scale(-1 1) rotate(${rotation})`); // Set the rotation
+        container.appendChild(tpl2Clone); // Append the cloned and transformed element to the container
+        const tpl3Clone = tpl3.cloneNode(true); // Clone the element
+        tpl3Clone.setAttribute("transform", `rotate(${rotation})`); // Set the rotation
+        container.appendChild(tpl3Clone); // Append the cloned and transformed element to the container
+        const tpl4Clone = tpl3.cloneNode(true); // Clone the element
+        tpl4Clone.setAttribute("transform", `scale(-1 1) rotate(${rotation})`); // Set the rotation
+        container.appendChild(tpl4Clone); // Append the cloned and transformed element to the container
+        const tpl5Clone = tpl5.cloneNode(true); // Clone the element
+        tpl5Clone.setAttribute("transform", `scale(1 1) rotate(${rotation})`); // Set the rotation
+        container.appendChild(tpl5Clone); // Append the cloned and transformed element to the container
+        const tpl6Clone = tpl5.cloneNode(true); // Clone the element
+        tpl6Clone.setAttribute("transform", `scale(-1 1) rotate(${rotation})`); // Set the rotation
+        container.appendChild(tpl6Clone); // Append the cloned and transformed element to the container
+      }
+}
+
+
+    function drawSquare(x, y, id = 123, s = 200, trig_degree = 45, rotDeg= 0, mainColor="#b49084", secondaryColor="#38445a", strokeColor = "gold", use_outline=false, tertiaryColor = "gold", use_middle_upper=true){  
+      let container = document.createElementNS(svgURI, "g");
+      container.setAttribute("transform", `translate(${x}, ${y}) rotate(${rotDeg})`);
+      container.setAttribute("stroke-width", 0.1);
+      container.setAttribute("id", id);
+      svg.appendChild(container);
+      const h = Math.tan(trig_degree/360 * 2 * Math.PI) * (0.5 * s);
+      let outline = document.createElementNS(svgURI, "path");
+      outline_sentence = `M0 0  ${0.5 * s} ${h}  ${-0.5 * s} ${h} Z`;
+      outline.setAttribute("d", outline_sentence);
+      outline.setAttribute("fill", "none");
+      outline.setAttribute("stroke", strokeColor);
+      if (use_outline){
+          container.appendChild(outline);
+      }
+      
+      R = s / 10;
+      Xc = 0.5 * s - R / Math.tan(0.5 * trig_degree/360 * 2 * Math.PI);
+      R_new =  R;
+      tpl_pth = `M0 ${h}  C ${Xc * 0.5} ${h}  ${Xc * 0.5} ${h - 2*R} ${Xc} ${h - 2* R} A${R} ${R} 0 0 1 ${Xc} ${h} A ${0.5 * R} ${0.5* R} 0 0 1 ${Xc} ${h - R} C${Xc - R} ${h - R} ${Xc - R} ${h}  ${Xc - 2 * R} ${h} Z`;
+      tpl = document.createElementNS(svgURI, "path");
+      tpl.setAttribute("d", tpl_pth);
+      tpl.setAttribute("fill", mainColor);
+      tpl.setAttribute("stroke", strokeColor);
+      container.appendChild(tpl);
+      tpl2 = tpl.cloneNode(true);
+      tpl2.setAttribute("transform", "scale(-1 1)");
+      container.appendChild(tpl2);
+      tpl3 = tpl.cloneNode(true);
+      tpl3_pth = `M${0} ${h}  C ${0} ${h - Xc * 0.5}  ${2 * R} ${h - Xc * 0.5} ${2 * R} ${h - Xc}  A${R} ${R} 0 0 0 ${0} ${h - Xc} A${0.5 * R} ${0.5 * R} 0 0 0 ${R} ${h - Xc} C ${R}  ${h - 0.6 * Xc} ${0}  ${h - 0.6 * Xc}  ${0}  ${h -0.2 *  Xc} `;
+      tpl3.setAttribute("d", tpl3_pth);
+      tpl3.setAttribute("fill", "#e8eadd");
+      tpl4 = tpl.cloneNode(true);
+      tpl4.setAttribute("transform", `rotate(-90 0 ${h})`);
+      tpl4.setAttribute("fill", "#e8eadd");
+      container.appendChild(tpl3);
+      container.appendChild(tpl4);
+      tpl5 = tpl.cloneNode(true);
+      tpl5.setAttribute("d", `M 0 0 C 0 ${ 0.5 * (h - Xc - R - 0.4 * R_new) } ${0.4 * R_new}  ${ 0.5 * (h - Xc - R - 0.4 * R_new) } ${0.4 * R_new} ${h - Xc - R - 0.4 * R_new} A${0.2 * R_new} ${0.2 * R_new} 0 0 0 ${0} ${h - Xc - R - 0.4 * R_new} A${0.4 * R_new} ${0.4 * R_new} 0 0 0 ${0.8 * R_new} ${ h - Xc - R - 0.4 * R_new} C${0.8 * R_new} ${0.5 * (h - Xc - R - 0.4 * R_new) } ${0} ${0.5 * (h - Xc - R - 0.4 * R_new)} 0 0`);
+      tpl6 = tpl5.cloneNode(true);
+      tpl6.setAttribute("transform", `scale(-1, 1)`);
+      container.appendChild(tpl5);
+      container.appendChild(tpl6);
+
+      for (let i = 1; i <= 4; i++) {
+        const tplClone = tpl.cloneNode(true); // Clone the element
+        const rotation = 90 * i; // Calculate the rotation degree
+        tplClone.setAttribute("transform", `rotate(${rotation})`); // Set the rotation
+        container.appendChild(tplClone); // Append the cloned and transformed element to the container
+        const tpl2Clone = tpl.cloneNode(true); // Clone the element
+        tpl2Clone.setAttribute("transform", `scale(-1 1) rotate(${rotation})`); // Set the rotation
+        container.appendChild(tpl2Clone); // Append the cloned and transformed element to the container
+        const tpl3Clone = tpl3.cloneNode(true); // Clone the element
+        tpl3Clone.setAttribute("transform", `rotate(${rotation})`); // Set the rotation
+        container.appendChild(tpl3Clone); // Append the cloned and transformed element to the container
+        const tpl4Clone = tpl3.cloneNode(true); // Clone the element
+        tpl4Clone.setAttribute("transform", `scale(-1 1) rotate(${rotation})`); // Set the rotation
+        container.appendChild(tpl4Clone); // Append the cloned and transformed element to the container
+        const tpl5Clone = tpl5.cloneNode(true); // Clone the element
+        tpl5Clone.setAttribute("transform", `scale(1 1) rotate(${rotation})`); // Set the rotation
+        container.appendChild(tpl5Clone); // Append the cloned and transformed element to the container
+        const tpl6Clone = tpl5.cloneNode(true); // Clone the element
+        tpl6Clone.setAttribute("transform", `scale(-1 1) rotate(${rotation})`); // Set the rotation
+        container.appendChild(tpl6Clone); // Append the cloned and transformed element to the container
+      }
+
+
+  }
+
+
+
+function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, mainColor="#b49084", secondaryColor="#38445a", strokeColor = "gold", use_outline=false, tertiaryColor = "gold", use_middle_upper=true){  
+      let container = document.createElementNS(svgURI, "g");
+      container.setAttribute("transform", `translate(${x}, ${y}) rotate(${rotDeg})`);
+      container.setAttribute("stroke-width", 0.1);
+      container.setAttribute("id", id);
+      svg.appendChild(container);
+      const h = Math.tan(trig_degree/360 * 2 * Math.PI) * (0.5 * s);
+      let outline = document.createElementNS(svgURI, "path");
+      outline_sentence = `M0 0  ${0.5 * s} ${h}  ${-0.5 * s} ${h} Z`;
+      outline.setAttribute("d", outline_sentence);
+      outline.setAttribute("fill", "none");
+      outline.setAttribute("stroke", strokeColor);
+      if (use_outline){
+          container.appendChild(outline);
+      }
+      
+      R = s /15;
+      Xc = 0.5 * s - R / Math.tan(0.5 * trig_degree/360 * 2 * Math.PI);
+      R_new =  R;
+      tpl_pth = `M0 ${h}  C ${Xc * 0.5} ${h}  ${Xc * 0.5} ${h - 2*R} ${Xc} ${h - 2* R} A${R} ${R} 0 0 1 ${Xc} ${h} A ${0.5 * R} ${0.5* R} 0 0 1 ${Xc} ${h - R} C${Xc - R} ${h - R} ${Xc - R} ${h}  ${Xc - 2 * R} ${h} Z`;
+      tpl = document.createElementNS(svgURI, "path");
+      tpl.setAttribute("d", tpl_pth);
+      tpl.setAttribute("fill", mainColor);
+      tpl.setAttribute("stroke", strokeColor);
+      container.appendChild(tpl);
+      tpl2 = tpl.cloneNode(true);
+      tpl2.setAttribute("transform", "scale(-1 1)");
+      container.appendChild(tpl2);
+      tpl3 = tpl.cloneNode(true);
+      tpl3_pth = `M ${0} ${h} C ${0} ${h- 0.3 * (2 * R + s/30)} ${s/30} ${h- 0.3 * (2 * R + s/30)}  ${s/30} ${h-2 * R + s/30} A ${s/60} ${s/60} 0 0 1 ${0} ${h-2 * R + s /30} A${s/30} ${s/30} 0 0 1 ${2 * s/30} ${h-2 * R + s /30} C${2 * s/30} ${h- 0.3 * (2 * R + s/30)} ${0} ${h- 0.3 * (2 * R + s/30)} ${0} ${h}  `;
+
+      tpl3.setAttribute("d", tpl3_pth);
+      tpl3.setAttribute("fill", "#e8eadd");
+      tpl4 = tpl3.cloneNode(true);
+      tpl4.setAttribute("transform", `scale(-1 1)`);
+      tpl4.setAttribute("fill", "#e8eadd");
+      container.appendChild(tpl3);
+      container.appendChild(tpl4);
+      tpl5 = tpl.cloneNode(true);
+      tpl5.setAttribute("d", `M ${0} ${0} C ${0} ${0.5 *  (h-2 * R - s /30) }  ${s/30}  ${0.5 *  (h-2 * R - s /30) }  ${s/30}  ${h-2 * R - s /30} A${s / 60} ${s / 60} 0 0 0 ${0} ${h-2 * R - s /30} A${s / 30} ${s / 30} 0 0 0 ${2 * s / 30} ${h-2 * R - s /30} C ${2 * s / 30} ${ 0.5 *  (h-2 * R - s /30) } ${0} ${ 0.5 *  (h-2 * R - s /30) }   ${0} ${0}`);
+      tpl6 = tpl5.cloneNode(true);
+      tpl6.setAttribute("transform", `scale(-1, 1)`);
+      container.appendChild(tpl5);
+      container.appendChild(tpl6);
+
+      for (let i = 1; i <= 3; i++) {
+        const tplClone = tpl.cloneNode(true); // Clone the element
+        const rotation = 120 * i; // Calculate the rotation degree
+        tplClone.setAttribute("transform", `rotate(${rotation})`); // Set the rotation
+        container.appendChild(tplClone); // Append the cloned and transformed element to the container
+        const tpl2Clone = tpl.cloneNode(true); // Clone the element
+        tpl2Clone.setAttribute("transform", `scale(-1 1) rotate(${rotation})`); // Set the rotation
+        container.appendChild(tpl2Clone); // Append the cloned and transformed element to the container
+        const tpl3Clone = tpl3.cloneNode(true); // Clone the element
+        tpl3Clone.setAttribute("transform", `rotate(${rotation})`); // Set the rotation
+        container.appendChild(tpl3Clone); // Append the cloned and transformed element to the container
+        const tpl4Clone = tpl3.cloneNode(true); // Clone the element
+        tpl4Clone.setAttribute("transform", `scale(-1 1) rotate(${rotation})`); // Set the rotation
+        container.appendChild(tpl4Clone); // Append the cloned and transformed element to the container
+        const tpl5Clone = tpl5.cloneNode(true); // Clone the element
+        tpl5Clone.setAttribute("transform", `scale(1 1) rotate(${rotation})`); // Set the rotation
+        container.appendChild(tpl5Clone); // Append the cloned and transformed element to the container
+        const tpl6Clone = tpl5.cloneNode(true); // Clone the element
+        tpl6Clone.setAttribute("transform", `scale(-1 1) rotate(${rotation})`); // Set the rotation
+        container.appendChild(tpl6Clone); // Append the cloned and transformed element to the container
+      }
+
+
+  }
+
+
+
+  class HexagonTumpal {
+        constructor(cx, cy, l, motive , rot_deg = 0, id = 123) {
+          this.cx = cx;
+          this.cy = cy;
+          this.l = l;
+          this.motive = motive;
+          this.rot_deg = rot_deg * 2 * Math.PI / 360;
+          this.rot_degree = rot_deg;
+          this.id = id;
+          this.r = getRadius(this.l , 6);
+          this.vertices = [
+                             [this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/3 + 0 *  Math.PI/3), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/3 +  0   * Math.PI/3)]
+                            ,[this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/3 + 1 *  Math.PI/3), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/3 +  1   * Math.PI/3)]
+                            ,[this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/3 + 2 *  Math.PI/3), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/3 +  2   * Math.PI/3)]
+                            ,[this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/3 + 3 *  Math.PI/3), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/3 +  3   * Math.PI/3)]
+                            ,[this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/3 + 4 *  Math.PI/3), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/3 +  4   * Math.PI/3)]
+                            ,[this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/3 + 5 *  Math.PI/3), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/3 +  5   * Math.PI/3)]
+                          ];
+          this.edges = [ 
+
+                           [[this.vertices[0][0], this.vertices[0][1]] , [this.vertices[1][0], this.vertices[1][1]]] // bottom
+                          ,[[this.vertices[1][0], this.vertices[1][1]] , [this.vertices[2][0], this.vertices[2][1]]] // bottom left
+                          ,[[this.vertices[2][0], this.vertices[2][1]] , [this.vertices[3][0], this.vertices[3][1]]] // upper left
+                          ,[[this.vertices[3][0], this.vertices[3][1]] , [this.vertices[4][0], this.vertices[4][1]]] // up
+                          ,[[this.vertices[4][0], this.vertices[4][1]] , [this.vertices[5][0], this.vertices[5][1]]] // upper right
+                          ,[[this.vertices[5][0], this.vertices[5][1]] , [this.vertices[0][0], this.vertices[0][1]]] // upper left
+          ]
+
+          this.bottomNeighbor= null; 
+          this.upperNeighbor= null; 
+          this.upperLeftNeighbor = null;
+          this.bottomLeftNeighbor = null;
+          this.upperRightNeighbor = null;
+          this.bottomRightNeighbor = null;
+
+
+        }
+
+      draw() {
+          drawHexagon(this.cx, this.cy, this.id, this.l, 60, 0 + this.rot_degree, "#b49084", "#38445a", "gold", false, "gold");
+          let outline1 = document.createElementNS(svgURI, "path");
+          let outline_sentence1 = `
+                        M ${this.vertices[0][0] } ${this.vertices[0][1]}
+                        L ${this.vertices[1][0] } ${this.vertices[1][1]}
+                        L ${this.vertices[2][0] } ${this.vertices[2][1]}
+                        L ${this.vertices[3][0] } ${this.vertices[3][1]}
+                        L ${this.vertices[4][0] } ${this.vertices[4][1]}
+                        L ${this.vertices[5][0] } ${this.vertices[5][1]}
+
+                        Z`;
+          outline1.setAttribute("d", outline_sentence1);
+          outline1.setAttribute("fill", "transparent");
+          outline1.setAttribute("stroke", "gold");
+          outline1.setAttribute("stroke-width", 0.5);
+          outline1.setAttribute("id", this.id);
+          svg.appendChild(outline1);
+
+
+      }
+      update(){
+        
+          for (const obj of objList) {
+
+            if (getOverlappingEdge(this, obj) !== null && this.id != obj.id){
+              // console.log(getOverlappingEdge(this, obj));
+         
+              if (this.edges[0] === getOverlappingEdge(this, obj)){
+                this.bottomNeighbor = obj;
+                this.bottomNeighborDist = Math.sqrt((this.cx - this.bottomNeighbor.cx) ** 2 + (this.cy - this.bottomNeighbor.cy) ** 2) ;
+              }  
+   
+              if (this.edges[1] === getOverlappingEdge(this, obj)){
+                this.bottomLeftNeighbor = obj;
+                this.bottomLeftNeighborDist = Math.sqrt((this.cx - this.bottomLeftNeighbor.cx) ** 2 + (this.cy - this.bottomLeftNeighbor.cy) ** 2) ;
+              }  
+
+              if (this.edges[2] === getOverlappingEdge(this, obj)){
+                this.upperLeftNeighbor = obj;
+                this.upperLeftNeighborDist = Math.sqrt((this.cx - this.upperLeftNeighbor.cx) ** 2 + (this.cy - this.upperLeftNeighbor.cy) ** 2) ;
+              }
+              else if (this.edges[3] === getOverlappingEdge(this, obj)){
+                this.upperNeighbor = obj;
+
+                if (this.upperNeighbor.motive === 'triangle'){
+                  // this.upperNeighborDist = Math.sqrt((this.cx - this.upperNeighbor.cx) ** 2 + (this.cy - this.upperNeighbor.cy) ** 2) ;
+                  this.upperNeighborDist = 4 /3 *  Math.sin(60 * 2 * Math.PI/ 360) * this.l;
+                }
+                else {
+                  this.upperNeighborDist = Math.sqrt((this.cx - this.upperNeighbor.cx) ** 2 + (this.cy - this.upperNeighbor.cy) ** 2) ;
+                }
+
+              }
+
+              else if (this.edges[4] === getOverlappingEdge(this, obj)){
+                this.upperRightNeighbor = obj;
+                this.upperRightNeighborDist = Math.sqrt((this.cx - this.upperRightNeighbor.cx) ** 2 + (this.cy - this.upperRightNeighbor.cy) ** 2) ;
+              }
+              else if (this.edges[5] === getOverlappingEdge(this, obj)){
+                this.bottomRightNeighbor = obj;
+                this.bottomRightNeighborDist = Math.sqrt((this.cx - this.bottomRightNeighbor.cx) ** 2 + (this.cy - this.bottomRightNeighbor.cy) ** 2) ;
+              }
+
+
+            }
+
+
+
+
+
+
+            if (hasSameEdge(this, obj) && this.id != obj.id) {
+              this.is_collision = true;
+            }
+
+            
+          }
+
+
+
+      }
+
+    }
+
+
+  class HintGuideline {
+        constructor(cx, cy, l, motive , rot_deg = 0, id = 123) {
+          this.cx = cx;
+          this.cy = cy;
+          this.l = l;
+          this.motive = motive;
+          this.rot_deg = rot_deg * 2 * Math.PI / 360;
+          this.rot_degree = rot_deg;
+          this.id = id;
+          this.r = getRadius(this.l , 6);
+          this.vertices = [
+                             [this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/3 + 0 *  Math.PI/3), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/3 +  0   * Math.PI/3)]
+                            ,[this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/3 + 1 *  Math.PI/3), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/3 +  1   * Math.PI/3)]
+                            ,[this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/3 + 2 *  Math.PI/3), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/3 +  2   * Math.PI/3)]
+                            ,[this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/3 + 3 *  Math.PI/3), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/3 +  3   * Math.PI/3)]
+                            ,[this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/3 + 4 *  Math.PI/3), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/3 +  4   * Math.PI/3)]
+                            ,[this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/3 + 5 *  Math.PI/3), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/3 +  5   * Math.PI/3)]
+                          ];
+          this.edges = [ 
+
+                           [[this.vertices[0][0], this.vertices[0][1]] , [this.vertices[1][0], this.vertices[1][1]]] // bottom
+                          ,[[this.vertices[1][0], this.vertices[1][1]] , [this.vertices[2][0], this.vertices[2][1]]] // bottom left
+                          ,[[this.vertices[2][0], this.vertices[2][1]] , [this.vertices[3][0], this.vertices[3][1]]] // upper left
+                          ,[[this.vertices[3][0], this.vertices[3][1]] , [this.vertices[4][0], this.vertices[4][1]]] // up
+                          ,[[this.vertices[4][0], this.vertices[4][1]] , [this.vertices[5][0], this.vertices[5][1]]] // upper right
+                          ,[[this.vertices[5][0], this.vertices[5][1]] , [this.vertices[0][0], this.vertices[0][1]]] // upper left
+          ]
+
+        }
+
+      draw() {
+          drawHint(this.cx, this.cy, this.id, this.l, 60, 0 + this.rot_degree, "#b49084", "none", "gold", false, "gold");
+      }
+      update(){
+      }
+
+    }
+
+
+
+      class SquareTumpal {
+        constructor(cx, cy, l, motive , rot_deg = 0, id = 123) {
+          this.cx = cx;
+          this.cy = cy;
+          this.l = l;
+          this.motive = motive;
+          this.rot_deg = rot_deg * 2 * Math.PI / 360;
+          this.rot_degree = rot_deg;
+          this.id = id;
+          this.is_collision = false;
+          this.r = getRadius(this.l , 4);
+          this.vertices = [
+                             [this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/4 + 0 *  Math.PI/2), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/4 +  0   * Math.PI/2)]
+                            ,[this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/4 + 1 *  Math.PI/2), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/4 +  1   * Math.PI/2)]
+                            ,[this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/4 + 2 *  Math.PI/2), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/4 +  2   * Math.PI/2)]
+                            ,[this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/4 + 3 *  Math.PI/2), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/4 +  3   * Math.PI/2)]
+
+                          ];
+          this.edges = [ 
+
+                           [[this.vertices[0][0], this.vertices[0][1]] , [this.vertices[1][0], this.vertices[1][1]]] // bottom
+                          ,[[this.vertices[1][0], this.vertices[1][1]] , [this.vertices[2][0], this.vertices[2][1]]] // left
+                          ,[[this.vertices[2][0], this.vertices[2][1]] , [this.vertices[3][0], this.vertices[3][1]]] // up
+                          ,[[this.vertices[3][0], this.vertices[3][1]] , [this.vertices[0][0], this.vertices[0][1]]] // right
+          ]
+          this.bottomNeighbor = null;
+          this.LeftNeighbor = null;
+          this.RightNeighbor = null;
+
+        }
+
+
+
+        draw() {
+          drawSquare(this.cx, this.cy, this.id, this.l, 45, 0 + this.rot_degree, "#b49084", "#38445a", "gold", false, "gold");
+          let outline1 = document.createElementNS(svgURI, "path");
+          let outline_sentence1 = `
+                        M ${this.vertices[0][0] } ${this.vertices[0][1]}
+                        L ${this.vertices[1][0] } ${this.vertices[1][1]}
+                        L ${this.vertices[2][0] } ${this.vertices[2][1]}
+                        L ${this.vertices[3][0] } ${this.vertices[3][1]}
+                        Z`;
+          outline1.setAttribute("d", outline_sentence1);
+          outline1.setAttribute("fill", "transparent");
+          outline1.setAttribute("stroke", "gold");
+          outline1.setAttribute("id", this.id);
+          outline1.setAttribute("stroke-width", 0.5);
+          svg.appendChild(outline1);
+        }
+        update(){
+            this.vertices = [
+                             [this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/4 + 0 *  Math.PI/2), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/4 +  0   * Math.PI/2)]
+                            ,[this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/4 + 1 *  Math.PI/2), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/4 +  1   * Math.PI/2)]
+                            ,[this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/4 + 2 *  Math.PI/2), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/4 +  2   * Math.PI/2)]
+                            ,[this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/4 + 3 *  Math.PI/2), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/4 +  3   * Math.PI/2)]
+
+            ];
+            this.edges = [ 
+
+                           [[this.vertices[0][0], this.vertices[0][1]] , [this.vertices[1][0], this.vertices[1][1]]] // bottom
+                          ,[[this.vertices[1][0], this.vertices[1][1]] , [this.vertices[2][0], this.vertices[2][1]]] // left
+                          ,[[this.vertices[2][0], this.vertices[2][1]] , [this.vertices[3][0], this.vertices[3][1]]] // up
+                          ,[[this.vertices[3][0], this.vertices[3][1]] , [this.vertices[0][0], this.vertices[0][1]]] // right
+           ]
+
+
+
+          if (this.is_collision === false){
+            this.cy += 1;
+          }
+
+
+
+
+          for (const obj of objList) {
+              if (getOverlappingEdge(this, obj) !== null && this.id != obj.id){
+              // console.log(getOverlappingEdge(this, obj));
+              
+
+              if (this.edges[0] === getOverlappingEdge(this, obj) && this.bottomNeighbor === null  ){
+                this.bottomNeighbor = obj;
+                if (obj.motive === 'hexagon'){
+                    this.cy = obj.cy - 3 /3 *  Math.sin(60 * 2 * Math.PI/ 360) * this.l - 0.5 * this.l;
+                  }
+                }
+
+
+              if (this.edges[1] === getOverlappingEdge(this, obj) && this.LeftNeighbor === null  ){
+                console.log("Zukkkyyyy");
+                this.LeftNeighbor = obj;
+                }
+
+              if (this.edges[3] === getOverlappingEdge(this, obj) && this.RightNeighbor === null  ){
+                console.log("Zukkkyyyy");
+                this.RightNeighbor = obj;
+                }
+              
+
+
+
+
+
+
+
+            }
+
+
+
+
+
+
+            if (hasSameEdge(this, obj) && this.id != obj.id) {
+              this.is_collision = true;
+              break;
+            }
+
+                        for (let edge1 of this.edges){
+              for (let edge2 of obj.edges){
+                  if (edgesIntersect(edge1, edge2) === true && this.id != obj.id ) {
+  
+                        if(this.bottomNeighbor == obj.bottomNeighbor ){
+                          break;
+                        }
+                        this.is_collision = true;
+                        console.log("Chiho Zukky!");
+                        console.log(obj);
+                        life = false;
+
+                      
+                  }
+              }
+            }
+
+
+
+
+
+          }
+
+
+
+        }
+    }
+
+
+
+      class TriangleTumpal {
+        constructor(cx, cy, l, motive , rot_deg = 0, id = 123) {
+          this.cx = cx;
+          this.cy = cy;
+          this.l = l;
+          this.motive = motive;
+          this.rot_deg = rot_deg * Math.PI / 180;
+          this.rot_degree = rot_deg;
+          this.id = id;
+          this.is_collision = false;
+          this.r = getRadius(this.l , 3);
+          this.vertices = [
+                             [this.cx + this.r * Math.cos(this.rot_deg - 3 * Math.PI/6 + 0 *  2 * Math.PI/3), this.cy + this.r * Math.sin(this.rot_deg - 3 * Math.PI/6 +  0   * 2 * Math.PI/3)]
+                            ,[this.cx + this.r * Math.cos(this.rot_deg - 3 * Math.PI/6 + 1 *  2 * Math.PI/3), this.cy + this.r * Math.sin(this.rot_deg - 3 * Math.PI/6 +  1   * 2 * Math.PI/3)]
+                            ,[this.cx + this.r * Math.cos(this.rot_deg - 3 * Math.PI/6 + 2 *  2 * Math.PI/3), this.cy + this.r * Math.sin(this.rot_deg - 3 * Math.PI/6 +  2   * 2 * Math.PI/3)]
+
+                          ];
+          this.edges = [ 
+
+                           [[this.vertices[0][0], this.vertices[0][1]] , [this.vertices[1][0], this.vertices[1][1]]] // bottom
+                          ,[[this.vertices[1][0], this.vertices[1][1]] , [this.vertices[2][0], this.vertices[2][1]]] // left
+                          ,[[this.vertices[2][0], this.vertices[2][1]] , [this.vertices[0][0], this.vertices[0][1]]] // up
+          ]
+          this.bottomNeighbor = null;
+          this.rightNeighbor = null;
+          this.neighbors = [];
+
+        }
+
+
+
+        draw() {
+          drawTriangle(this.cx, this.cy, this.id, this.l, 30, 0 + this.rot_degree, "#b49084", "#38445a", "gold", false, "gold");
+          let outline1 = document.createElementNS(svgURI, "path");
+          let outline_sentence1 = `
+                        M ${this.vertices[0][0] } ${this.vertices[0][1]}
+                        L ${this.vertices[1][0] } ${this.vertices[1][1]}
+                        L ${this.vertices[2][0] } ${this.vertices[2][1]}
+                        Z`;
+          outline1.setAttribute("d", outline_sentence1);
+          outline1.setAttribute("fill", "transparent");
+          outline1.setAttribute("stroke", "gold");
+          outline1.setAttribute("id", this.id);
+          outline1.setAttribute("stroke-width", 0.5);
+
+          svg.appendChild(outline1);
+        }
+        update(){
+            this.vertices = [
+                             [this.cx + this.r * Math.cos(this.rot_deg  - 3 * Math.PI/6 + 0 * 2 *  Math.PI/3), this.cy + this.r * Math.sin(this.rot_deg - 3 * Math.PI/6 +  0 * 2 * Math.PI/3)]
+                            ,[this.cx + this.r * Math.cos(this.rot_deg  - 3 * Math.PI/6 + 1 * 2 *  Math.PI/3), this.cy + this.r * Math.sin(this.rot_deg - 3 * Math.PI/6 +  1 * 2 * Math.PI/3)]
+                            ,[this.cx + this.r * Math.cos(this.rot_deg  - 3 * Math.PI/6 + 2 * 2 *  Math.PI/3), this.cy + this.r * Math.sin(this.rot_deg - 3 * Math.PI/6 +  2 * 2 * Math.PI/3)]
+
+            ];
+            this.edges = [ 
+
+                           [[this.vertices[0][0], this.vertices[0][1]] , [this.vertices[1][0], this.vertices[1][1]]] 
+                          ,[[this.vertices[1][0], this.vertices[1][1]] , [this.vertices[2][0], this.vertices[2][1]]] 
+                          ,[[this.vertices[2][0], this.vertices[2][1]] , [this.vertices[0][0], this.vertices[0][1]]] 
+           ]
+
+
+
+          if (this.is_collision === false){
+            this.cy += 1;
+          }
+
+
+
+
+          for (const obj of objList) {
+              if (getOverlappingEdge(this, obj) !== null && this.id != obj.id){
+              // console.log(getOverlappingEdge(this, obj));
+              
+
+              if (this.edges[1] === getOverlappingEdge(this, obj) && this.bottomNeighbor === null){
+                console.log("Chihoku!");
+                this.bottomNeighbor = obj;
+                if(this.bottomNeighbor.motive === 'hexagon'){
+                  this.cy = obj.cy - 4 /3 *  Math.sin(60 * 2 * Math.PI/ 360) * this.l;
+                }
+                if(this.bottomNeighbor.motive === 'square'){
+                  let sqtri_dist = 1 /3 *  Math.sin(60 * 2 * Math.PI/ 360) * this.l + 0.5 * this.l;
+                  this.cy = obj.cy -  sqtri_dist * Math.sin(-obj.rot_deg);
+                  console.log(Math.sin(-obj.rot_deg));
+                }
+
+                                  this.is_collision = true;
+                  break;
+
+              }
+
+              if (this.edges[0] === getOverlappingEdge(this, obj) && this.rightNeighbor === null){
+                console.log("Chihoku!");
+                this.rightNeighbor = obj;
+                if (this.rightNeighbor.motive === 'square'){
+                  console.log("Chihochan!");
+                  let sqtri_dist = 1 /3 *  Math.sin(60 * 2 * Math.PI/ 360) * this.l + 0.5 * this.l;
+                  this.cy = obj.cy -  sqtri_dist * Math.sin(obj.rot_deg);
+                  console.log(obj.rot_degree);
+                }
+                  this.is_collision = true;
+                  break;
+              }
+
+
+
+
+            }
+
+
+            if (hasSameEdge(this, obj) && this.id != obj.id) {
+              this.is_collision = true;
+              break;
+            }
+
+
+            for (let edge1 of this.edges){
+              for (let edge2 of obj.edges){
+                  if (edgesIntersect(edge1, edge2) === true && this.id != obj.id && this.bottomNeighbor != obj) {
+  
+                        this.is_collision = true;
+                        console.log("Chiho Zukky!");
+                        console.log(obj);
+                        life = false;
+
+                      
+                  }
+              }
+            }
+
+
+
+
+          }
+
+
+        }
+    }
+
+
+
+
+
+
+    let rotationAngle = 0; // Initialize rotation angle
+
+    function rotateClockwise() {
+      rotationAngle = (rotationAngle + 30) % 360; // Increase rotation by 30 degrees
+      core.rot_degree = rotationAngle; // Set to the new angle
+      core.rot_deg = rotationAngle * 2 * Math.PI / 360; // Update radians
+      core.vertices = [
+                             [core.cx + core.r * Math.cos(core.rot_deg  + Math.PI/3 + 0 *  Math.PI/3), core.cy + core.r * Math.sin(core.rot_deg + Math.PI/3 +  0   * Math.PI/3)]
+                            ,[core.cx + core.r * Math.cos(core.rot_deg  + Math.PI/3 + 1 *  Math.PI/3), core.cy + core.r * Math.sin(core.rot_deg + Math.PI/3 +  1   * Math.PI/3)]
+                            ,[core.cx + core.r * Math.cos(core.rot_deg  + Math.PI/3 + 2 *  Math.PI/3), core.cy + core.r * Math.sin(core.rot_deg + Math.PI/3 +  2   * Math.PI/3)]
+                            ,[core.cx + core.r * Math.cos(core.rot_deg  + Math.PI/3 + 3 *  Math.PI/3), core.cy + core.r * Math.sin(core.rot_deg + Math.PI/3 +  3   * Math.PI/3)]
+                            ,[core.cx + core.r * Math.cos(core.rot_deg  + Math.PI/3 + 4 *  Math.PI/3), core.cy + core.r * Math.sin(core.rot_deg + Math.PI/3 +  4   * Math.PI/3)]
+                            ,[core.cx + core.r * Math.cos(core.rot_deg  + Math.PI/3 + 5 *  Math.PI/3), core.cy + core.r * Math.sin(core.rot_deg + Math.PI/3 +  5   * Math.PI/3)]
+                      ];
+      core.edges = [
+                           [[core.vertices[0][0], core.vertices[0][1]] , [core.vertices[1][0], core.vertices[1][1]]] // bottom
+                          ,[[core.vertices[1][0], core.vertices[1][1]] , [core.vertices[2][0], core.vertices[2][1]]] // bottom left
+                          ,[[core.vertices[2][0], core.vertices[2][1]] , [core.vertices[3][0], core.vertices[3][1]]] // upper left
+                          ,[[core.vertices[3][0], core.vertices[3][1]] , [core.vertices[4][0], core.vertices[4][1]]] // up
+                          ,[[core.vertices[4][0], core.vertices[4][1]] , [core.vertices[5][0], core.vertices[5][1]]] // upper right
+                          ,[[core.vertices[5][0], core.vertices[5][1]] , [core.vertices[0][0], core.vertices[0][1]]] // upper left
+      ];
+
+
+
+      if (core.upperNeighbor != null) {
+        core.upperNeighbor.cx = core.cx + core.upperNeighborDist * Math.sin(core.rot_deg );
+        core.upperNeighbor.cy = core.cy - core.upperNeighborDist * Math.cos(core.rot_deg );
+        core.upperNeighbor.rot_degree = core.rot_degree;
+        core.upperNeighbor.rot_deg = core.rot_deg; 
+        core.upperNeighbor.update();
+      }
+
+      if (core.upperLeftNeighbor != null) {
+        core.upperLeftNeighbor.cx = core.cx + core.upperLeftNeighborDist * Math.sin(core.rot_deg - Math.PI/3 );
+        core.upperLeftNeighbor.cy = core.cy - core.upperLeftNeighborDist * Math.cos(core.rot_deg - Math.PI/3 );
+        core.upperLeftNeighbor.rot_degree = core.rot_degree - 60;
+        core.upperLeftNeighbor.rot_deg = core.rot_deg - Math.PI/3; 
+        core.upperLeftNeighbor.update();
+      }
+      if (core.bottomLeftNeighbor != null) {
+        core.bottomLeftNeighbor.cx = core.cx + core.bottomLeftNeighborDist * Math.sin(core.rot_deg - 2 * Math.PI/3 );
+        core.bottomLeftNeighbor.cy = core.cy - core.bottomLeftNeighborDist * Math.cos(core.rot_deg - 2 * Math.PI/3 );
+        core.bottomLeftNeighbor.rot_degree = core.rot_degree - 2 * 60;
+        core.bottomLeftNeighbor.rot_deg = core.rot_deg - 2 * Math.PI/3; 
+        core.bottomLeftNeighbor.update();
+      }
+
+      if (core.bottomNeighbor != null) {
+        core.bottomNeighbor.cx = core.cx + core.bottomNeighborDist * Math.sin(core.rot_deg - 3 * Math.PI/3 );
+        core.bottomNeighbor.cy = core.cy - core.bottomNeighborDist * Math.cos(core.rot_deg - 3 * Math.PI/3 );
+        core.bottomNeighbor.rot_degree = core.rot_degree - 3 * 60;
+        core.bottomNeighbor.rot_deg = core.rot_deg - 3 * Math.PI/3; 
+        core.bottomNeighbor.update();
+      }
+
+      if (core.upperRightNeighbor != null) {
+        core.upperRightNeighbor.cx = core.cx + core.upperRightNeighborDist * Math.sin(core.rot_deg + Math.PI/3 );
+        core.upperRightNeighbor.cy = core.cy - core.upperRightNeighborDist * Math.cos(core.rot_deg + Math.PI/3 );
+        core.upperRightNeighbor.rot_degree = core.rot_degree + 60;
+        core.upperRightNeighbor.rot_deg = core.rot_deg + Math.PI/3; 
+        core.upperRightNeighbor.update();
+      }
+
+      if (core.bottomRightNeighbor != null) {
+        core.bottomRightNeighbor.cx = core.cx + core.bottomRightNeighborDist * Math.sin(core.rot_deg + 2 * Math.PI/3 );
+        core.bottomRightNeighbor.cy = core.cy - core.bottomRightNeighborDist * Math.cos(core.rot_deg + 2 * Math.PI/3 );
+        core.bottomRightNeighbor.rot_degree = core.rot_degree + 2 * 60;
+        core.bottomRightNeighbor.rot_deg = core.rot_deg + 2 * Math.PI/3; 
+        core.bottomRightNeighbor.update();
+      }
+
+
+      for (let obj of objList){
+        if (obj.motive === 'triangle' && ( (obj.bottomNeighbor != null && obj.bottomNeighbor.id != 'core')  || (obj.rightNeighbor != null && obj.rightNeighbor.id != 'core')  )){
+          let dist = Math.sqrt((core.cx - obj.cx)**2 + (core.cy - obj.cy) **2);
+          let deg = Math.atan2((core.cy - obj.cy), (core.cx - obj.cx));
+
+          obj.cx = core.cx - dist * Math.cos(deg + Math.PI/6 );
+          obj.cy = core.cy - dist * Math.sin(deg + Math.PI/6 );
+          obj.rot_degree = obj.rot_degree + 30;
+          obj.rot_deg = obj.rot_deg + Math.PI/6; 
+          obj.update();
+
+          console.log(deg * 180 / Math.PI);
+        }
+      }
+
+        
+      console.log("chiho!");
+    }
+    
+    function rotateCounterClockwise() {
+      rotationAngle = (rotationAngle - 30 + 360) % 360; // Decrease rotation by 30 degrees, ensuring no negative angles
+      core.rot_degree = rotationAngle; // Set to the new angle
+      core.rot_deg = rotationAngle * 2 * Math.PI / 360; // Update radians
+      core.vertices = [
+                             [core.cx + core.r * Math.cos(core.rot_deg  + Math.PI/3 + 0 *  Math.PI/3), core.cy + core.r * Math.sin(core.rot_deg + Math.PI/3 +  0   * Math.PI/3)]
+                            ,[core.cx + core.r * Math.cos(core.rot_deg  + Math.PI/3 + 1 *  Math.PI/3), core.cy + core.r * Math.sin(core.rot_deg + Math.PI/3 +  1   * Math.PI/3)]
+                            ,[core.cx + core.r * Math.cos(core.rot_deg  + Math.PI/3 + 2 *  Math.PI/3), core.cy + core.r * Math.sin(core.rot_deg + Math.PI/3 +  2   * Math.PI/3)]
+                            ,[core.cx + core.r * Math.cos(core.rot_deg  + Math.PI/3 + 3 *  Math.PI/3), core.cy + core.r * Math.sin(core.rot_deg + Math.PI/3 +  3   * Math.PI/3)]
+                            ,[core.cx + core.r * Math.cos(core.rot_deg  + Math.PI/3 + 4 *  Math.PI/3), core.cy + core.r * Math.sin(core.rot_deg + Math.PI/3 +  4   * Math.PI/3)]
+                            ,[core.cx + core.r * Math.cos(core.rot_deg  + Math.PI/3 + 5 *  Math.PI/3), core.cy + core.r * Math.sin(core.rot_deg + Math.PI/3 +  5   * Math.PI/3)]
+                      ];
+      core.edges = [
+                           [[core.vertices[0][0], core.vertices[0][1]] , [core.vertices[1][0], core.vertices[1][1]]] // bottom
+                          ,[[core.vertices[1][0], core.vertices[1][1]] , [core.vertices[2][0], core.vertices[2][1]]] // bottom left
+                          ,[[core.vertices[2][0], core.vertices[2][1]] , [core.vertices[3][0], core.vertices[3][1]]] // upper left
+                          ,[[core.vertices[3][0], core.vertices[3][1]] , [core.vertices[4][0], core.vertices[4][1]]] // up
+                          ,[[core.vertices[4][0], core.vertices[4][1]] , [core.vertices[5][0], core.vertices[5][1]]] // upper right
+                          ,[[core.vertices[5][0], core.vertices[5][1]] , [core.vertices[0][0], core.vertices[0][1]]] // upper left
+      ];
+
+
+      if (core.upperNeighbor != null) {
+        core.upperNeighbor.cx = core.cx + core.upperNeighborDist * Math.sin(core.rot_deg );
+        core.upperNeighbor.cy = core.cy - core.upperNeighborDist * Math.cos(core.rot_deg );
+        core.upperNeighbor.rot_degree = core.rot_degree;
+        core.upperNeighbor.rot_deg = core.rot_deg; 
+        core.upperNeighbor.update();
+      }
+
+
+      if (core.upperLeftNeighbor != null) {
+        core.upperLeftNeighbor.cx = core.cx + core.upperLeftNeighborDist * Math.sin(core.rot_deg - Math.PI/3 );
+        core.upperLeftNeighbor.cy = core.cy - core.upperLeftNeighborDist * Math.cos(core.rot_deg - Math.PI/3 );
+        core.upperLeftNeighbor.rot_degree = core.rot_degree - 60;
+        core.upperLeftNeighbor.rot_deg = core.rot_deg - Math.PI/3; 
+        core.upperLeftNeighbor.update();
+      }
+
+      if (core.bottomLeftNeighbor != null) {
+        core.bottomLeftNeighbor.cx = core.cx + core.bottomLeftNeighborDist * Math.sin(core.rot_deg - 2 * Math.PI/3 );
+        core.bottomLeftNeighbor.cy = core.cy - core.bottomLeftNeighborDist * Math.cos(core.rot_deg - 2 * Math.PI/3 );
+        core.bottomLeftNeighbor.rot_degree = core.rot_degree - 2 * 60;
+        core.bottomLeftNeighbor.rot_deg = core.rot_deg - 2 * Math.PI/3; 
+        core.bottomLeftNeighbor.update();
+      }
+
+      if (core.bottomNeighbor != null) {
+        core.bottomNeighbor.cx = core.cx + core.bottomNeighborDist * Math.sin(core.rot_deg - 3 * Math.PI/3 );
+        core.bottomNeighbor.cy = core.cy - core.bottomNeighborDist * Math.cos(core.rot_deg - 3 * Math.PI/3 );
+        core.bottomNeighbor.rot_degree = core.rot_degree - 3 * 60;
+        core.bottomNeighbor.rot_deg = core.rot_deg - 3 * Math.PI/3; 
+        core.bottomNeighbor.update();
+      }
+
+      if (core.upperRightNeighbor != null) {
+        core.upperRightNeighbor.cx = core.cx + core.upperRightNeighborDist * Math.sin(core.rot_deg + Math.PI/3 );
+        core.upperRightNeighbor.cy = core.cy - core.upperRightNeighborDist * Math.cos(core.rot_deg + Math.PI/3 );
+        core.upperRightNeighbor.rot_degree = core.rot_degree + 60;
+        core.upperRightNeighbor.rot_deg = core.rot_deg + Math.PI/3; 
+        core.upperRightNeighbor.update();
+      }
+
+      if (core.bottomRightNeighbor != null) {
+        core.bottomRightNeighbor.cx = core.cx + core.bottomRightNeighborDist * Math.sin(core.rot_deg + 2 * Math.PI/3 );
+        core.bottomRightNeighbor.cy = core.cy - core.bottomRightNeighborDist * Math.cos(core.rot_deg + 2 * Math.PI/3 );
+        core.bottomRightNeighbor.rot_degree = core.rot_degree + 2 * 60;
+        core.bottomRightNeighbor.rot_deg = core.rot_deg + 2 * Math.PI/3; 
+        core.bottomRightNeighbor.update();
+      }
+
+
+        for (let obj of objList){
+        if (obj.motive === 'triangle' && ( (obj.bottomNeighbor != null && obj.bottomNeighbor.id != 'core')  || (obj.rightNeighbor != null && obj.rightNeighbor.id != 'core')  )){
+          let dist = Math.sqrt((core.cx - obj.cx)**2 + (core.cy - obj.cy) **2);
+          let deg = Math.atan2((core.cy - obj.cy), (core.cx - obj.cx));
+
+          obj.cx = core.cx - dist * Math.cos(deg -  Math.PI/6 );
+          obj.cy = core.cy - dist * Math.sin(deg -  Math.PI/6 );
+          obj.rot_degree = obj.rot_degree - 30;
+          obj.rot_deg = obj.rot_deg - Math.PI/6; 
+          obj.update();
+
+          console.log(deg * 180 / Math.PI);
+        }
+      }
+
+
+    }
+
+    // Add event listeners for key presses
+    document.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowRight') {
+      rotateClockwise();
+    } else if (event.key === 'ArrowLeft') {
+      rotateCounterClockwise();
+    }
+    });
+
+
+
+
+
+
+
+
+
+
+    // Initialize the Game
+    let objList = [];
+
+    // let core = new TriangleTumpal(200, 250, 65, 'triangle', 0, 'tr');
+    // objList.push(core);
+
+
+
+    // let hint = new HintGuideline(200, 450 - Math.tan(60/360 * 2 * Math.PI) * (65), 65 * 3, 'hint', 0 + rotationAngle, 'hint');
+    // objList.push(hint);
+
+
+    // let sq = new SquareTumpal(200, 100, 65, 'square', 0, 'sq');
+    // objList.push(sq);
+
+    // let sq2 = new SquareTumpal(200, -200, 65, 'square', 0, 'sq2');
+    // objList.push(sq2);
+
+
+    // let sq3 = new SquareTumpal(200, -600, 65, 'square', 0, 'sq3');
+    // objList.push(sq3);
+
+    // let sq4 = new SquareTumpal(200, -900, 65, 'square', 0, 'sq4');
+    // objList.push(sq4);
+
+    // let sq5 = new SquareTumpal(200, -1200, 65, 'square', 0, 'sq5');
+    // objList.push(sq5);
+
+    // let sq6 = new SquareTumpal(200, -1500, 65, 'square', 0, 'sq6');
+    // objList.push(sq6);
+
+    // let tri = new TriangleTumpal(200, -1700, 65, 'triangle', 60, 'tr');
+    // objList.push(tri);
+
+    // let tri2 = new TriangleTumpal(200, -1900, 65, 'triangle', 60, 'tr2');
+    // objList.push(tri2);
+
+    // let tri3 = new TriangleTumpal(200, -2100, 65, 'triangle', 60, 'tr3');
+    // objList.push(tri3);
+
+    // let tri4 = new TriangleTumpal(200, -2200, 65, 'triangle', 60, 'tr4');
+    // objList.push(tri4);
+
+    // let tri5 = new TriangleTumpal(200, -2400, 65, 'triangle', 60, 'tr5');
+    // objList.push(tri5);
+
+    // let tri6 = new TriangleTumpal(200, -2600, 65, 'triangle', 60, 'tr6');
+    // objList.push(tri6);
+
+    let core = new HexagonTumpal(200, 450, 65, 'hexagon', 0 + rotationAngle, 'core');
+    objList.push(core);
+
+
+    let tri = new TriangleTumpal(200, 100, 65, 'triangle', 0, 'tr');
+    objList.push(tri);
+
+    let tri2 = new TriangleTumpal(200, -100, 65, 'triangle', 0, 'tr2');
+    objList.push(tri2);
+
+    let tri3 = new TriangleTumpal(200, -300, 65, 'triangle', 0, 'tr3');
+    objList.push(tri3);
+
+
+
+
+    // Game loop
+    function gameLoop() {
+      // removeSvgChildById(svg, 'core');
+      // removeSvgChildById(svg, 'sq');
+      // `container-${Date.now()}-${Math.floor(Math.random() * 1000000)}`
+      for (obj of objList){
+        removeSvgChildById(svg, obj.id);
+        obj.update();
+        obj.draw();
+      }
+
+                removeSvgChildById(svg, 'hint');
+        drawHint(200, 450 - Math.tan(60/360 * 2 * Math.PI) * 65, 'hint', 65 * 3, 60, 0, "none", "none", "white");
+
+
+
+      if (life === true){
+        requestAnimationFrame(gameLoop);
+      }
+
+
+if (
+  (core.upperNeighbor?.motive === 'triangle' && 
+   core.bottomLeftNeighbor?.motive === 'triangle' && 
+   core.bottomRightNeighbor?.motive === 'triangle') || 
+  (core.upperLeftNeighbor?.motive === 'triangle' && 
+   core.bottomNeighbor?.motive === 'triangle' && 
+   core.upperRightNeighbor?.motive === 'triangle')
+){
+
+        let text2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        text2.setAttribute("x", "50%");
+        text2.setAttribute("y", "50%");
+        text2.setAttribute("text-anchor", "middle");
+        text2.setAttribute("dominant-baseline", "middle");
+        text2.setAttribute("fill", "white");
+        text2.setAttribute("font-size", "40");
+        text2.setAttribute("font-family", "Arial, sans-serif");
+        text2.textContent = "Game Clear!";
+        // Append the text to the SVG
+        svg.appendChild(text2);
+      }
+
+      
+
+
+
+      if (life === false){
+        let text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        text.setAttribute("x", "50%");
+        text.setAttribute("y", "50%");
+        text.setAttribute("text-anchor", "middle");
+        text.setAttribute("dominant-baseline", "middle");
+        text.setAttribute("fill", "white");
+        text.setAttribute("font-size", "40");
+        text.setAttribute("font-family", "Arial, sans-serif");
+        text.textContent = "Game Over";
+        // Append the text to the SVG
+        svg.appendChild(text);
+      }
+    }
+
+    // Start the game
+    gameLoop();
+  </script>
+</body>
+</html>
