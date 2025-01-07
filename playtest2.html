@@ -170,10 +170,23 @@ function drawHint(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, mainColo
       container.setAttribute("stroke-width", 0.5);
       container.setAttribute("id", id);
       svg.appendChild(container);
-      const h = Math.tan(trig_degree/360 * 2 * Math.PI) * (0.5 * s);
+      let r = getRadius(s, 12);
+      sentence = ''
+
+
+      for(let i = 0; i<12; i++){
+        if (i === 0){
+          sentence += `M${Math.cos(i * 2 * Math.PI/12) * r} ${Math.sin(i * 2 * Math.PI/12) * r}`
+        }
+        else{
+          sentence += `L${Math.cos(i * 2 * Math.PI/12) * r} ${Math.sin(i * 2 * Math.PI/12) * r}`
+        }
+
+      }
+
+      sentence += 'Z';
       let outline = document.createElementNS(svgURI, "path");
-      outline_sentence = `M0 0  ${0.5 * s} ${h}  ${-0.5 * s} ${h} Z`;
-      outline.setAttribute("d", outline_sentence);
+      outline.setAttribute("d", sentence);
       outline.setAttribute("fill", secondaryColor);
       outline.setAttribute("stroke", strokeColor);
       container.appendChild(outline);
@@ -1122,9 +1135,8 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
         obj.draw();
       }
 
-                // removeSvgChildById(svg, 'hint');
-        // drawHint(200, 450 - Math.tan(60/360 * 2 * Math.PI) * 65, 'hint', 65 * 3, 60, 0, "none", "none", "white");
-
+        removeSvgChildById(svg, 'hint');
+        drawHint(200, 450, 'hint', 65, 60, 15, "none", "none", "white");
 
 
       if (life === true){
