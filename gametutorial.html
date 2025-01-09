@@ -1,0 +1,1500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Play Test 1 </title>
+  <style>
+    body {
+      margin: 0;
+      background: white;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+  </style>
+</head>
+<body>
+  <!-- SVG Canvas -->
+  <svg id="game" width="400" height="600" style="background: #38445a;"></svg>
+
+
+
+  <script>
+    const svgNS = "http://www.w3.org/2000/svg";
+    const svgURI = 'http://www.w3.org/2000/svg';
+    const svg = document.getElementById("game");
+
+
+// Define constraints
+  const maxSvgWidth = 400; // Maximum width in pixels
+  const maxSvgHeight = 700; // Maximum height in pixels
+
+  // Adjust SVG dimensions based on screen size
+  function adjustSvgSize() {
+    const screenWidth = window.innerWidth;  // Current screen width
+    const screenHeight = window.innerHeight; // Current screen height
+
+    // Cap width and height
+    const newWidth = Math.min(screenWidth, maxSvgWidth);
+    const newHeight = Math.min(screenHeight, maxSvgHeight);
+
+    // Update SVG attributes
+    svg.setAttribute("width", newWidth);
+    svg.setAttribute("height", newHeight);
+  }
+
+  // Adjust SVG size initially
+  adjustSvgSize();
+
+  // Re-adjust SVG size on window resize
+  window.addEventListener("resize", adjustSvgSize);
+
+
+
+
+
+    let life = true;
+    let pause = false;
+    let initTutorial = true;
+    let isTutorialCleared = false;
+
+
+    function removeSvgChildById(svgContainer, targetId) {
+    // Get all child elements
+    const children = svgContainer.children;
+    // Loop through children in reverse and remove the ones with the matching ID
+    for (let i = children.length - 1; i >= 0; i--) {
+      if (children[i].getAttribute("id") === targetId) {
+        svgContainer.removeChild(children[i]);
+      }
+    }
+  }
+
+    function getRadius(side_length, n){
+      theta = (2* Math.PI) / n;
+      a = (Math.cos(2 * theta) - Math.cos(theta))** 2;
+      b = (Math.sin(2 * theta) - Math.sin(theta))** 2;
+      return side_length / Math.sqrt(a + b);
+    }
+
+
+
+function edgesEqual(edge1, edge2) {
+    return (
+        edge1[0][0] === edge2[0][0] &&
+        edge1[0][1] === edge2[0][1] &&
+        edge1[1][0] === edge2[1][0] &&
+        edge1[1][1] === edge2[1][1]
+    );
+}
+
+
+
+function hasSameEdge(square, hexagon) {
+  // Helper function to check if two edges are within a tolerance
+  function isSameEdge(edge1, edge2, epsilon = 0.5) {
+    // Edge1: [[x1, y1], [x2, y2]]
+    // Edge2: [[x3, y3], [x4, y4]]
+    const [[x1, y1], [x2, y2]] = edge1;
+    const [[x3, y3], [x4, y4]] = edge2;
+
+    const arePointsClose = (x1, y1, x2, y2) =>
+      Math.abs(x1 - x2) <= epsilon && Math.abs(y1 - y2) <= epsilon;
+
+    return (
+      (arePointsClose(x1, y1, x3, y3) && arePointsClose(x2, y2, x4, y4)) || // Same direction
+      (arePointsClose(x1, y1, x4, y4) && arePointsClose(x2, y2, x3, y3))    // Reversed direction
+    );
+  }
+
+  // Extract edges from both objects
+  // function getEdges(vertices) {
+  //   const edges = [];
+  //   for (let i = 0; i < vertices.length; i++) {
+  //     const start = vertices[i];
+  //     const end = vertices[(i + 1) % vertices.length];
+  //     edges.push([start, end]);
+  //   }
+  //   return edges;
+  // }
+
+  // const squareEdges = getEdges(square.vertices);
+  // const hexagonEdges = getEdges(hexagon.vertices);
+
+  squareEdges = square.edges;
+  hexagonEdges = hexagon.edges;
+
+  // Check for common edges with tolerance
+  for (const squareEdge of squareEdges) {
+    for (const hexEdge of hexagonEdges) {
+      if (isSameEdge(squareEdge, hexEdge)) {
+        return true; // A matching edge within tolerance was found
+      }
+    }
+  }
+
+  return false; // No matching edges
+}
+
+function getOverlappingEdge(square, hexagon) {
+  // Helper function to check if two edges are within a tolerance
+  function isSameEdge(edge1, edge2, epsilon = 0.5) {
+    // Edge1: [[x1, y1], [x2, y2]]
+    // Edge2: [[x3, y3], [x4, y4]]
+    const [[x1, y1], [x2, y2]] = edge1;
+    const [[x3, y3], [x4, y4]] = edge2;
+
+    const arePointsClose = (x1, y1, x2, y2) =>
+      Math.abs(x1 - x2) <= epsilon && Math.abs(y1 - y2) <= epsilon;
+
+    return (
+      (arePointsClose(x1, y1, x3, y3) && arePointsClose(x2, y2, x4, y4)) || // Same direction
+      (arePointsClose(x1, y1, x4, y4) && arePointsClose(x2, y2, x3, y3))    // Reversed direction
+    );
+  }
+
+  // Directly using edges from objects
+  const squareEdges = square.edges;
+  const hexagonEdges = hexagon.edges;
+
+  // Check for common edges with tolerance
+  for (const squareEdge of squareEdges) {
+    for (const hexEdge of hexagonEdges) {
+      if (isSameEdge(squareEdge, hexEdge)) {
+        return squareEdge; // Return the overlapping edge
+      }
+    }
+  }
+
+  return null; // No overlapping edges found
+}
+
+
+
+
+function edgesIntersect(edge1, edge2) {
+  const [p1, q1] = edge1; // First edge points
+  const [p2, q2] = edge2; // Second edge points
+
+  // Helper to find orientation of ordered triplet (p, q, r)
+  function orientation(p, q, r) {
+    const val = (q[1] - p[1]) * (r[0] - q[0]) - (q[0] - p[0]) * (r[1] - q[1]);
+    if (val === 0) return 0; // Collinear
+    return val > 0 ? 1 : 2; // Clockwise or Counterclockwise
+  }
+
+  // Helper to check if point q lies on segment pr
+  function onSegment(p, q, r) {
+    return (
+      q[0] >= Math.min(p[0], r[0]) && q[0] <= Math.max(p[0], r[0]) &&
+      q[1] >= Math.min(p[1], r[1]) && q[1] <= Math.max(p[1], r[1])
+    );
+  }
+
+  const o1 = orientation(p1, q1, p2);
+  const o2 = orientation(p1, q1, q2);
+  const o3 = orientation(p2, q2, p1);
+  const o4 = orientation(p2, q2, q1);
+
+  // General case: If orientations are different, the edges intersect
+  if (o1 !== o2 && o3 !== o4) return true;
+
+  // Special cases: Check if any point of one segment lies on the other segment
+  const isSpecialIntersect =
+    (o1 === 0 && onSegment(p1, p2, q1)) ||
+    (o2 === 0 && onSegment(p1, q2, q1)) ||
+    (o3 === 0 && onSegment(p2, p1, q2)) ||
+    (o4 === 0 && onSegment(p2, q1, q2));
+
+  if (isSpecialIntersect) {
+    // Additional check: Do the segments share exactly one endpoint?
+    const endpoints = new Set([
+      JSON.stringify(p1),
+      JSON.stringify(q1),
+      JSON.stringify(p2),
+      JSON.stringify(q2),
+    ]);
+
+    if (endpoints.size === 3) {
+      // Exactly one shared endpoint, treat as non-intersecting
+      return false;
+    }
+
+    return true; // Otherwise, treat as intersecting
+  }
+
+  // No intersection
+  return false;
+}
+
+function drawHint(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, mainColor="#b49084", secondaryColor="#586b8c", strokeColor = "gold", use_outline=false, tertiaryColor = "gold"){  
+      let container = document.createElementNS(svgURI, "g");
+      container.setAttribute("transform", `translate(${x}, ${y}) rotate(${rotDeg})`);
+      container.setAttribute("stroke-width", 0.5);
+      container.setAttribute("id", id);
+      svg.appendChild(container);
+      let r = getRadius(s, 12);
+      sentence = ''
+
+
+      for(let i = 0; i<12; i++){
+        if (i === 0){
+          sentence += `M${Math.cos(i * 2 * Math.PI/12) * r} ${Math.sin(i * 2 * Math.PI/12) * r}`
+        }
+        else{
+          sentence += `L${Math.cos(i * 2 * Math.PI/12) * r} ${Math.sin(i * 2 * Math.PI/12) * r}`
+        }
+
+      }
+
+      sentence += 'Z';
+      let outline = document.createElementNS(svgURI, "path");
+      outline.setAttribute("d", sentence);
+      outline.setAttribute("fill", secondaryColor);
+      outline.setAttribute("stroke", strokeColor);
+      container.appendChild(outline);
+}
+
+
+
+function drawTutorialHint(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, mainColor="#b49084", secondaryColor="#586b8c", strokeColor = "gold", use_outline=false, tertiaryColor = "gold"){  
+      let container = document.createElementNS(svgURI, "g");
+      container.setAttribute("transform", `translate(${x}, ${y}) rotate(${rotDeg})`);
+      container.setAttribute("stroke-width", 0.5);
+      container.setAttribute("id", id);
+      svg.appendChild(container);
+      let r = getRadius(s, 4);
+      sentence = ''
+
+
+      for(let i = 0; i<4; i++){
+        if (i === 0){
+          sentence += `M${Math.cos(i * 2 * Math.PI/4) * r} ${Math.sin(i * 2 * Math.PI/4) * r}`
+        }
+        else{
+          sentence += `L${Math.cos(i * 2 * Math.PI/4) * r} ${Math.sin(i * 2 * Math.PI/4) * r}`
+        }
+
+      }
+
+      sentence += 'Z';
+      let outline = document.createElementNS(svgURI, "path");
+      outline.setAttribute("d", sentence);
+      outline.setAttribute("fill", secondaryColor);
+      outline.setAttribute("stroke", strokeColor);
+      container.appendChild(outline);
+}
+
+
+function drawRotateButton(x, y, id = 123, r = 50, trig_degree = 30, rotDeg= 0, mainColor="#b49084", secondaryColor="#586b8c", strokeColor = "gold", use_outline=false, tertiaryColor = "gold"){  
+      removeSvgChildById(svg, id);
+      let container = document.createElementNS(svgURI, "g");
+      container.setAttribute("transform", `translate(${x}, ${y}) rotate(${rotDeg})`);
+      container.setAttribute("stroke-width", 0.5);
+      container.setAttribute("id", id);
+      svg.appendChild(container);
+      sentence = `M${0} ${Math.sin(Math.PI/2) * 0.8 * r} L${0} ${Math.sin(Math.PI/2) * 0.6 * r}
+                  A${0.6 * r} ${0.6 * r} 0 1 1 ${Math.cos(360 * 2 *Math.PI/ 360) * 0.6 * r} ${Math.sin(360 * 2 *Math.PI/ 360) * 0.6 * r}
+                  L${0.5 * r} ${0}
+                  L${0.7 *r} ${0.2 * r}
+                  L${0.9 *r} ${0}
+
+                  L${Math.cos(360 * 2 *Math.PI/ 360) * 0.8 * r} ${Math.sin(360 * 2 *Math.PI/ 360) * 0.8 * r}
+
+                  A${0.8 * r} ${0.8 * r} 0 1 0 ${0} ${Math.sin(90 * 2 *Math.PI/ 360) * 0.8 * r}
+
+
+    `
+
+
+      // for(let i = 0; i<4; i++){
+      //   if (i === 0){
+      //     sentence += `M${Math.cos(i * 2 * Math.PI/4) * r} ${Math.sin(i * 2 * Math.PI/4) * r}`
+      //   }
+      //   else{
+      //     sentence += `L${Math.cos(i * 2 * Math.PI/4) * r} ${Math.sin(i * 2 * Math.PI/4) * r}`
+      //   }
+
+      // }
+
+      // sentence += 'Z';
+      let rotateBtn = document.createElementNS(svgURI, "path");
+      rotateBtn.setAttribute("d", sentence);
+      rotateBtn.setAttribute("fill", "white");
+      rotateBtn.setAttribute("stroke", strokeColor);
+
+
+        isen_circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        isen_circle.setAttribute("cx", 0);
+        isen_circle.setAttribute("cy", 0);
+        isen_circle.setAttribute("r", r);
+        isen_circle.setAttribute("fill", mainColor);
+        // container.appendChild(isen_circle);
+
+
+
+      container.appendChild(rotateBtn);
+
+
+
+}
+
+
+
+    function drawHexagon(x, y, id = 123, s = 200, trig_degree = 60, rotDeg= 0, mainColor="#b49084", secondaryColor="#38445a", strokeColor = "gold", use_outline=false, tertiaryColor = "gold", use_middle_upper=true){  
+      let container = document.createElementNS(svgURI, "g");
+      container.setAttribute("transform", `translate(${x}, ${y}) rotate(${rotDeg})`);
+      container.setAttribute("stroke-width", 0.01);
+      container.setAttribute("id", id);
+      svg.appendChild(container);
+      const h = Math.tan(trig_degree/360 * 2 * Math.PI) * (0.5 * s);
+      let outline = document.createElementNS(svgURI, "path");
+      outline_sentence = `M0 0  ${0.5 * s} ${h}  ${-0.5 * s} ${h} Z`;
+      outline.setAttribute("d", outline_sentence);
+      outline.setAttribute("fill", "none");
+      outline.setAttribute("stroke", strokeColor);
+      if (use_outline){
+          container.appendChild(outline);
+      }
+      
+      R = s / 10;
+      Xc = 0.5 * s - R / Math.tan(0.5 * trig_degree/360 * 2 * Math.PI);
+      R_new = 2 * R;
+      tpl_pth = `M0 ${h}  C ${Xc * 0.5} ${h}  ${Xc * 0.5} ${h - 2*R} ${Xc} ${h - 2* R} A${R} ${R} 0 0 1 ${Xc} ${h} A ${0.5 * R} ${0.5* R} 0 0 1 ${Xc} ${h - R} C${Xc - R} ${h - R} ${Xc - R} ${h}  ${Xc - 2 * R} ${h} Z`;
+      tpl = document.createElementNS(svgURI, "path");
+      tpl.setAttribute("d", tpl_pth);
+      tpl.setAttribute("fill", mainColor);
+      tpl.setAttribute("stroke", strokeColor);
+      container.appendChild(tpl);
+      tpl2 = tpl.cloneNode(true);
+      tpl2.setAttribute("transform", "scale(-1 1)");
+      container.appendChild(tpl2);
+      tpl3 = tpl.cloneNode(true);
+      tpl3_pth = `M${0} ${h}  C ${0} ${h - Xc * 0.5}  ${2 * R} ${h - Xc * 0.5} ${2 * R} ${h - Xc}  A${R} ${R} 0 0 0 ${0} ${h - Xc} A${0.5 * R} ${0.5 * R} 0 0 0 ${R} ${h - Xc} C ${R}  ${h - 0.6 * Xc} ${0}  ${h - 0.6 * Xc}  ${0}  ${h -0.2 *  Xc} `;
+      tpl3.setAttribute("d", tpl3_pth);
+      tpl3.setAttribute("fill", "#e8eadd");
+      tpl4 = tpl.cloneNode(true);
+      tpl4.setAttribute("transform", `rotate(-90 0 ${h})`);
+      tpl4.setAttribute("fill", "#e8eadd");
+      container.appendChild(tpl3);
+      container.appendChild(tpl4);
+      tpl5 = tpl.cloneNode(true);
+      tpl5.setAttribute("d", `M 0 0 C 0 ${ 0.5 * (h - Xc - R - 0.4 * R_new) } ${0.4 * R_new}  ${ 0.5 * (h - Xc - R - 0.4 * R_new) } ${0.4 * R_new} ${h - Xc - R - 0.4 * R_new} A${0.2 * R_new} ${0.2 * R_new} 0 0 0 ${0} ${h - Xc - R - 0.4 * R_new} A${0.4 * R_new} ${0.4 * R_new} 0 0 0 ${0.8 * R_new} ${ h - Xc - R - 0.4 * R_new} C${0.8 * R_new} ${0.5 * (h - Xc - R - 0.4 * R_new) } ${0} ${0.5 * (h - Xc - R - 0.4 * R_new)} 0 0`);
+      tpl6 = tpl5.cloneNode(true);
+      tpl6.setAttribute("transform", `scale(-1, 1)`);
+      container.appendChild(tpl5);
+      container.appendChild(tpl6);
+
+      for (let i = 1; i <= 6; i++) {
+        const tplClone = tpl.cloneNode(true); // Clone the element
+        const rotation = 60 * i; // Calculate the rotation degree
+        tplClone.setAttribute("transform", `rotate(${rotation})`); // Set the rotation
+        container.appendChild(tplClone); // Append the cloned and transformed element to the container
+        const tpl2Clone = tpl.cloneNode(true); // Clone the element
+        tpl2Clone.setAttribute("transform", `scale(-1 1) rotate(${rotation})`); // Set the rotation
+        container.appendChild(tpl2Clone); // Append the cloned and transformed element to the container
+        const tpl3Clone = tpl3.cloneNode(true); // Clone the element
+        tpl3Clone.setAttribute("transform", `rotate(${rotation})`); // Set the rotation
+        container.appendChild(tpl3Clone); // Append the cloned and transformed element to the container
+        const tpl4Clone = tpl3.cloneNode(true); // Clone the element
+        tpl4Clone.setAttribute("transform", `scale(-1 1) rotate(${rotation})`); // Set the rotation
+        container.appendChild(tpl4Clone); // Append the cloned and transformed element to the container
+        const tpl5Clone = tpl5.cloneNode(true); // Clone the element
+        tpl5Clone.setAttribute("transform", `scale(1 1) rotate(${rotation})`); // Set the rotation
+        container.appendChild(tpl5Clone); // Append the cloned and transformed element to the container
+        const tpl6Clone = tpl5.cloneNode(true); // Clone the element
+        tpl6Clone.setAttribute("transform", `scale(-1 1) rotate(${rotation})`); // Set the rotation
+        container.appendChild(tpl6Clone); // Append the cloned and transformed element to the container
+      }
+}
+
+
+    function drawSquare(x, y, id = 123, s = 200, trig_degree = 45, rotDeg= 0, mainColor="#b49084", secondaryColor="#38445a", strokeColor = "gold", use_outline=false, tertiaryColor = "gold", use_middle_upper=true){  
+      let container = document.createElementNS(svgURI, "g");
+      container.setAttribute("transform", `translate(${x}, ${y}) rotate(${rotDeg})`);
+      container.setAttribute("stroke-width", 0.1);
+      container.setAttribute("id", id);
+      svg.appendChild(container);
+      const h = Math.tan(trig_degree/360 * 2 * Math.PI) * (0.5 * s);
+      let outline = document.createElementNS(svgURI, "path");
+      outline_sentence = `M0 0  ${0.5 * s} ${h}  ${-0.5 * s} ${h} Z`;
+      outline.setAttribute("d", outline_sentence);
+      outline.setAttribute("fill", "none");
+      outline.setAttribute("stroke", strokeColor);
+      if (use_outline){
+          container.appendChild(outline);
+      }
+      
+      R = s / 10;
+      Xc = 0.5 * s - R / Math.tan(0.5 * trig_degree/360 * 2 * Math.PI);
+      R_new =  R;
+      tpl_pth = `M0 ${h}  C ${Xc * 0.5} ${h}  ${Xc * 0.5} ${h - 2*R} ${Xc} ${h - 2* R} A${R} ${R} 0 0 1 ${Xc} ${h} A ${0.5 * R} ${0.5* R} 0 0 1 ${Xc} ${h - R} C${Xc - R} ${h - R} ${Xc - R} ${h}  ${Xc - 2 * R} ${h} Z`;
+      tpl = document.createElementNS(svgURI, "path");
+      tpl.setAttribute("d", tpl_pth);
+      tpl.setAttribute("fill", mainColor);
+      tpl.setAttribute("stroke", strokeColor);
+      container.appendChild(tpl);
+      tpl2 = tpl.cloneNode(true);
+      tpl2.setAttribute("transform", "scale(-1 1)");
+      container.appendChild(tpl2);
+      tpl3 = tpl.cloneNode(true);
+      tpl3_pth = `M${0} ${h}  C ${0} ${h - Xc * 0.5}  ${2 * R} ${h - Xc * 0.5} ${2 * R} ${h - Xc}  A${R} ${R} 0 0 0 ${0} ${h - Xc} A${0.5 * R} ${0.5 * R} 0 0 0 ${R} ${h - Xc} C ${R}  ${h - 0.6 * Xc} ${0}  ${h - 0.6 * Xc}  ${0}  ${h -0.2 *  Xc} `;
+      tpl3.setAttribute("d", tpl3_pth);
+      tpl3.setAttribute("fill", "#e8eadd");
+      tpl4 = tpl.cloneNode(true);
+      tpl4.setAttribute("transform", `rotate(-90 0 ${h})`);
+      tpl4.setAttribute("fill", "#e8eadd");
+      container.appendChild(tpl3);
+      container.appendChild(tpl4);
+      tpl5 = tpl.cloneNode(true);
+      tpl5.setAttribute("d", `M 0 0 C 0 ${ 0.5 * (h - Xc - R - 0.4 * R_new) } ${0.4 * R_new}  ${ 0.5 * (h - Xc - R - 0.4 * R_new) } ${0.4 * R_new} ${h - Xc - R - 0.4 * R_new} A${0.2 * R_new} ${0.2 * R_new} 0 0 0 ${0} ${h - Xc - R - 0.4 * R_new} A${0.4 * R_new} ${0.4 * R_new} 0 0 0 ${0.8 * R_new} ${ h - Xc - R - 0.4 * R_new} C${0.8 * R_new} ${0.5 * (h - Xc - R - 0.4 * R_new) } ${0} ${0.5 * (h - Xc - R - 0.4 * R_new)} 0 0`);
+      tpl6 = tpl5.cloneNode(true);
+      tpl6.setAttribute("transform", `scale(-1, 1)`);
+      container.appendChild(tpl5);
+      container.appendChild(tpl6);
+
+      for (let i = 1; i <= 4; i++) {
+        const tplClone = tpl.cloneNode(true); // Clone the element
+        const rotation = 90 * i; // Calculate the rotation degree
+        tplClone.setAttribute("transform", `rotate(${rotation})`); // Set the rotation
+        container.appendChild(tplClone); // Append the cloned and transformed element to the container
+        const tpl2Clone = tpl.cloneNode(true); // Clone the element
+        tpl2Clone.setAttribute("transform", `scale(-1 1) rotate(${rotation})`); // Set the rotation
+        container.appendChild(tpl2Clone); // Append the cloned and transformed element to the container
+        const tpl3Clone = tpl3.cloneNode(true); // Clone the element
+        tpl3Clone.setAttribute("transform", `rotate(${rotation})`); // Set the rotation
+        container.appendChild(tpl3Clone); // Append the cloned and transformed element to the container
+        const tpl4Clone = tpl3.cloneNode(true); // Clone the element
+        tpl4Clone.setAttribute("transform", `scale(-1 1) rotate(${rotation})`); // Set the rotation
+        container.appendChild(tpl4Clone); // Append the cloned and transformed element to the container
+        const tpl5Clone = tpl5.cloneNode(true); // Clone the element
+        tpl5Clone.setAttribute("transform", `scale(1 1) rotate(${rotation})`); // Set the rotation
+        container.appendChild(tpl5Clone); // Append the cloned and transformed element to the container
+        const tpl6Clone = tpl5.cloneNode(true); // Clone the element
+        tpl6Clone.setAttribute("transform", `scale(-1 1) rotate(${rotation})`); // Set the rotation
+        container.appendChild(tpl6Clone); // Append the cloned and transformed element to the container
+      }
+
+
+  }
+
+
+
+function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, mainColor="#b49084", secondaryColor="#38445a", strokeColor = "gold", use_outline=false, tertiaryColor = "gold", use_middle_upper=true){  
+      let container = document.createElementNS(svgURI, "g");
+      container.setAttribute("transform", `translate(${x}, ${y}) rotate(${rotDeg})`);
+      container.setAttribute("stroke-width", 0.1);
+      container.setAttribute("id", id);
+      svg.appendChild(container);
+      const h = Math.tan(trig_degree/360 * 2 * Math.PI) * (0.5 * s);
+      let outline = document.createElementNS(svgURI, "path");
+      outline_sentence = `M0 0  ${0.5 * s} ${h}  ${-0.5 * s} ${h} Z`;
+      outline.setAttribute("d", outline_sentence);
+      outline.setAttribute("fill", "none");
+      outline.setAttribute("stroke", strokeColor);
+      if (use_outline){
+          container.appendChild(outline);
+      }
+      
+      R = s /15;
+      Xc = 0.5 * s - R / Math.tan(0.5 * trig_degree/360 * 2 * Math.PI);
+      R_new =  R;
+      tpl_pth = `M0 ${h}  C ${Xc * 0.5} ${h}  ${Xc * 0.5} ${h - 2*R} ${Xc} ${h - 2* R} A${R} ${R} 0 0 1 ${Xc} ${h} A ${0.5 * R} ${0.5* R} 0 0 1 ${Xc} ${h - R} C${Xc - R} ${h - R} ${Xc - R} ${h}  ${Xc - 2 * R} ${h} Z`;
+      tpl = document.createElementNS(svgURI, "path");
+      tpl.setAttribute("d", tpl_pth);
+      tpl.setAttribute("fill", mainColor);
+      tpl.setAttribute("stroke", strokeColor);
+      container.appendChild(tpl);
+      tpl2 = tpl.cloneNode(true);
+      tpl2.setAttribute("transform", "scale(-1 1)");
+      container.appendChild(tpl2);
+      tpl3 = tpl.cloneNode(true);
+      tpl3_pth = `M ${0} ${h} C ${0} ${h- 0.3 * (2 * R + s/30)} ${s/30} ${h- 0.3 * (2 * R + s/30)}  ${s/30} ${h-2 * R + s/30} A ${s/60} ${s/60} 0 0 1 ${0} ${h-2 * R + s /30} A${s/30} ${s/30} 0 0 1 ${2 * s/30} ${h-2 * R + s /30} C${2 * s/30} ${h- 0.3 * (2 * R + s/30)} ${0} ${h- 0.3 * (2 * R + s/30)} ${0} ${h}  `;
+
+      tpl3.setAttribute("d", tpl3_pth);
+      tpl3.setAttribute("fill", "#e8eadd");
+      tpl4 = tpl3.cloneNode(true);
+      tpl4.setAttribute("transform", `scale(-1 1)`);
+      tpl4.setAttribute("fill", "#e8eadd");
+      container.appendChild(tpl3);
+      container.appendChild(tpl4);
+      tpl5 = tpl.cloneNode(true);
+      tpl5.setAttribute("d", `M ${0} ${0} C ${0} ${0.5 *  (h-2 * R - s /30) }  ${s/30}  ${0.5 *  (h-2 * R - s /30) }  ${s/30}  ${h-2 * R - s /30} A${s / 60} ${s / 60} 0 0 0 ${0} ${h-2 * R - s /30} A${s / 30} ${s / 30} 0 0 0 ${2 * s / 30} ${h-2 * R - s /30} C ${2 * s / 30} ${ 0.5 *  (h-2 * R - s /30) } ${0} ${ 0.5 *  (h-2 * R - s /30) }   ${0} ${0}`);
+      tpl6 = tpl5.cloneNode(true);
+      tpl6.setAttribute("transform", `scale(-1, 1)`);
+      container.appendChild(tpl5);
+      container.appendChild(tpl6);
+
+      for (let i = 1; i <= 3; i++) {
+        const tplClone = tpl.cloneNode(true); // Clone the element
+        const rotation = 120 * i; // Calculate the rotation degree
+        tplClone.setAttribute("transform", `rotate(${rotation})`); // Set the rotation
+        container.appendChild(tplClone); // Append the cloned and transformed element to the container
+        const tpl2Clone = tpl.cloneNode(true); // Clone the element
+        tpl2Clone.setAttribute("transform", `scale(-1 1) rotate(${rotation})`); // Set the rotation
+        container.appendChild(tpl2Clone); // Append the cloned and transformed element to the container
+        const tpl3Clone = tpl3.cloneNode(true); // Clone the element
+        tpl3Clone.setAttribute("transform", `rotate(${rotation})`); // Set the rotation
+        container.appendChild(tpl3Clone); // Append the cloned and transformed element to the container
+        const tpl4Clone = tpl3.cloneNode(true); // Clone the element
+        tpl4Clone.setAttribute("transform", `scale(-1 1) rotate(${rotation})`); // Set the rotation
+        container.appendChild(tpl4Clone); // Append the cloned and transformed element to the container
+        const tpl5Clone = tpl5.cloneNode(true); // Clone the element
+        tpl5Clone.setAttribute("transform", `scale(1 1) rotate(${rotation})`); // Set the rotation
+        container.appendChild(tpl5Clone); // Append the cloned and transformed element to the container
+        const tpl6Clone = tpl5.cloneNode(true); // Clone the element
+        tpl6Clone.setAttribute("transform", `scale(-1 1) rotate(${rotation})`); // Set the rotation
+        container.appendChild(tpl6Clone); // Append the cloned and transformed element to the container
+      }
+
+
+  }
+
+
+
+  class HexagonTumpal {
+        constructor(cx, cy, l, motive , rot_deg = 0, id = 123) {
+          this.cx = cx;
+          this.cy = cy;
+          this.l = l;
+          this.motive = motive;
+          this.rot_deg = rot_deg * 2 * Math.PI / 360;
+          this.rot_degree = rot_deg;
+          this.id = id;
+          this.r = getRadius(this.l , 6);
+          this.vertices = [
+                             [this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/3 + 0 *  Math.PI/3), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/3 +  0   * Math.PI/3)]
+                            ,[this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/3 + 1 *  Math.PI/3), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/3 +  1   * Math.PI/3)]
+                            ,[this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/3 + 2 *  Math.PI/3), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/3 +  2   * Math.PI/3)]
+                            ,[this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/3 + 3 *  Math.PI/3), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/3 +  3   * Math.PI/3)]
+                            ,[this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/3 + 4 *  Math.PI/3), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/3 +  4   * Math.PI/3)]
+                            ,[this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/3 + 5 *  Math.PI/3), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/3 +  5   * Math.PI/3)]
+                          ];
+          this.edges = [ 
+
+                           [[this.vertices[0][0], this.vertices[0][1]] , [this.vertices[1][0], this.vertices[1][1]]] // bottom
+                          ,[[this.vertices[1][0], this.vertices[1][1]] , [this.vertices[2][0], this.vertices[2][1]]] // bottom left
+                          ,[[this.vertices[2][0], this.vertices[2][1]] , [this.vertices[3][0], this.vertices[3][1]]] // upper left
+                          ,[[this.vertices[3][0], this.vertices[3][1]] , [this.vertices[4][0], this.vertices[4][1]]] // up
+                          ,[[this.vertices[4][0], this.vertices[4][1]] , [this.vertices[5][0], this.vertices[5][1]]] // upper right
+                          ,[[this.vertices[5][0], this.vertices[5][1]] , [this.vertices[0][0], this.vertices[0][1]]] // upper left
+          ]
+
+          this.bottomNeighbor= null; 
+          this.upperNeighbor= null; 
+          this.upperLeftNeighbor = null;
+          this.bottomLeftNeighbor = null;
+          this.upperRightNeighbor = null;
+          this.bottomRightNeighbor = null;
+
+
+        }
+
+      draw() {
+          drawHexagon(this.cx, this.cy, this.id, this.l, 60, 0 + this.rot_degree, "#b49084", "#38445a", "gold", false, "gold");
+          let outline1 = document.createElementNS(svgURI, "path");
+          let outline_sentence1 = `
+                        M ${this.vertices[0][0] } ${this.vertices[0][1]}
+                        L ${this.vertices[1][0] } ${this.vertices[1][1]}
+                        L ${this.vertices[2][0] } ${this.vertices[2][1]}
+                        L ${this.vertices[3][0] } ${this.vertices[3][1]}
+                        L ${this.vertices[4][0] } ${this.vertices[4][1]}
+                        L ${this.vertices[5][0] } ${this.vertices[5][1]}
+
+                        Z`;
+          outline1.setAttribute("d", outline_sentence1);
+          outline1.setAttribute("fill", "transparent");
+          outline1.setAttribute("stroke", "gold");
+          outline1.setAttribute("stroke-width", 0.5);
+          outline1.setAttribute("id", this.id);
+          svg.appendChild(outline1);
+
+
+      }
+      update(){
+        
+          for (const obj of objList) {
+
+            if (getOverlappingEdge(this, obj) !== null && this.id != obj.id){
+              // console.log(getOverlappingEdge(this, obj));
+         
+              if (this.edges[0] === getOverlappingEdge(this, obj)){
+                this.bottomNeighbor = obj;
+                this.bottomNeighborDist = Math.sqrt((this.cx - this.bottomNeighbor.cx) ** 2 + (this.cy - this.bottomNeighbor.cy) ** 2) ;
+              }  
+   
+              if (this.edges[1] === getOverlappingEdge(this, obj)){
+                this.bottomLeftNeighbor = obj;
+                this.bottomLeftNeighborDist = Math.sqrt((this.cx - this.bottomLeftNeighbor.cx) ** 2 + (this.cy - this.bottomLeftNeighbor.cy) ** 2) ;
+              }  
+
+              if (this.edges[2] === getOverlappingEdge(this, obj)){
+                this.upperLeftNeighbor = obj;
+                this.upperLeftNeighborDist = Math.sqrt((this.cx - this.upperLeftNeighbor.cx) ** 2 + (this.cy - this.upperLeftNeighbor.cy) ** 2) ;
+              }
+              else if (this.edges[3] === getOverlappingEdge(this, obj)){
+                this.upperNeighbor = obj;
+
+                if (this.upperNeighbor.motive === 'triangle'){
+                  // this.upperNeighborDist = Math.sqrt((this.cx - this.upperNeighbor.cx) ** 2 + (this.cy - this.upperNeighbor.cy) ** 2) ;
+                  this.upperNeighborDist = 4 /3 *  Math.sin(60 * 2 * Math.PI/ 360) * this.l;
+                }
+                else {
+                  this.upperNeighborDist = Math.sqrt((this.cx - this.upperNeighbor.cx) ** 2 + (this.cy - this.upperNeighbor.cy) ** 2) ;
+                }
+
+              }
+
+              else if (this.edges[4] === getOverlappingEdge(this, obj)){
+                this.upperRightNeighbor = obj;
+                this.upperRightNeighborDist = Math.sqrt((this.cx - this.upperRightNeighbor.cx) ** 2 + (this.cy - this.upperRightNeighbor.cy) ** 2) ;
+              }
+              else if (this.edges[5] === getOverlappingEdge(this, obj)){
+                this.bottomRightNeighbor = obj;
+                this.bottomRightNeighborDist = Math.sqrt((this.cx - this.bottomRightNeighbor.cx) ** 2 + (this.cy - this.bottomRightNeighbor.cy) ** 2) ;
+              }
+
+
+            }
+
+
+
+
+
+
+            if (hasSameEdge(this, obj) && this.id != obj.id) {
+              this.is_collision = true;
+            }
+
+            
+          }
+
+
+
+      }
+
+    }
+
+
+  class HintGuideline {
+        constructor(cx, cy, l, motive , rot_deg = 0, id = 123) {
+          this.cx = cx;
+          this.cy = cy;
+          this.l = l;
+          this.motive = motive;
+          this.rot_deg = rot_deg * 2 * Math.PI / 360;
+          this.rot_degree = rot_deg;
+          this.id = id;
+          this.r = getRadius(this.l , 6);
+          this.vertices = [
+                             [this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/3 + 0 *  Math.PI/3), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/3 +  0   * Math.PI/3)]
+                            ,[this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/3 + 1 *  Math.PI/3), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/3 +  1   * Math.PI/3)]
+                            ,[this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/3 + 2 *  Math.PI/3), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/3 +  2   * Math.PI/3)]
+                            ,[this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/3 + 3 *  Math.PI/3), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/3 +  3   * Math.PI/3)]
+                            ,[this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/3 + 4 *  Math.PI/3), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/3 +  4   * Math.PI/3)]
+                            ,[this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/3 + 5 *  Math.PI/3), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/3 +  5   * Math.PI/3)]
+                          ];
+          this.edges = [ 
+
+                           [[this.vertices[0][0], this.vertices[0][1]] , [this.vertices[1][0], this.vertices[1][1]]] // bottom
+                          ,[[this.vertices[1][0], this.vertices[1][1]] , [this.vertices[2][0], this.vertices[2][1]]] // bottom left
+                          ,[[this.vertices[2][0], this.vertices[2][1]] , [this.vertices[3][0], this.vertices[3][1]]] // upper left
+                          ,[[this.vertices[3][0], this.vertices[3][1]] , [this.vertices[4][0], this.vertices[4][1]]] // up
+                          ,[[this.vertices[4][0], this.vertices[4][1]] , [this.vertices[5][0], this.vertices[5][1]]] // upper right
+                          ,[[this.vertices[5][0], this.vertices[5][1]] , [this.vertices[0][0], this.vertices[0][1]]] // upper left
+          ]
+
+        }
+
+      draw() {
+          drawHint(this.cx, this.cy, this.id, this.l, 60, 0 + this.rot_degree, "#b49084", "none", "gold", false, "gold");
+      }
+      update(){
+      }
+
+    }
+
+
+
+      class SquareTumpal {
+        constructor(cx, cy, l, motive , rot_deg = 0, id = 123) {
+          this.cx = cx;
+          this.cy = cy;
+          this.l = l;
+          this.motive = motive;
+          this.rot_deg = rot_deg * 2 * Math.PI / 360;
+          this.rot_degree = rot_deg;
+          this.id = id;
+          this.is_collision = false;
+          this.r = getRadius(this.l , 4);
+          this.vertices = [
+                             [this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/4 + 0 *  Math.PI/2), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/4 +  0   * Math.PI/2)]
+                            ,[this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/4 + 1 *  Math.PI/2), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/4 +  1   * Math.PI/2)]
+                            ,[this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/4 + 2 *  Math.PI/2), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/4 +  2   * Math.PI/2)]
+                            ,[this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/4 + 3 *  Math.PI/2), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/4 +  3   * Math.PI/2)]
+
+                          ];
+          this.edges = [ 
+
+                           [[this.vertices[0][0], this.vertices[0][1]] , [this.vertices[1][0], this.vertices[1][1]]] // bottom
+                          ,[[this.vertices[1][0], this.vertices[1][1]] , [this.vertices[2][0], this.vertices[2][1]]] // left
+                          ,[[this.vertices[2][0], this.vertices[2][1]] , [this.vertices[3][0], this.vertices[3][1]]] // up
+                          ,[[this.vertices[3][0], this.vertices[3][1]] , [this.vertices[0][0], this.vertices[0][1]]] // right
+          ]
+          this.bottomNeighbor = null;
+          this.LeftNeighbor = null;
+          this.RightNeighbor = null;
+          this.upperNeighbor = null;
+          this.isLinked = false;
+
+        }
+
+
+
+        draw() {
+          drawSquare(this.cx, this.cy, this.id, this.l, 45, 0 + this.rot_degree, "#b49084", "#38445a", "gold", false, "gold");
+          let outline1 = document.createElementNS(svgURI, "path");
+          let outline_sentence1 = `
+                        M ${this.vertices[0][0] } ${this.vertices[0][1]}
+                        L ${this.vertices[1][0] } ${this.vertices[1][1]}
+                        L ${this.vertices[2][0] } ${this.vertices[2][1]}
+                        L ${this.vertices[3][0] } ${this.vertices[3][1]}
+                        Z`;
+          outline1.setAttribute("d", outline_sentence1);
+          outline1.setAttribute("fill", "transparent");
+          outline1.setAttribute("stroke", "gold");
+          outline1.setAttribute("id", this.id);
+          outline1.setAttribute("stroke-width", 0.5);
+          svg.appendChild(outline1);
+        }
+        update(){
+            this.vertices = [
+                             [this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/4 + 0 *  Math.PI/2), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/4 +  0   * Math.PI/2)]
+                            ,[this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/4 + 1 *  Math.PI/2), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/4 +  1   * Math.PI/2)]
+                            ,[this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/4 + 2 *  Math.PI/2), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/4 +  2   * Math.PI/2)]
+                            ,[this.cx + this.r * Math.cos(this.rot_deg  + Math.PI/4 + 3 *  Math.PI/2), this.cy + this.r * Math.sin(this.rot_deg + Math.PI/4 +  3   * Math.PI/2)]
+
+            ];
+            this.edges = [ 
+
+                           [[this.vertices[0][0], this.vertices[0][1]] , [this.vertices[1][0], this.vertices[1][1]]] // bottom
+                          ,[[this.vertices[1][0], this.vertices[1][1]] , [this.vertices[2][0], this.vertices[2][1]]] // left
+                          ,[[this.vertices[2][0], this.vertices[2][1]] , [this.vertices[3][0], this.vertices[3][1]]] // up
+                          ,[[this.vertices[3][0], this.vertices[3][1]] , [this.vertices[0][0], this.vertices[0][1]]] // right
+           ]
+
+
+
+
+
+
+
+
+
+for (const obj of objList) {
+  if (getOverlappingEdge(this, obj) !== null && this.id !== obj.id) {
+    // Bottom neighbor
+    if (this.edges[0] === getOverlappingEdge(this, obj) && this.bottomNeighbor === null) {
+      this.bottomNeighbor = obj;
+      this.isLinked = true;
+      this.is_collision = true;
+
+      if (obj.motive === 'hexagon') {
+        this.cy = obj.cy - (Math.sin(60 * Math.PI / 180) * this.l + 0.5 * this.l);
+      }
+      if (obj.motive === 'square') {
+        let dist = this.l;
+        let deg = Math.atan2((this.cy - obj.cy), (this.cx - obj.cx));
+        this.cx = obj.cx + dist * Math.cos(deg);
+        this.cy = obj.cy + dist * Math.sin(deg);
+      }
+    }
+
+    // Left neighbor
+    if (this.edges[1] === getOverlappingEdge(this, obj) && this.LeftNeighbor === null) {
+      console.log("Left neighbor found");
+
+      this.LeftNeighbor = obj;
+            this.isLinked = true;
+
+
+      if (obj.motive === 'square') {
+        console.log("Square left neighbor detected");
+        let dist = this.l;
+        let deg = Math.atan2((this.cy - obj.cy), (this.cx - obj.cx));
+        this.cx = obj.cx + dist * Math.cos(deg);
+        this.cy = obj.cy + dist * Math.sin(deg);
+        this.is_collision = true;
+      }
+    }
+
+    // Upper neighbor
+    if (this.edges[2] === getOverlappingEdge(this, obj) && this.upperNeighbor === null) {
+      console.log("Upper neighbor found");
+
+      this.upperNeighbor = obj;
+            this.isLinked = true;
+
+
+      if (obj.motive === 'square') {
+        console.log("Square upper neighbor detected");
+        let dist = this.l;
+        let deg = Math.atan2((this.cy - obj.cy), (this.cx - obj.cx));
+        this.cx = obj.cx + dist * Math.cos(deg);
+        this.cy = obj.cy + dist * Math.sin(deg);
+        this.is_collision = true;
+      }
+    }
+
+    // Right neighbor
+    // if (this.edges[3] === getOverlappingEdge(this, obj) && this.RightNeighbor === null) {
+
+      if (edgesEqual(this.edges[3], getOverlappingEdge(this, obj)) && this.RightNeighbor === null){
+      console.log("Right neighbor found");
+
+      this.RightNeighbor = obj;
+            this.isLinked = true;
+            this.is_collision = true;
+
+      if (obj.motive === 'square') {
+        let dist = this.l;
+        let deg = Math.atan2((this.cy - obj.cy), (this.cx - obj.cx));
+        this.cx = obj.cx + dist * Math.cos(deg);
+        this.cy = obj.cy + dist * Math.sin(deg);
+        console.log(deg * 180 / Math.PI);
+      }
+
+    }
+  }
+
+
+
+  // Check for intersecting edges
+  // for (let edge1 of this.edges) {
+  //   for (let edge2 of obj.edges) {
+  //     if (edgesIntersect(edge1, edge2) === true && this.id !== obj.id) {
+  //       if (this.bottomNeighbor === obj.upperNeighbor) {
+  //         break;
+  //       }
+  //       this.is_collision = true;
+  //       console.log("Collision detected!");
+  //       console.log(obj);
+  //       life = false;
+  //       console.log("Object destroyed; ID: " + this.id);
+  //     }
+  //   }
+  // }
+
+
+
+}
+
+for (const obj of objList) {
+  // Check for collisions
+  if (hasSameEdge(this, obj) && this.id !== obj.id) {
+    this.is_collision = true;
+    break;
+  }
+for (let edge1 of this.edges) {
+  for (let edge2 of obj.edges) {
+    if (edgesIntersect(edge1, edge2) === true && this.id !== obj.id) {
+      if (getOverlappingEdge(this, obj) !== null) {
+        // console.log("Overlapping edges found, continuing...");
+        continue;
+      }
+
+      if ( (edge1[0][0] === edge2[1][0] && edge1[0][1] === edge2[1][1]) || (edge1[1][0] === edge2[0][0] && edge1[1][1] === edge2[0][1]) ) {
+        console.log("Shared endpoint detected, skipping...");
+        continue;
+      }
+
+      if (obj.isLinked === true && this.isLinked === true) {
+        // console.log("Both objects are linked, continuing...");
+        continue;
+      }
+
+      // Set collision flag if not excluded above
+      this.is_collision = true;
+      life = false;
+      console.log("Intersection detected between:", edge1, edge2);
+      console.log(edge1[0]);
+      console.log(edge2[1]);
+      console.log( edge1[1][0] === edge2[0][0] && edge1[1][1] === edge2[0][1] );
+      console.log("Objects:", this.id, obj.id);
+    }
+  }
+}
+
+}
+
+          if (this.is_collision === false && this.id != 'core'){
+            this.cy += 1;
+          }
+
+
+
+
+
+
+        }
+    }
+
+
+
+    //   class TriangleTumpal {
+    //     constructor(cx, cy, l, motive , rot_deg = 0, id = 123) {
+    //       this.cx = cx;
+    //       this.cy = cy;
+    //       this.l = l;
+    //       this.motive = motive;
+    //       this.rot_deg = rot_deg * Math.PI / 180;
+    //       this.rot_degree = rot_deg;
+    //       this.id = id;
+    //       this.is_collision = false;
+    //       this.r = getRadius(this.l , 3);
+    //       this.vertices = [
+    //                          [this.cx + this.r * Math.cos(this.rot_deg - 3 * Math.PI/6 + 0 *  2 * Math.PI/3), this.cy + this.r * Math.sin(this.rot_deg - 3 * Math.PI/6 +  0   * 2 * Math.PI/3)]
+    //                         ,[this.cx + this.r * Math.cos(this.rot_deg - 3 * Math.PI/6 + 1 *  2 * Math.PI/3), this.cy + this.r * Math.sin(this.rot_deg - 3 * Math.PI/6 +  1   * 2 * Math.PI/3)]
+    //                         ,[this.cx + this.r * Math.cos(this.rot_deg - 3 * Math.PI/6 + 2 *  2 * Math.PI/3), this.cy + this.r * Math.sin(this.rot_deg - 3 * Math.PI/6 +  2   * 2 * Math.PI/3)]
+
+    //                       ];
+    //       this.edges = [ 
+
+    //                        [[this.vertices[0][0], this.vertices[0][1]] , [this.vertices[1][0], this.vertices[1][1]]] // bottom
+    //                       ,[[this.vertices[1][0], this.vertices[1][1]] , [this.vertices[2][0], this.vertices[2][1]]] // left
+    //                       ,[[this.vertices[2][0], this.vertices[2][1]] , [this.vertices[0][0], this.vertices[0][1]]] // up
+    //       ]
+    //       this.bottomNeighbor = null;
+    //       this.rightNeighbor = null;
+    //       this.neighbors = [];
+
+    //     }
+
+
+
+    //     draw() {
+    //       drawTriangle(this.cx, this.cy, this.id, this.l, 30, 0 + this.rot_degree, "#b49084", "#38445a", "gold", false, "gold");
+    //       let outline1 = document.createElementNS(svgURI, "path");
+    //       let outline_sentence1 = `
+    //                     M ${this.vertices[0][0] } ${this.vertices[0][1]}
+    //                     L ${this.vertices[1][0] } ${this.vertices[1][1]}
+    //                     L ${this.vertices[2][0] } ${this.vertices[2][1]}
+    //                     Z`;
+    //       outline1.setAttribute("d", outline_sentence1);
+    //       outline1.setAttribute("fill", "transparent");
+    //       outline1.setAttribute("stroke", "gold");
+    //       outline1.setAttribute("id", this.id);
+    //       outline1.setAttribute("stroke-width", 0.5);
+
+    //       svg.appendChild(outline1);
+    //     }
+    //     update(){
+    //         this.vertices = [
+    //                          [this.cx + this.r * Math.cos(this.rot_deg  - 3 * Math.PI/6 + 0 * 2 *  Math.PI/3), this.cy + this.r * Math.sin(this.rot_deg - 3 * Math.PI/6 +  0 * 2 * Math.PI/3)]
+    //                         ,[this.cx + this.r * Math.cos(this.rot_deg  - 3 * Math.PI/6 + 1 * 2 *  Math.PI/3), this.cy + this.r * Math.sin(this.rot_deg - 3 * Math.PI/6 +  1 * 2 * Math.PI/3)]
+    //                         ,[this.cx + this.r * Math.cos(this.rot_deg  - 3 * Math.PI/6 + 2 * 2 *  Math.PI/3), this.cy + this.r * Math.sin(this.rot_deg - 3 * Math.PI/6 +  2 * 2 * Math.PI/3)]
+
+    //         ];
+    //         this.edges = [ 
+
+    //                        [[this.vertices[0][0], this.vertices[0][1]] , [this.vertices[1][0], this.vertices[1][1]]] 
+    //                       ,[[this.vertices[1][0], this.vertices[1][1]] , [this.vertices[2][0], this.vertices[2][1]]] 
+    //                       ,[[this.vertices[2][0], this.vertices[2][1]] , [this.vertices[0][0], this.vertices[0][1]]] 
+    //        ]
+
+
+
+    //       if (this.is_collision === false){
+    //         this.cy += 1;
+    //       }
+
+
+
+
+    //       for (const obj of objList) {
+    //           if (getOverlappingEdge(this, obj) !== null && this.id != obj.id){
+    //           // console.log(getOverlappingEdge(this, obj));
+              
+
+    //           if (this.edges[1] === getOverlappingEdge(this, obj) && this.bottomNeighbor === null){
+    //             console.log("Chihoku!");
+    //             this.bottomNeighbor = obj;
+    //             if(this.bottomNeighbor.motive === 'hexagon'){
+    //               this.cy = obj.cy - 4 /3 *  Math.sin(60 * 2 * Math.PI/ 360) * this.l;
+    //             }
+    //             if(this.bottomNeighbor.motive === 'square'){
+    //               let sqtri_dist = 1 /3 *  Math.sin(60 * 2 * Math.PI/ 360) * this.l + 0.5 * this.l;
+    //               this.cy = obj.cy -  sqtri_dist * Math.sin(-obj.rot_deg);
+    //               console.log(Math.sin(-obj.rot_deg));
+    //             }
+
+    //                               this.is_collision = true;
+    //               break;
+
+    //           }
+
+    //           if (this.edges[0] === getOverlappingEdge(this, obj) && this.rightNeighbor === null){
+    //             console.log("Chihoku!");
+    //             this.rightNeighbor = obj;
+    //             if (this.rightNeighbor.motive === 'square'){
+    //               console.log("Chihochan!");
+    //               let sqtri_dist = 1 /3 *  Math.sin(60 * 2 * Math.PI/ 360) * this.l + 0.5 * this.l;
+    //               this.cy = obj.cy -  sqtri_dist * Math.sin(obj.rot_deg);
+    //               console.log(obj.rot_degree);
+    //             }
+    //               this.is_collision = true;
+    //               break;
+    //           }
+
+
+
+
+    //         }
+
+
+    //         if (hasSameEdge(this, obj) && this.id != obj.id) {
+    //           this.is_collision = true;
+    //           break;
+    //         }
+
+
+    //         for (let edge1 of this.edges){
+    //           for (let edge2 of obj.edges){
+    //               if (edgesIntersect(edge1, edge2) === true && this.id != obj.id && this.bottomNeighbor != obj) {
+  
+    //                     this.is_collision = true;
+    //                     console.log("Chiho Zukky!");
+    //                     console.log(obj);
+    //                     life = false;
+
+                      
+    //               }
+    //           }
+    //         }
+
+
+
+
+    //       }
+
+
+    //     }
+    // }
+
+
+
+
+
+
+    let rotationAngle = 0; // Initialize rotation angle
+
+    function rotateClockwise() {
+      rotationAngle = (rotationAngle + 45) % 360; // Increase rotation by 30 degrees
+      core.rot_degree = rotationAngle; // Set to the new angle
+      core.rot_deg = rotationAngle * 2 * Math.PI / 360; // Update radians
+      core.vertices = [
+                             [core.cx + core.r * Math.cos(core.rot_deg  + Math.PI/3 + 0 *  Math.PI/4), core.cy + core.r * Math.sin(core.rot_deg + Math.PI/3 +  0   * Math.PI/4)]
+                            ,[core.cx + core.r * Math.cos(core.rot_deg  + Math.PI/3 + 1 *  Math.PI/4), core.cy + core.r * Math.sin(core.rot_deg + Math.PI/3 +  1   * Math.PI/4)]
+                            ,[core.cx + core.r * Math.cos(core.rot_deg  + Math.PI/3 + 2 *  Math.PI/4), core.cy + core.r * Math.sin(core.rot_deg + Math.PI/3 +  2   * Math.PI/4)]
+                            ,[core.cx + core.r * Math.cos(core.rot_deg  + Math.PI/3 + 3 *  Math.PI/4), core.cy + core.r * Math.sin(core.rot_deg + Math.PI/3 +  3   * Math.PI/4)]
+                            ,[core.cx + core.r * Math.cos(core.rot_deg  + Math.PI/3 + 4 *  Math.PI/4), core.cy + core.r * Math.sin(core.rot_deg + Math.PI/3 +  4   * Math.PI/4)]
+                            ,[core.cx + core.r * Math.cos(core.rot_deg  + Math.PI/3 + 5 *  Math.PI/4), core.cy + core.r * Math.sin(core.rot_deg + Math.PI/3 +  5   * Math.PI/4)]
+                      ];
+      core.edges = [
+                           [[core.vertices[0][0], core.vertices[0][1]] , [core.vertices[1][0], core.vertices[1][1]]] // bottom
+                          ,[[core.vertices[1][0], core.vertices[1][1]] , [core.vertices[2][0], core.vertices[2][1]]] // bottom left
+                          ,[[core.vertices[2][0], core.vertices[2][1]] , [core.vertices[3][0], core.vertices[3][1]]] // upper left
+                          ,[[core.vertices[3][0], core.vertices[3][1]] , [core.vertices[4][0], core.vertices[4][1]]] // up
+                          ,[[core.vertices[4][0], core.vertices[4][1]] , [core.vertices[5][0], core.vertices[5][1]]] // upper right
+                          ,[[core.vertices[5][0], core.vertices[5][1]] , [core.vertices[0][0], core.vertices[0][1]]] // upper left
+      ];
+
+
+
+
+      for (let obj of objList){
+        if (obj.motive === 'square' && obj.id != 'core' && obj.isLinked === true){
+          let dist = Math.sqrt((core.cx - obj.cx)**2 + (core.cy - obj.cy) **2);
+          let deg = Math.atan2((core.cy - obj.cy), (core.cx - obj.cx));
+
+          
+          console.log(obj.id);
+          console.log(core.cy);
+          console.log(obj.cy);
+          console.log(deg);
+
+          obj.cx = core.cx - dist * Math.cos(deg + Math.PI/4 );
+          obj.cy = core.cy - dist * Math.sin(deg + Math.PI/4 );
+          obj.rot_degree = obj.rot_degree + 45;
+          obj.rot_deg = obj.rot_deg + Math.PI/4; 
+          obj.update();
+
+          console.log(deg * 180 / Math.PI);
+        }
+      }
+        
+      console.log("chiho!");
+    }
+    
+    function rotateCounterClockwise() {
+      rotationAngle = (rotationAngle - 45 + 360) % 360; // Decrease rotation by 30 degrees, ensuring no negative angles
+      core.rot_degree = rotationAngle; // Set to the new angle
+      core.rot_deg = rotationAngle * 2 * Math.PI / 360; // Update radians
+      core.vertices = [
+                             [core.cx + core.r * Math.cos(core.rot_deg  + Math.PI/3 + 0 *  Math.PI/4), core.cy + core.r * Math.sin(core.rot_deg + Math.PI/3 +  0   * Math.PI/4)]
+                            ,[core.cx + core.r * Math.cos(core.rot_deg  + Math.PI/3 + 1 *  Math.PI/4), core.cy + core.r * Math.sin(core.rot_deg + Math.PI/3 +  1   * Math.PI/4)]
+                            ,[core.cx + core.r * Math.cos(core.rot_deg  + Math.PI/3 + 2 *  Math.PI/4), core.cy + core.r * Math.sin(core.rot_deg + Math.PI/3 +  2   * Math.PI/4)]
+                            ,[core.cx + core.r * Math.cos(core.rot_deg  + Math.PI/3 + 3 *  Math.PI/4), core.cy + core.r * Math.sin(core.rot_deg + Math.PI/3 +  3   * Math.PI/4)]
+                            ,[core.cx + core.r * Math.cos(core.rot_deg  + Math.PI/3 + 4 *  Math.PI/4), core.cy + core.r * Math.sin(core.rot_deg + Math.PI/3 +  4   * Math.PI/4)]
+                            ,[core.cx + core.r * Math.cos(core.rot_deg  + Math.PI/3 + 5 *  Math.PI/4), core.cy + core.r * Math.sin(core.rot_deg + Math.PI/3 +  5   * Math.PI/4)]
+                      ];
+      core.edges = [
+                           [[core.vertices[0][0], core.vertices[0][1]] , [core.vertices[1][0], core.vertices[1][1]]] // bottom
+                          ,[[core.vertices[1][0], core.vertices[1][1]] , [core.vertices[2][0], core.vertices[2][1]]] // bottom left
+                          ,[[core.vertices[2][0], core.vertices[2][1]] , [core.vertices[3][0], core.vertices[3][1]]] // upper left
+                          ,[[core.vertices[3][0], core.vertices[3][1]] , [core.vertices[4][0], core.vertices[4][1]]] // up
+                          ,[[core.vertices[4][0], core.vertices[4][1]] , [core.vertices[5][0], core.vertices[5][1]]] // upper right
+                          ,[[core.vertices[5][0], core.vertices[5][1]] , [core.vertices[0][0], core.vertices[0][1]]] // upper left
+      ];
+
+
+           for (let obj of objList){
+        if (obj.motive === 'square' && obj.id != 'core' && obj.isLinked === true){
+          let dist = Math.sqrt((core.cx - obj.cx)**2 + (core.cy - obj.cy) **2);
+          let deg = Math.atan2((core.cy - obj.cy), (core.cx - obj.cx));
+
+          
+          console.log(obj.id);
+          console.log(core.cy);
+          console.log(obj.cy);
+          console.log(deg);
+
+          obj.cx = core.cx - dist * Math.cos(deg - Math.PI/4 );
+          obj.cy = core.cy - dist * Math.sin(deg - Math.PI/4 );
+          obj.rot_degree = obj.rot_degree - 45;
+          obj.rot_deg = obj.rot_deg - Math.PI/4; 
+          obj.update();
+
+          console.log(deg * 180 / Math.PI);
+        }
+      }
+
+
+    }
+
+    // Add event listeners for key presses
+    document.addEventListener('keydown', (event) => {
+      pause = false;
+      tutorialLoop();
+    if (event.key === 'ArrowRight') {
+      rotateClockwise();
+    } else if (event.key === 'ArrowLeft') {
+      rotateCounterClockwise();
+    }
+    });
+
+
+
+let touchStartX = 0;
+let touchEndX = 0;
+
+document.addEventListener('touchstart', (event) => {
+  touchStartX = event.changedTouches[0].screenX;
+});
+
+document.addEventListener('touchend', (event) => {
+  touchEndX = event.changedTouches[0].screenX;
+  handleGesture();
+});
+
+function handleGesture() {
+  const swipeThreshold = 30; // Minimum distance to consider as a swipe
+  if (touchEndX < touchStartX - swipeThreshold) {
+    // console.log("Swiped Left");
+          pause = false;
+      tutorialLoop();
+    rotateCounterClockwise();
+  } else if (touchEndX > touchStartX + swipeThreshold) {
+    // console.log("Swiped Right");
+          pause = false;
+      tutorialLoop();
+    rotateClockwise();
+  }
+}
+
+
+
+
+
+
+    // Initialize the Game
+    // let objList = [];
+
+    // let core = new TriangleTumpal(200, 250, 65, 'triangle', 0, 'tr');
+    // objList.push(core);
+
+
+
+    // let hint = new HintGuideline(200, 450 - Math.tan(60/360 * 2 * Math.PI) * (65), 65 * 3, 'hint', 0 + rotationAngle, 'hint');
+    // objList.push(hint);
+
+
+    // let sq = new SquareTumpal(200, 100, 65, 'square', 0, 'sq');
+    // objList.push(sq);
+
+    // let sq2 = new SquareTumpal(200, -200, 65, 'square', 0, 'sq2');
+    // objList.push(sq2);
+
+
+    // let sq3 = new SquareTumpal(200, -600, 65, 'square', 0, 'sq3');
+    // objList.push(sq3);
+
+    // let sq4 = new SquareTumpal(200, -900, 65, 'square', 0, 'sq4');
+    // objList.push(sq4);
+
+    // let sq5 = new SquareTumpal(200, -1200, 65, 'square', 0, 'sq5');
+    // objList.push(sq5);
+
+    // let sq6 = new SquareTumpal(200, -1500, 65, 'square', 0, 'sq6');
+    // objList.push(sq6);
+
+    // let tri = new TriangleTumpal(200, -1700, 65, 'triangle', 60, 'tr');
+    // objList.push(tri);
+
+    // let tri2 = new TriangleTumpal(200, -1900, 65, 'triangle', 60, 'tr2');
+    // objList.push(tri2);
+
+    // let tri3 = new TriangleTumpal(200, -2100, 65, 'triangle', 60, 'tr3');
+    // objList.push(tri3);
+
+    // let tri4 = new TriangleTumpal(200, -2200, 65, 'triangle', 60, 'tr4');
+    // objList.push(tri4);
+
+    // let tri5 = new TriangleTumpal(200, -2400, 65, 'triangle', 60, 'tr5');
+    // objList.push(tri5);
+
+    // let tri6 = new TriangleTumpal(200, -2600, 65, 'triangle', 60, 'tr6');
+    // objList.push(tri6);
+
+    // let core = new HexagonTumpal(200, 450, 65, 'hexagon', 0 + rotationAngle, 'core');
+    // objList.push(core);
+
+
+    // let tri = new TriangleTumpal(200, 100, 65, 'triangle', 0, 'tr');
+    // objList.push(tri);
+
+    // let tri2 = new TriangleTumpal(200, -100, 65, 'triangle', 0, 'tr2');
+    // objList.push(tri2);
+
+    // let tri3 = new TriangleTumpal(200, -300, 65, 'triangle', 0, 'tr3');
+    // objList.push(tri3);
+
+
+
+
+    // Game loop
+    function gameLoop() {
+      // removeSvgChildById(svg, 'core');
+      // removeSvgChildById(svg, 'sq');
+      // `container-${Date.now()}-${Math.floor(Math.random() * 1000000)}`
+      for (obj of objList){
+        removeSvgChildById(svg, obj.id);
+        obj.update();
+        obj.draw();
+      }
+
+        removeSvgChildById(svg, 'hint');
+        drawHint(200, 450, 'hint', 65, 60, 15, "none", "none", "white");
+
+
+
+
+      if (life === true){
+        requestAnimationFrame(gameLoop);
+      }
+
+
+if (
+  (core.upperNeighbor?.motive === 'triangle' && 
+   core.bottomLeftNeighbor?.motive === 'triangle' && 
+   core.bottomRightNeighbor?.motive === 'triangle') || 
+  (core.upperLeftNeighbor?.motive === 'triangle' && 
+   core.bottomNeighbor?.motive === 'triangle' && 
+   core.upperRightNeighbor?.motive === 'triangle')
+){
+
+        let text2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        text2.setAttribute("x", "50%");
+        text2.setAttribute("y", "50%");
+        text2.setAttribute("text-anchor", "middle");
+        text2.setAttribute("dominant-baseline", "middle");
+        text2.setAttribute("fill", "white");
+        text2.setAttribute("font-size", "40");
+        text2.setAttribute("font-family", "Arial, sans-serif");
+        text2.textContent = "Game Clear!";
+        // Append the text to the SVG
+        svg.appendChild(text2);
+      }
+
+      
+
+
+
+      if (life === false){
+        let text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        text.setAttribute("x", "50%");
+        text.setAttribute("y", "50%");
+        text.setAttribute("text-anchor", "middle");
+        text.setAttribute("dominant-baseline", "middle");
+        text.setAttribute("fill", "white");
+        text.setAttribute("font-size", "40");
+        text.setAttribute("font-family", "Arial, sans-serif");
+        text.textContent = "Game Over";
+        // Append the text to the SVG
+        svg.appendChild(text);
+      }
+    }
+
+
+
+
+    let tutObjList = [];
+
+    const ox = svg.getAttribute("width") / 2;
+    const sqSize = svg.getAttribute("width") / 8;
+    
+    let tutUR = new SquareTumpal(ox, 100, sqSize, 'square', 45, 'tutUR');
+    let tutCR = new SquareTumpal(ox + sqSize, 350, sqSize, 'square', 0, 'tutCR');
+    let tutUM = new SquareTumpal(ox, 300, sqSize, 'square', 0, 'tutUM');
+    let tutBM = new SquareTumpal(ox, 400, sqSize, 'square', 0, 'tutBM');
+    let tutBR = new SquareTumpal(ox + sqSize, 400, sqSize, 'square', 0, 'tutBR');
+    let tutBL = new SquareTumpal(ox - sqSize, 400, sqSize, 'square', 0, 'tutBL');
+    let tutCL = new SquareTumpal(ox - sqSize, 350, sqSize, 'square', 0, 'tutCL');
+    let tutUL = new SquareTumpal(ox - sqSize, 300, sqSize, 'square', 0, 'tutUL');
+    let core = new SquareTumpal(ox, 350, sqSize, 'square', 0, 'core');
+
+
+    
+    let objList = [];
+
+    objList.push(core);
+    objList.push(tutUM);
+    objList.push(tutCR);
+    objList.push(tutBM);
+    objList.push(tutBR);
+    objList.push(tutBL);
+    objList.push(tutCL);
+    objList.push(tutUL);
+    objList.push(tutUR);
+
+
+
+
+    function tutorialLoop() {
+      for (obj of objList){
+        removeSvgChildById(svg, obj.id);
+        obj.update();
+        obj.draw();
+      }
+        removeSvgChildById(svg, 'tutorialhint');
+        drawTutorialHint(svg.getAttribute("width")/2, 350, 'tutorialhint', 150, 60, 45 + core.rot_degree, "none", "none", "white");
+      if (initTutorial === true){
+        removeSvgChildById(svg, 'textTutorialInit');
+        let textTut = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        textTut.setAttribute("x", "50%");
+        textTut.setAttribute("y", "80%");
+        textTut.setAttribute("id", "textTutorialInit");
+        textTut.setAttribute("text-anchor", "middle");
+        textTut.setAttribute("dominant-baseline", "middle");
+        textTut.setAttribute("fill", "white");
+        textTut.setAttribute("font-size", "18");
+        textTut.setAttribute("font-family", "Arial, sans-serif");
+        textTut.textContent = "Arrange tiles to match the white outline";
+        svg.appendChild(textTut);
+      }
+
+      if (tutUR.cy === 150){
+        pause = true;
+      }
+
+
+      if (pause === true){
+        let text2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        text2.setAttribute("x", "50%");
+        text2.setAttribute("y", "85%");
+        text2.setAttribute("id", "pause");
+        text2.setAttribute("text-anchor", "middle");
+        text2.setAttribute("dominant-baseline", "middle");
+        text2.setAttribute("fill", "white");
+        text2.setAttribute("font-size", "18");
+        text2.setAttribute("font-family", "Arial, sans-serif");
+        text2.textContent = "Press right or left key to rotate object";
+        svg.appendChild(text2);
+
+      }
+
+
+
+
+
+if (tutUM.RightNeighbor?.motive === 'square'){
+    initTutorial = false;
+    isTutorialCleared  = true;
+    removeSvgChildById(svg, 'textTutorialInit');
+    let text2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    text2.setAttribute("x", "50%");
+    text2.setAttribute("y", "80%");
+    text2.setAttribute("text-anchor", "middle");
+    text2.setAttribute("dominant-baseline", "middle");
+    text2.setAttribute("fill", "white");
+    text2.setAttribute("font-size", "20");
+    text2.setAttribute("font-family", "Arial, sans-serif");
+    text2.textContent = "Nice! Enjoy the Game!";
+    svg.appendChild(text2);
+}
+
+      
+
+
+
+      if (life === false){
+        let text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        text.setAttribute("x", "50%");
+        text.setAttribute("y", "50%");
+        text.setAttribute("text-anchor", "middle");
+        text.setAttribute("dominant-baseline", "middle");
+        text.setAttribute("fill", "white");
+        text.setAttribute("font-size", "40");
+        text.setAttribute("font-family", "Arial, sans-serif");
+        text.textContent = "Game Over";
+        // Append the text to the SVG
+        svg.appendChild(text);
+      }
+
+
+      if (pause === false){
+                removeSvgChildById(svg, "pause");
+      }
+
+      if (life === true && pause === false &&  isTutorialCleared === false){
+        requestAnimationFrame(tutorialLoop);
+      }
+    }
+
+
+
+
+
+
+    // Start the game
+    // gameLoop();
+
+    tutorialLoop();
+
+
+  </script>
+</body>
+</html>
