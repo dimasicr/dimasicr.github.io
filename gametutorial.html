@@ -1368,12 +1368,12 @@ if (
     
     let tutUR = new SquareTumpal(ox, 100, sqSize, 'square', 45, 'tutUR');
     let tutCR = new SquareTumpal(ox + sqSize, 350, sqSize, 'square', 0, 'tutCR');
-    let tutUM = new SquareTumpal(ox, 300, sqSize, 'square', 0, 'tutUM');
-    let tutBM = new SquareTumpal(ox, 400, sqSize, 'square', 0, 'tutBM');
-    let tutBR = new SquareTumpal(ox + sqSize, 400, sqSize, 'square', 0, 'tutBR');
-    let tutBL = new SquareTumpal(ox - sqSize, 400, sqSize, 'square', 0, 'tutBL');
+    let tutUM = new SquareTumpal(ox, 350 - sqSize, sqSize, 'square', 0, 'tutUM');
+    let tutBM = new SquareTumpal(ox, 350 + sqSize, sqSize, 'square', 0, 'tutBM');
+    let tutBR = new SquareTumpal(ox + sqSize, 350 + sqSize, sqSize, 'square', 0, 'tutBR');
+    let tutBL = new SquareTumpal(ox - sqSize, 350 + sqSize, sqSize, 'square', 0, 'tutBL');
     let tutCL = new SquareTumpal(ox - sqSize, 350, sqSize, 'square', 0, 'tutCL');
-    let tutUL = new SquareTumpal(ox - sqSize, 300, sqSize, 'square', 0, 'tutUL');
+    let tutUL = new SquareTumpal(ox - sqSize, 350 - sqSize, sqSize, 'square', 0, 'tutUL');
     let core = new SquareTumpal(ox, 350, sqSize, 'square', 0, 'core');
 
 
@@ -1400,7 +1400,7 @@ if (
         obj.draw();
       }
         removeSvgChildById(svg, 'tutorialhint');
-        drawTutorialHint(svg.getAttribute("width")/2, 350, 'tutorialhint', 150, 60, 45 + core.rot_degree, "none", "none", "white");
+        drawTutorialHint(svg.getAttribute("width")/2, 350, 'tutorialhint', sqSize * 3, 60, 45 + core.rot_degree, "none", "none", "white");
       if (initTutorial === true){
         removeSvgChildById(svg, 'textTutorialInit');
         let textTut = document.createElementNS("http://www.w3.org/2000/svg", "text");
