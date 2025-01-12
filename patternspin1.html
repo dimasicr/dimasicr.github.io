@@ -227,7 +227,7 @@ function drawHint(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, mainColo
       let outline = document.createElementNS(svgURI, "path");
       outline_sentence = `M0 0  ${0.5 * s} ${h}  ${-0.5 * s} ${h} Z`;
       outline.setAttribute("d", outline_sentence);
-      outline.setAttribute("fill", "none");
+      outline.setAttribute("fill", "transparent");
       outline.setAttribute("stroke", strokeColor);
       if (use_outline){
           container.appendChild(outline);
@@ -295,7 +295,7 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
       let outline = document.createElementNS(svgURI, "path");
       outline_sentence = `M0 0  ${0.5 * s} ${h}  ${-0.5 * s} ${h} Z`;
       outline.setAttribute("d", outline_sentence);
-      outline.setAttribute("fill", "none");
+      outline.setAttribute("fill", "transparent");
       outline.setAttribute("stroke", strokeColor);
       if (use_outline){
           container.appendChild(outline);
@@ -903,8 +903,8 @@ function gameLoop() {
     65 * 3, 
     60, 
     core.rot_degree, 
-    "none", 
-    "none", 
+    "transparent", 
+    "transparent", 
     "white"
   );
 
