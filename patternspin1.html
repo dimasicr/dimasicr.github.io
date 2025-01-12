@@ -61,7 +61,7 @@ document.addEventListener('touchend', (event) => {
 });
 
 function handleGesture() {
-  const swipeThreshold = 15; // Minimum distance to consider as a swipe
+  const swipeThreshold = 10; // Minimum distance to consider as a swipe
   if (touchEndX < touchStartX - swipeThreshold) {
     rotateCounterClockwise();
     showInstrution = false;
