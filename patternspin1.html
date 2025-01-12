@@ -51,11 +51,11 @@ adjustSvgSize();
 window.addEventListener("resize", adjustSvgSize);
 
 
-document.addEventListener('touchstart', (event) => {
+svg.addEventListener('touchstart', (event) => {
   touchStartX = event.changedTouches[0].screenX;
 });
 
-document.addEventListener('touchend', (event) => {
+svg.addEventListener('touchend', (event) => {
   touchEndX = event.changedTouches[0].screenX;
   handleGesture();
 });
