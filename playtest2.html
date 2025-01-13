@@ -649,6 +649,7 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
 
               if (this.edges[0] === getOverlappingEdge(this, obj) && this.bottomNeighbor === null  ){
                 this.bottomNeighbor = obj;
+                this.isLinked = true;
                 if (obj.motive === 'hexagon'){
                     this.cy = obj.cy - 3 /3 *  Math.sin(60 * 2 * Math.PI/ 360) * this.l - 0.5 * this.l;
                   }
@@ -658,48 +659,65 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
               if (this.edges[1] === getOverlappingEdge(this, obj) && this.LeftNeighbor === null  ){
                 console.log("Zukkkyyyy");
                 this.LeftNeighbor = obj;
+                this.isLinked = true;
                 }
 
               if (this.edges[3] === getOverlappingEdge(this, obj) && this.RightNeighbor === null  ){
                 console.log("Zukkkyyyy");
                 this.RightNeighbor = obj;
+                this.isLinked = true;
                 }
-              
-
-
-
-
-
-
-
+            
             }
+          }
 
 
 
 
 
-
+          for (let obj of objList) {
             if (hasSameEdge(this, obj) && this.id != obj.id) {
               this.is_collision = true;
               break;
             }
 
-                        for (let edge1 of this.edges){
+            for (let edge1 of this.edges){
               for (let edge2 of obj.edges){
-                  if (edgesIntersect(edge1, edge2) === true && this.id != obj.id ) {
+                  if (edgesIntersect(edge1, edge2) === true && this.id != obj.id && this.bottomNeighbor != obj) {
   
-                        if(this.bottomNeighbor == obj.bottomNeighbor ){
-                          break;
-                        }
+
+                  if (obj.isLinked === true && this.isLinked === true) {
+                  console.log("Both objects are linked, continuing...");
+                  continue;
+                  }
+
+                  if ( ((edge1[0][0] === edge2[1][0] && edge1[0][1] === edge2[1][1]) || (edge1[1][0] === edge2[0][0] && edge1[1][1] === edge2[0][1])) ) {
+                  console.log("Shared endpoint detected, skipping...");
+                                                console.log("Skipped Objects:", this.id, obj.id);
+
+                  continue;
+                  }
+
+                                    if ( !((edge1[0][0] === edge2[1][0] && edge1[0][1] === edge2[1][1]) || (edge1[1][0] === edge2[0][0] && edge1[1][1] === edge2[0][1])) ) {
+
                         this.is_collision = true;
                         console.log("Chiho Zukky!");
                         console.log(obj);
                         life = false;
+                              console.log("Objects:", this.id, obj.id);
+                              console.log(((edge1[0][0] === edge2[1][0] && edge1[0][1] === edge2[1][1]) || (edge1[1][0] === edge2[0][0] && edge1[1][1] === edge2[0][1])));
+                              console.log(edge1, edge2);
+
+                            }
+
 
                       
                   }
               }
             }
+
+
+
 
 
 
