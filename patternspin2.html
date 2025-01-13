@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Play Test 1 </title>
+  <title>Pattern Spin 2 </title>
   <style>
     body {
       margin: 0;
@@ -14,22 +14,26 @@
       align-items: center;
       height: 100vh;
     }
+
+      path, rect, circle {
+    pointer-events: none;
+  }
   </style>
 </head>
 <body>
   <!-- SVG Canvas -->
   <svg id="game" width="400" height="600" style="background: #38445a;"></svg>
   <script>
-    const svgNS = "http://www.w3.org/2000/svg";
-    const svgURI = 'http://www.w3.org/2000/svg';
-    const svg = document.getElementById("game");
-    let life = true;
-    let rotationAngle = 0; // Initialize rotation angle
-    let touchStartX = 0;
-    let touchEndX = 0;
-    const maxSvgWidth = 400; // Maximum width in pixels
-    const maxSvgHeight = 700; // Maximum height in pixels
-    let showInstrution = true;
+const svgNS = "http://www.w3.org/2000/svg";
+const svgURI = 'http://www.w3.org/2000/svg';
+const svg = document.getElementById("game");
+let life = true;
+let rotationAngle = 0; // Initialize rotation angle
+let touchStartX = 0;
+let touchEndX = 0;
+const maxSvgWidth = 400; // Maximum width in pixels
+const maxSvgHeight = 700; // Maximum height in pixels
+let showInstrution = true;
 
 // Adjust SVG dimensions based on screen size
 function adjustSvgSize() {
@@ -48,6 +52,29 @@ adjustSvgSize();
 
 // Re-adjust SVG size on window resize
 window.addEventListener("resize", adjustSvgSize);
+
+
+document.addEventListener('touchstart', (event) => {
+  touchStartX = event.changedTouches[0].screenX;
+});
+
+document.addEventListener('touchend', (event) => {
+  touchEndX = event.changedTouches[0].screenX;
+  handleGesture();
+});
+
+function handleGesture() {
+  const swipeThreshold = 15; // Minimum distance to consider as a swipe
+  if (touchEndX < touchStartX - swipeThreshold) {
+    rotateCounterClockwise();
+    showInstrution = false;
+    removeSvgChildById(svg, 'textTutorialInit2');
+  } else if (touchEndX > touchStartX + swipeThreshold) {
+    rotateClockwise();
+    showInstrution = false;
+    removeSvgChildById(svg, 'textTutorialInit2');
+  }
+}
     
     
     function removeSvgChildById(svgContainer, targetId) {
@@ -1180,7 +1207,7 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
       }
 
         removeSvgChildById(svg, 'hint');
-        drawHint(200, 450, 'hint', 65, 60, 15, "none", "none", "white");
+        drawHint(200, 450, 'hint', unitSize, 0, 15 + core.rot_degree, "none", "none", "white");
 
 
       if (life === true){
@@ -1219,13 +1246,37 @@ if (
         text.setAttribute("x", "50%");
         text.setAttribute("y", "50%");
         text.setAttribute("text-anchor", "middle");
-        text.setAttribute("dominant-baseline", "middle");
-        text.setAttribute("fill", "white");
-        text.setAttribute("font-size", "40");
-        text.setAttribute("font-family", "Arial, sans-serif");
-        text.textContent = "Game Over";
+    text.setAttribute("dominant-baseline", "middle");
+    text.setAttribute("fill", "white");
+    text.setAttribute("font-size", "20");
+    text.setAttribute("font-family", "Arial, sans-serif");
+    text.textContent = "Game Over. Press any key to retry";
         // Append the text to the SVG
         svg.appendChild(text);
+
+            function waitForUserInput(callback) {
+    const handleUserInput = (event) => {
+              console.log("User input received:", event.type, event.key);
+
+        document.removeEventListener("keydown", handleUserInput);
+        document.removeEventListener("click", handleUserInput);
+        callback(); // Proceed with the game logic
+    };
+
+    // Add event listeners only if they're not already attached
+    document.removeEventListener("keydown", handleUserInput);
+    document.removeEventListener("click", handleUserInput);
+
+    document.addEventListener("keydown", handleUserInput);
+    document.addEventListener("click", handleUserInput);
+    }
+
+    // Insert Pause and wait for input before continue the statement
+    waitForUserInput(() => {
+    location.reload(true);    
+    });
+
+    
       }
     }
 
