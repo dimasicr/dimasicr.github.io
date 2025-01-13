@@ -24,8 +24,32 @@
     const svgURI = 'http://www.w3.org/2000/svg';
     const svg = document.getElementById("game");
     let life = true;
+    let rotationAngle = 0; // Initialize rotation angle
+    let touchStartX = 0;
+    let touchEndX = 0;
+    const maxSvgWidth = 400; // Maximum width in pixels
+    const maxSvgHeight = 700; // Maximum height in pixels
+    let showInstrution = true;
 
+// Adjust SVG dimensions based on screen size
+function adjustSvgSize() {
+  const screenWidth = window.innerWidth;  // Current screen width
+  const screenHeight = window.innerHeight; // Current screen height
+  // Cap width and height
+  const newWidth = Math.min(screenWidth, maxSvgWidth);
+  const newHeight = Math.min(screenHeight, maxSvgHeight);
+  // Update SVG attributes
+  svg.setAttribute("width", newWidth);
+  svg.setAttribute("height", newHeight);
+}
 
+// Adjust SVG size initially
+adjustSvgSize();
+
+// Re-adjust SVG size on window resize
+window.addEventListener("resize", adjustSvgSize);
+    
+    
     function removeSvgChildById(svgContainer, targetId) {
     // Get all child elements
     const children = svgContainer.children;
@@ -877,7 +901,6 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
 
 
 
-    let rotationAngle = 0; // Initialize rotation angle
 
     function rotateClockwise() {
       rotationAngle = (rotationAngle + 30) % 360; // Increase rotation by 30 degrees
@@ -1079,7 +1102,10 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
 
     // Initialize the Game
     let objList = [];
+    const cx = svg.getAttribute("width") / 2;
+    const unitSize = svg.getAttribute("width") / 8;
 
+    
     // let core = new TriangleTumpal(200, 250, 65, 'triangle', 0, 'tr');
     // objList.push(core);
 
@@ -1089,54 +1115,54 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
     // objList.push(hint);
 
 
-    let sq = new SquareTumpal(200, 100, 65, 'square', 0, 'sq');
+    let sq = new SquareTumpal(cx, 100, unitSize, 'square', 0, 'sq');
     objList.push(sq);
 
-    let sq2 = new SquareTumpal(200, -200, 65, 'square', 0, 'sq2');
+    let sq2 = new SquareTumpal(cx, -200, unitSize, 'square', 0, 'sq2');
     objList.push(sq2);
 
 
-    let sq3 = new SquareTumpal(200, -600, 65, 'square', 0, 'sq3');
+    let sq3 = new SquareTumpal(cx, -600, unitSize, 'square', 0, 'sq3');
     objList.push(sq3);
 
-    let sq4 = new SquareTumpal(200, -900, 65, 'square', 0, 'sq4');
+    let sq4 = new SquareTumpal(cx, -900, unitSize, 'square', 0, 'sq4');
     objList.push(sq4);
 
-    let sq5 = new SquareTumpal(200, -1200, 65, 'square', 0, 'sq5');
+    let sq5 = new SquareTumpal(cx, -1200, unitSize, 'square', 0, 'sq5');
     objList.push(sq5);
 
-    let sq6 = new SquareTumpal(200, -1500, 65, 'square', 0, 'sq6');
+    let sq6 = new SquareTumpal(cx, -1500, unitSize, 'square', 0, 'sq6');
     objList.push(sq6);
 
-    let tri = new TriangleTumpal(200, -1700, 65, 'triangle', 60, 'tr');
+    let tri = new TriangleTumpal(cx, -1700, unitSize, 'triangle', 60, 'tr');
     objList.push(tri);
 
-    let tri2 = new TriangleTumpal(200, -1900, 65, 'triangle', 60, 'tr2');
+    let tri2 = new TriangleTumpal(cx, -1900, unitSize, 'triangle', 60, 'tr2');
     objList.push(tri2);
 
-    let tri3 = new TriangleTumpal(200, -2100, 65, 'triangle', 60, 'tr3');
+    let tri3 = new TriangleTumpal(cx, -2100, unitSize, 'triangle', 60, 'tr3');
     objList.push(tri3);
 
-    let tri4 = new TriangleTumpal(200, -2200, 65, 'triangle', 60, 'tr4');
+    let tri4 = new TriangleTumpal(cx, -2200, unitSize, 'triangle', 60, 'tr4');
     objList.push(tri4);
 
-    let tri5 = new TriangleTumpal(200, -2400, 65, 'triangle', 60, 'tr5');
+    let tri5 = new TriangleTumpal(cx, -2400, unitSize, 'triangle', 60, 'tr5');
     objList.push(tri5);
 
-    let tri6 = new TriangleTumpal(200, -2600, 65, 'triangle', 60, 'tr6');
+    let tri6 = new TriangleTumpal(cx, -2600, unitSize, 'triangle', 60, 'tr6');
     objList.push(tri6);
 
-    let core = new HexagonTumpal(200, 450, 65, 'hexagon', 0 + rotationAngle, 'core');
+    let core = new HexagonTumpal(cx, 450, unitSize, 'hexagon', 0 + rotationAngle, 'core');
     objList.push(core);
 
 
-    // let tri = new TriangleTumpal(200, 100, 65, 'triangle', 0, 'tr');
+    // let tri = new TriangleTumpal(200, 100, unitSize, 'triangle', 0, 'tr');
     // objList.push(tri);
 
-    // let tri2 = new TriangleTumpal(200, -100, 65, 'triangle', 0, 'tr2');
+    // let tri2 = new TriangleTumpal(200, -100, unitSize, 'triangle', 0, 'tr2');
     // objList.push(tri2);
 
-    // let tri3 = new TriangleTumpal(200, -300, 65, 'triangle', 0, 'tr3');
+    // let tri3 = new TriangleTumpal(200, -300, unitSize, 'triangle', 0, 'tr3');
     // objList.push(tri3);
 
 
