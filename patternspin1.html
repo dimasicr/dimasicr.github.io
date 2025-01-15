@@ -519,6 +519,18 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
 
 
         draw() {
+          this.vertices = [
+                             [this.cx + this.r * Math.cos(this.rot_deg - 3 * Math.PI/6 + 0 *  2 * Math.PI/3), this.cy + this.r * Math.sin(this.rot_deg - 3 * Math.PI/6 +  0   * 2 * Math.PI/3)]
+                            ,[this.cx + this.r * Math.cos(this.rot_deg - 3 * Math.PI/6 + 1 *  2 * Math.PI/3), this.cy + this.r * Math.sin(this.rot_deg - 3 * Math.PI/6 +  1   * 2 * Math.PI/3)]
+                            ,[this.cx + this.r * Math.cos(this.rot_deg - 3 * Math.PI/6 + 2 *  2 * Math.PI/3), this.cy + this.r * Math.sin(this.rot_deg - 3 * Math.PI/6 +  2   * 2 * Math.PI/3)]
+
+                          ];
+          this.edges = [ 
+
+                           [[this.vertices[0][0], this.vertices[0][1]] , [this.vertices[1][0], this.vertices[1][1]]] // bottom
+                          ,[[this.vertices[1][0], this.vertices[1][1]] , [this.vertices[2][0], this.vertices[2][1]]] // left
+                          ,[[this.vertices[2][0], this.vertices[2][1]] , [this.vertices[0][0], this.vertices[0][1]]] // up
+          ]
           drawTriangle(this.cx, this.cy, this.id, this.l, 30, 0 + this.rot_degree, "#b49084", "#38445a", "gold", false, "gold");
           let outline1 = document.createElementNS(svgURI, "path");
           let outline_sentence1 = `
