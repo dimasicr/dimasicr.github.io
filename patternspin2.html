@@ -767,7 +767,9 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
 
                         this.is_collision = true;
                         console.log("Chiho Zukky!");
-                        console.log(obj);
+                        console.log("this is linked: ", this.isLinked);
+                        console.log("obj is linked: ", obj.isLinked);
+
                         life = false;
                               console.log("Objects:", this.id, obj.id);
                               console.log(((edge1[0][0] === edge2[1][0] && edge1[0][1] === edge2[1][1]) || (edge1[1][0] === edge2[0][0] && edge1[1][1] === edge2[0][1])));
@@ -823,7 +825,7 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
           this.bottomNeighbor = null;
           this.rightNeighbor = null;
           this.neighbors = [];
-
+          this.isLinked = false;
         }
 
 
@@ -888,6 +890,11 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
               if (this.edges[1] === getOverlappingEdge(this, obj) && this.bottomNeighbor === null){
                 console.log("Chihoku!");
                 this.bottomNeighbor = obj;
+                if(obj.isLinked === true){
+                  this.isLinked = true;
+                }
+
+
                 if(this.bottomNeighbor.motive === 'hexagon'){
                   this.cy = obj.cy - 4 /3 *  Math.sin(60 * 2 * Math.PI/ 360) * this.l;
                 }
@@ -905,6 +912,9 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
               if (this.edges[0] === getOverlappingEdge(this, obj) && this.rightNeighbor === null){
                 console.log("Chihoku!");
                 this.rightNeighbor = obj;
+                                if(obj.isLinked === true){
+                  this.isLinked = true;
+                }
                 if (this.rightNeighbor.motive === 'square'){
                   console.log("Chihochan!");
                   let sqtri_dist = 1 /3 *  Math.sin(60 * 2 * Math.PI/ 360) * this.l + 0.5 * this.l;
@@ -929,7 +939,7 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
 
             for (let edge1 of this.edges){
               for (let edge2 of obj.edges){
-                  if (edgesIntersect(edge1, edge2) === true && this.id != obj.id && this.bottomNeighbor != obj) {
+                  if (edgesIntersect(edge1, edge2) === true && this.id != obj.id && this.bottomNeighbor != obj && obj.isLinked === false) {
   
                         this.is_collision = true;
                         console.log("Chiho Zukky!");
@@ -1169,6 +1179,11 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
     // objList.push(hint);
 
 
+
+    let core = new HexagonTumpal(cx, 450, unitSize, 'hexagon', 0 + rotationAngle, 'core');
+    objList.push(core);
+
+
     let sq = new SquareTumpal(cx, 200, unitSize, 'square', 0, 'sq');
     objList.push(sq);
 
@@ -1206,8 +1221,7 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
     let tri6 = new TriangleTumpal(cx, -2000, unitSize, 'triangle', 60, 'tr6');
     objList.push(tri6);
 
-    let core = new HexagonTumpal(cx, 450, unitSize, 'hexagon', 0 + rotationAngle, 'core');
-    objList.push(core);
+
 
 
     // let tri = new TriangleTumpal(200, 100, unitSize, 'triangle', 0, 'tr');
