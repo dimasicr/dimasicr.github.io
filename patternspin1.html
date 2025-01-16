@@ -37,33 +37,104 @@ const maxSvgHeight = 700; // Maximum height in pixels
 let showInstrution = true;
 
 
-// Function to generate a simple beep sound
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+
 function playBeep() {
-  // Create an audio context
-  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  
-  // Create an oscillator node (the source of the beep sound)
-  const oscillator = audioCtx.createOscillator();
-  
-  // Create a gain node (to control the volume)
+  // Ensure the AudioContext is resumed before playing sound
+  if (audioCtx.state === "suspended") {
+    audioCtx.resume().then(() => {
+      generateBeep();
+    });
+  } else {
+    generateBeep();
+  }
+
+  function generateBeep() {
+    // // Create an oscillator node (the source of the beep sound)
+    // const oscillator = audioCtx.createOscillator();
+
+    // // Create a gain node (to control the volume)
+    // const gainNode = audioCtx.createGain();
+
+    // // Set oscillator properties
+    // oscillator.type = "sine"; // You can use "square", "sawtooth", or "triangle" too
+    // oscillator.frequency.setValueAtTime(440, audioCtx.currentTime); // Frequency in Hz (e.g., 440Hz = A4 note)
+
+    // // Set gain properties
+    // gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); // Volume
+
+    // // Connect nodes: oscillator -> gain -> destination (speakers)
+    // oscillator.connect(gainNode);
+    // gainNode.connect(audioCtx.destination);
+
+    // // Start the sound
+    // oscillator.start();
+
+    // // Stop the sound after 200 milliseconds
+    // oscillator.stop(audioCtx.currentTime + 0.2);
+  // }
+
+    // const oscillator = audioCtx.createOscillator();
+    // const gainNode = audioCtx.createGain();
+
+    // // Oscillator settings for a bell-like sound
+    // oscillator.type = "sine"; // Sine wave produces a purer bell tone
+    // oscillator.frequency.setValueAtTime(880, audioCtx.currentTime); // Base frequency for "cling"
+
+    // // Frequency modulation to create a metallic sound
+    // const modulation = audioCtx.createOscillator();
+    // const modulationGain = audioCtx.createGain();
+    // modulation.frequency.setValueAtTime(50, audioCtx.currentTime); // Modulation frequency
+    // modulationGain.gain.setValueAtTime(40, audioCtx.currentTime); // Modulation depth
+    // modulation.connect(modulationGain);
+    // modulationGain.connect(oscillator.frequency);
+    // modulation.start();
+
+    // // Gain node for volume envelope
+    // gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime); // Initial volume
+    // gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1); // Fade out
+
+    // // Connect oscillator -> gain -> destination
+    // oscillator.connect(gainNode);
+    // gainNode.connect(audioCtx.destination);
+
+    // // Start the oscillator and stop after 1 second
+    // oscillator.start();
+    // oscillator.stop(audioCtx.currentTime + 1);
+    // modulation.stop(audioCtx.currentTime + 1);
+
+
+
+  // Generate white noise buffer
+  const bufferSize = audioCtx.sampleRate * 0.1; // Duration: 0.1 seconds
+  const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+  const data = buffer.getChannelData(0);
+
+  // Fill buffer with white noise
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = Math.random() * 2 - 1; // Random values between -1 and 1
+  }
+
+  // Create a buffer source to play the noise
+  const noiseSource = audioCtx.createBufferSource();
+  noiseSource.buffer = buffer;
+
+  // Create a gain node to shape the snap envelope
   const gainNode = audioCtx.createGain();
-  
-  // Set oscillator properties
-  oscillator.type = "sine"; // You can try "square", "sawtooth", or "triangle" for different tones
-  oscillator.frequency.setValueAtTime(440, audioCtx.currentTime); // Frequency in Hz (e.g., 440Hz = A4 note)
-  
-  // Set gain properties
-  gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); // Volume
-  
-  // Connect nodes: oscillator -> gain -> destination (speakers)
-  oscillator.connect(gainNode);
+  gainNode.gain.setValueAtTime(1, audioCtx.currentTime); // Start volume
+  gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05); // Rapid fade-out
+
+  // Connect nodes
+  noiseSource.connect(gainNode);
   gainNode.connect(audioCtx.destination);
-  
-  // Start the sound
-  oscillator.start();
-  
-  // Stop the sound after 200 milliseconds
-  oscillator.stop(audioCtx.currentTime + 0.2);
+
+  // Start noise playback and stop it after a short duration
+  noiseSource.start();
+  noiseSource.stop(audioCtx.currentTime + 0.1);
+
+
+  }
 }
 
 
@@ -89,10 +160,12 @@ window.addEventListener("resize", adjustSvgSize);
 
 svg.addEventListener('touchstart', (event) => {
   touchStartX = event.changedTouches[0].screenX;
+  audioCtx.resume();
 });
 
 svg.addEventListener('touchend', (event) => {
   touchEndX = event.changedTouches[0].screenX;
+  audioCtx.resume();
   handleGesture();
 });
 
@@ -860,6 +933,7 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
 
     // Add event listeners for key presses
     document.addEventListener('keydown', (event) => {
+      audioCtx.resume();
     if (event.key === 'ArrowRight') {
       rotateClockwise();
       showInstrution = false;
