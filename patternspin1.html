@@ -51,57 +51,7 @@ function playBeep() {
   }
 
   function generateBeep() {
-    // // Create an oscillator node (the source of the beep sound)
-    // const oscillator = audioCtx.createOscillator();
-
-    // // Create a gain node (to control the volume)
-    // const gainNode = audioCtx.createGain();
-
-    // // Set oscillator properties
-    // oscillator.type = "sine"; // You can use "square", "sawtooth", or "triangle" too
-    // oscillator.frequency.setValueAtTime(440, audioCtx.currentTime); // Frequency in Hz (e.g., 440Hz = A4 note)
-
-    // // Set gain properties
-    // gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); // Volume
-
-    // // Connect nodes: oscillator -> gain -> destination (speakers)
-    // oscillator.connect(gainNode);
-    // gainNode.connect(audioCtx.destination);
-
-    // // Start the sound
-    // oscillator.start();
-
-    // // Stop the sound after 200 milliseconds
-    // oscillator.stop(audioCtx.currentTime + 0.2);
-  // }
-
-    // const oscillator = audioCtx.createOscillator();
-    // const gainNode = audioCtx.createGain();
-
-    // // Oscillator settings for a bell-like sound
-    // oscillator.type = "sine"; // Sine wave produces a purer bell tone
-    // oscillator.frequency.setValueAtTime(880, audioCtx.currentTime); // Base frequency for "cling"
-
-    // // Frequency modulation to create a metallic sound
-    // const modulation = audioCtx.createOscillator();
-    // const modulationGain = audioCtx.createGain();
-    // modulation.frequency.setValueAtTime(50, audioCtx.currentTime); // Modulation frequency
-    // modulationGain.gain.setValueAtTime(40, audioCtx.currentTime); // Modulation depth
-    // modulation.connect(modulationGain);
-    // modulationGain.connect(oscillator.frequency);
-    // modulation.start();
-
-    // // Gain node for volume envelope
-    // gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime); // Initial volume
-    // gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1); // Fade out
-
-    // // Connect oscillator -> gain -> destination
-    // oscillator.connect(gainNode);
-    // gainNode.connect(audioCtx.destination);
-
-    // // Start the oscillator and stop after 1 second
-    // oscillator.start();
-    // oscillator.stop(audioCtx.currentTime + 1);
+ 
     // modulation.stop(audioCtx.currentTime + 1);
 
 
@@ -136,6 +86,48 @@ function playBeep() {
 
   }
 }
+
+
+
+function playCrash() {
+
+
+  // Create a white noise buffer
+  const bufferSize = audioCtx.sampleRate * 0.5; // Duration: 0.5 seconds
+  const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+  const data = buffer.getChannelData(0);
+
+  // Fill buffer with white noise
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = Math.random() * 2 - 1; // Random values between -1 and 1
+  }
+
+  // Create a buffer source to play the noise
+  const noiseSource = audioCtx.createBufferSource();
+  noiseSource.buffer = buffer;
+
+  // Create a gain node to control the envelope
+  const gainNode = audioCtx.createGain();
+  gainNode.gain.setValueAtTime(1, audioCtx.currentTime); // Start loud
+  gainNode.gain.exponentialRampToValueAtTime(0.1, audioCtx.currentTime + 0.1); // Quick decay
+  gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4); // Fade out
+
+  // Optional: Add a filter for a metallic effect
+  const filter = audioCtx.createBiquadFilter();
+  filter.type = "bandpass"; // Emulate the crash sound by emphasizing mid frequencies
+  filter.frequency.setValueAtTime(1000, audioCtx.currentTime); // Center frequency
+  filter.Q.setValueAtTime(5, audioCtx.currentTime); // Narrow band
+
+  // Connect nodes
+  noiseSource.connect(filter);
+  filter.connect(gainNode);
+  gainNode.connect(audioCtx.destination);
+
+  // Start the noise source and stop it after 0.5 seconds
+  noiseSource.start();
+  noiseSource.stop(audioCtx.currentTime + 0.5);
+}
+
 
 
 
@@ -731,6 +723,7 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
                         console.log("Chiho Zukky!");
                         console.log(obj);
                         life = false;
+                        playCrash();
 
                       
                   }
