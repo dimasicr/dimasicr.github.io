@@ -36,6 +36,38 @@ const maxSvgWidth = 400; // Maximum width in pixels
 const maxSvgHeight = 700; // Maximum height in pixels
 let showInstrution = true;
 
+
+// Function to generate a simple beep sound
+function playBeep() {
+  // Create an audio context
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  
+  // Create an oscillator node (the source of the beep sound)
+  const oscillator = audioCtx.createOscillator();
+  
+  // Create a gain node (to control the volume)
+  const gainNode = audioCtx.createGain();
+  
+  // Set oscillator properties
+  oscillator.type = "sine"; // You can try "square", "sawtooth", or "triangle" for different tones
+  oscillator.frequency.setValueAtTime(440, audioCtx.currentTime); // Frequency in Hz (e.g., 440Hz = A4 note)
+  
+  // Set gain properties
+  gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); // Volume
+  
+  // Connect nodes: oscillator -> gain -> destination (speakers)
+  oscillator.connect(gainNode);
+  gainNode.connect(audioCtx.destination);
+  
+  // Start the sound
+  oscillator.start();
+  
+  // Stop the sound after 200 milliseconds
+  oscillator.stop(audioCtx.currentTime + 0.2);
+}
+
+
+
 // Adjust SVG dimensions based on screen size
 function adjustSvgSize() {
   const screenWidth = window.innerWidth;  // Current screen width
@@ -577,6 +609,7 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
               if (this.edges[1] === getOverlappingEdge(this, obj) && this.bottomNeighbor === null){
                 console.log("Chihoku!");
                 this.bottomNeighbor = obj;
+                playBeep();
                 if(this.bottomNeighbor.motive === 'hexagon'){
                   this.cy = obj.cy - 4 /3 *  Math.sin(60 * 2 * Math.PI/ 360) * this.l;
                 }
@@ -594,6 +627,7 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
               if (this.edges[0] === getOverlappingEdge(this, obj) && this.rightNeighbor === null){
                 console.log("Chihoku!");
                 this.rightNeighbor = obj;
+                playBeep();
                 if (this.rightNeighbor.motive === 'square'){
                   console.log("Chihochan!");
                   let sqtri_dist = 1 /3 *  Math.sin(60 * 2 * Math.PI/ 360) * this.l + 0.5 * this.l;
