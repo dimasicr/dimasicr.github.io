@@ -1102,12 +1102,69 @@ function gameLoop() {
     waitForUserInput(() => {
     location.reload(true);    
     });
+
+
+
   }
 }
 
 
-    // Start the game
+
+    function waitForGameStart(callback) {
+    const handleUserInput = (event) => {
+
+        document.removeEventListener("keydown", handleUserInput);
+        document.removeEventListener("click", handleUserInput);
+        callback(); // Proceed with the game logic
+    };
+
+    // Add event listeners only if they're not already attached
+    document.removeEventListener("keydown", handleUserInput);
+    document.removeEventListener("click", handleUserInput);
+
+    document.addEventListener("keydown", handleUserInput);
+    document.addEventListener("click", handleUserInput);
+    }
+
+
+
+    const text2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    text2.setAttribute("x", "50%");
+    text2.setAttribute("y", "50%");
+    text2.setAttribute("id", "waitStart");
+    text2.setAttribute("text-anchor", "middle");
+    text2.setAttribute("dominant-baseline", "middle");
+    text2.setAttribute("fill", "white");
+    text2.setAttribute("font-size", "20");
+    text2.setAttribute("font-family", "Arial, sans-serif");
+    text2.textContent = "Level 1: Hidden Star ";
+    svg.appendChild(text2); // Append the "Game Clear" text to the SVG
+
+
+    const text3 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    text3.setAttribute("x", "50%");
+    text3.setAttribute("y", "60%");
+    text3.setAttribute("id", "waitStart");
+    text3.setAttribute("text-anchor", "middle");
+    text3.setAttribute("dominant-baseline", "middle");
+    text3.setAttribute("fill", "white");
+    text3.setAttribute("font-size", "20");
+    text3.setAttribute("font-family", "Arial, sans-serif");
+    text3.textContent = "Click or tap to start ";
+    svg.appendChild(text3); // Append the "Game Clear" text to the SVG
+
+
+
+    // Insert Pause and wait for input before continue the statement
+    waitForGameStart(() => {
+    removeSvgChildById(svg, 'waitStart');
     gameLoop();
+    });
+
+
+
+    // Start the game
+    // gameLoop();
   </script>
 </body>
 </html>
