@@ -335,8 +335,20 @@ function edgesIntersect(edge1, edge2) {
   const o3 = orientation(p2, q2, p1);
   const o4 = orientation(p2, q2, q1);
 
+  if (o1 === 0 && onSegment(p1.map(Math.round), p2.map(Math.round), q1.map(Math.round) )) return false;
+  if (o2 === 0 && onSegment(p1.map(Math.round), q2.map(Math.round), q1.map(Math.round) )) return false;
+  if (o3 === 0 && onSegment(p2.map(Math.round), p1.map(Math.round), q2.map(Math.round) )) return false;
+  if (o4 === 0 && onSegment(p2.map(Math.round), q1.map(Math.round), q2.map(Math.round) )) return false;
+
+
+
   // General case: If orientations are different, the edges intersect
+  // if (o1 !== o2 && o3 !== o4) return console.log("o1:", o1, "o2:", o2, "o3:", o3, "o4:", o4);
+
   if (o1 !== o2 && o3 !== o4) return true;
+
+
+
 
   // Special cases: Check if any point of one segment lies on the other segment
   // if (o1 === 0 && onSegment(p1, p2, q1)) return true;
@@ -896,7 +908,7 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
                   continue;
                   }
 
-                  if ( ((edge1[0][0] === edge2[1][0] && edge1[0][1] === edge2[1][1]) || (edge1[1][0] === edge2[0][0] && edge1[1][1] === edge2[0][1])) ) {
+                  if ( (( Math.round(edge1[0][0]) === Math.round(edge2[1][0]) && Math.round(edge1[0][1]) === Math.round(edge2[1][1])) || ( Math.round(edge1[1][0]) === Math.round(edge2[0][0]) && Math.round(edge1[1][1]) === Math.round(edge2[0][1])  )) ) {
                   console.log("Shared endpoint detected, skipping...");
                                                 console.log("Skipped Objects:", this.id, obj.id);
 
@@ -1547,7 +1559,7 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
         requestAnimationFrame(gameLoop);
       }
 
-      
+
     }
 
 
