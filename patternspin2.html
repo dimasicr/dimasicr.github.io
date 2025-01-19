@@ -35,6 +35,140 @@ const maxSvgWidth = 400; // Maximum width in pixels
 const maxSvgHeight = 700; // Maximum height in pixels
 let showInstrution = true;
 
+
+
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+
+function playBeep() {
+  // Ensure the AudioContext is resumed before playing sound
+  if (audioCtx.state === "suspended") {
+    audioCtx.resume().then(() => {
+      generateBeep();
+    });
+  } else {
+    generateBeep();
+  }
+
+  function generateBeep() {
+ 
+    // modulation.stop(audioCtx.currentTime + 1);
+
+
+
+  // Generate white noise buffer
+  const bufferSize = audioCtx.sampleRate * 0.1; // Duration: 0.1 seconds
+  const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+  const data = buffer.getChannelData(0);
+
+  // Fill buffer with white noise
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = Math.random() * 2 - 1; // Random values between -1 and 1
+  }
+
+  // Create a buffer source to play the noise
+  const noiseSource = audioCtx.createBufferSource();
+  noiseSource.buffer = buffer;
+
+  // Create a gain node to shape the snap envelope
+  const gainNode = audioCtx.createGain();
+  gainNode.gain.setValueAtTime(1, audioCtx.currentTime); // Start volume
+  gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05); // Rapid fade-out
+
+  // Connect nodes
+  noiseSource.connect(gainNode);
+  gainNode.connect(audioCtx.destination);
+
+  // Start noise playback and stop it after a short duration
+  noiseSource.start();
+  noiseSource.stop(audioCtx.currentTime + 0.1);
+
+
+  }
+}
+
+
+
+function playCrash() {
+
+
+  // Create a white noise buffer
+  const bufferSize = audioCtx.sampleRate * 0.5; // Duration: 0.5 seconds
+  const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+  const data = buffer.getChannelData(0);
+
+  // Fill buffer with white noise
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = Math.random() * 2 - 1; // Random values between -1 and 1
+  }
+
+  // Create a buffer source to play the noise
+  const noiseSource = audioCtx.createBufferSource();
+  noiseSource.buffer = buffer;
+
+  // Create a gain node to control the envelope
+  const gainNode = audioCtx.createGain();
+  gainNode.gain.setValueAtTime(1, audioCtx.currentTime); // Start loud
+  gainNode.gain.exponentialRampToValueAtTime(0.1, audioCtx.currentTime + 0.1); // Quick decay
+  gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4); // Fade out
+
+  // Optional: Add a filter for a metallic effect
+  const filter = audioCtx.createBiquadFilter();
+  filter.type = "bandpass"; // Emulate the crash sound by emphasizing mid frequencies
+  filter.frequency.setValueAtTime(1000, audioCtx.currentTime); // Center frequency
+  filter.Q.setValueAtTime(5, audioCtx.currentTime); // Narrow band
+
+  // Connect nodes
+  noiseSource.connect(filter);
+  filter.connect(gainNode);
+  gainNode.connect(audioCtx.destination);
+
+  // Start the noise source and stop it after 0.5 seconds
+  noiseSource.start();
+  noiseSource.stop(audioCtx.currentTime + 0.5);
+}
+
+
+
+function playGameClear() {
+
+  // Notes in the melody (frequency in Hz) and their durations
+  const notes = [
+    { freq: 523.25, duration: 0.2 }, // C5
+    { freq: 659.25, duration: 0.2 }, // E5
+    { freq: 783.99, duration: 0.2 }, // G5
+    { freq: 1046.5, duration: 0.4 }, // C6 (hold longer)
+  ];
+
+  // Play each note in sequence
+  let currentTime = audioCtx.currentTime;
+  notes.forEach((note, index) => {
+    const osc = audioCtx.createOscillator(); // Create an oscillator for the tone
+    const gainNode = audioCtx.createGain();  // Create a gain node for volume control
+
+    osc.type = "sine"; // Smooth, pleasant sound
+    osc.frequency.setValueAtTime(note.freq, currentTime); // Set frequency
+    gainNode.gain.setValueAtTime(0.3, currentTime); // Set initial volume
+
+    // Slight fade-out for each note
+    gainNode.gain.exponentialRampToValueAtTime(0.001, currentTime + note.duration);
+
+    // Connect nodes and play the note
+    osc.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    osc.start(currentTime);
+    osc.stop(currentTime + note.duration);
+
+    // Increment the current time by the note's duration
+    currentTime += note.duration;
+  });
+}
+
+
+
+
+
+
 // Adjust SVG dimensions based on screen size
 function adjustSvgSize() {
   const screenWidth = window.innerWidth;  // Current screen width
@@ -715,6 +849,8 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
               if (this.edges[0] === getOverlappingEdge(this, obj) && this.bottomNeighbor === null  ){
                 this.bottomNeighbor = obj;
                 this.isLinked = true;
+                                playBeep();
+
                 if (obj.motive === 'hexagon'){
                     this.cy = obj.cy - 3 /3 *  Math.sin(60 * 2 * Math.PI/ 360) * this.l - 0.5 * this.l;
                   }
@@ -725,12 +861,14 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
                 console.log("Zukkkyyyy");
                 this.LeftNeighbor = obj;
                 this.isLinked = true;
+                playBeep();
                 }
 
               if (this.edges[3] === getOverlappingEdge(this, obj) && this.RightNeighbor === null  ){
                 console.log("Zukkkyyyy");
                 this.RightNeighbor = obj;
                 this.isLinked = true;
+                playBeep();
                 }
             
             }
@@ -746,9 +884,11 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
               break;
             }
 
+
+
             for (let edge1 of this.edges){
               for (let edge2 of obj.edges){
-                  if (edgesIntersect(edge1, edge2) === true && this.id != obj.id && this.bottomNeighbor != obj) {
+                  if (edgesIntersect(edge1, edge2) === true && this.id != obj.id  ) {
   
 
                   if (obj.isLinked === true && this.isLinked === true) {
@@ -767,9 +907,7 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
 
                         this.is_collision = true;
                         console.log("Chiho Zukky!");
-                        console.log("this is linked: ", this.isLinked);
-                        console.log("obj is linked: ", obj.isLinked);
-
+                        console.log(obj);
                         life = false;
                               console.log("Objects:", this.id, obj.id);
                               console.log(((edge1[0][0] === edge2[1][0] && edge1[0][1] === edge2[1][1]) || (edge1[1][0] === edge2[0][0] && edge1[1][1] === edge2[0][1])));
@@ -782,6 +920,8 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
                   }
               }
             }
+
+
 
 
 
@@ -939,12 +1079,33 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
 
             for (let edge1 of this.edges){
               for (let edge2 of obj.edges){
-                  if (edgesIntersect(edge1, edge2) === true && this.id != obj.id && this.bottomNeighbor != obj && obj.isLinked === false) {
+                  if (edgesIntersect(edge1, edge2) === true && this.id != obj.id  ) {
   
+
+                  if (obj.isLinked === true && this.isLinked === true) {
+                  console.log("Both objects are linked, continuing...");
+                  continue;
+                  }
+
+                  if ( ((edge1[0][0] === edge2[1][0] && edge1[0][1] === edge2[1][1]) || (edge1[1][0] === edge2[0][0] && edge1[1][1] === edge2[0][1])) ) {
+                  console.log("Shared endpoint detected, skipping...");
+                                                console.log("Skipped Objects:", this.id, obj.id);
+
+                  continue;
+                  }
+
+                                    if ( !((edge1[0][0] === edge2[1][0] && edge1[0][1] === edge2[1][1]) || (edge1[1][0] === edge2[0][0] && edge1[1][1] === edge2[0][1])) && this.isLinked === false ) {
+
                         this.is_collision = true;
                         console.log("Chiho Zukky!");
                         console.log(obj);
                         life = false;
+                              console.log("Objects that intersects: ", this.id, obj.id);
+                              console.log(((edge1[0][0] === edge2[1][0] && edge1[0][1] === edge2[1][1]) || (edge1[1][0] === edge2[0][0] && edge1[1][1] === edge2[0][1])));
+                              console.log(edge1, edge2);
+
+                            }
+
 
                       
                   }
@@ -989,59 +1150,88 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
 
 
 
-      if (core.upperNeighbor != null) {
-        core.upperNeighbor.cx = core.cx + core.upperNeighborDist * Math.sin(core.rot_deg );
-        core.upperNeighbor.cy = core.cy - core.upperNeighborDist * Math.cos(core.rot_deg );
-        core.upperNeighbor.rot_degree = core.rot_degree;
-        core.upperNeighbor.rot_deg = core.rot_deg; 
-        core.upperNeighbor.update();
-      }
+      // if (core.upperNeighbor != null) {
+      //   core.upperNeighbor.cx = core.cx + core.upperNeighborDist * Math.sin(core.rot_deg );
+      //   core.upperNeighbor.cy = core.cy - core.upperNeighborDist * Math.cos(core.rot_deg );
+      //   core.upperNeighbor.rot_degree = core.rot_degree;
+      //   core.upperNeighbor.rot_deg = core.rot_deg; 
+      //   core.upperNeighbor.update();
+      // }
 
-      if (core.upperLeftNeighbor != null) {
-        core.upperLeftNeighbor.cx = core.cx + core.upperLeftNeighborDist * Math.sin(core.rot_deg - Math.PI/3 );
-        core.upperLeftNeighbor.cy = core.cy - core.upperLeftNeighborDist * Math.cos(core.rot_deg - Math.PI/3 );
-        core.upperLeftNeighbor.rot_degree = core.rot_degree - 60;
-        core.upperLeftNeighbor.rot_deg = core.rot_deg - Math.PI/3; 
-        core.upperLeftNeighbor.update();
-      }
-      if (core.bottomLeftNeighbor != null) {
-        core.bottomLeftNeighbor.cx = core.cx + core.bottomLeftNeighborDist * Math.sin(core.rot_deg - 2 * Math.PI/3 );
-        core.bottomLeftNeighbor.cy = core.cy - core.bottomLeftNeighborDist * Math.cos(core.rot_deg - 2 * Math.PI/3 );
-        core.bottomLeftNeighbor.rot_degree = core.rot_degree - 2 * 60;
-        core.bottomLeftNeighbor.rot_deg = core.rot_deg - 2 * Math.PI/3; 
-        core.bottomLeftNeighbor.update();
-      }
+      // if (core.upperLeftNeighbor != null) {
+      //   core.upperLeftNeighbor.cx = core.cx + core.upperLeftNeighborDist * Math.sin(core.rot_deg - Math.PI/3 );
+      //   core.upperLeftNeighbor.cy = core.cy - core.upperLeftNeighborDist * Math.cos(core.rot_deg - Math.PI/3 );
+      //   core.upperLeftNeighbor.rot_degree = core.rot_degree - 60;
+      //   core.upperLeftNeighbor.rot_deg = core.rot_deg - Math.PI/3; 
+      //   core.upperLeftNeighbor.update();
+      // }
+      // if (core.bottomLeftNeighbor != null) {
+      //   core.bottomLeftNeighbor.cx = core.cx + core.bottomLeftNeighborDist * Math.sin(core.rot_deg - 2 * Math.PI/3 );
+      //   core.bottomLeftNeighbor.cy = core.cy - core.bottomLeftNeighborDist * Math.cos(core.rot_deg - 2 * Math.PI/3 );
+      //   core.bottomLeftNeighbor.rot_degree = core.rot_degree - 2 * 60;
+      //   core.bottomLeftNeighbor.rot_deg = core.rot_deg - 2 * Math.PI/3; 
+      //   core.bottomLeftNeighbor.update();
+      // }
 
-      if (core.bottomNeighbor != null) {
-        core.bottomNeighbor.cx = core.cx + core.bottomNeighborDist * Math.sin(core.rot_deg - 3 * Math.PI/3 );
-        core.bottomNeighbor.cy = core.cy - core.bottomNeighborDist * Math.cos(core.rot_deg - 3 * Math.PI/3 );
-        core.bottomNeighbor.rot_degree = core.rot_degree - 3 * 60;
-        core.bottomNeighbor.rot_deg = core.rot_deg - 3 * Math.PI/3; 
-        core.bottomNeighbor.update();
-      }
+      // if (core.bottomNeighbor != null) {
+      //   core.bottomNeighbor.cx = core.cx + core.bottomNeighborDist * Math.sin(core.rot_deg - 3 * Math.PI/3 );
+      //   core.bottomNeighbor.cy = core.cy - core.bottomNeighborDist * Math.cos(core.rot_deg - 3 * Math.PI/3 );
+      //   core.bottomNeighbor.rot_degree = core.rot_degree - 3 * 60;
+      //   core.bottomNeighbor.rot_deg = core.rot_deg - 3 * Math.PI/3; 
+      //   core.bottomNeighbor.update();
+      // }
 
-      if (core.upperRightNeighbor != null) {
-        core.upperRightNeighbor.cx = core.cx + core.upperRightNeighborDist * Math.sin(core.rot_deg + Math.PI/3 );
-        core.upperRightNeighbor.cy = core.cy - core.upperRightNeighborDist * Math.cos(core.rot_deg + Math.PI/3 );
-        core.upperRightNeighbor.rot_degree = core.rot_degree + 60;
-        core.upperRightNeighbor.rot_deg = core.rot_deg + Math.PI/3; 
-        core.upperRightNeighbor.update();
-      }
+      // if (core.upperRightNeighbor != null) {
+      //   core.upperRightNeighbor.cx = core.cx + core.upperRightNeighborDist * Math.sin(core.rot_deg + Math.PI/3 );
+      //   core.upperRightNeighbor.cy = core.cy - core.upperRightNeighborDist * Math.cos(core.rot_deg + Math.PI/3 );
+      //   core.upperRightNeighbor.rot_degree = core.rot_degree + 60;
+      //   core.upperRightNeighbor.rot_deg = core.rot_deg + Math.PI/3; 
+      //   core.upperRightNeighbor.update();
+      // }
 
-      if (core.bottomRightNeighbor != null) {
-        core.bottomRightNeighbor.cx = core.cx + core.bottomRightNeighborDist * Math.sin(core.rot_deg + 2 * Math.PI/3 );
-        core.bottomRightNeighbor.cy = core.cy - core.bottomRightNeighborDist * Math.cos(core.rot_deg + 2 * Math.PI/3 );
-        core.bottomRightNeighbor.rot_degree = core.rot_degree + 2 * 60;
-        core.bottomRightNeighbor.rot_deg = core.rot_deg + 2 * Math.PI/3; 
-        core.bottomRightNeighbor.update();
-      }
+      // if (core.bottomRightNeighbor != null) {
+      //   core.bottomRightNeighbor.cx = core.cx + core.bottomRightNeighborDist * Math.sin(core.rot_deg + 2 * Math.PI/3 );
+      //   core.bottomRightNeighbor.cy = core.cy - core.bottomRightNeighborDist * Math.cos(core.rot_deg + 2 * Math.PI/3 );
+      //   core.bottomRightNeighbor.rot_degree = core.rot_degree + 2 * 60;
+      //   core.bottomRightNeighbor.rot_deg = core.rot_deg + 2 * Math.PI/3; 
+      //   core.bottomRightNeighbor.update();
+      // }
 
 
-      for (let obj of objList){
-        if (obj.motive === 'triangle' && ( (obj.bottomNeighbor != null && obj.bottomNeighbor.id != 'core')  || (obj.rightNeighbor != null && obj.rightNeighbor.id != 'core')  )){
+      // for (let obj of objList){
+      //   if (obj.motive === 'triangle' && ( (obj.bottomNeighbor != null && obj.bottomNeighbor.id != 'core')  || (obj.rightNeighbor != null && obj.rightNeighbor.id != 'core')  )){
+      //     let dist = Math.sqrt((core.cx - obj.cx)**2 + (core.cy - obj.cy) **2);
+      //     let deg = Math.atan2((core.cy - obj.cy), (core.cx - obj.cx));
+
+      //     obj.cx = core.cx - dist * Math.cos(deg + Math.PI/6 );
+      //     obj.cy = core.cy - dist * Math.sin(deg + Math.PI/6 );
+      //     obj.rot_degree = obj.rot_degree + 30;
+      //     obj.rot_deg = obj.rot_deg + Math.PI/6; 
+      //     obj.update();
+
+      //     console.log(deg * 180 / Math.PI);
+      //   }
+      // }
+
+            for (let obj of objList){
+        // if (obj.motive === 'triangle' && ( (obj.bottomNeighbor != null && obj.bottomNeighbor.id != 'core')  || (obj.rightNeighbor != null && obj.rightNeighbor.id != 'core')  )){
+        //   let dist = Math.sqrt((core.cx - obj.cx)**2 + (core.cy - obj.cy) **2);
+        //   let deg = Math.atan2((core.cy - obj.cy), (core.cx - obj.cx));
+
+        //   obj.cx = core.cx - dist * Math.cos(deg + Math.PI/6 );
+        //   obj.cy = core.cy - dist * Math.sin(deg + Math.PI/6 );
+        //   obj.rot_degree = obj.rot_degree + 30;
+        //   obj.rot_deg = obj.rot_deg + Math.PI/6; 
+        //   obj.update();
+
+        //   console.log(deg * 180 / Math.PI);
+        // }
+
+        if (obj.isLinked === true && obj.id !== 'core'){
+          console.log("Chihooooo Channnnn");
+          console.log(obj);
           let dist = Math.sqrt((core.cx - obj.cx)**2 + (core.cy - obj.cy) **2);
           let deg = Math.atan2((core.cy - obj.cy), (core.cx - obj.cx));
-
           obj.cx = core.cx - dist * Math.cos(deg + Math.PI/6 );
           obj.cy = core.cy - dist * Math.sin(deg + Math.PI/6 );
           obj.rot_degree = obj.rot_degree + 30;
@@ -1050,6 +1240,8 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
 
           console.log(deg * 180 / Math.PI);
         }
+
+
       }
 
         
@@ -1078,69 +1270,86 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
       ];
 
 
-      if (core.upperNeighbor != null) {
-        core.upperNeighbor.cx = core.cx + core.upperNeighborDist * Math.sin(core.rot_deg );
-        core.upperNeighbor.cy = core.cy - core.upperNeighborDist * Math.cos(core.rot_deg );
-        core.upperNeighbor.rot_degree = core.rot_degree;
-        core.upperNeighbor.rot_deg = core.rot_deg; 
-        core.upperNeighbor.update();
-      }
+      // if (core.upperNeighbor != null) {
+      //   core.upperNeighbor.cx = core.cx + core.upperNeighborDist * Math.sin(core.rot_deg );
+      //   core.upperNeighbor.cy = core.cy - core.upperNeighborDist * Math.cos(core.rot_deg );
+      //   core.upperNeighbor.rot_degree = core.rot_degree;
+      //   core.upperNeighbor.rot_deg = core.rot_deg; 
+      //   core.upperNeighbor.update();
+      // }
 
 
-      if (core.upperLeftNeighbor != null) {
-        core.upperLeftNeighbor.cx = core.cx + core.upperLeftNeighborDist * Math.sin(core.rot_deg - Math.PI/3 );
-        core.upperLeftNeighbor.cy = core.cy - core.upperLeftNeighborDist * Math.cos(core.rot_deg - Math.PI/3 );
-        core.upperLeftNeighbor.rot_degree = core.rot_degree - 60;
-        core.upperLeftNeighbor.rot_deg = core.rot_deg - Math.PI/3; 
-        core.upperLeftNeighbor.update();
-      }
+      // if (core.upperLeftNeighbor != null) {
+      //   core.upperLeftNeighbor.cx = core.cx + core.upperLeftNeighborDist * Math.sin(core.rot_deg - Math.PI/3 );
+      //   core.upperLeftNeighbor.cy = core.cy - core.upperLeftNeighborDist * Math.cos(core.rot_deg - Math.PI/3 );
+      //   core.upperLeftNeighbor.rot_degree = core.rot_degree - 60;
+      //   core.upperLeftNeighbor.rot_deg = core.rot_deg - Math.PI/3; 
+      //   core.upperLeftNeighbor.update();
+      // }
 
-      if (core.bottomLeftNeighbor != null) {
-        core.bottomLeftNeighbor.cx = core.cx + core.bottomLeftNeighborDist * Math.sin(core.rot_deg - 2 * Math.PI/3 );
-        core.bottomLeftNeighbor.cy = core.cy - core.bottomLeftNeighborDist * Math.cos(core.rot_deg - 2 * Math.PI/3 );
-        core.bottomLeftNeighbor.rot_degree = core.rot_degree - 2 * 60;
-        core.bottomLeftNeighbor.rot_deg = core.rot_deg - 2 * Math.PI/3; 
-        core.bottomLeftNeighbor.update();
-      }
+      // if (core.bottomLeftNeighbor != null) {
+      //   core.bottomLeftNeighbor.cx = core.cx + core.bottomLeftNeighborDist * Math.sin(core.rot_deg - 2 * Math.PI/3 );
+      //   core.bottomLeftNeighbor.cy = core.cy - core.bottomLeftNeighborDist * Math.cos(core.rot_deg - 2 * Math.PI/3 );
+      //   core.bottomLeftNeighbor.rot_degree = core.rot_degree - 2 * 60;
+      //   core.bottomLeftNeighbor.rot_deg = core.rot_deg - 2 * Math.PI/3; 
+      //   core.bottomLeftNeighbor.update();
+      // }
 
-      if (core.bottomNeighbor != null) {
-        core.bottomNeighbor.cx = core.cx + core.bottomNeighborDist * Math.sin(core.rot_deg - 3 * Math.PI/3 );
-        core.bottomNeighbor.cy = core.cy - core.bottomNeighborDist * Math.cos(core.rot_deg - 3 * Math.PI/3 );
-        core.bottomNeighbor.rot_degree = core.rot_degree - 3 * 60;
-        core.bottomNeighbor.rot_deg = core.rot_deg - 3 * Math.PI/3; 
-        core.bottomNeighbor.update();
-      }
+      // if (core.bottomNeighbor != null) {
+      //   core.bottomNeighbor.cx = core.cx + core.bottomNeighborDist * Math.sin(core.rot_deg - 3 * Math.PI/3 );
+      //   core.bottomNeighbor.cy = core.cy - core.bottomNeighborDist * Math.cos(core.rot_deg - 3 * Math.PI/3 );
+      //   core.bottomNeighbor.rot_degree = core.rot_degree - 3 * 60;
+      //   core.bottomNeighbor.rot_deg = core.rot_deg - 3 * Math.PI/3; 
+      //   core.bottomNeighbor.update();
+      // }
 
-      if (core.upperRightNeighbor != null) {
-        core.upperRightNeighbor.cx = core.cx + core.upperRightNeighborDist * Math.sin(core.rot_deg + Math.PI/3 );
-        core.upperRightNeighbor.cy = core.cy - core.upperRightNeighborDist * Math.cos(core.rot_deg + Math.PI/3 );
-        core.upperRightNeighbor.rot_degree = core.rot_degree + 60;
-        core.upperRightNeighbor.rot_deg = core.rot_deg + Math.PI/3; 
-        core.upperRightNeighbor.update();
-      }
+      // if (core.upperRightNeighbor != null) {
+      //   core.upperRightNeighbor.cx = core.cx + core.upperRightNeighborDist * Math.sin(core.rot_deg + Math.PI/3 );
+      //   core.upperRightNeighbor.cy = core.cy - core.upperRightNeighborDist * Math.cos(core.rot_deg + Math.PI/3 );
+      //   core.upperRightNeighbor.rot_degree = core.rot_degree + 60;
+      //   core.upperRightNeighbor.rot_deg = core.rot_deg + Math.PI/3; 
+      //   core.upperRightNeighbor.update();
+      // }
 
-      if (core.bottomRightNeighbor != null) {
-        core.bottomRightNeighbor.cx = core.cx + core.bottomRightNeighborDist * Math.sin(core.rot_deg + 2 * Math.PI/3 );
-        core.bottomRightNeighbor.cy = core.cy - core.bottomRightNeighborDist * Math.cos(core.rot_deg + 2 * Math.PI/3 );
-        core.bottomRightNeighbor.rot_degree = core.rot_degree + 2 * 60;
-        core.bottomRightNeighbor.rot_deg = core.rot_deg + 2 * Math.PI/3; 
-        core.bottomRightNeighbor.update();
-      }
+      // if (core.bottomRightNeighbor != null) {
+      //   core.bottomRightNeighbor.cx = core.cx + core.bottomRightNeighborDist * Math.sin(core.rot_deg + 2 * Math.PI/3 );
+      //   core.bottomRightNeighbor.cy = core.cy - core.bottomRightNeighborDist * Math.cos(core.rot_deg + 2 * Math.PI/3 );
+      //   core.bottomRightNeighbor.rot_degree = core.rot_degree + 2 * 60;
+      //   core.bottomRightNeighbor.rot_deg = core.rot_deg + 2 * Math.PI/3; 
+      //   core.bottomRightNeighbor.update();
+      // }
 
 
         for (let obj of objList){
-        if (obj.motive === 'triangle' && ( (obj.bottomNeighbor != null && obj.bottomNeighbor.id != 'core')  || (obj.rightNeighbor != null && obj.rightNeighbor.id != 'core')  )){
+
+
+        // if (obj.motive === 'triangle' && ( (obj.bottomNeighbor != null && obj.bottomNeighbor.id != 'core')  || (obj.rightNeighbor != null && obj.rightNeighbor.id != 'core')  )){
+        //   let dist = Math.sqrt((core.cx - obj.cx)**2 + (core.cy - obj.cy) **2);
+        //   let deg = Math.atan2((core.cy - obj.cy), (core.cx - obj.cx));
+
+        //   obj.cx = core.cx - dist * Math.cos(deg -  Math.PI/6 );
+        //   obj.cy = core.cy - dist * Math.sin(deg -  Math.PI/6 );
+        //   obj.rot_degree = obj.rot_degree - 30;
+        //   obj.rot_deg = obj.rot_deg - Math.PI/6; 
+        //   obj.update();
+
+        //   console.log(deg * 180 / Math.PI);
+        // }
+        if (obj.isLinked === true && obj.id !== 'core'){
+          console.log("Chihooooo Channnnn");
+          console.log(obj);
           let dist = Math.sqrt((core.cx - obj.cx)**2 + (core.cy - obj.cy) **2);
           let deg = Math.atan2((core.cy - obj.cy), (core.cx - obj.cx));
-
-          obj.cx = core.cx - dist * Math.cos(deg -  Math.PI/6 );
-          obj.cy = core.cy - dist * Math.sin(deg -  Math.PI/6 );
+          obj.cx = core.cx - dist * Math.cos(deg - Math.PI/6 );
+          obj.cy = core.cy - dist * Math.sin(deg - Math.PI/6 );
           obj.rot_degree = obj.rot_degree - 30;
           obj.rot_deg = obj.rot_deg - Math.PI/6; 
           obj.update();
 
           console.log(deg * 180 / Math.PI);
         }
+
+
       }
 
 
@@ -1190,21 +1399,23 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
     let sq2 = new SquareTumpal(cx, 0, unitSize, 'square', 0, 'sq2');
     objList.push(sq2);
 
+    let tri = new TriangleTumpal(cx, -200, unitSize, 'triangle', 60, 'tr');
+    objList.push(tri);
 
-    let sq3 = new SquareTumpal(cx, -200, unitSize, 'square', 0, 'sq3');
+
+    let sq3 = new SquareTumpal(cx, -400, unitSize, 'square', 0, 'sq3');
     objList.push(sq3);
 
-    let sq4 = new SquareTumpal(cx, -400, unitSize, 'square', 0, 'sq4');
+    let sq4 = new SquareTumpal(cx, -600, unitSize, 'square', 0, 'sq4');
     objList.push(sq4);
 
-    let sq5 = new SquareTumpal(cx, -600, unitSize, 'square', 0, 'sq5');
+    let sq5 = new SquareTumpal(cx, -1000, unitSize, 'square', 0, 'sq5');
     objList.push(sq5);
 
     let sq6 = new SquareTumpal(cx, -800, unitSize, 'square', 0, 'sq6');
     objList.push(sq6);
 
-    let tri = new TriangleTumpal(cx, -1000, unitSize, 'triangle', 60, 'tr');
-    objList.push(tri);
+
 
     let tri2 = new TriangleTumpal(cx, -1200, unitSize, 'triangle', 60, 'tr2');
     objList.push(tri2);
@@ -1251,38 +1462,50 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
         drawHint(cx, 450, 'hint', unitSize, 0, 15 + core.rot_degree, "none", "none", "white");
 
 
-      if (life === true){
-        requestAnimationFrame(gameLoop);
-      }
 
 
-if (
-  (core.upperNeighbor?.motive === 'triangle' && 
-   core.bottomLeftNeighbor?.motive === 'triangle' && 
-   core.bottomRightNeighbor?.motive === 'triangle') || 
-  (core.upperLeftNeighbor?.motive === 'triangle' && 
-   core.bottomNeighbor?.motive === 'triangle' && 
-   core.upperRightNeighbor?.motive === 'triangle')
-){
 
-        let text2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        text2.setAttribute("x", "50%");
-        text2.setAttribute("y", "50%");
-        text2.setAttribute("text-anchor", "middle");
-        text2.setAttribute("dominant-baseline", "middle");
-        text2.setAttribute("fill", "white");
-        text2.setAttribute("font-size", "40");
-        text2.setAttribute("font-family", "Arial, sans-serif");
-        text2.textContent = "Game Clear!";
-        // Append the text to the SVG
-        svg.appendChild(text2);
-      }
+
+  const coreHasTriangles = (
+    core.bottomNeighbor?.motive === 'square' && 
+    core.upperNeighbor?.motive === 'square' &&
+    core.upperLeftNeighbor?.motive === 'square' &&
+    core.bottomLeftNeighbor?.motive === 'square' &&
+    core.upperRightNeighbor?.motive === 'square' &&
+    core.bottomRightNeighbor?.motive === 'square' && 
+    (tri.rightNeighbor?.motive === 'square' || tri.bottomNeighbor?.motive === 'square') && 
+    (tri2.rightNeighbor?.motive === 'square' || tri2.bottomNeighbor?.motive === 'square') && 
+    (tri3.rightNeighbor?.motive === 'square' || tri3.bottomNeighbor?.motive === 'square') && 
+    (tri4.rightNeighbor?.motive === 'square' || tri4.bottomNeighbor?.motive === 'square') && 
+    (tri5.rightNeighbor?.motive === 'square' || tri5.bottomNeighbor?.motive === 'square') && 
+    (tri6.rightNeighbor?.motive === 'square' || tri6.bottomNeighbor?.motive === 'square') 
+
+
+  );
+
+
+  if (coreHasTriangles) {
+    const text2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    text2.setAttribute("x", "50%");
+    text2.setAttribute("y", "85%");
+    text2.setAttribute("text-anchor", "middle");
+    text2.setAttribute("dominant-baseline", "middle");
+    text2.setAttribute("fill", "white");
+    text2.setAttribute("font-size", "40");
+    text2.setAttribute("font-family", "Arial, sans-serif");
+    text2.textContent = "Game Clear!";
+    svg.appendChild(text2); // Append the "Game Clear" text to the SVG
+    removeSvgChildById(svg, 'textTutorialInit');
+    removeSvgChildById(svg, 'textTutorialInit2');
+    playGameClear()
+  }
 
       
 
 
 
       if (life === false){
+        playCrash();
         let text = document.createElementNS("http://www.w3.org/2000/svg", "text");
         text.setAttribute("x", "50%");
         text.setAttribute("y", "50%");
@@ -1319,10 +1542,70 @@ if (
 
     
       }
+
+      if (life === true && !coreHasTriangles){
+        requestAnimationFrame(gameLoop);
+      }
+
+      
     }
 
-    // Start the game
+
+        function waitForGameStart(callback) {
+    const handleUserInput = (event) => {
+
+        document.removeEventListener("keydown", handleUserInput);
+        document.removeEventListener("click", handleUserInput);
+        callback(); // Proceed with the game logic
+    };
+
+    // Add event listeners only if they're not already attached
+    document.removeEventListener("keydown", handleUserInput);
+    document.removeEventListener("click", handleUserInput);
+
+    document.addEventListener("keydown", handleUserInput);
+    document.addEventListener("click", handleUserInput);
+    }
+
+
+
+    const text2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    text2.setAttribute("x", "50%");
+    text2.setAttribute("y", "50%");
+    text2.setAttribute("id", "waitStart");
+    text2.setAttribute("text-anchor", "middle");
+    text2.setAttribute("dominant-baseline", "middle");
+    text2.setAttribute("fill", "white");
+    text2.setAttribute("font-size", "20");
+    text2.setAttribute("font-family", "Arial, sans-serif");
+    text2.textContent = "Level 2: Elusive Dodecagon ";
+    svg.appendChild(text2); // Append the "Game Clear" text to the SVG
+
+
+    const text3 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    text3.setAttribute("x", "50%");
+    text3.setAttribute("y", "60%");
+    text3.setAttribute("id", "waitStart");
+    text3.setAttribute("text-anchor", "middle");
+    text3.setAttribute("dominant-baseline", "middle");
+    text3.setAttribute("fill", "white");
+    text3.setAttribute("font-size", "20");
+    text3.setAttribute("font-family", "Arial, sans-serif");
+    text3.textContent = "Click or tap to start ";
+    svg.appendChild(text3); // Append the "Game Clear" text to the SVG
+
+
+
+    // Insert Pause and wait for input before continue the statement
+    waitForGameStart(() => {
+    removeSvgChildById(svg, 'waitStart');
     gameLoop();
+    });
+
+
+
+    // Start the game
+    // gameLoop();
   </script>
 </body>
 </html>
