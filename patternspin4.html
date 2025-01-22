@@ -1473,7 +1473,7 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
 
 
     function rotateClockwise() {
-      rotationAngle = (rotationAngle + 30) % 360; // Increase rotation by 30 degrees
+      rotationAngle = (rotationAngle + 45) % 360; // Increase rotation by 30 degrees
       core.rot_degree = rotationAngle; // Set to the new angle
       core.rot_deg = rotationAngle * 2 * Math.PI / 360; // Update radians
       core.vertices = [
@@ -1577,10 +1577,10 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
           console.log(obj);
           let dist = Math.sqrt((core.cx - obj.cx)**2 + (core.cy - obj.cy) **2);
           let deg = Math.atan2((core.cy - obj.cy), (core.cx - obj.cx));
-          obj.cx = core.cx - dist * Math.cos(deg + Math.PI/6 );
-          obj.cy = core.cy - dist * Math.sin(deg + Math.PI/6 );
-          obj.rot_degree = obj.rot_degree + 30;
-          obj.rot_deg = obj.rot_deg + Math.PI/6; 
+          obj.cx = core.cx - dist * Math.cos(deg + Math.PI/4 );
+          obj.cy = core.cy - dist * Math.sin(deg + Math.PI/4 );
+          obj.rot_degree = obj.rot_degree + 45;
+          obj.rot_deg = obj.rot_deg + Math.PI/4; 
           obj.update();
 
           console.log(deg * 180 / Math.PI);
@@ -1594,7 +1594,7 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
     }
     
     function rotateCounterClockwise() {
-      rotationAngle = (rotationAngle - 30 + 360) % 360; // Decrease rotation by 30 degrees, ensuring no negative angles
+      rotationAngle = (rotationAngle - 45 + 360) % 360; // Decrease rotation by 30 degrees, ensuring no negative angles
       core.rot_degree = rotationAngle; // Set to the new angle
       core.rot_deg = rotationAngle * 2 * Math.PI / 360; // Update radians
       core.vertices = [
@@ -1685,10 +1685,10 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
           console.log(obj);
           let dist = Math.sqrt((core.cx - obj.cx)**2 + (core.cy - obj.cy) **2);
           let deg = Math.atan2((core.cy - obj.cy), (core.cx - obj.cx));
-          obj.cx = core.cx - dist * Math.cos(deg - Math.PI/6 );
-          obj.cy = core.cy - dist * Math.sin(deg - Math.PI/6 );
-          obj.rot_degree = obj.rot_degree - 30;
-          obj.rot_deg = obj.rot_deg - Math.PI/6; 
+          obj.cx = core.cx - dist * Math.cos(deg - Math.PI/4 );
+          obj.cy = core.cy - dist * Math.sin(deg - Math.PI/4 );
+          obj.rot_degree = obj.rot_degree - 45;
+          obj.rot_deg = obj.rot_deg - Math.PI/4; 
           obj.update();
 
           console.log(deg * 180 / Math.PI);
@@ -1988,3 +1988,4 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
   </script>
 </body>
 </html>
+  
