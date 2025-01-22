@@ -1007,7 +1007,7 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
           outline1.setAttribute("stroke", "#e1d6ba");
           outline1.setAttribute("id", this.id);
           outline1.setAttribute("stroke-width", 0.5);
-          svg.appendChild(outline1);
+          // svg.appendChild(outline1);
         }
         update(){
             this.vertices = [
@@ -1840,7 +1840,10 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
     core.UpperNeighbor?.motive === 'triangle' &&
     core.RightNeighbor?.motive === 'square' &&
     core.LeftNeighbor?.motive === 'square' &&
-    core.LeftNeighbor?.RightNeighbor?.motive === 'triangle' && core.RightNeighbor?.LeftNeighbor?.motive === 'triangle'
+    core.LeftNeighbor?.RightNeighbor?.motive === 'triangle' && core.RightNeighbor?.LeftNeighbor?.motive === 'triangle' && 
+    core.UpperNeighbor?.rightNeighbor?.motive === 'triangle' && core.UpperNeighbor?.leftNeighbor?.motive === 'triangle' && 
+    core.bottomNeighbor?.rightNeighbor?.motive === 'triangle' && core.bottomNeighbor?.leftNeighbor?.motive === 'triangle'
+
     // core.bottomNeighbor?.rightNeighbor?.motive === 'triangle' && core.bottomNeighbor?.leftNeighbor?.motive === 'square' &&
     // core.UpperNeighbor?.rightNeighbor?.motive === 'triangle' && core.UpperNeighbor?.leftNeighbor?.motive === 'square' &&
     // core.RightNeighbor?.rightNeighbor?.motive === 'triangle' && core.RightNeighbor?.leftNeighbor?.motive === 'square'
