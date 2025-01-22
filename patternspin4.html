@@ -1842,7 +1842,8 @@ function drawTriangle(x, y, id = 123, s = 200, trig_degree = 30, rotDeg= 0, main
     core.LeftNeighbor?.motive === 'square' &&
     core.LeftNeighbor?.RightNeighbor?.motive === 'triangle' && core.RightNeighbor?.LeftNeighbor?.motive === 'triangle' && 
     core.UpperNeighbor?.rightNeighbor?.motive === 'triangle' && core.UpperNeighbor?.leftNeighbor?.motive === 'triangle' && 
-    core.bottomNeighbor?.rightNeighbor?.motive === 'triangle' && core.bottomNeighbor?.leftNeighbor?.motive === 'triangle'
+    core.bottomNeighbor?.rightNeighbor?.motive === 'triangle' && core.bottomNeighbor?.leftNeighbor?.motive === 'triangle' && 
+    core.RightNeighbor?.RightNeighbor?.motive === 'triangle'
 
     // core.bottomNeighbor?.rightNeighbor?.motive === 'triangle' && core.bottomNeighbor?.leftNeighbor?.motive === 'square' &&
     // core.UpperNeighbor?.rightNeighbor?.motive === 'triangle' && core.UpperNeighbor?.leftNeighbor?.motive === 'square' &&
