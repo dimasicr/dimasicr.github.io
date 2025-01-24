@@ -11,6 +11,9 @@
       <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200&display=swap" rel="stylesheet">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
       <link rel="stylesheet" href="main.css">
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
       <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/js/loaders/STLLoader.js"></script>
       <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4445967865776203"
@@ -106,7 +109,7 @@
 <div style="text-align: center;">
   <img src="asset/Kawung Definition.png" alt="Kawung as intersection of four circles">
 </div>
-         <h2 style="text-align: justify; color: #493118; font-weight: bold;"> Drawing Steps </h2>
+         <h2 style="text-align: justify; color: #493118; font-weight: bold;"> Manual Drawing Steps </h2>
          <p style="text-align: justify;"> Knowing how to sketch Batik Kawung manually using a pencil, a compass, and paper is a relatively straightforward process. Given a square ABCD, we can draw a circle centered at O with a radius equal to half of the square's side length. Next, we draw a quarter circle centered at vertex A. We then draw a quarter circle at vertices B, C, and D as shown in figure below. </p>
 
          <div style="text-align: center;">
@@ -121,6 +124,33 @@
 
          <p style="text-align: justify;"> Using the steps mentioned above, we are able to draw the main motive “klowongan” of Batik Kawung. To make it more visually pleasing, batik artists usually add secondary motives and background motives. Secondary motive is usually called “isen-isen”. Isen-isen is the decorative fillings found within the main patterns. These additional motifs are used to fill the spaces between the main motifs  to enhance the overall aesthetic appeal of the fabric. For batik Kawung, usually isen cecek are used. The illustration of this concept can be found in the figure below. </p>
   <img src="asset/Klowongan Isen Cecek.png" alt="Breakdown of kawung ornaments">
+
+         <h2 style="text-align: justify; color: #493118; font-weight: bold;"> Digital Drawing Steps </h2>
+         <p style="text-align: justify;"> If we only want to draw hand written batik, then it is enough to only know how to draw it manually using the steps mentioned above.  However, if we want to use computers to generate digital patterns for digital printing or 3D modeling design, we need to represent Batik in a way that computers understand.  One of those ways is to represent Kawung in Scalable Vector Graphic (SVG). </p>
+         <p style="text-align: justify;"> Scalable Vector Graphics (SVG) is an XML-based markup language for describing two-dimensional based vector graphics. The benefit of using SVG is that the image can be rendered at any size and it will still look clean. The other benefit is that SVG format is easily readable by 3D modeling CAD programs. For instance, if we want to make a necklace pendant with motif Kawung, we can import an SVG file of Kawung and extrude it in a 3D modeling CAD program. To draw Kawung using Scalable Vector Graphic, we can write the following code in a text editor. </p>
+
+
+<pre><code class="language-markup">
+<g transform="translate(x_origin, y_origin)”>
+     <path d="M0 0 A R R 0 0 1 R R A R R 0 0 1 0 0"> </path>
+     <path d="M0 0 A R R 0 0 1 R R A R R 0 0 1 0 0" transform="rotate(90)"> </path>
+     <path d="M0 0 A R R 0 0 1 R R A R R 0 0 1 0 0" transform="rotate(180)"> </path>
+     <path d="M0 0 A R R 0 0 1 R R A R R 0 0 1 0 0" transform="rotate(270)"> </path>
+</g>
+</code></pre>
+         <p style="text-align: justify;"> The explanation of the code mentioned above are as follows:
+First, we group four path elements inside a group tag, we then change the coordinate of the group to the origin we wanted. Second, we draw a path that describes the leaf of the Kawung.  To describe the leaf, we use attribute d in the path and use the following command.
+M0 0 → Move cursor to the origin (0,0)
+A R R 0 0 1 R R  → Using Arc command to draw an arc from (0,0) to end coordinate (R,R).
+A R R 0 0 1 0 0 → Using Arc command draw an arc from (R,R) back to starting coordinate (0,0)
+The same arc command is then used three times, the resulting path is then rotated 90 degrees to get the shape of Kawung.
+ </p>
+
+
+
+
+
+            
 
             
          <h2 style="text-align: justify; color: #493118; font-weight: bold;"> Math Concept </h2>
