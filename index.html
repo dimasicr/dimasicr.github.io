@@ -130,13 +130,16 @@
          <p style="text-align: justify;"> Scalable Vector Graphics (SVG) is an XML-based markup language for describing two-dimensional based vector graphics. The benefit of using SVG is that the image can be rendered at any size and it will still look clean. The other benefit is that SVG format is easily readable by 3D modeling CAD programs. For instance, if we want to make a necklace pendant with motif Kawung, we can import an SVG file of Kawung and extrude it in a 3D modeling CAD program. To draw Kawung using Scalable Vector Graphic, we can write the following code in a text editor. </p>
 
 
-<pre><code class="language-svg">
+<pre>
+<code class="language-svg">
+<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
 <g transform="translate(x_origin, y_origin)”>
-     <path d="M0 0 A R R 0 0 1 R R A R R 0 0 1 0 0"> </path>
+     <path d="M0 0 A R R 0 0 1 R R A R R 0 0 1 0 0" > </path>
      <path d="M0 0 A R R 0 0 1 R R A R R 0 0 1 0 0" transform="rotate(90)"> </path>
      <path d="M0 0 A R R 0 0 1 R R A R R 0 0 1 0 0" transform="rotate(180)"> </path>
      <path d="M0 0 A R R 0 0 1 R R A R R 0 0 1 0 0" transform="rotate(270)"> </path>
 </g>
+</svg>
 </code></pre>
          <p style="text-align: justify;"> The explanation of the code mentioned above are as follows:
 First, we group four path elements inside a group tag, we then change the coordinate of the group to the origin we wanted. Second, we draw a path that describes the leaf of the Kawung.  To describe the leaf, we use attribute d in the path and use the following command.
