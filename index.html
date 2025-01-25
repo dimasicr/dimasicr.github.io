@@ -103,7 +103,7 @@
          <p style="text-align: justify;"> The following text will briefly discuss what Batik Kawung is from a geometrical point of view, its mathematical formula, and how to draw it manually using a compass and ruler, as well as how to draw it using SVG code. Afterward, we will learn Descartes' theorem and how to apply it to create new motifs. In the final section, we will apply that motif to create a necklace pendant for jewelry. </p>
          
          <h2 style="text-align: justify; color: #493118; font-weight: bold;"> Geometry </h2>
-         <p style="text-align: justify;"> Batik Kawung is one of the oldest motifs known in Java.  The motifs are found adorning many statues in Indonesian temples. For example, there is one that adorns Mahakala statue found in Singosari temple as shown in figure 3. It is also found in statues of Ganesha, Nandishvara, and Durga Mahishasuramardini. The popularity of the Kawung motif has stood the test of time. Even now, in the 21st century, Kawung is widely used in Indonesian fabric, building architecture, and even in popular culture. If you pay attention, you might even see it in the opening credit of 2013 Studio Ghibli animated movies, the Tales of Princess Kaguya. Knowing how popular this motif is, it is interesting to find out more about the geometry of this motif. </p>
+         <p style="text-align: justify;"> Batik Kawung is one of the oldest motifs known in Java.  The motifs are found adorning many statues in Indonesian temples. For example, there is one that adorns Mahakala statue found in Singosari temple. It is also found in statues of Ganesha, Nandishvara, and Durga Mahishasuramardini. The popularity of the Kawung motif has stood the test of time. Even now, in the 21st century, Kawung is widely used in Indonesian fabric, building architecture, and even in popular culture. If you pay attention, you might even see it in the opening credit of 2013 Studio Ghibli animated movies, the Tales of Princess Kaguya. Knowing how popular this motif is, it is interesting to find out more about the geometry of this motif. </p>
          <p style="text-align: justify;"> There are many ways the Kawung motif can be defined. In this chapter, we will use the definition of circular Kawung.  Circular Kawung can be defined as a shape formed by the intersection of four circles, each with the same radius, positioned above (0, -r), below (0, r), to the left(-r, 0) , and to the right (r, 0)  of its origin (0,0) as shown in figure below </p>
 
 <figure style="text-align: center; display: flex; flex-direction: column; align-items: center; margin: 0;">
@@ -125,10 +125,12 @@
          </ol>
 
          <p style="text-align: justify;"> Using the steps mentioned above, we are able to draw the main motive “klowongan” of Batik Kawung. To make it more visually pleasing, batik artists usually add secondary motives and background motives. Secondary motive is usually called “isen-isen”. Isen-isen is the decorative fillings found within the main patterns. These additional motifs are used to fill the spaces between the main motifs  to enhance the overall aesthetic appeal of the fabric. For batik Kawung, usually isen cecek are used. The illustration of this concept can be found in the figure below. </p>
-     <figure>
-            <img src="asset/Klowongan Isen Cecek.png" alt="Breakdown of kawung ornaments">
-            <figcaption> Fig.2 - Breakdown of batik ornaments </figcaption>
-     </figure>
+
+            <figure style="text-align: center; display: flex; flex-direction: column; align-items: center; margin: 0;">
+  <img src="asset/Klowongan Isen Cecek.png" alt="Breakdown of kawung ornaments" style="max-width: 100%; height: auto;">
+  <figcaption style="text-align: center; margin-top: 8px;">Fig.2 - Breakdown of batik ornaments</figcaption>
+</figure>
+
          <h2 style="text-align: justify; color: #493118; font-weight: bold;"> Digital Drawing Steps </h2>
          <p style="text-align: justify;"> If we only want to draw hand written batik, then it is enough to only know how to draw it manually using the steps mentioned above.  However, if we want to use computers to generate digital patterns for digital printing or 3D modeling design, we need to represent Batik in a way that computers understand.  One of those ways is to represent Kawung in Scalable Vector Graphic (SVG). </p>
          <p style="text-align: justify;"> Scalable Vector Graphics (SVG) is an XML-based markup language for describing two-dimensional based vector graphics. The benefit of using SVG is that the image can be rendered at any size and it will still look clean. The other benefit is that SVG format is easily readable by 3D modeling CAD programs. For instance, if we want to make a necklace pendant with motif Kawung, we can import an SVG file of Kawung and extrude it in a 3D modeling CAD program. To draw Kawung using Scalable Vector Graphic, we can write the following code in a text editor. </p>
@@ -163,10 +165,10 @@ First, we group four path elements inside a group tag, we then change the coordi
          <p style="text-align: justify;"> Descartes theorem is used to get the radius and location of the circle center, given that we know three others mutually tangent circle position and radius. The first circle C1, is a circle located at position (0,0) and radius r1 let’s say 140.  The second one is located at (-70,0) and has radius r2 = 70. The third circle is located at  (70,0) and has radius r3 = 70. Using Descartes' theorem we can find the radius of the fourth circle and the location of the circle centre.
  To solve this problem, we can use the following formula: </p>
 
-         <figure>
-            <img src="asset/Descartes Theorem.png" alt="Descartes Theorem" width="350" height="auto" >
-            <figcaption> Fig.3 - Application of Descartes Theorem in Batik Pattern </figcaption>
-         </figure>   
+<figure style="text-align: center; display: flex; flex-direction: column; align-items: center; margin: 0;">
+  <img src="asset/Descartes Theorem.png" alt="Descartes Theorem" style="max-width: 100%; height: auto; width: 350px;">
+  <figcaption style="text-align: center; margin-top: 8px;">Fig.3 - Application of Descartes Theorem in Batik Pattern</figcaption>
+</figure> 
          <p style=" overflow-x: scroll;"> \( (k_1 + k_2 + k_3 + k_4)^2  = 2 \cdot (2k_1 ^2 + k_2 ^2+ k_3 ^2 + k_4 ^2)  \) </p>
          <p style="text-align: justify;"> To get location of circle center, we can use complex Descartes theorem:  </p>
          <p style=" overflow-x: scroll;"> \( (k_1 z_1 + k_2 z_2 + k_3 z_3 + k_4 z_4)^2  = 2 \cdot (2k_1 ^2 z_1 ^ 2+ k_2 ^2 z_2^2+ k_3 ^2 z_3 ^ 2 + k_4 ^2 z_4 ^ 2)  \) </p>         </details>
@@ -174,19 +176,15 @@ First, we group four path elements inside a group tag, we then change the coordi
 
          <h2 style="text-align: justify; color: #493118; font-weight: bold;"> Application </h2>
          <p style="text-align: justify;"> Using Descartes theorem we learned in this chapter, we can create various products. For example, we can create clothes with various designs. Below are some images that you can create using theory we learn in this chapter. </p>
-        <figure>
-            <img src="asset/Variant of Apollonian Gasket.png" alt="Variant of Apollonian Gasket" width="500" height="auto">
-               <figcaption> Fig.4 - Variant of Apollonian Gasket </figcaption>
-
-        </figure>
+<figure style="text-align: center; display: flex; flex-direction: column; align-items: center; margin: 0;">
+  <img src="asset/Variant of Apollonian Gasket.png" alt="Variant of Apollonian Gasket" style="max-width: 100%; height: auto; width: 500px;">
+  <figcaption style="text-align: center; margin-top: 8px;">Fig.4 - Variant of Apollonian Gasket</figcaption>
+</figure>
          <p style="text-align: justify;"> Not only can we create 2D designs, we can also create 3D products such as necklace pendants. We can import a 2D svg pattern into a 3D CAD program and create a 3D model by extruding the 2D pattern. Figure below illustrates a sample necklace pendant ready to be casted by a jewelry shop.</p>
-         
-                  <figure>
-   
-            <img src="asset/Apollonian Necklace.png" alt="Apollonian Necklace" width="250" height="auto" >
-               <figcaption> Fig.5 - Application of Batik pattern in Jewelry </figcaption>
-
-                  </figure>
+         <figure style="text-align: center; display: flex; flex-direction: column; align-items: center; margin: 0;">
+  <img src="asset/Apollonian Necklace.png" alt="Apollonian Necklace" style="max-width: 100%; height: auto; width: 250px;">
+  <figcaption style="text-align: center; margin-top: 8px;">Fig.5 - Application of Batik pattern in Jewelry</figcaption>
+</figure>
                
 <!--          <p style="text-align: justify;"> Below is 3D render of appolonian necklace </p> -->
 
