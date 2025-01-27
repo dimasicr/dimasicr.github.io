@@ -170,9 +170,9 @@ First, we group four path elements inside a group tag, we then change the coordi
   <figcaption style="text-align: center; margin-top: 8px;">Fig.3 - Application of Descartes Theorem in Batik Pattern</figcaption>
 </figure> 
          <p style=" overflow-x: scroll;"> \( (k_1 + k_2 + k_3 + k_4)^2  = 2 \cdot (2k_1 ^2 + k_2 ^2+ k_3 ^2 + k_4 ^2)  \) </p>
-         <p> To get location of circle center, we can use complex Descartes theorem:  </p>
+         <p> To get the location of circle's center, we can use complex Descartes theorem:  </p>
          <p style=" overflow-x: scroll;"> \( (k_1 z_1 + k_2 z_2 + k_3 z_3 + k_4 z_4)^2  = 2 \cdot (2k_1 ^2 z_1 ^ 2+ k_2 ^2 z_2^2+ k_3 ^2 z_3 ^ 2 + k_4 ^2 z_4 ^ 2)  \) </p>         </details>
-         <p> To draw intricate patterns, we will apply Descartes theorem multiple times. To do it manually is a laborious task. We can use recursion to make it more efficient. Recursion solves problems by using functions that call themselves in the function. In this case, we will create a recursive function that will find the  fourth circle given 3 circles, and only will stop if the radius of the newly created circle is less than a threshold.  Below pseudocode to do it:  </p>
+         <p> To draw intricate patterns, we will apply Descartes' theorem multiple times. While this process could be done manually, it would be a laborious task. Instead, we can use recursion to make the process more efficient. Recursion is a technique where a function calls itself to solve a problem. In this case, we will create a recursive function that calculates the fourth circle given three circles. This function will continue to call itself until the radius of the newly created circle falls below a set threshold. Below is the pseudocode for this recursive approach:  </p>
 <pre><code class="language-python">
 circleList = []
 
