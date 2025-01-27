@@ -159,7 +159,7 @@ First, we group four path elements inside a group tag, we then change the coordi
             
 
             
-         <h2 style="color: #493118; font-weight: bold;"> Descartes Theorem </h2>
+         <h2 style="color: #493118; font-weight: bold; text-align: left"> Descartes Theorem and Apollonian Gasket </h2>
 
          <p> Descartes theorem is crucial to the development of Apollonian Gasket. Apollonian Gasket is a type of circle fractal, in which every circle is tangent to three other circles. We are going to substitute the circle with a Kawung shape to make a pattern author named as Apollonian Kawung Gasket. Descartes theorem is needed to find the radius, and the coordinate of the circle center </p>
          <p> Descartes theorem is used to get the radius and location of the circle center, given that we know three others mutually tangent circle position and radius. The first circle C1, is a circle located at position (0,0) and radius r1 let’s say 140.  The second one is located at (-70,0) and has radius r2 = 70. The third circle is located at  (70,0) and has radius r3 = 70. Using Descartes' theorem we can find the radius of the fourth circle and the location of the circle centre.
@@ -172,9 +172,20 @@ First, we group four path elements inside a group tag, we then change the coordi
          <p style=" overflow-x: scroll;"> \( (k_1 + k_2 + k_3 + k_4)^2  = 2 \cdot (2k_1 ^2 + k_2 ^2+ k_3 ^2 + k_4 ^2)  \) </p>
          <p> To get location of circle center, we can use complex Descartes theorem:  </p>
          <p style=" overflow-x: scroll;"> \( (k_1 z_1 + k_2 z_2 + k_3 z_3 + k_4 z_4)^2  = 2 \cdot (2k_1 ^2 z_1 ^ 2+ k_2 ^2 z_2^2+ k_3 ^2 z_3 ^ 2 + k_4 ^2 z_4 ^ 2)  \) </p>         </details>
+         <p> To draw intricate patterns, we will apply Descartes theorem multiple times. To do it manually is a laborious task. We can use recursion to make it more efficient. Recursion solves problems by using functions that call themselves in the function. In this case, we will create a recursive function that will find the  fourth circle given 3 circles, and only will stop if the radius of the newly created circle is less than a threshold.  Below pseudocode to do it:  </p>
+<pre><code class="language-python">
+circleList = []
 
+def recursiveDescartes(circle1, circle2, circle3):
+    circle4 = calculate(circle1, circle2, circle3)
+    circleList.append(circle4)
+    if circle4.r > threshold: 
+        recursiveDescartes(circle1, circle2, circle4)
+        recursiveDescartes(circle2, circle3, circle4)
+        recursiveDescartes(circle1, circle3, circle4)
+</code></pre>
 
-         <h2 style="color: #493118; font-weight: bold;"> Application </h2>
+         <h2 style="color: #493118; font-weight: bold; text-align: left">Bringing Kawung to Life: Creative Applications </h2>
          <p> Using Descartes theorem we learned in this chapter, we can create various products. For example, we can create clothes with various designs. Below are some images that you can create using theory we learn in this chapter. </p>
 <figure style="text-align: center; display: flex; flex-direction: column; align-items: center; margin: 0;">
   <img src="asset/Variant of Apollonian Gasket.png" alt="Variant of Apollonian Gasket" style="max-width: 100%; height: auto; width: 500px;">
