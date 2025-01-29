@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Draggable Quadrilateral with SVG</title>
+  <style>
+    svg {
+/*      border: 1px solid black;*/
+      width: 500px;
+      height: 500px;
+    }
+    .point {
+      cursor: grab;
+    }
+  </style>
+</head>
+<body>
+  <h1>Draggable Quadrilateral (SVG)</h1>
+  <svg id="svgCanvas" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+    <!-- Polygon representing the quadrilateral -->
+    <polygon id="quadrilateral" points="150,150 450,150 450,450 150,450" fill="none" stroke="gray" stroke-width="1"/>
+    
+    <!-- Draggable points -->
+    <circle id="pointA" class="point" cx="300" cy="450" r="8" fill="gray"/>
+    <circle id="pointB" class="point" cx="350" cy="300" r="8" fill="gray"/>
+    <circle id="pointC" class="point" cx="220" cy="250" r="8" fill="gray"/>
+    <circle id="pointD" class="point" cx="150" cy="320" r="8" fill="gray"/>
+  </svg>
+
+  <script>
+    const svg = document.getElementById('svgCanvas');
+    const quadrilateral = document.getElementById('quadrilateral');
+    const svgURI = 'http://www.w3.org/2000/svg';
+
+    const points = {
+      A: document.getElementById('pointA'),
+      B: document.getElementById('pointB'),
+      C: document.getElementById('pointC'),
+      D: document.getElementById('pointD'),
+    };
+
+    let draggingPoint = null;
+
+    // Helper Function to find the midpoint of two points
+    function midpoint(x1, x2, split = 0.5) {
+      dx = x2 - x1;
+      return x1 + dx * split;
+    }
+    
+    function dist(x1,y1, x2, y2){
+        return Math.sqrt((x1-x2)**2 + (y1-y2)**2);
+    }
+
+    function drawArbitraryKawung(Points, x, y, r =200, rotDeg= 0, mainColor=themes["oldJava"].mainColor, secondaryColor=themes["oldJava"].secondaryColor, strokeColor = themes["oldJava"].strokeColor, use_outline=false){  
+    let container = document.createElementNS(svgURI, "g");
+    container.setAttribute("transform", `translate(${x}, ${y}) rotate(${rotDeg}) scale(${r/200} , ${r/200})`);
+    svg.appendChild(container);
+    let outline = document.createElementNS(svgURI, "path");
+    outline_sentence = `M ${Points[0][0]}, ${Points[0][1]} `;
+    container.setAttribute("id", "kawung");
+
+
+    // Get center
+    xc = 0;
+    yc = 0;
+    minY = Points[0][1];
+    maxY = Points[0][1];
+    for (let i=0; i < Points.length; i++){
+      xc += Points[i][0];
+      yc += Points[i][1];
+      if (i>0){
+        outline_sentence += `L${Points[i][0]}, ${Points[i][1]} `;
+      }
+      if (Points[i][1] < minY){
+        minY = Points[i][1];
+      }
+
+     if (Points[i][1] > maxY){
+        maxY = Points[i][1];
+      }
+
+
+
+    }
+
+    outline_sentence += 'Z';
+    outline.setAttribute("d", outline_sentence);
+    outline.setAttribute("fill", "none");
+    outline.setAttribute("stroke",mainColor);
+    outline.setAttribute("stroke-width", 1);
+    if (use_outline){
+        container.appendChild(outline);
+    }
+
+    xc = xc / Points.length;
+    yc = yc / Points.length;
+    // yc = (0.65 * maxY) ;
+    split = 0.5;
+
+    // Points = sortPointsClockwise(Points);
+
+    for (let i=0; i < Points.length ; i++){
+        if (i < Points.length -1) {
+
+            dp = dist(Points[i][0], Points[i][1], xc, yc);
+            dp2 = dist(Points[i+1][0], Points[i+1][1], xc, yc);
+            // split = dp / (dp + dp2);
+
+
+            new_x = midpoint(Points[i][0],Points[i+1][0], split);
+            new_y = midpoint(Points[i][1],Points[i+1][1], split);
+        }
+        else {
+
+            dp = dist(Points[i][0], Points[i][1], xc, yc);
+            dp2 = dist(Points[0][0], Points[0][1], xc, yc);
+            // split = dp / (dp + dp2);
+
+            new_x = midpoint(Points[i][0],Points[0][0], split);
+            new_y = midpoint(Points[i][1],Points[0][1], split);    
+        }
+    
+        if (i === 0){
+            dp = dist(Points[i][0], Points[i][1], xc, yc);
+            dp2 = dist(Points[Points.length -1][0], Points[Points.length -1][1], xc, yc);
+            // split = dp / (dp + dp2);
+
+            new_x2 = midpoint(Points[i][0],Points[Points.length -1][0], split);
+            new_y2 = midpoint(Points[i][1],Points[Points.length -1][1], split);  
+        }
+        else {
+            dp = dist(Points[i][0], Points[i][1], xc, yc);
+            dp2 = dist(Points[i -1][0], Points[i -1][1], xc, yc);
+            // split = dp / (dp + dp2);
+            new_x2 = midpoint(Points[i][0], Points[i-1][0]);
+            new_y2 = midpoint(Points[i][1], Points[i-1][1]);  
+        }
+
+        // Quadratic Bezier Curve
+        kawung_part = document.createElementNS(svgURI, "path");
+        kawung_part.setAttribute("d", `M ${xc} ${yc} Q${new_x} ${new_y} ${Points[i][0]} ${Points[i][1]} Q${new_x2} ${new_y2} ${xc} ${yc}`);
+        kawung_part.setAttribute("stroke", strokeColor);
+        kawung_part.setAttribute("fill", mainColor);
+        kawung_part.setAttribute("stroke-width", 0.15);
+        container.appendChild(kawung_part);
+    
+        circle = document.createElementNS(svgURI, "circle");
+        circle.setAttribute("cx", xc + 0.80 * (Points[i][0] - xc)); // x-coordinate of the center
+        circle.setAttribute("cy", yc + 0.80 * (Points[i][1] - yc)); // y-coordinate of the center
+        circle.setAttribute("r", 0.04 * Math.sqrt(  (Points[i][0] - xc) ** 2 + (Points[i][1] - yc) ** 2));   // radius
+        // circle.setAttribute('stroke', secondary_colour);
+        circle.setAttribute("fill", secondaryColor); // fill color
+        container.appendChild(circle);
+    }
+}
+
+    // Update the polygon points when a point is moved
+    function updateQuadrilateral() {
+      const newPoints = [
+        `${points.A.cx.baseVal.value},${points.A.cy.baseVal.value}`,
+        `${points.B.cx.baseVal.value},${points.B.cy.baseVal.value}`,
+        `${points.C.cx.baseVal.value},${points.C.cy.baseVal.value}`,
+        `${points.D.cx.baseVal.value},${points.D.cy.baseVal.value}`
+      ];
+      quadrilateral.setAttribute('points', newPoints.join(' '));
+
+      cX = (points.A.cx.baseVal.value + points.B.cx.baseVal.value + points.C.cx.baseVal.value + points.D.cx.baseVal.value) / 4;
+      cY = (points.A.cy.baseVal.value + points.B.cy.baseVal.value + points.C.cy.baseVal.value + points.D.cy.baseVal.value) / 4;
+
+      dataset = [
+         [points.A.cx.baseVal.value - cX ,points.A.cy.baseVal.value - cY]
+        ,[points.B.cx.baseVal.value - cX ,points.B.cy.baseVal.value - cY]
+        ,[points.C.cx.baseVal.value - cX ,points.C.cy.baseVal.value - cY]
+        ,[points.D.cx.baseVal.value - cX ,points.D.cy.baseVal.value - cY]
+
+      ];
+      const element = document.getElementById('kawung');
+      if (element) {
+        element.remove();
+      }
+      
+      drawArbitraryKawung(dataset, cX, cY, 200, 0, "#78a0ce", "white", "black");
+
+    }
+
+    // Handle mouse events
+    svg.addEventListener('mousedown', (e) => {
+      if (e.target.classList.contains('point')) {
+        draggingPoint = e.target;
+      }
+    });
+
+    svg.addEventListener('mousemove', (e) => {
+      if (draggingPoint) {
+        const rect = svg.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+
+        draggingPoint.setAttribute('cx', mouseX);
+        draggingPoint.setAttribute('cy', mouseY);
+
+        updateQuadrilateral();
+      }
+    });
+
+    svg.addEventListener('mouseup', () => {
+      draggingPoint = null;
+    });
+
+    svg.addEventListener('mouseleave', () => {
+      draggingPoint = null;
+    });
+
+    updateQuadrilateral();
+  </script>
+</body>
+</html>
