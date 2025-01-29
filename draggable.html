@@ -22,10 +22,10 @@
     <polygon id="quadrilateral" points="150,150 450,150 450,450 150,450" fill="none" stroke="gray" stroke-width="1"/>
     
     <!-- Draggable points -->
-    <circle id="pointA" class="point" cx="300" cy="450" r="8" fill="gray"/>
-    <circle id="pointB" class="point" cx="350" cy="300" r="8" fill="gray"/>
-    <circle id="pointC" class="point" cx="220" cy="250" r="8" fill="gray"/>
-    <circle id="pointD" class="point" cx="150" cy="320" r="8" fill="gray"/>
+    <circle id="pointA" class="point" cx="300" cy="450" r="10" fill="gray"/>
+    <circle id="pointB" class="point" cx="350" cy="300" r="10" fill="gray"/>
+    <circle id="pointC" class="point" cx="220" cy="250" r="10" fill="gray"/>
+    <circle id="pointD" class="point" cx="150" cy="320" r="10" fill="gray"/>
   </svg>
 
   <script>
@@ -184,6 +184,50 @@
 
     }
 
+
+    // Get correct mouse/touch position
+    function getEventPosition(event) {
+      const rect = svg.getBoundingClientRect();
+      if (event.touches) {
+        return {
+          x: event.touches[0].clientX - rect.left,
+          y: event.touches[0].clientY - rect.top
+        };
+      }
+      return {
+        x: event.clientX - rect.left,
+        y: event.clientY - rect.top
+      };
+    }
+
+
+    // Start dragging (mousedown / touchstart)
+    function startDrag(event) {
+      event.preventDefault();
+      const target = event.target;
+      if (target.classList.contains('point')) {
+        draggingPoint = target;
+      }
+    }
+
+    // Dragging (mousemove / touchmove)
+    function drag(event) {
+      if (!draggingPoint) return;
+      event.preventDefault();
+
+      const pos = getEventPosition(event);
+      draggingPoint.setAttribute('cx', pos.x);
+      draggingPoint.setAttribute('cy', pos.y);
+
+      updateQuadrilateral();
+    }
+
+    // Stop dragging (mouseup / touchend)
+    function endDrag() {
+      draggingPoint = null;
+    }
+
+
     // Handle mouse events
     svg.addEventListener('mousedown', (e) => {
       if (e.target.classList.contains('point')) {
@@ -211,6 +255,10 @@
     svg.addEventListener('mouseleave', () => {
       draggingPoint = null;
     });
+
+    svg.addEventListener('touchstart', startDrag, { passive: false });
+    svg.addEventListener('touchmove', drag, { passive: false });
+    svg.addEventListener('touchend', endDrag);
 
     updateQuadrilateral();
   </script>
