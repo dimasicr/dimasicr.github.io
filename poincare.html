@@ -95,13 +95,14 @@ The key concept is that in Euclidean space, the sum of the interior angles of a 
 For instance, four pentagons cannot tessellate in Euclidean space because their angles sum to more than 360 degrees, leaving no room for a fourth pentagon. However, in hyperbolic space, where angles sum to less than their Euclidean counterparts, this tessellation becomes possible.  </p>
          <p style="text-align: left;"> To determine whether a polygon will tesselate in which place, we can use the following neat formula. First, we know than in Euclidean plane, sum of all angle in polygon can be described as (n-2) * 180 degree. For example, sum of all angles in triangle are 180 degrees. On the other hand, sum of all angles in square are 360 degrees. For pentagon, the sum of all angles are 540 degrees. The formula will hold for polygon with more sides.    </p>
 
-         <p style="text-align: center"> Sum of Interior Angle of n-sided polygon =  \[
+         <p style="text-align: center">   \[ Sum of Interior Angle of n-sided polygon =
   (n - 2) \times 180^\circ
   \] </p>
 
          <p style="text-align: left;"> For a tessellation {n,k}, there are k regular polygons at each vertex. So the angle at each vertex is 360°/k. Since a regular n-gon has n equal angles, each being 360°/k, therefore the angle sum is n360°/k </p>
 
-         <p style="text-align: center"> Sum of Interior Angle of n-sided polygon =   \[
+         <p style="text-align: center">    \[
+            Sum of Interior Angle of n-sided polygon =
   \frac{n \times 360^\circ}{k}
   \] </p>
 
@@ -119,6 +120,12 @@ For instance, four pentagons cannot tessellate in Euclidean space because their 
          <p style=" overflow-x: scroll;"> For Euclidean tessellation,  \( \frac{1}{n} + \frac{1}{k} = \frac{1}{2}  \) </p>
          <p style=" overflow-x: scroll;"> For Hyperbolic tessellation,  \( \frac{1}{n} + \frac{1}{k} < \frac{1}{2}  \) </p>
          <p style=" overflow-x: scroll;"> For Elliptical tessellation,  \( \frac{1}{n} + \frac{1}{k} > \frac{1}{2}  \) </p>
+
+         <p style="text-align: left;"> Using the equation mentioned above, we can determine which polygons can tessellate neatly in the hyperbolic plane. The author has tested various combinations of 
+𝑛
+n and 
+𝑘
+k, ranging from 1 to 10, and found that the {5,4} tessellation (where four pentagons meet at one vertex) and the {4,5} tessellation (where five quadrilaterals meet at one vertex) satisfy the equation for hyperbolic tessellation. Additionally, these patterns produce visually pleasing results. </p>
 
 
          <h2 style="text-align: justify; color: #493118; font-weight: bold;"> How to Draw </h2>
