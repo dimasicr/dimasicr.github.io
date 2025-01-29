@@ -86,7 +86,7 @@
          <p style="text-align: left;"> To better understand hyperbolic geometry, we use models and projections. This is similar to what we do with Earth: while the Earth is spherical, we project it onto a 2D flat surface to make it easier for us to read and write about it. Similarly, in hyperbolic geometry, we use the Poincaré disk model. The Poincaré disk model has several key characteristics that make it both interesting and aesthetically pleasing. First, it uses a unit circle. Second, the shapes at the center of the disk appear larger, while those near the edges appear smaller. Third, it is conformal, meaning it preserves angles. These combinations, if used by great artists, can create very unique art. One of the most famous examples is <a href="https://en.wikipedia.org/wiki/Circle_Limit_III">M.C Escher Circle Limit</a>  </p>
          <p style="text-align: left;"> In the following text, we will explore methods to combine hyperbolic geometry with the traditional batik kawung motif.   </p>
 
-         <h2 style="text-align: left;"> Choosing what to tile </h2>
+         <h2 style="text-align: left;"> Tiling Design </h2>
          
          <p style="text-align: left;"> First, we want to determine which regular tessellation {n, k} will produce an aesthetically pleasing result in the hyperbolic plane. An {n, k} tessellation means that an n-sided polygon meets k other polygons at a single vertex. For example, a {3,6} tessellation means that six triangles meet at a vertex.
 
@@ -95,14 +95,14 @@ The key concept is that in Euclidean space, the sum of the interior angles of a 
 For instance, four pentagons cannot tessellate in Euclidean space because their angles sum to more than 360 degrees, leaving no room for a fourth pentagon. However, in hyperbolic space, where angles sum to less than their Euclidean counterparts, this tessellation becomes possible.  </p>
          <p style="text-align: left;"> To determine whether a polygon will tesselate in which place, we can use the following neat formula. First, we know than in Euclidean plane, sum of all angle in polygon can be described as (n-2) * 180 degree. For example, sum of all angles in triangle are 180 degrees. On the other hand, sum of all angles in square are 360 degrees. For pentagon, the sum of all angles are 540 degrees. The formula will hold for polygon with more sides.    </p>
 
-         <p style="text-align: center">   \[ Sum of Interior Angle of n-sided polygon =
+         <p style="text-align: center">   \[ SumOfInteriorAngle =
   (n - 2) \times 180^\circ
   \] </p>
 
          <p style="text-align: left;"> For a tessellation {n,k}, there are k regular polygons at each vertex. So the angle at each vertex is 360°/k. Since a regular n-gon has n equal angles, each being 360°/k, therefore the angle sum is n360°/k </p>
 
          <p style="text-align: center">    \[
-            Sum of Interior Angle of n-sided polygon =
+            SumOfInteriorAngle =
   \frac{n \times 360^\circ}{k}
   \] </p>
 
@@ -122,9 +122,7 @@ For instance, four pentagons cannot tessellate in Euclidean space because their 
          <p style=" overflow-x: scroll;"> For Elliptical tessellation,  \( \frac{1}{n} + \frac{1}{k} > \frac{1}{2}  \) </p>
 
          <p style="text-align: left;"> Using the equation mentioned above, we can determine which polygons can tessellate neatly in the hyperbolic plane. The author has tested various combinations of 
-𝑛
-n and 
-𝑘
+𝑛 and 𝑘
 k, ranging from 1 to 10, and found that the {5,4} tessellation (where four pentagons meet at one vertex) and the {4,5} tessellation (where five quadrilaterals meet at one vertex) satisfy the equation for hyperbolic tessellation. Additionally, these patterns produce visually pleasing results. </p>
 
 
