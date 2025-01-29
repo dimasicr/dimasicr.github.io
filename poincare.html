@@ -93,7 +93,26 @@
 The key concept is that in Euclidean space, the sum of the interior angles of a triangle is always 180 degrees, whereas in hyperbolic space, it is less than 180 degrees. This fundamental difference allows for tessellations that are impossible in Euclidean space to exist in hyperbolic space.
 
 For instance, four pentagons cannot tessellate in Euclidean space because their angles sum to more than 360 degrees, leaving no room for a fourth pentagon. However, in hyperbolic space, where angles sum to less than their Euclidean counterparts, this tessellation becomes possible.  </p>
-<!--          <p style="text-align: left;"> To determine whether a polygon will tesselate in which place, we can use the following neat formula. First, we know than in Euclidean plane, sum of all angle in polygon can be described as (n-2) * 180 degree. For example, sum of all angles in triangle are 180 degrees. On the other hand, sum of all angles in square are 360 degrees. For pentagon, the sum of all angles are 540 degrees. The formula will hold for polygon with more sides.    </p> -->
+         <p style="text-align: left;"> To determine whether a polygon will tesselate in which place, we can use the following neat formula. First, we know than in Euclidean plane, sum of all angle in polygon can be described as (n-2) * 180 degree. For example, sum of all angles in triangle are 180 degrees. On the other hand, sum of all angles in square are 360 degrees. For pentagon, the sum of all angles are 540 degrees. The formula will hold for polygon with more sides.    </p>
+
+         <p style="text-align: center"> Sum of Interior Angle of n-sided polygon =  \[
+  (n - 2) \times 180^\circ
+  \] </p>
+
+         <p style="text-align: left;"> For a tessellation {n,k}, there are k regular polygons at each vertex. So the angle at each vertex is 360°/k. Since a regular n-gon has n equal angles, each being 360°/k, therefore the angle sum is n360°/k </p>
+
+         <p style="text-align: center"> Sum of Interior Angle of n-sided polygon =   \[
+  \frac{n \times 360^\circ}{k}
+  \] </p>
+
+         <p style="text-align: left;"> If we substitute first equation to second equation we get this formula: </p>
+<p style="text-align: center">
+  \[
+  (n - 2) \times 180^\circ = \frac{n \times 360^\circ}{k}
+  \]
+</p>
+            
+
 
             
          <p style="text-align: justify;"> We can ascertain whether the {n, k} tessellation (Note: a polygon with n sides meeting k other polygons at each vertex) will form a tessellation in the Euclidean plane, the hyperbolic plane, or the elliptic plane by utilizing the following formula:  </p>
