@@ -55,7 +55,8 @@
     function drawArbitraryKawung(Points, x, y, r =200, rotDeg= 0, mainColor=themes["oldJava"].mainColor, secondaryColor=themes["oldJava"].secondaryColor, strokeColor = themes["oldJava"].strokeColor, use_outline=false){  
     let container = document.createElementNS(svgURI, "g");
     container.setAttribute("transform", `translate(${x}, ${y}) rotate(${rotDeg}) scale(${r/200} , ${r/200})`);
-    svg.appendChild(container);
+    // svg.appendChild(container);
+    svg.insertBefore(container, points.A)
     let outline = document.createElementNS(svgURI, "path");
     outline_sentence = `M ${Points[0][0]}, ${Points[0][1]} `;
     container.setAttribute("id", "kawung");
