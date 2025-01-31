@@ -126,17 +126,32 @@ For instance, four pentagons cannot tessellate in Euclidean space because their 
 k, ranging from 1 to 10, and found that the {5,4} tessellation (where four pentagons meet at one vertex) and the {4,5} tessellation (where five quadrilaterals meet at one vertex) satisfy the equation for hyperbolic tessellation. Additionally, these patterns produce visually pleasing results. </p>
 
 
-         <h2 style="text-align: justify; color: #493118; font-weight: bold;"> How to Draw </h2>
+         <h2 style="text-align: justify; color: #493118; font-weight: bold;"> Generalization of Batik Kawung </h2>
+         <p style="text-align: left;"> In order to decorate hyperbolic tiling with batik kawung, we need to find method to draw batik Kawung given a set of points. Author propose the following algorithm to generate kawung pattern. </p>
+         <ol>
+         <li><p style="text-align: justify;"> Any set of vertices can be decorated with batik Kawung using this algorithm. </p></li>
+         <li><p style="text-align: justify;"> Initially, we identify the polygon's center by computing the average of the x-coordinates and y-coordinates of its points. This provides us with the coordinates for the center of the vertices </p> </li>
+         <li><p style="text-align: justify;"> Subsequently, a Quadratic Bezier curve is drawn, commencing from the center as the starting point, utilizing the midpoints of the vertices as control points, and ending at the vertices themselves</p> </li>
+         <li><p style="text-align: justify;"> This process is reiterated by repeating step #3 for each subsequent vertex.</p> </li>
+         </ol>
+         <p style="text-align: left;"> You can refer to image below to see the algorithm in action. You can try drag the gray circles to change the vertices, and kawung pattern will be dynamically updated according to the circles position. </p>
+   
+   <svg id="svgCanvasDraggable" viewBox="0 0 500 500" width="500px" height="500px" xmlns="http://www.w3.org/2000/svg">
+    <!-- Polygon representing the quadrilateral -->
+    <polygon id="quadrilateral" points="100,300 300,300 300,100 100,100" fill="none" stroke="gray" stroke-width="1"/>
+    
+    <!-- Draggable points -->
+    <circle id="pointA" class="point" cx="100" cy="300" r="10" fill="gray"/>
+    <circle id="pointB" class="point" cx="300" cy="300" r="10" fill="gray"/>
+    <circle id="pointC" class="point" cx="300" cy="100" r="10" fill="gray"/>
+    <circle id="pointD" class="point" cx="100" cy="100" r="10" fill="gray"/>
+  </svg>
+            
          <div style="text-align: center;">
               <canvas id="myCanvas" style="display: block; margin: auto;"></canvas>
          </div>
          <button id="refresh-btn"> <i class="fa fa-refresh"></i>  Replay Animation </span> </button>
-         <ol>
-         <li><p style="text-align: justify;"> Any polygon can be transformed into an n-leaf polygon using a straightforward algorithm </p></li>
-         <li><p style="text-align: justify;"> Initially, we identify the polygon's center by computing the average of the x-coordinates and y-coordinates of its points. This provides us with the coordinates for the center of the polygon. </p> </li>
-         <li><p style="text-align: justify;"> Subsequently, a Quadratic Bezier curve is drawn, commencing from the polygon's center as the starting point, utilizing the midpoints of the polygon's vertices as control points, and concluding at the vertices themselves</p> </li>
-         <li><p style="text-align: justify;"> This process is reiterated by repeating step #3 for each subsequent vertex.</p> </li>
-         </ol>
+
          <h2 style="text-align: justify; color: #493118; font-weight: bold;"> Exhibit </h2>  
          <img src="asset/jewelryKawungBall.png" alt="Apollonian Kawung Necklace" style="display: flex;
      justify-content: center;
@@ -159,5 +174,246 @@ k, ranging from 1 to 10, and found that the {5,4} tessellation (where four penta
       <script src="js/mainUI.js"></script> 
       <script src="js/animationToolkit.js"></script>
       <script src="js/animationIrregularPolygon.js"></script>
+
+                  <script>
+    const svgDraggable = document.getElementById('svgCanvasDraggable');
+    const quadrilateral = document.getElementById('quadrilateral');
+
+    const points = {
+      A: document.getElementById('pointA'),
+      B: document.getElementById('pointB'),
+      C: document.getElementById('pointC'),
+      D: document.getElementById('pointD'),
+    };
+
+    let draggingPoint = null;
+
+    // Helper Function to find the midpoint of two points
+    function midpoint(x1, x2, split = 0.5) {
+      dx = x2 - x1;
+      return x1 + dx * split;
+    }
+    
+    function dist(x1,y1, x2, y2){
+        return Math.sqrt((x1-x2)**2 + (y1-y2)**2);
+    }
+
+    function drawArbitraryKawung2(Points, x, y, r =200, rotDeg= 0, mainColor=themes["oldJava"].mainColor, secondaryColor=themes["oldJava"].secondaryColor, strokeColor = themes["oldJava"].strokeColor, use_outline=false){  
+    let container = document.createElementNS('http://www.w3.org/2000/svg', "g");
+    container.setAttribute("transform", `translate(${x}, ${y}) rotate(${rotDeg}) scale(${r/200} , ${r/200})`);
+    // svgDraggable.appendChild(container);
+    svgDraggable.insertBefore(container, points.A)
+    let outline = document.createElementNS('http://www.w3.org/2000/svg', "path");
+    outline_sentence = `M ${Points[0][0]}, ${Points[0][1]} `;
+    container.setAttribute("id", "kawung");
+
+
+    // Get center
+    xc = 0;
+    yc = 0;
+    minY = Points[0][1];
+    maxY = Points[0][1];
+    for (let i=0; i < Points.length; i++){
+      xc += Points[i][0];
+      yc += Points[i][1];
+      if (i>0){
+        outline_sentence += `L${Points[i][0]}, ${Points[i][1]} `;
+      }
+      if (Points[i][1] < minY){
+        minY = Points[i][1];
+      }
+
+     if (Points[i][1] > maxY){
+        maxY = Points[i][1];
+      }
+
+
+
+    }
+
+    outline_sentence += 'Z';
+    outline.setAttribute("d", outline_sentence);
+    outline.setAttribute("fill", "none");
+    outline.setAttribute("stroke",mainColor);
+    outline.setAttribute("stroke-width", 1);
+    if (use_outline){
+        container.appendChild(outline);
+    }
+
+    xc = xc / Points.length;
+    yc = yc / Points.length;
+    // yc = (0.65 * maxY) ;
+    split = 0.5;
+
+    // Points = sortPointsClockwise(Points);
+
+    for (let i=0; i < Points.length ; i++){
+        if (i < Points.length -1) {
+
+            dp = dist(Points[i][0], Points[i][1], xc, yc);
+            dp2 = dist(Points[i+1][0], Points[i+1][1], xc, yc);
+            // split = dp / (dp + dp2);
+
+
+            new_x = midpoint(Points[i][0],Points[i+1][0], split);
+            new_y = midpoint(Points[i][1],Points[i+1][1], split);
+        }
+        else {
+
+            dp = dist(Points[i][0], Points[i][1], xc, yc);
+            dp2 = dist(Points[0][0], Points[0][1], xc, yc);
+            // split = dp / (dp + dp2);
+
+            new_x = midpoint(Points[i][0],Points[0][0], split);
+            new_y = midpoint(Points[i][1],Points[0][1], split);    
+        }
+    
+        if (i === 0){
+            dp = dist(Points[i][0], Points[i][1], xc, yc);
+            dp2 = dist(Points[Points.length -1][0], Points[Points.length -1][1], xc, yc);
+            // split = dp / (dp + dp2);
+
+            new_x2 = midpoint(Points[i][0],Points[Points.length -1][0], split);
+            new_y2 = midpoint(Points[i][1],Points[Points.length -1][1], split);  
+        }
+        else {
+            dp = dist(Points[i][0], Points[i][1], xc, yc);
+            dp2 = dist(Points[i -1][0], Points[i -1][1], xc, yc);
+            // split = dp / (dp + dp2);
+            new_x2 = midpoint(Points[i][0], Points[i-1][0]);
+            new_y2 = midpoint(Points[i][1], Points[i-1][1]);  
+        }
+
+        // Quadratic Bezier Curve
+        kawung_part = document.createElementNS('http://www.w3.org/2000/svg', "path");
+        kawung_part.setAttribute("d", `M ${xc} ${yc} Q${new_x} ${new_y} ${Points[i][0]} ${Points[i][1]} Q${new_x2} ${new_y2} ${xc} ${yc}`);
+        kawung_part.setAttribute("stroke", strokeColor);
+        kawung_part.setAttribute("fill", mainColor);
+        kawung_part.setAttribute("stroke-width", 0.15);
+        container.appendChild(kawung_part);
+    
+        circle = document.createElementNS('http://www.w3.org/2000/svg', "circle");
+        circle.setAttribute("cx", xc + 0.80 * (Points[i][0] - xc)); // x-coordinate of the center
+        circle.setAttribute("cy", yc + 0.80 * (Points[i][1] - yc)); // y-coordinate of the center
+        circle.setAttribute("r", 0.04 * Math.sqrt(  (Points[i][0] - xc) ** 2 + (Points[i][1] - yc) ** 2));   // radius
+        // circle.setAttribute('stroke', secondary_colour);
+        circle.setAttribute("fill", secondaryColor); // fill color
+        container.appendChild(circle);
+    }
+}
+
+    // Update the polygon points when a point is moved
+    function updateQuadrilateral() {
+      const newPoints = [
+        `${points.A.cx.baseVal.value},${points.A.cy.baseVal.value}`,
+        `${points.B.cx.baseVal.value},${points.B.cy.baseVal.value}`,
+        `${points.C.cx.baseVal.value},${points.C.cy.baseVal.value}`,
+        `${points.D.cx.baseVal.value},${points.D.cy.baseVal.value}`
+      ];
+      quadrilateral.setAttribute('points', newPoints.join(' '));
+
+      cX = (points.A.cx.baseVal.value + points.B.cx.baseVal.value + points.C.cx.baseVal.value + points.D.cx.baseVal.value) / 4;
+      cY = (points.A.cy.baseVal.value + points.B.cy.baseVal.value + points.C.cy.baseVal.value + points.D.cy.baseVal.value) / 4;
+
+      dataset = [
+         [points.A.cx.baseVal.value - cX ,points.A.cy.baseVal.value - cY]
+        ,[points.B.cx.baseVal.value - cX ,points.B.cy.baseVal.value - cY]
+        ,[points.C.cx.baseVal.value - cX ,points.C.cy.baseVal.value - cY]
+        ,[points.D.cx.baseVal.value - cX ,points.D.cy.baseVal.value - cY]
+
+      ];
+      const element = document.getElementById('kawung');
+      if (element) {
+        element.remove();
+      }
+      
+      drawArbitraryKawung2(dataset, cX, cY, 200, 0, "#78a0ce", "white", "black");
+
+    }
+
+
+    // Get correct mouse/touch position
+    function getEventPosition(event) {
+      const rect = svgDraggable.getBoundingClientRect();
+      if (event.touches) {
+        return {
+          x: event.touches[0].clientX - rect.left,
+          y: event.touches[0].clientY - rect.top
+        };
+      }
+      return {
+        x: event.clientX - rect.left,
+        y: event.clientY - rect.top
+      };
+    }
+
+
+    // Start dragging (mousedown / touchstart)
+    function startDrag(event) {
+      event.preventDefault();
+      const target = event.target;
+      if (target.classList.contains('point')) {
+        draggingPoint = target;
+      }
+    }
+
+    // Dragging (mousemove / touchmove)
+    function drag(event) {
+      if (!draggingPoint) return;
+      event.preventDefault();
+
+      const pos = getEventPosition(event);
+      draggingPoint.setAttribute('cx', pos.x);
+      draggingPoint.setAttribute('cy', pos.y);
+
+      updateQuadrilateral();
+    }
+
+    // Stop dragging (mouseup / touchend)
+    function endDrag() {
+      draggingPoint = null;
+    }
+
+
+    // Handle mouse events
+    svgDraggable.addEventListener('mousedown', (e) => {
+      if (e.target.classList.contains('point')) {
+        draggingPoint = e.target;
+      }
+    });
+
+    svgDraggable.addEventListener('mousemove', (e) => {
+      if (draggingPoint) {
+        const rect = svgDraggable.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+
+        draggingPoint.setAttribute('cx', mouseX);
+        draggingPoint.setAttribute('cy', mouseY);
+
+        updateQuadrilateral();
+      }
+    });
+
+    svgDraggable.addEventListener('mouseup', () => {
+      draggingPoint = null;
+    });
+
+    svgDraggable.addEventListener('mouseleave', () => {
+      draggingPoint = null;
+    });
+
+    svgDraggable.addEventListener('touchstart', startDrag, { passive: false });
+    svgDraggable.addEventListener('touchmove', drag, { passive: false });
+    svgDraggable.addEventListener('touchend', endDrag);
+
+    updateQuadrilateral();
+
+
+
+
+
+
+  </script>
    </body>
 </html>
