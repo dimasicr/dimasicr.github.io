@@ -293,7 +293,7 @@ function draw_polygon(n, x,y, r, rot_deg){
     isen_circle2 = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
     isen_circle2.setAttribute("cx", midpoint(vertices[j][0], vertices[j+1][0]) * 0.85);
     isen_circle2.setAttribute("cy", midpoint(vertices[j][1], vertices[j+1][1]) * 0.85);
-    isen_circle2.setAttribute("rx", r / 40);
+    isen_circle2.setAttribute("rx", r / 20);
     isen_circle2.setAttribute("ry", r / 20);
 
     isen_circle2.setAttribute("fill", mainColor);
@@ -306,7 +306,7 @@ function draw_polygon(n, x,y, r, rot_deg){
     isen_circle2 = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
     isen_circle2.setAttribute("cx", new_x2 * 0.85);
     isen_circle2.setAttribute("cy", new_y2 * 0.85);
-    isen_circle2.setAttribute("rx", r / 40);
+    isen_circle2.setAttribute("rx", r / 20);
     isen_circle2.setAttribute("ry", r / 20);
     isen_circle2.setAttribute("fill", mainColor);
     group.appendChild(isen_circle2);
