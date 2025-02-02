@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title> PatternSpin </title>
-  <style>
+<style>
     body {
       margin: 0;
       background: white;
@@ -15,14 +15,76 @@
       height: 100vh;
     }
 
-  path, rect, circle {
-    pointer-events: none;
-  }
+    path, rect, circle {
+      pointer-events: none;
+    }
+
+    /* Menu button styles */
+    .menu-container {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+    .menu-button {
+      background: #38445a;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 5px;
+    }
+    .menu-dropdown {
+      display: none;
+      position: absolute;
+      top: 40px;
+      right: 0;
+      background: white;
+      border: 1px solid #ccc;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    .menu-dropdown a {
+      display: block;
+      padding: 10px;
+      text-decoration: none;
+      color: #333;
+      background: white;
+    }
+    .menu-dropdown a:hover {
+      background: #f0f0f0;
+    }
   </style>
 </head>
 <body>
   <!-- SVG Canvas -->
   <svg id="game" width="400" height="600" style="background: #38445a;"></svg>
+
+  <!-- Menu Button -->
+  <div class="menu-container">
+    <button class="menu-button" onclick="toggleMenu()">Menu</button>
+    <div class="menu-dropdown" id="menuDropdown">
+      <a href="level1.html">Level 1</a>
+      <a href="level2.html">Level 2</a>
+      <a href="level3.html">Level 3</a>
+    </div>
+  </div>
+    <script>
+    function toggleMenu() {
+      var menu = document.getElementById("menuDropdown");
+      menu.style.display = menu.style.display === "block" ? "none" : "block";
+    }
+
+    // Close menu when clicking outside
+    document.addEventListener("click", function(event) {
+      var menu = document.getElementById("menuDropdown");
+      var button = document.querySelector(".menu-button");
+      if (!menu.contains(event.target) && !button.contains(event.target)) {
+        menu.style.display = "none";
+      }
+    });
+  </script>
   <script>
 
 const svgNS = "http://www.w3.org/2000/svg";
