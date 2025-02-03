@@ -27,82 +27,14 @@
       height: 600px;
     }
 
-    /* Menu button styling */
-    .menu-button {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: white;
-      border: 2px solid black;
-      padding: 5px 10px;
-      cursor: pointer;
-      font-size: 14px;
-      font-family: Arial, sans-serif;
-      border-radius: 5px;
-      z-index: 10;
-    }
-
-    /* Menu dropdown */
-    .menu-items {
-      position: absolute;
-      top: 40px;
-      right: 10px;
-      background: white;
-      border: 2px solid black;
-      display: none;
-      flex-direction: column;
-      border-radius: 5px;
-      z-index: 10;
-    }
-
-    .menu-items a {
-      padding: 5px 10px;
-      text-decoration: none;
-      color: black;
-      font-size: 14px;
-      font-family: Arial, sans-serif;
-      border-bottom: 1px solid black;
-      cursor: pointer;
-    }
-
-    .menu-items a:last-child {
-      border-bottom: none;
-    }
-
-    .menu-items a:hover {
-      background: lightgray;
-    }
   </style>
 </head>
 <body>
   <div class="svg-container">
-    <!-- Menu Button -->
-    <button class="menu-button" onclick="toggleMenu()">Menu</button>
-    
-    <!-- Menu Items -->
-    <div class="menu-items" id="menu-items">
-      <a href="#" onclick="goToLevel(1)">Level 1</a>
-      <a href="#" onclick="goToLevel(2)">Level 2</a>
-      <a href="#" onclick="goToLevel(3)">Level 3</a>
-      <a href="#" onclick="goToLevel(4)">Level 4</a>
-    </div>
 
     <!-- SVG Canvas -->
     <svg id="game" width="400" height="600" style="background: #38445a;"></svg>
   </div>
-
-  
-  <script>
-    function toggleMenu() {
-      const menu = document.getElementById('menu-items');
-      menu.style.display = (menu.style.display === 'flex') ? 'none' : 'flex';
-    }
-
-    function goToLevel(level) {
-      alert("Going to Level " + level); 
-      // Replace with actual navigation logic
-    }
-  </script>
   
   <script>
 
