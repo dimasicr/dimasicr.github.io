@@ -318,7 +318,7 @@ function midpoint(x1, x2){
 }
 
 
-function draw_polygon(id, n, x,y, r, rot_deg){
+function draw_polygon2(id, n, x,y, r, rot_deg){
   vertices = [];
   let deg =  2 * Math.PI / n;
   group = document.createElementNS("http://www.w3.org/2000/svg", "g");
@@ -577,7 +577,7 @@ setTimeout(() => {
                 // for (let j=0; j<4; j++){
                 //   drawTumpal(this.cx, this.cy, this.id, this.l, 45, this.rot_degree +  90 * j);
                 // }
-                                                  draw_polygon(this.id, 4, this.cx, this.cy, getRadius(this.l, 4), this.rot_degree + 45);
+                                                  draw_polygon2(this.id, 4, this.cx, this.cy, getRadius(this.l, 4), this.rot_degree + 45);
 
             }
           
@@ -868,7 +868,7 @@ outline4.addEventListener("click", (event) => {
                 // for (let j=0; j<3; j++){
                 //   drawTumpal(this.cx, this.cy, this.id, this.l, 30, this.rot_degree + 120 * j);
                 // }
-                                                                  draw_polygon(this.id, 3, this.cx, this.cy, getRadius(this.l, 3), this.rot_degree + 30 );
+                                                                  draw_polygon2(this.id, 3, this.cx, this.cy, getRadius(this.l, 3), this.rot_degree + 30 );
 
             }
 
