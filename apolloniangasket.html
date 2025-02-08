@@ -1,31 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
    <head>
+      <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TTRH2Q9QJB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-TTRH2Q9QJB');
+</script>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title> Apollonian Gasket Tutorial </title>
+      <meta name="google-adsense-account" content="ca-pub-4445967865776203">
+      <title> Chapter 1: Apollonian Gasket </title>
       <link rel="icon" href="logo.svg" type="image/svg+xml">
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
       <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200&display=swap" rel="stylesheet">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
       <link rel="stylesheet" href="main.css">
-      <style>
-            table {
-            border-collapse: collapse;
-            width: 80%;
-            margin: auto;
-        }
-
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: center;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-      </style>
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/js/loaders/STLLoader.js"></script>
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4445967865776203"
+     crossorigin="anonymous"></script>
+      
    </head>
    <body>
       <div class="container">
@@ -39,328 +41,269 @@
          <div class="sidenav" id="sidenav">
             <div style= "display: flex; font-size: 24px;">
                <img src="asset/tumpalLogo.svg" alt="SVG Image Description">
-               <span style="margin-left: 10px;"> Geometry of Batik  
-               <span>
+               <span style="margin-left: 10px;"> Geometry of Batik  <span>
             </div>
             <hr>
             <script src="nav.js"></script>
          </div>
          <!-- Main Content Area -->
          <div class="main-content">
-         <h1 > Apollonian Kawung </h1>
-            <div style="text-align: center;">
-              <canvas id="myCanvas" style="display: block; margin: auto;"></canvas>
-            </div>
-         <button id="refresh-btn"> <i class="fa fa-refresh"></i>  Replay Animation </span> </button>
+         <h1 > Chapter 1: The Kissing Circles </h1>
+         
+            <div id="svg-container"></div>
+         <figure>
+            <details style="margin-top: 5px;">
+               <summary style="text-align: center;"> <span> Interactive Image  </span> </summary>  
+               <select name="Motives" id="motives" class="btns" style="margin-top: 10px;" >
+                  <option value="symmetric">Symmetric</option>
+                  <option value="asymmetric">Asymmetric</option>
+                  <option value="triplet">Triplet</option>
+                  <option value="five">Five</option>
+               </select>
+               <select name="theme" id="themes" class="btns" >
+                  <option value="oldJava">Old Java </option>
+                  <option value="tetradiac">Nusantara </option>
+                  <option value="batavia">Batavia </option>
+               </select>
+               <select name="Paddings" id="paddings" class="btns" >
+                  <option value="false" selected >No Padding</option>
+                  <option value="true">Padding</option>
+               </select>
+               <select name="recursion_threshold" id="recursion_threshold" class="btns" >
+                  <option value="1"> Detail </option>
+                  <option value="3.5" selected> Normal </option>
+                  <option value="5"> Rough </option>
+               </select>
+               <button id="download-btn"> <i class="fa fa-download"></i>  Download SVG </span> </button>
+            </details>
+            <div style="text-align: center; margin-top: 10px;">
+                    <button id="left-button" onclick="if (currentPattern === 'symmetric') {
+          currentPattern = 'asymmetric';
+          selectBox.value = 'asymmetric';
+        } 
+        else if (currentPattern === 'asymmetric') {
+          currentPattern = 'triplet';
+          selectBox.value = 'triplet';
+        } 
+        else if (currentPattern === 'triplet') {
+          currentPattern = 'symmetric';
+          selectBox.value = 'symmetric';
+        } redraw();"><</button>
+                    <button id="right-button" onclick="if (currentPattern === 'symmetric') {
+          currentPattern = 'triplet';
+          selectBox.value = 'triplet';
+        } 
+        else if (currentPattern === 'triplet') {
+          currentPattern = 'asymmetric';
+          selectBox.value = 'asymmetric';
+        } 
+        else if (currentPattern === 'asymmetric') {
+          currentPattern = 'symmetric';
+          selectBox.value = 'symmetric';
+        } redraw();">></button>
+               </div>
+         </figure>
          
          <article style="width: 80%; text-align: center; margin: auto;">
-            <p> Apollonian Gasket Calculator </p>
-            <label for="quantity">Enter the radius:</label>
-            <input type="number" id="quantity" name="quantity" value="9" min="1" max="100" style="margin-bottom: 10px;">
+         <h2 style="color: #493118; font-weight: bold; text-align: left"> From Philosophy to Geometry: Descartes’ Legacy and the Art of Batik </h2>
+         <p> “I think, therefore I am,” or in Latin, <em>“Cogito ergo sum,”</em> is one of the most famous quotes by the French philosopher René Descartes. He argued that while everything else could be doubted—such as sensory perception and physical reality—the very act of doubting confirms the existence of a thinking entity. This quote illustrates Descartes' brilliance in logical reasoning and his use of syllogism, earning him a place as one of philosophy's most prominent figures. But did you know his genius also extended into mathematics? </p>
+         <p> As a mathematician, he was a prolific writer. When we are in school, we are introduced to a coordinate system called “Cartersian Coordinate”. This coordinate is named after him, whose contribution in Math especially in analytical geometry  earned him the honour to be named as one of the most used coordinate systems  in the world. </p>
+         <p> In this article, we’ll explore one of Descartes’ lesser-known theorems and use it to create a new Batik pattern. Known as the theory of kissing circles, this concept was discussed in his correspondence with Princess Elisabeth of the Palatinate—a royal scholar and student of Descartes. In their exchange, Descartes tackled an ancient mathematical puzzle about four mutually tangent circles, a problem that had puzzled mathematicians for millennia. </p>
+         <p> The following text will provide a geometrical perspective on Batik Kawung, outline its mathematical formula, and guide you in manually drawing it using a compass and ruler or digitally with SVG code. Then, we’ll learn about Descartes’ theorem and apply it to design new Batik motifs. Finally, we’ll take the pattern a step further by integrating it into the design of a necklace pendant for jewelry. </p>
+         
+         <h2 style="text-align: left; color: #493118; font-weight: bold;"> The Geometry Behind the Beauty </h2>
+         <p> Batik Kawung is one of the oldest and most iconic motifs in Java. This motif appears frequently in Indonesian temple statues, adorning figures like Mahakala in the Singosari temple, as well as Ganesha, Nandishvara, and Durga Mahishasuramardini. Over centuries, the Kawung motif has endured as a cultural emblem. Today, it remains a prevalent design in Indonesian textiles, architecture, and even popular culture. If you look closely, you’ll spot it in unexpected places, such as the opening credits of the 2013 Studio Ghibli animated movie <em> The Tale of Princess Kaguya </em>. </p>
+         <p> Given its timeless appeal, the Kawung motif invites deeper exploration, particularly its geometric foundation. Among its many interpretations, we focus on the circular Kawung. This form is defined by the intersection of four equal circles positioned around the origin: one above at (0, -r), one below at (0, r), one to the left at (-r, 0), and one to the right at (r, 0), as illustrated in the figure 1 </p>
 
-            <table>
-        <thead>
-            <tr>
-                <th>No</th>
-                <th>R</th>
-                <th>X</th>
-                <th>Y</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td id ="r1">2</td>
-                <td id ="x1">3</td>
-                <td id ="y1">4</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td id="r2">5</td>
-                <td id="x2">6</td>
-                <td id="y2">7</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td id="r3">5</td>
-                <td id="x3">6</td>
-                <td id="y3">7</td>
-            </tr>
+<figure style="text-align: center; display: flex; flex-direction: column; align-items: center; margin: 0;">
+  <img src="asset/Kawung Definition.png" alt="Kawung as intersection of four circles" style="max-width: 100%; height: auto;">
+  <figcaption style="text-align: center; margin-top: 8px;">Fig.1 - Kawung as intersection of four circles</figcaption>
+</figure>
+            
+         <h2 style="color: #493118; font-weight: bold; text-align: left"> Drawing Kawung by Hand: A Step-by-Step Guide </h2>
+         <p> Knowing how to sketch Batik Kawung manually using a pencil, a compass, and paper is a relatively straightforward process. Given a square ABCD, we can draw a circle centered at O with a radius equal to half of the square's side length. Next, we draw a quarter circle centered at vertex A. We then draw a quarter circle at vertices B, C, and D as shown in figure below. </p>
 
-            <tr>
-                <td>4</td>
-                <td id="r4">5</td>
-                <td id="x4">6</td>
-                <td id="y4">7</td>
-            </tr>
+         <div style="text-align: center;">
+              <canvas id="myCanvas" style="display: block; margin: auto;"></canvas>
+         </div>
+         <button id="refresh-btn"> <i class="fa fa-refresh"></i>  Replay Animation </span> </button>
+         <ol>
+            <li> <p style="text-align: justify;"> Given square ABCD, draw a circle centered at O with a radius equal to half of the square side length. </p> </li>
+            <li> <p style="text-align: justify;"> Draw a quarter circle centered at vertex A, using the same radius. </p> </li>
+            <li> <p style="text-align: justify;"> Repeat step #2 three times, centering the quarter circles at vertices B, C, and D, respectively. </p> </li>
+         </ol>
 
+         <p> Using the steps mentioned above, we are able to draw the main motive “klowongan” of Batik Kawung. To make it more visually pleasing, batik artists usually add secondary motives and background motives. Secondary motive is usually called “isen-isen”. Isen-isen is the decorative fillings found within the main patterns. These additional motifs are used to fill the spaces between the main motifs  to enhance the overall aesthetic appeal of the fabric. For batik Kawung, usually isen cecek are used. The illustration of this concept can be found in the figure below. </p>
 
-            <tr>
-                <td>5</td>
-                <td id="r5">5</td>
-                <td id="x5">6</td>
-                <td id="y5">7</td>
-            </tr>
+            <figure style="text-align: center; display: flex; flex-direction: column; align-items: center; margin: 0;">
+  <img src="asset/Klowongan Isen Cecek.png" alt="Breakdown of kawung ornaments" style="max-width: 100%; height: auto;">
+  <figcaption style="text-align: center; margin-top: 8px;">Fig.2 - Breakdown of batik ornaments</figcaption>
+</figure>
 
-            <tr>
-                <td>6</td>
-                <td id="r6">5</td>
-                <td id="x6">6</td>
-                <td id="y6">7</td>
-            </tr>
+         <h2 style="color: #493118; font-weight: bold; text-align: left"> Mastering Digital Kawung: Step-by-Step Instructions </h2>
+         <p> If we only want to draw hand written batik, then it is enough to only know how to draw it manually using the steps mentioned above.  However, if we want to use computers to generate digital patterns for digital printing or 3D modeling design, we need to represent Batik in a way that computers understand.  One of those ways is to represent Kawung in Scalable Vector Graphic (SVG). </p>
+         <p> Scalable Vector Graphics (SVG) is an XML-based markup language for describing two-dimensional based vector graphics. The benefit of using SVG is that the image can be rendered at any size and it will still look clean. The other benefit is that SVG format is easily readable by 3D modeling CAD programs. For instance, if we want to make a necklace pendant with motif Kawung, we can import an SVG file of Kawung and extrude it in a 3D modeling CAD program. To draw Kawung using Scalable Vector Graphic, we can write the following code in a text editor. </p>
+
+<pre><code class="language-markup">
+&lt;g transform=&quot;translate(x_origin, y_origin)&quot;&gt;
+     &lt;path d=&quot;M0 0 A R R 0 0 1 R R A R R 0 0 1 0 0&quot;&gt;&lt;/path&gt;
+     &lt;path d=&quot;M0 0 A R R 0 0 1 R R A R R 0 0 1 0 0&quot; transform=&quot;rotate(90)&quot;&gt;&lt;/path&gt;
+     &lt;path d=&quot;M0 0 A R R 0 0 1 R R A R R 0 0 1 0 0&quot; transform=&quot;rotate(180)&quot;&gt;&lt;/path&gt;
+     &lt;path d=&quot;M0 0 A R R 0 0 1 R R A R R 0 0 1 0 0&quot; transform=&quot;rotate(270)&quot;&gt;&lt;/path&gt;
+&lt;/g&gt;
+</code></pre>
+            
+         <p> The explanation of the code mentioned above are as follows:
+First, we group four path elements inside a group tag, we then change the coordinate of the group to the origin we wanted. Second, we draw a path that describes the leaf of the Kawung.  To describe the leaf, we use attribute d in the path and use the following command.
+<br> <code class="language-markup"> &lt;path d=&quot;M0 0&quot;&gt;&lt;/path&gt; </code> → Move cursor to the origin (0,0)
+<br> <code class="language-markup"> &lt;path d=&quot;A R R 0 0 1 R R&quot;&gt;&lt;/path&gt; </code>  → Using Arc command to draw an arc from (0,0) with radius-x equals to R, radius-y equals to R, 0 degree x-axis rotation, 0 large-arc-flag (it determines that arc should be less than 180 degrees), 1 sweep flag (means clockwise) to end coordinate (R,R).
+<br> <code class="language-markup"> &lt;path d=&quot;A R R 0 0 1 0 0&quot;&gt;&lt;/path&gt; </code>  → Using Arc command draw an arc from (R,R) back to starting coordinate (0,0).
+<br> The same arc command is then used three times, the resulting path is then rotated 90 degrees to get the shape of Kawung.
+ </p>
 
 
-            <!-- Add more rows as needed -->
-        </tbody>
-    </table>
 
-         <h3 style="text-align: justify;"> We can draw apollonian gasket, based on circular kawung we draw on previous page.</h3>
-         <p style="text-align: justify;">  Using Descates theorem, we can find the radius of the circle: </p>
+
+
+            
+
+            
+         <h2 style="color: #493118; font-weight: bold; text-align: left"> Descartes Theorem and Apollonian Gasket </h2>
+
+         <p> Descartes theorem is crucial to the development of Apollonian Gasket. Apollonian Gasket is a type of circle fractal, in which every circle is tangent to three other circles. We are going to substitute the circle with a Kawung shape to make a pattern author named as Apollonian Kawung Gasket. Descartes theorem is needed to find the radius, and the coordinate of the circle center </p>
+         <p> Descartes theorem is used to get the radius and location of the circle center, given that we know three others mutually tangent circle position and radius. The first circle C1, is a circle located at position (0,0) and radius r1 let’s say 140.  The second one is located at (-70,0) and has radius r2 = 70. The third circle is located at  (70,0) and has radius r3 = 70. Using Descartes' theorem we can find the radius of the fourth circle and the location of the circle centre.
+ To solve this problem, we can use the following formula: </p>
+
+<figure style="text-align: center; display: flex; flex-direction: column; align-items: center; margin: 0;">
+  <img src="asset/Descartes Theorem.png" alt="Descartes Theorem" style="max-width: 100%; height: auto; width: 350px;">
+  <figcaption style="text-align: center; margin-top: 8px;">Fig.3 - Application of Descartes Theorem in Batik Pattern</figcaption>
+</figure> 
          <p style=" overflow-x: scroll;"> \( (k_1 + k_2 + k_3 + k_4)^2  = 2 \cdot (2k_1 ^2 + k_2 ^2+ k_3 ^2 + k_4 ^2)  \) </p>
-         <p style="text-align: justify;">  where  \( k = \frac{1}{r} \)</p>
+         <p> To get the location of circle's center, we can use complex Descartes theorem:  </p>
+         <p style=" overflow-x: scroll;"> \( (k_1 z_1 + k_2 z_2 + k_3 z_3 + k_4 z_4)^2  = 2 \cdot (2k_1 ^2 z_1 ^ 2+ k_2 ^2 z_2^2+ k_3 ^2 z_3 ^ 2 + k_4 ^2 z_4 ^ 2)  \) </p>         </details>
+         <p> To draw intricate patterns, we will apply Descartes' theorem multiple times. While this process could be done manually, it would be a laborious task. Instead, we can use recursion to make the process more efficient. Recursion is a technique where a function calls itself to solve a problem. In this case, we will create a recursive function that calculates the fourth circle given three circles. This function will continue to call itself until the radius of the newly created circle falls below a set threshold. Below is the pseudocode for this recursive approach:  </p>
+<pre><code class="language-python">
+circleList = []
 
-         </details>
+def recursiveDescartes(circle1, circle2, circle3):
+    circle4 = calculate(circle1, circle2, circle3)
+    circleList.append(circle4)
+    if circle4.r > threshold: 
+        recursiveDescartes(circle1, circle2, circle4)
+        recursiveDescartes(circle2, circle3, circle4)
+        recursiveDescartes(circle1, circle3, circle4)
+</code></pre>
+
+         <h2 style="color: #493118; font-weight: bold; text-align: left">Bringing Kawung to Life: Creative Applications </h2>
+         <p> Using Descartes' theorem that we have learned in this chapter, we can create a variety of creative products. For instance, this mathematical concept can inspire designs for T-shirts, tumblers, and book covers, among others. Below are examples of images you can generate using the principles covered in this chapter. These designs not only showcase the elegance of mathematics but also demonstrate the versatility of geometric art in everyday items. </p>
+<figure style="text-align: center; display: flex; flex-direction: column; align-items: center; margin: 0;">
+  <img src="asset/Variant of Apollonian Gasket.png" alt="Variant of Apollonian Gasket" style="max-width: 100%; height: auto; width: 500px;">
+  <figcaption style="text-align: center; margin-top: 8px;">Fig.4 - Variant of Apollonian Gasket</figcaption>
+</figure>
+         <p> Not only can we decorate products with 2D SVG designs, but we can also create 3D objects. One of the most exciting applications is designing a necklace pendant. The process is surprisingly simple. First, import the SVG file into a 3D CAD program like Blender. Next, convert the design elements into a mesh. Then, apply a solidify modifier to extrude the design and add thickness. Finally, export the model as an .STL file. Once ready, you can send it to a 3D printing jewelry service such as Sculpteo, Materialise, or Shapeways. And voilà—your custom necklace pendant is ready to wear or gift! Below is a 3D render showcasing the final design.</p>
+         <figure style="text-align: center; display: flex; flex-direction: column; align-items: center; margin: 0;">
+  <img src="asset/Apollonian Necklace.png" alt="Apollonian Necklace" style="max-width: 100%; height: auto; width: 250px;">
+  <figcaption style="text-align: center; margin-top: 8px;">Fig.5 - Application of Batik pattern in Jewelry</figcaption>
+</figure>
+               
+<!--          <p style="text-align: justify;"> Below is 3D render of appolonian necklace </p> -->
+
+
+
+<!-- <div id="modelViewer" style="width: 250px; height: 250px; margin: 50px auto;"></div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Scene setup
+        var scene = new THREE.Scene();
+
+        // Camera setup
+        var camera = new THREE.PerspectiveCamera(75, 400 / 300, 0.1, 1000);
+        camera.position.set(0, 0, 8);
+
+        // Renderer setup with a light background color
+        var renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(350, 300); // Set the renderer size to match the #modelViewer
+        renderer.setClearColor(0xf5f5f5, 1); // Set background to light gray
+        document.getElementById("modelViewer").appendChild(renderer.domElement);
+
+        // Lights setup for a shiny, metallic look
+        var ambientLight = new THREE.AmbientLight(0xaaaaaa, 1.0); // Increased ambient light intensity
+        scene.add(ambientLight);
+
+        var pointLight1 = new THREE.PointLight(0xffffff, 1.2); // Increased intensity
+        pointLight1.position.set(50, 50, 50);  // Top-right light
+        scene.add(pointLight1);
+
+        var pointLight2 = new THREE.PointLight(0xffffff, 1.2); // Increased intensity
+        pointLight2.position.set(-50, 50, 50);  // Top-left light
+        scene.add(pointLight2);
+
+        var pointLight3 = new THREE.PointLight(0xffffff, 1.0); // Additional point light
+        pointLight3.position.set(0, -50, 50); // Bottom center light
+        scene.add(pointLight3);
+
+        // Load STL model from GitHub Pages
+        var loader = new THREE.STLLoader();
+        loader.load('https://raw.githubusercontent.com/dimasicr/dimasicr.github.io/master/stl/apolloniankawung.stl', function (geometry) {
+            // Silvery material
+            var material = new THREE.MeshStandardMaterial({
+                color: 0xaaaaaa,       // Light gray color to mimic silver
+                metalness: 0.8,        // Higher metalness for shiny, reflective surface
+                roughness: 0.2         // Lower roughness to make it glossy
+            });
+
+            // Create the mesh and center it
+            var mesh = new THREE.Mesh(geometry, material);
+            mesh.geometry.computeBoundingBox();
+            var center = new THREE.Vector3();
+            mesh.geometry.boundingBox.getCenter(center);
+            mesh.geometry.center();  // Center the object at the origin
+            scene.add(mesh);
+
+            // Animation loop
+            function animate() {
+                requestAnimationFrame(animate);
+                mesh.rotation.y += 0.01;  // Rotate around the Y-axis
+                renderer.render(scene, camera);
+            }
+
+            animate();
+        });
+
+        // Resize handling (update this for your frame size)
+        window.addEventListener('resize', function () {
+            var width = 350; // Fixed width
+            var height = 300; // Fixed height
+            renderer.setSize(width, height);
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+        });
+    });
+</script> -->
+            
+         <h2 style="color: #493118; font-weight: bold; text-align: left"> References </h2>
+            
+         <p style="text-align: left"> Codepen by @pimskie: <a href="https://codepen.io/pimskie/pen/QKjBEV"> How to draw Apollonian Gasket on HTML Canvas using Javascript </a> </p>
+         
+         <h2 style="color: #493118; font-weight: bold; text-align: left"> You May Also Like </h2>
+
+         <ul>
+            <li> <p style="text-align: justify;"> <a href="https://www.geometryofbatik.com/fibonacci.html"> Fibonacci Batik </a> </p> </li>
+            <li> <p style="text-align: justify;"> <a href="https://www.geometryofbatik.com/circular.html"> Batik Kawung Animation </a> </p> </li>
+            <li> <p style="text-align: justify;"> <a href="https://www.geometryofbatik.com/apolloniangasket.html"> Apollonian Gasket Calculator </a> </p> </li>
+         </ul>
+            
          </article>
          </div>
       </div>
-      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
       <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script src="js/complex.js"></script>
       <script src="js/batikGeometry.js"></script>
-      <script src="js/animationToolkit.js"></script>      
-      <script>
-
-
-   // Part 1: JavaScript to toggle the side navigation bar
-document.getElementById('toggleButton').addEventListener('click', function() {
-    const sidenav = document.getElementById('sidenav');
-    const container = document.querySelector('.container');
-    container.classList.toggle('show-nav');
-});
-
-const refreshBtn = document.getElementById("refresh-btn");
-refreshBtn.addEventListener("click", () => {
-    step = 0;
-});
-       
-   var numberInput = document.getElementById("quantity");
-   numberInput.addEventListener("input", updateTable);
-
-   function updateTable() {
-      // Get the input value
-      var r = numberInput.value;
-
-      r1 = document.getElementById("r1");
-      r1.textContent = 0.5 * r;
-      x1 = document.getElementById("x1");
-      x1.textContent = -0.5 * r;
-      y1 = document.getElementById("y1");
-      y1.textContent = 0;
-
-      r2 = document.getElementById("r2");
-      r2.textContent = Math.round(r/3 * 100)/100;
-      x2 = document.getElementById("x2");
-      x2.textContent = 0;
-      y2 = document.getElementById("y2");
-      y2.textContent = Math.round(- 2 * r * 100 / 3)/100;
-
-      r3 = document.getElementById("r3");
-      r3.textContent = Math.round(r/6 * 100)/100;
-      x3 = document.getElementById("x3");
-      x3.textContent =  -0.5 * r;
-      y3 = document.getElementById("y3");
-      y3.textContent = Math.round(- 2 * r * 100 / 3)/100;
-
-      r4 = document.getElementById("r4");
-      r4.textContent = Math.round(r/11 * 100)/100;
-      x4 = document.getElementById("x4");
-      x4.textContent =  Math.round(-0.73 * r * 100)/100;
-      y4 = document.getElementById("y4");
-      y4.textContent = Math.round(-0.55 * r * 100)/100;
-
-      r5 = document.getElementById("r5");
-      r5.textContent = Math.round(r/14 * 100)/100;
-      x5 = document.getElementById("x5");
-      x5.textContent =  Math.round(-0.36 * r * 100)/100;
-      y5 = document.getElementById("y5");
-      y5.textContent = Math.round(-0.86 * r * 100)/100;
-
-
-      r6 = document.getElementById("r6");
-      r6.textContent = Math.round(r/18 * 100)/100;
-      x6 = document.getElementById("x6");
-      x6.textContent =  Math.round(-0.83 * r * 100)/100;
-      y6 = document.getElementById("y6");
-      y6.textContent = Math.round(0.44 * r * 100)/100;
-
-
-   }
-
-   updateTable();
-
-    function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.width);
-      ctx.fillStyle = "#000000";
-      ctx.strokeStyle = "white";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.save();
-      ctx.translate(canvas.width/2, canvas.width/2);
-      r = canvas.width * 0.5;
-
-      Ax = Math.cos(1 * 2 * Math.PI/ 4 - 1 * Math.PI /4) * r;
-      Ay = Math.sin(1 * 2 * Math.PI/ 4 - 1 * Math.PI /4) * r;
-      Bx = Math.cos(2 * 2 * Math.PI/ 4 - 1 * Math.PI /4) * r;
-      By = Math.sin(2 * 2 * Math.PI/ 4 - 1 * Math.PI /4) * r;
-      Cx = Math.cos(3 * 2 * Math.PI/ 4 - 1 * Math.PI /4) * r;
-      Cy = Math.sin(3 * 2 * Math.PI/ 4 - 1 * Math.PI /4) * r;
-      Dx = Math.cos(4 * 2 * Math.PI/ 4 - 1 * Math.PI /4) * r;
-      Dy = Math.sin(4 * 2 * Math.PI/ 4 - 1 * Math.PI /4) * r;
-
-      // Draw Square Outline
-      // ctx.strokeStyle = 'black'; ctx.setLineDash([]);ctx.lineWidth = 0.8;
-      // animateLine(Ax, Ay, Bx, By, step, step > 0 );
-      // animateLine(-r, 0,   r, 0, step, step > 0 );
-       ctx.setLineDash([2,2]);
-      animateArc(0,0, r, 0 * Math.PI, 2 * Math.PI, step - 20, step - 20 > 0);
-
-       ctx.strokeStyle = '#4a6374'; ctx.setLineDash([]);ctx.lineWidth = 2.5;
-       ctx.fillStyle = "#86bedc";
-      animateArc(-0.5 * r,0, 0.5 * r, 0 * Math.PI, 2 * Math.PI, step - 40, step - 40 > 0);
-      animateArc(0 * r, -0.5 * r, 0.5 * r, 0.5 * Math.PI, 1 * Math.PI, step - 60, step - 60 > 0 , true, true);
-      animateArc(0 * r, 0.5 * r, 0.5 * r, 1 * Math.PI, 1.5 * Math.PI, step - 80, step - 80 > 0, true, true);
-      animateArc(- r, 0.5 * r, 0.5 * r, 1.5 * Math.PI, 2 * Math.PI, step - 100, step - 100 > 0, true, true);
-      animateArc(- r, -0.5 * r, 0.5 * r, 0 * Math.PI, 0.5 * Math.PI, step - 120, step - 120 > 0, true, true);
-
-      animateArc(0.5 * r,0, 0.5 * r, 0 * Math.PI, 2 * Math.PI, step - 140, step - 140 > 0);
-      animateArc(r, -0.5 * r, 0.5 * r, 0.5 * Math.PI, 1 * Math.PI, step - 160, step - 160 > 0, true, true);
-      animateArc(r, 0.5 * r, 0.5 * r, 1 * Math.PI, 1.5 * Math.PI, step - 180, step - 180 > 0, true, true);
-      animateArc(0, 0.5 * r, 0.5 * r, 1.5 * Math.PI, 2 * Math.PI, step - 200, step - 200 > 0, true, true);
-      animateArc(0, -0.5 * r, 0.5 * r, 0 * Math.PI, 0.5 * Math.PI, step - 220, step - 220 > 0, true, true);
-
-      animateArc(0,- 2 * r / 3, r/3, 0 * Math.PI, 2 * Math.PI, step - 240, step - 240 > 0);
-      animateArc(0 + r /3, -2 * r /3  - r /3, r/3, 0.5 * Math.PI, 1 * Math.PI, step - 260, step - 260 > 0, true, true);
-      animateArc(0 + r /3, -2 * r /3  + r /3, r/3, 1 * Math.PI, 1.5 * Math.PI, step - 280, step - 280 > 0, true, true);
-      animateArc(0 - r /3, -2 * r /3  + r /3, r/3, 1.5 * Math.PI, 2 * Math.PI, step - 300, step - 300 > 0, true, true);
-      animateArc(0 - r /3, -2 * r /3  - r /3, r/3, 0 * Math.PI, 0.5 * Math.PI, step - 320, step - 320 > 0, true, true);
-
-      animateArc(0, 2 * r / 3, r/3, 0 * Math.PI, 2 * Math.PI, step - 340, step - 340 > 0);
-      animateArc(0 + r /3, 2 * r /3  - r /3, r/3, 0.5 * Math.PI, 1 * Math.PI, step - 360, step - 360 > 0, true, true);
-      animateArc(0 + r /3, 2 * r /3  + r /3, r/3, 1 * Math.PI, 1.5 * Math.PI, step - 380, step - 380 > 0, true, true);
-      animateArc(0 - r /3, 2 * r /3  + r /3, r/3, 1.5 * Math.PI, 2 * Math.PI, step - 400, step - 400 > 0, true, true);
-      animateArc(0 - r /3, 2 * r /3  - r /3, r/3, 0 * Math.PI, 0.5 * Math.PI, step - 420, step - 420 > 0, true, true);
-
-      animateArc(-0.5 * r, -2 * r / 3, r/6, 0 * Math.PI, 2 * Math.PI, step - 440, step - 440 > 0);
-      animateArc(-0.5 * r + r/6, -2 * r /3  - r /6, r/6, 0.5 * Math.PI, 1 * Math.PI, step - 460, step - 460 > 0, true, true);
-      animateArc(-0.5 * r + r/6, -2 * r /3  + r /6, r/6, 1 * Math.PI, 1.5 * Math.PI, step - 480, step - 480 > 0, true, true);
-      animateArc(-0.5 * r - r/6, -2 * r /3  + r /6, r/6, 1.5 * Math.PI, 2 * Math.PI, step - 500, step - 500 > 0, true, true);
-      animateArc(-0.5 * r - r/6, -2 * r /3  - r /6, r/6, 0 * Math.PI, 0.5 * Math.PI, step - 520, step - 520 > 0, true, true);
-
-      animateArc(0.5 * r, -2 * r / 3, r/6, 0 * Math.PI, 2 * Math.PI, step - 540, step - 540 > 0);
-      animateArc(0.5 * r + r/6, -2 * r /3  - r /6, r/6, 0.5 * Math.PI, 1 * Math.PI, step - 560, step - 560 > 0, true, true);
-      animateArc(0.5 * r + r/6, -2 * r /3  + r /6, r/6, 1 * Math.PI, 1.5 * Math.PI, step - 580, step - 580 > 0, true, true);
-      animateArc(0.5 * r - r/6, -2 * r /3  + r /6, r/6, 1.5 * Math.PI, 2 * Math.PI, step - 600, step - 600 > 0, true, true);
-      animateArc(0.5 * r - r/6, -2 * r /3  - r /6, r/6, 0 * Math.PI, 0.5 * Math.PI, step - 620, step - 620 > 0, true, true);
-
-      animateArc(0.5 * r, 2 * r / 3, r/6, 0 * Math.PI, 2 * Math.PI, step - 640, step - 640 > 0);
-      animateArc(0.5 * r + r/6, 2 * r /3  - r /6, r/6, 0.5 * Math.PI, 1 * Math.PI, step - 660, step - 660 > 0, true, true);
-      animateArc(0.5 * r + r/6, 2 * r /3  + r /6, r/6, 1 * Math.PI, 1.5 * Math.PI, step - 680, step - 680 > 0, true, true);
-      animateArc(0.5 * r - r/6, 2 * r /3  + r /6, r/6, 1.5 * Math.PI, 2 * Math.PI, step - 700, step - 700 > 0, true, true);
-      animateArc(0.5 * r - r/6, 2 * r /3  - r /6, r/6, 0 * Math.PI, 0.5 * Math.PI, step - 720, step - 720 > 0, true, true);
-
-      animateArc(-0.5 * r, 2 * r / 3, r/6, 0 * Math.PI, 2 * Math.PI, step - 740, step - 740 > 0);
-      animateArc(-0.5 * r + r/6, 2 * r /3  - r /6, r/6, 0.5 * Math.PI, 1 * Math.PI, step - 760, step - 760 > 0, true, true);
-      animateArc(-0.5 * r + r/6, 2 * r /3  + r /6, r/6, 1 * Math.PI, 1.5 * Math.PI, step - 780, step - 780 > 0, true, true);
-      animateArc(-0.5 * r - r/6, 2 * r /3  + r /6, r/6, 1.5 * Math.PI, 2 * Math.PI, step - 800, step - 800 > 0, true, true);
-      animateArc(-0.5 * r - r/6, 2 * r /3  - r /6, r/6, 0 * Math.PI, 0.5 * Math.PI, step - 820, step - 820 > 0, true, true);
-
-      animateArc(-0.73 * r, -0.55 * r, r/11, 0 * Math.PI, 2 * Math.PI, step - 840, step - 840 > 0);
-      animateArc(-0.73 * r + r/11, -0.55 * r  - r /11, r/11, 0.5 * Math.PI, 1 * Math.PI, step - 860, step - 860 > 0, true);
-      animateArc(-0.73 * r + r/11, -0.55 * r  + r /11, r/11, 1 * Math.PI, 1.5 * Math.PI, step - 880, step - 880 > 0, true);
-      animateArc(-0.73 * r - r/11, -0.55 * r  + r /11, r/11, 1.5 * Math.PI, 2 * Math.PI, step - 900, step - 900 > 0, true);
-      animateArc(-0.73 * r - r/11, -0.55 * r  - r /11, r/11, 0 * Math.PI, 0.5 * Math.PI, step - 920, step - 920 > 0, true);
-
-      animateArc(0.73 * r, -0.55 * r, r/11, 0 * Math.PI, 2 * Math.PI, step - 940, step - 940 > 0);
-      animateArc(0.73 * r + r/11, -0.55 * r  - r /11, r/11, 0.5 * Math.PI, 1 * Math.PI, step - 960, step - 960 > 0, true);
-      animateArc(0.73 * r + r/11, -0.55 * r  + r /11, r/11, 1 * Math.PI, 1.5 * Math.PI, step - 980, step - 980 > 0, true);
-      animateArc(0.73 * r - r/11, -0.55 * r  + r /11, r/11, 1.5 * Math.PI, 2 * Math.PI, step - 1000, step - 1000 > 0, true);
-      animateArc(0.73 * r - r/11, -0.55 * r  - r /11, r/11, 0 * Math.PI, 0.5 * Math.PI, step - 1020, step - 1020 > 0, true);
-
-      animateArc(0.73 * r, 0.55 * r, r/11, 0 * Math.PI, 2 * Math.PI, step - 1040, step - 1040 > 0);
-      animateArc(0.73 * r + r/11, 0.55 * r  - r /11, r/11, 0.5 * Math.PI, 1 * Math.PI, step - 1060, step - 1060 > 0, true);
-      animateArc(0.73 * r + r/11, 0.55 * r  + r /11, r/11, 1 * Math.PI, 1.5 * Math.PI, step - 1080, step - 1080 > 0, true);
-      animateArc(0.73 * r - r/11, 0.55 * r  + r /11, r/11, 1.5 * Math.PI, 2 * Math.PI, step - 1100, step - 1100 > 0, true);
-      animateArc(0.73 * r - r/11, 0.55 * r  - r /11, r/11, 0 * Math.PI, 0.5 * Math.PI, step - 1120, step - 1120 > 0, true);
-
-      animateArc(-0.73 * r, 0.55 * r, r/11, 0 * Math.PI, 2 * Math.PI, step - 1140, step - 1140 > 0);
-      animateArc(-0.73 * r + r/11, 0.55 * r  - r /11, r/11, 0.5 * Math.PI, 1 * Math.PI, step - 1160, step - 1160 > 0, true);
-      animateArc(-0.73 * r + r/11, 0.55 * r  + r /11, r/11, 1 * Math.PI, 1.5 * Math.PI, step - 1180, step - 1180 > 0, true);
-      animateArc(-0.73 * r - r/11, 0.55 * r  + r /11, r/11, 1.5 * Math.PI, 2 * Math.PI, step - 1200, step - 1200 > 0, true);
-      animateArc(-0.73 * r - r/11, 0.55 * r  - r /11, r/11, 0 * Math.PI, 0.5 * Math.PI, step - 1220, step - 1220 > 0, true);
-
-      animateArc(-0.36 * r, -0.86 * r, r/14, 0 * Math.PI, 2 * Math.PI, step - 1240, step - 1240 > 0);
-      animateArc(-0.36 * r + r/14, -0.86 * r  - r /14, r/14, 0.5 * Math.PI, 1 * Math.PI, step - 1260, step - 1260 > 0, true);
-      animateArc(-0.36 * r + r/14, -0.86 * r  + r /14, r/14, 1 * Math.PI, 1.5 * Math.PI, step - 1280, step - 1280 > 0, true);
-      animateArc(-0.36 * r - r/14, -0.86 * r  + r /14, r/14, 1.5 * Math.PI, 2 * Math.PI, step - 1300, step - 1300 > 0, true);
-      animateArc(-0.36 * r - r/14, -0.86 * r  - r /14, r/14, 0 * Math.PI, 0.5 * Math.PI, step - 1320, step - 1320 > 0, true);
-
-      animateArc(0.36 * r, -0.86 * r, r/14, 0 * Math.PI, 2 * Math.PI, step - 1340, step - 1340 > 0);
-      animateArc(0.36 * r + r/14, -0.86 * r  - r /14, r/14, 0.5 * Math.PI, 1 * Math.PI, step - 1360, step - 1360 > 0, true);
-      animateArc(0.36 * r + r/14, -0.86 * r  + r /14, r/14, 1 * Math.PI, 1.5 * Math.PI, step - 1380, step - 1380 > 0, true);
-      animateArc(0.36 * r - r/14, -0.86 * r  + r /14, r/14, 1.5 * Math.PI, 2 * Math.PI, step - 1400, step - 1400 > 0, true);
-      animateArc(0.36 * r - r/14, -0.86 * r  - r /14, r/14, 0 * Math.PI, 0.5 * Math.PI, step - 1420, step - 1420 > 0, true);
-
-      animateArc(0.36 * r, 0.86 * r, r/14, 0 * Math.PI, 2 * Math.PI, step - 1440, step - 1440 > 0);
-      animateArc(0.36 * r + r/14, 0.86 * r  - r /14, r/14, 0.5 * Math.PI, 1 * Math.PI, step - 1460, step - 1460 > 0, true);
-      animateArc(0.36 * r + r/14, 0.86 * r  + r /14, r/14, 1 * Math.PI, 1.5 * Math.PI, step - 1480, step - 1480 > 0, true);
-      animateArc(0.36 * r - r/14, 0.86 * r  + r /14, r/14, 1.5 * Math.PI, 2 * Math.PI, step - 1500, step - 1500 > 0, true);
-      animateArc(0.36 * r - r/14, 0.86 * r  - r /14, r/14, 0 * Math.PI, 0.5 * Math.PI, step - 1520, step - 1520 > 0, true);
-
-      animateArc(-0.36 * r, 0.86 * r, r/14, 0 * Math.PI, 2 * Math.PI, step - 1540, step - 1540 > 0);
-      animateArc(-0.36 * r + r/14, 0.86 * r  - r /14, r/14, 0.5 * Math.PI, 1 * Math.PI, step - 1560, step - 1560 > 0, true);
-      animateArc(-0.36 * r + r/14, 0.86 * r  + r /14, r/14, 1 * Math.PI, 1.5 * Math.PI, step - 1580, step - 1580 > 0, true);
-      animateArc(-0.36 * r - r/14, 0.86 * r  + r /14, r/14, 1.5 * Math.PI, 2 * Math.PI, step - 1600, step - 1600 > 0, true);
-      animateArc(-0.36 * r - r/14, 0.86 * r  - r /14, r/14, 0 * Math.PI, 0.5 * Math.PI, step - 1620, step - 1620 > 0, true);
-
-      animateArc(-0.83 * r, 0.44 * r, r/18, 0 * Math.PI, 2 * Math.PI, step - 1640, step - 1640 > 0);
-      animateArc(-0.83 * r + r/18, 0.44 * r  - r /18, r/18, 0.5 * Math.PI, 1 * Math.PI, step - 1660, step - 1660 > 0, true);
-      animateArc(-0.83 * r + r/18, 0.44 * r  + r /18, r/18, 1 * Math.PI, 1.5 * Math.PI, step - 1680, step - 1680 > 0, true);
-      animateArc(-0.83 * r - r/18, 0.44 * r  + r /18, r/18, 1.5 * Math.PI, 2 * Math.PI, step - 1700, step - 1700 > 0, true);
-      animateArc(-0.83 * r - r/18, 0.44 * r  - r /18, r/18, 0 * Math.PI, 0.5 * Math.PI, step - 1720, step - 1720 > 0, true);
-
-      animateArc(-0.83 * r, -0.44 * r, r/18, 0 * Math.PI, 2 * Math.PI, step - 1740, step - 1740 > 0);
-      animateArc(-0.83 * r + r/18, -0.44 * r  - r /18, r/18, 0.5 * Math.PI, 1 * Math.PI, step - 1760, step - 1760 > 0, true);
-      animateArc(-0.83 * r + r/18, -0.44 * r  + r /18, r/18, 1 * Math.PI, 1.5 * Math.PI, step - 1780, step - 1780 > 0, true);
-      animateArc(-0.83 * r - r/18, -0.44 * r  + r /18, r/18, 1.5 * Math.PI, 2 * Math.PI, step - 1800, step - 1800 > 0, true);
-      animateArc(-0.83 * r - r/18, -0.44 * r  - r /18, r/18, 0 * Math.PI, 0.5 * Math.PI, step - 1820, step - 1820 > 0, true);
-
-      animateArc(0.83 * r, -0.44 * r, r/18, 0 * Math.PI, 2 * Math.PI, step - 1840, step - 1840 > 0);
-      animateArc(0.83 * r + r/18, -0.44 * r  - r /18, r/18, 0.5 * Math.PI, 1 * Math.PI, step - 1860, step - 1860 > 0, true);
-      animateArc(0.83 * r + r/18, -0.44 * r  + r /18, r/18, 1 * Math.PI, 1.5 * Math.PI, step - 1880, step - 1880 > 0, true);
-      animateArc(0.83 * r - r/18, -0.44 * r  + r /18, r/18, 1.5 * Math.PI, 2 * Math.PI, step - 1900, step - 1900 > 0, true);
-      animateArc(0.83 * r - r/18, -0.44 * r  - r /18, r/18, 0 * Math.PI, 0.5 * Math.PI, step - 1920, step - 1920 > 0, true);
-
-      animateArc(0.83 * r, 0.44 * r, r/18, 0 * Math.PI, 2 * Math.PI, step - 1940, step - 1940 > 0);
-      animateArc(0.83 * r + r/18, 0.44 * r  - r /18, r/18, 0.5 * Math.PI, 1 * Math.PI, step - 1960, step - 1960 > 0, true);
-      animateArc(0.83 * r + r/18, 0.44 * r  + r /18, r/18, 1 * Math.PI, 1.5 * Math.PI, step - 1980, step - 1980 > 0, true);
-      animateArc(0.83 * r - r/18, 0.44 * r  + r /18, r/18, 1.5 * Math.PI, 2 * Math.PI, step - 2000, step - 2000 > 0, true);
-      animateArc(0.83 * r - r/18, 0.44 * r  - r /18, r/18, 0 * Math.PI, 0.5 * Math.PI, step - 2020, step - 2020 > 0, true);
-
-      ctx.restore();
-      step += 1;
-      requestAnimationFrame(draw);
-
-    }
-
-    if (screenWidth > 400){
-        canvas.width = 400;
-        canvas.height = 400;
-    }
-    else {
-        canvas.width = screenWidth * screenWidth / canvas.width;
-        canvas.height = screenWidth * screenWidth / canvas.width;
-        console.log(canvas.width);
-    }
-    draw();
-
-      </script> 
+      <script src="js/apollonianGasket.js"> </script>
+      <script src="js/mainUI.js"></script> 
+      <script src="js/animationToolkit.js"></script>
+      <script src="js/animationCircularKawung.js"></script>
+         
+      </script>
    </body>
 </html>
