@@ -1,3 +1,11 @@
+document.write('<h2>App</h2>');
+document.write(
+  '<ul class="nav-links">' +
+    '<li><a href="app/batiktumpalmaker.html"> Batik Tumpal Maker </a></li>' +
+    '<li><a href="tumpalfractal.html"> Fractal of Tumpal </a></li>' +
+  '</ul>'
+);
+
 document.write('<h2>Gallery</h2>');
 document.write(
   '<ul class="nav-links">' +
