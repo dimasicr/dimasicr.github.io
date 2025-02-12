@@ -58,14 +58,127 @@
 </div>
 
   <script>
-
 const svgURI = 'http://www.w3.org/2000/svg';
-    const svg = document.getElementById("svgcontainer");
+const svg = document.getElementById("svgcontainer");
+const screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+
+// Color Scheme Options
+const themes = {
+    "uluwatu": {
+        mainColor: "rgb(235, 210, 140)",
+        secondaryColor: "rgb(170, 130, 75)",
+        strokeColor: "peru",
+        strokeWidth: 0.5
+    },
+    "batavia": {
+        mainColor: "#F7F0F5",
+        secondaryColor: "#333",
+        tertiaryColor: "#F0F7F2",
+        strokeColor: "black",
+        strokeWidth: 0
+    },
+    "oldJava": {
+        mainColor: "#e4d5b7",
+        secondaryColor: "#493118",
+        tertiaryColor: "gray",
+        strokeColor: "brown",
+        strokeWidth: 0.5
+    }
+    ,"rajaampat": {
+        mainColor:   "#F7F0F5",
+        secondaryColor: "#5d7591",
+        strokeColor: "none",
+        strokeWidth: 0.5
+    }
+    ,"tetradiac": {
+        mainColor:   ["#87895d", "#d19f5b", "#945f42", "#616f82"],
+        secondaryColor: "#f1e4d8",
+        isenColor: "#493118",
+        strokeColor: "black",
+        strokeWidth: 0.5
+    }
+    ,"pastel": {
+        mainColor: "#b49084",
+        secondaryColor: "#38445a",
+        isenColor: "#e8eadd",
+        strokeColor: "gold",
+        strokeWidth: 0.5
+    }
+    ,"goldenSunset": {
+        mainColor: "rgb(214,164,85)",
+        secondaryColor: "rgb(105,43,45)",
+        tertiaryColor: "rgb(247,235,213)",
+        isenColor: "white",
+        strokeColor: "rgb(189,53,37)",
+        strokeWidth: 0.1
+    }   
+    ,"green": {
+        mainColor: "rgb(83,168,162)",
+        secondaryColor: "rgb(0,77,90)",
+        tertiaryColor: "rgb(255,253,241)",
+        isenColor: "white",
+        strokeColor: "rgb(238,134,154)",
+        strokeWidth: 0.1
+    }  
+};
+
+
+// Helper Function to find the midpoint of two points
+function midpoint(x1, x2) {
+  return (x1 + x2) / 2;
+}
+
+// Function to calculate the angle of a point with respect to the center point
+function getClockwiseAngle(p, center) {
+    return (Math.atan2(p[1] - center[1], p[0] - center[0]) * 180 / Math.PI + 360) % 360;
+}
+
+// Function to get the center point
+function getCenterPoint(points) {
+    const xSum = points.reduce((acc, p) => acc + p[0], 0);
+    const ySum = points.reduce((acc, p) => acc + p[1], 0);
+    const totalPoints = points.length;
+    return [xSum / totalPoints, ySum / totalPoints];
+}
+
+// Function to sort points clockwise
+function sortPointsClockwise(points) {
+    const center = getCenterPoint(points);
+    points.sort((a, b) => getClockwiseAngle(a, center) - getClockwiseAngle(b, center));
+    return points;
+}
+
+// Setup function
+function setup(w, h, mainColor=themes["pastel"].secondaryColor){
+    svg.innerHTML = '';
+    if (screenWidth > w){
+        svg.setAttribute("width", w);
+        svg.setAttribute("height", h);
+    }
+    else{
+        svg.setAttribute("width", screenWidth * (screenWidth/ w));
+        svg.setAttribute("height", screenWidth * (screenWidth/w) * h/w);
+    }
     bg_rect = document.createElementNS(svgURI, "rect");
+    bg_rect.setAttribute("rx", 15);
     bg_rect.setAttribute("width", "100%");
     bg_rect.setAttribute("height", "100%");
-    bg_rect.setAttribute("fill", "#38445a");
+    bg_rect.setAttribute("fill", mainColor);
     svg.appendChild(bg_rect);
+}
+
+
+
+setup(400, 400);
+
+
+
+
+
+
+
+    
+
 
 
 function removeSvgChildById(svgContainer, targetId) {
