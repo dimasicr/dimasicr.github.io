@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>SVG Custom Context Menu</title>
+  <title> Batik Tumpal Maker </title>
         <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200&display=swap" rel="stylesheet">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
@@ -44,15 +44,38 @@
 </style>
 </head>
 <body>
-  <h1 style="position: absolute; top: 10px; width: 100%; text-align: center;"> Super Copycat Maker </h1>
-  <h2 style="width: 100%; text-align: center;"> Draw pattern similar to first canvas. Click on 2nd canvas object to start </h2>
 
+   <div class="container">
+         <!-- Toggle button for small screens -->
+         <div class="toggle-button" id="toggleButton">
+            <img src="asset/tumpalLogo.svg" alt="SVG Image Description">
+            <span style="margin-left: auto; margin-right: auto;"> Geometry of Batik </span>
+            <span style="margin-left: auto; margin-right: 20px;"> &#9776; </span> 
+         </div>
+         <!-- Side Navigation Bar -->
+         <div class="sidenav" id="sidenav">
+            <div style= "display: flex; font-size: 24px;">
+               <img src="asset/tumpalLogo.svg" alt="SVG Image Description">
+               <span style="margin-left: 10px;"> Geometry of Batik  <span>
+            </div>
+            <hr>
+            <script src="nav.js"></script>
+         </div>
+         <!-- Main Content Area -->
+         <div class="main-content">
+         <h1 > Batik Tumpal Maker </h1>
+         
     <div class="svg-container">
     <svg id='svgcontainer' width="400" height="400" viewBox="0 0 400 400"></svg>
-    <button id="download-btn"> <i class="fa fa-download"></i>  Download SVG </span> </button>
 
 
   </div>
+                     <button id="download-btn"> <i class="fa fa-download"></i>  Download SVG </span> </button>
+
+               </div>
+
+
+
   </svg>
 
   <script>
