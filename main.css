@@ -149,3 +149,21 @@ th {
 a {
   color: #28a2a2;
 }
+
+   .footer {
+      background-color: #493118;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+      border-top: 2px solid #d19f5b;
+   }
+   .footer .social-icon {
+      color: white;
+      text-decoration: none;
+      margin: 0 10px;
+      font-size: 18px;
+   }
+   .footer .social-icon:hover {
+      color: #d19f5b;
+   }
