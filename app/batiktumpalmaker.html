@@ -2,11 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title> Batik Tumpal Maker </title>
-      <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200&display=swap" rel="stylesheet">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-      <link rel="stylesheet" href="/main.css">
-
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/main.css">
 </head>
 <body>
 <div class="container">
@@ -16,7 +17,6 @@
         <span style="margin-left: auto; margin-right: auto;">Geometry of Batik</span>
         <span style="margin-left: auto; margin-right: 20px;">&#9776;</span> 
     </div>
-
     <!-- Side Navigation Bar -->
     <div class="sidenav" id="sidenav">
         <div style="display: flex; font-size: 24px;">
@@ -1608,59 +1608,11 @@ outline4.addEventListener("click", (event) => {
         },
       ]);
     });
-
-
-
-
             }
-
     }
-
-
-
 
       abc = new HexagonTumpal(200, 200, 100, 'hexagon', 0, `container-${Date.now()}-${Math.floor(Math.random() * 1000000)}`);
       abc.draw(); 
-
-
-
-
-
-    // const dialogueBox = document.getElementById("dialogueBox");
-    // const svgElement = document.getElementById("clickableRect");
-
-
-    // // Display the custom menu on right-click
-    // svgElement.addEventListener("click", (event) => {
-    //   event.preventDefault(); // Prevent default browser context menu
-
-    //   // Show the dialogue box near the cursor position
-    //   dialogueBox.style.left = `${event.clientX}px`;
-    //   dialogueBox.style.top = `${event.clientY}px`;
-    //   dialogueBox.style.display = "block";
-
-    //   event.stopPropagation(); // Prevent closing immediately
-    // });
-
-    // // Handle menu option clicks
-    // function handleOption(action) {
-    //   alert(`You selected: ${action}`);
-    //   closeDialogue();
-    // }
-
-    // // Close the menu when clicking outside
-    // window.addEventListener("click", closeDialogue);
-
-    // function closeDialogue() {
-    //   dialogueBox.style.display = "none";
-    // }
-
-    // // Close on escape key press
-    // window.addEventListener("keydown", (event) => {
-    //   if (event.key === "Escape") {
-    //     closeDialogue();
-    //   }
-    // });
   </script>
   <script src="/js/mainUI.js"></script> 
 </body>
