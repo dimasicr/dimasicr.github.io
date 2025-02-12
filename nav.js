@@ -1,7 +1,7 @@
 document.write('<h2>App</h2>');
 document.write(
   '<ul class="nav-links">' +
-    '<li><a href="/app/batiktumpalmaker.html"> Batik Tumpal Maker </a></li>'
+    '<li><a href="/app/batiktumpalmaker.html"> Batik Tumpal Maker </a></li>' +
   '</ul>'
 );
 
