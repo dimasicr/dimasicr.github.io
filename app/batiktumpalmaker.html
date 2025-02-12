@@ -9,46 +9,51 @@
 
 </head>
 <body>
+<div class="container">
+    <!-- Toggle button for small screens -->
+    <div class="toggle-button" id="toggleButton">
+        <img src="/asset/tumpalLogo.svg" alt="SVG Image Description">
+        <span style="margin-left: auto; margin-right: auto;">Geometry of Batik</span>
+        <span style="margin-left: auto; margin-right: 20px;">&#9776;</span> 
+    </div>
 
-   <div class="container">
-         <!-- Toggle button for small screens -->
-         <div class="toggle-button" id="toggleButton">
+    <!-- Side Navigation Bar -->
+    <div class="sidenav" id="sidenav">
+        <div style="display: flex; font-size: 24px;">
             <img src="/asset/tumpalLogo.svg" alt="SVG Image Description">
-            <span style="margin-left: auto; margin-right: auto;"> Geometry of Batik </span>
-            <span style="margin-left: auto; margin-right: 20px;"> &#9776; </span> 
-         </div>
-         <!-- Side Navigation Bar -->
-         <div class="sidenav" id="sidenav">
-            <div style= "display: flex; font-size: 24px;">
-               <img src="/asset/tumpalLogo.svg" alt="SVG Image Description">
-               <span style="margin-left: 10px;"> Geometry of Batik  <span>
-            </div>
-            <hr>
-            <script src="/nav.js"></script>
-         </div>
-         <!-- Main Content Area -->
-         <div class="main-content">
-         <h1 > Batik Tumpal Maker </h1>
-         
-    <div class="svg-container" id="svg-container">
-    <svg id='svgcontainer' width="400" height="400" viewBox="0 0 400 400"></svg>
-  </div>
-                 <h2 > How to Use </h2>
-      <p> You can create a variety of fascinating patterns using our tessellation tool! Simply hover over the side of a polygon and click to add a new motif—voilà, your design expands effortlessly. Don't worry about making mistakes; you can easily remove unwanted patterns using the remove option.  </p>
-      <p> Need some inspiration? Try these ideas:  </p>
-      <ul> 
-          <li> A full design made entirely of hexagons </li>
-          <li> A pattern composed entirely of squares </li>
-          <li> A pattern composed entirely of triangles </li>
-          <li> A creative mix of squares and triangles </li>
-      </ul>
-                     <button id="download-btn"> <i class="fa fa-download"></i>  Download SVG </span> </button>
+            <span style="margin-left: 10px;">Geometry of Batik</span>
+        </div>
+        <hr>
+        <script src="/nav.js"></script>
+    </div>
 
-               </div>
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <h1>Batik Tumpal Maker</h1>
 
+        <div class="svg-container" id="svg-container">
+            <svg id="svgcontainer" width="400" height="400" viewBox="0 0 400 400"></svg>
+            <button id="download-btn">
+                <i class="fa fa-download"></i> Download SVG
+            </button>
+        </div>
 
-
-  </svg>
+        <h2>How to Use</h2>
+        <p>
+            You can create a variety of fascinating patterns using our tessellation tool! 
+            Simply hover over the side of a polygon and click to add a new motif—voilà, 
+            your design expands effortlessly. Don't worry about making mistakes; you can 
+            easily remove unwanted patterns using the remove option.
+        </p>
+        <p>Need some inspiration? Try these ideas:</p>
+        <ul>
+            <li>A full design made entirely of hexagons</li>
+            <li>A pattern composed entirely of squares</li>
+            <li>A pattern composed entirely of triangles</li>
+            <li>A creative mix of squares and triangles</li>
+        </ul>
+    </div>
+</div>
 
   <script>
 
@@ -1658,6 +1663,7 @@ outline4.addEventListener("click", (event) => {
     //   }
     // });
   </script>
+      <script src="js/mainUI.js"></script> 
 
    <script>
 
