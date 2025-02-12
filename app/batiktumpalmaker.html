@@ -1662,36 +1662,6 @@ outline4.addEventListener("click", (event) => {
     //   }
     // });
   </script>
-      <script src="/js/mainUI.js"></script> 
-
-   <script>
-
-
-         
-         // Attach click event listener to the download button
-         const downloadBtn = document.getElementById("download-btn");
-         downloadBtn.addEventListener("click", () => {
-          removeTransparentSVGElements(svg);
-           // Convert the SVG document to a string
-           const svgString = new XMLSerializer().serializeToString(svg);
-         
-           // Create a Blob with the SVG string
-           const blob = new Blob([svgString], { type: "image/svg+xml" });
-         
-           // Create a download URL for the Blob
-           const downloadURL = URL.createObjectURL(blob);
-         
-           // Create a temporary link element
-           const link = document.createElement("a");
-           link.href = downloadURL;
-           link.download = "example.svg";
-         
-           // Programmatically click the link to trigger the download
-           link.click();
-         
-           // Clean up by revoking the URL
-           URL.revokeObjectURL(downloadURL);
-         });
-      </script> 
+  <script src="/js/mainUI.js"></script> 
 </body>
 </html>
