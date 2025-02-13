@@ -160,11 +160,19 @@ function setup(w, h, mainColor=themes["pastel"].secondaryColor){
     if (screenWidth > w){
         svg.setAttribute("width", w);
         svg.setAttribute("height", h);
+        svg.setAttribute("viewBox", `0 0 ${w} ${h}`); // Ensure correct aspect ratio
+        svg.style.width = `${w}px`;
+        svg.style.height = `${h}px`;
         console.log("Zukky!!");
+      
     }
     else{
         svg.setAttribute("width", screenWidth * (screenWidth/ w));
         svg.setAttribute("height", screenWidth * (screenWidth/w) * h/w);
+
+        svg.setAttribute("viewBox", `0 0 ${screenWidth * (screenWidth/ w)} ${screenWidth * (screenWidth/w) * h/w}`); // Ensure correct aspect ratio
+        svg.style.width = `${screenWidth * (screenWidth/ w}px`;
+        svg.style.height = `${screenWidth * (screenWidth/w) * h/w}px`;
     }
     bg_rect = document.createElementNS(svgURI, "rect");
     bg_rect.setAttribute("width", "100%");
