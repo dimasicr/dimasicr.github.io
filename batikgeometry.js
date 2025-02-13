@@ -44,6 +44,14 @@ const themes = {
         strokeColor: "gold",
         strokeWidth: 0.5
     }
+    ,"pastelwhite": {
+        mainColor: "white",
+        secondaryColor: "#38445a",
+        isenColor: "#38445a",
+        strokeColor: "white",
+        strokeWidth: 0.5
+    }
+    
     ,"goldenSunset": {
         mainColor: "rgb(214,164,85)",
         secondaryColor: "rgb(105,43,45)",
