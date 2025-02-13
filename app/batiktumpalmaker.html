@@ -34,11 +34,12 @@
         <div class="svg-container" id="svg-container">
             <svg id="svgcontainer" width="400" height="400" viewBox="0 0 400 400"></svg>
         </div>
-            <select name="CanvasSize" id="CanvasSize" class="btns" style="margin-top: 10px;" >
-                  <option value="Square"> <i class="fa-solid fa-square"></i>  Square </option>
-                  <option value="HorizontalSquare"> <i class="fa-solid fa-maximize"></i> HorizontalSquare </option>
-                  <option value="VerticalSquare"> <i class="fa-solid fa-maximize"></i>  VerticalSquare </option>
-            </select>
+<select name="CanvasSize" id="CanvasSize" class="btns" style="margin-top: 10px;">
+    <option value="Square" data-icon="fa-minimize"> Minimize </option>
+    <option value="HorizontalSquare" data-icon="fa-maximize"> Maximize </option>
+</select>
+      <span id="canvas-icon" class="fa-solid"></span>
+
             <button id="download-btn">
                 <i class="fa fa-download"></i> Download SVG
             </button>
@@ -1734,6 +1735,13 @@ outline4.addEventListener("click", (event) => {
       abc = new HexagonTumpal(200, 200, 100, 'hexagon', 0, `container-${Date.now()}-${Math.floor(Math.random() * 1000000)}`);
       abc.draw(); 
   </script>
+  <script>
+document.getElementById("CanvasSize").addEventListener("change", function() {
+    const selectedOption = this.options[this.selectedIndex];
+    const iconClass = selectedOption.getAttribute("data-icon");
+    document.getElementById("canvas-icon").className = "fa-solid " + iconClass;
+});
+</script>
   <script src="/js/mainUI.js"></script> 
 </body>
 </html>
