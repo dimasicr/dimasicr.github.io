@@ -39,6 +39,14 @@ const themes = {
         strokeColor: "gold",
         strokeWidth: 0.5
     }
+
+        ,"pastelwhite": {
+        mainColor: "white",
+        secondaryColor: "#38445a",
+        isenColor: "#38445a",
+        strokeColor: "white",
+        strokeWidth: 0.5
+    }
     ,"rajaampat": {
         mainColor:   "#F7F0F5",
         secondaryColor: "#5d7591",
