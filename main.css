@@ -90,15 +90,17 @@
      padding-top: 30px;
 }
  .btn, #motives, #paddings, #threshold, #recursion_threshold, #tesselation_type, #themes, #download-btn, #Isens, #refresh-btn  {
-     display: block;
-     margin: 0.4rem auto;
-     padding: 0.5rem 1rem;
-     background: none;
-     border: 1px solid #bfbfbf;
-     color: #585858;
-     text-align: center;
-     width: 80%;
+    display: block;
+    margin: 0.4rem auto;
+    padding: 0.5rem 1rem;
+    background: none;
+    border: 1px solid #bfbfbf;
+    color: #585858;
+    text-align: center;
+    width: 80%;
+    max-width: min(80vw, 300px); /* Limits width to 80% of viewport or 300px */
 }
+
  .btn:hover, .btn.is-selected, #download-btn:hover, #refresh-btn:hover {
      color: #28a2a2;
      border-color: #28a2a2;
