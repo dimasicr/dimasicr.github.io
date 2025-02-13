@@ -22,7 +22,7 @@
 /* Style for the side navigation bar */
 .sidenav {
     width: 250px;
-    background-color: #333;
+    background-color: #38445a;
     color: #fff;
     padding: 20px;
     height: 100vh;
@@ -54,7 +54,7 @@
      position: fixed;
      top: 0;
      left: 0;
-     background-color: #333;
+     background-color: #38445a;
      color: #fff;
      text-align: left;
      padding: 10px;
