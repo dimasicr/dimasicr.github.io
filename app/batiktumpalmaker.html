@@ -182,8 +182,8 @@ function setup(w, h, mainColor=themes["pastel"].secondaryColor){
 }
 
 
-if (screenWidth > 800) {
-  setup(600, 400);
+if (screenWidth > 900) {
+  setup(711, 400);
   console.log("Yamauchi Mizuki!");
 }
 else {
@@ -1745,7 +1745,7 @@ outline4.addEventListener("click", (event) => {
             }
     }
 
-      abc = new HexagonTumpal(200, 200, 100, 'hexagon', 0, `container-${Date.now()}-${Math.floor(Math.random() * 1000000)}`);
+      abc = new HexagonTumpal(svg.getAttribute("width")/2, 200, 100, 'hexagon', 0, `container-${Date.now()}-${Math.floor(Math.random() * 1000000)}`);
       abc.draw(); 
   </script>
   <script>
