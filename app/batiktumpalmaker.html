@@ -171,7 +171,7 @@ function setup(w, h, mainColor=themes["pastel"].secondaryColor){
         svg.setAttribute("height", screenWidth * (screenWidth/w) * h/w);
 
         svg.setAttribute("viewBox", `0 0 ${screenWidth * (screenWidth/ w)} ${screenWidth * (screenWidth/w) * h/w}`); // Ensure correct aspect ratio
-        svg.style.width = `${screenWidth * (screenWidth/ w}px`;
+        svg.style.width = `${screenWidth * (screenWidth/ w)}px`;
         svg.style.height = `${screenWidth * (screenWidth/w) * h/w}px`;
     }
     bg_rect = document.createElementNS(svgURI, "rect");
