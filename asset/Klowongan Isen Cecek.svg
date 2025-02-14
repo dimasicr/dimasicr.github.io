@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400">
+  <rect width="100%" height="100%" fill="none"/>
+
+  <path d="M 150 125 L 150 275" stroke="black" stroke-width="1" stroke-dasharray="3,3"> </path>
+  <path d="M 250 125 L 250 275" stroke="black" stroke-width="1" stroke-dasharray="3,3"> </path>
+
+
+<!-- <g stroke="#38445a" transform="translate(200,200)" fill="#54678a">  -->
+
+
+  <g transform="translate(100, 200)" stroke="#38445a" stroke-width="0.5">
+    <g>
+      <path d="M 0 -50 A50 50 0 0 1 50 0 A50 50 0 0 1 0 -50" transform="rotate(0)" fill="#54678a"/>
+      <path d="M 0 -50 A50 50 0 0 1 50 0 A50 50 0 0 1 0 -50" transform="rotate(90)" fill="#54678a"/>
+      <path d="M 0 -50 A50 50 0 0 1 50 0 A50 50 0 0 1 0 -50" transform="rotate(180)" fill="#54678a"/>
+      <path d="M 0 -50 A50 50 0 0 1 50 0 A50 50 0 0 1 0 -50" transform="rotate(270)" fill="#54678a"/>
+    </g>
+    <g/>
+    <g transform="rotate(45)" fill="rgb(235, 210, 140)"/>
+    <g fill="rgb(235, 210, 140)"/>
+
+    <path d= "M 0 -50 0 -65" stroke="black" fill="none" stroke-dasharray="3,3"> </path>
+    <text x="-20" y="-70" font-family="Arial" font-size="10" fill="black"> Klowongan </text>
+  </g>
+
+  <g transform="translate(200, 200)" stroke="#38445a" stroke-width="0.5">
+    <g>
+      <path d="M 0 -50 A50 50 0 0 1 50 0 A50 50 0 0 1 0 -50" transform="rotate(0)" fill="#54678a"/>
+      <path d="M 0 -50 A50 50 0 0 1 50 0 A50 50 0 0 1 0 -50" transform="rotate(90)" fill="#54678a"/>
+      <path d="M 0 -50 A50 50 0 0 1 50 0 A50 50 0 0 1 0 -50" transform="rotate(180)" fill="#54678a"/>
+      <path d="M 0 -50 A50 50 0 0 1 50 0 A50 50 0 0 1 0 -50" transform="rotate(270)" fill="#54678a"/>
+    </g>
+
+
+
+    <g stroke="none">
+      <circle cx="-42.857142857142854" cy="-7.142857142857143" r="3.3333333333333335" transform="rotate(0)" fill="white"/>
+      <circle cx="-7.142857142857143" cy="-42.857142857142854" r="3.3333333333333335" transform="rotate(0)" fill="white"/>
+      <circle cx="-42.857142857142854" cy="-7.142857142857143" r="3.3333333333333335" transform="rotate(90)" fill="white"/>
+      <circle cx="-7.142857142857143" cy="-42.857142857142854" r="3.3333333333333335" transform="rotate(90)" fill="white"/>
+      <circle cx="-42.857142857142854" cy="-7.142857142857143" r="3.3333333333333335" transform="rotate(180)" fill="white"/>
+      <circle cx="-7.142857142857143" cy="-42.857142857142854" r="3.3333333333333335" transform="rotate(180)" fill="white"/>
+      <circle cx="-42.857142857142854" cy="-7.142857142857143" r="3.3333333333333335" transform="rotate(270)" fill="white"/>
+      <circle cx="-7.142857142857143" cy="-42.857142857142854" r="3.3333333333333335" transform="rotate(270)" fill="white"/>
+    </g>
+    <g transform="rotate(45)" fill="rgb(235, 210, 140)"/>
+    <g fill="rgb(235, 210, 140)"/>
+
+    <path d= "M -7.14 -42.85 -7.14 -65" stroke="black" fill="none" stroke-dasharray="3,3"> </path>
+    <text x="-20" y="-70" font-family="Arial" font-size="10" fill="black"> Isen Cecek </text>
+  </g>
+
+
+
+
+  <g transform="translate(300, 200)" stroke="#38445a" stroke-width="0.5">
+    <g>
+      <path d="M 0 -50 A50 50 0 0 1 50 0 A50 50 0 0 1 0 -50" transform="rotate(0)" fill="#54678a"/>
+      <path d="M 0 -50 A50 50 0 0 1 50 0 A50 50 0 0 1 0 -50" transform="rotate(90)" fill="#54678a"/>
+      <path d="M 0 -50 A50 50 0 0 1 50 0 A50 50 0 0 1 0 -50" transform="rotate(180)" fill="#54678a"/>
+      <path d="M 0 -50 A50 50 0 0 1 50 0 A50 50 0 0 1 0 -50" transform="rotate(270)" fill="#54678a"/>
+    </g>
+    <g stroke="none">
+      <circle cx="-42.857142857142854" cy="-7.142857142857143" r="3.3333333333333335" transform="rotate(0)" fill="white"/>
+      <circle cx="-7.142857142857143" cy="-42.857142857142854" r="3.3333333333333335" transform="rotate(0)" fill="white"/>
+      <circle cx="-42.857142857142854" cy="-7.142857142857143" r="3.3333333333333335" transform="rotate(90)" fill="white"/>
+      <circle cx="-7.142857142857143" cy="-42.857142857142854" r="3.3333333333333335" transform="rotate(90)" fill="white"/>
+      <circle cx="-42.857142857142854" cy="-7.142857142857143" r="3.3333333333333335" transform="rotate(180)" fill="white"/>
+      <circle cx="-7.142857142857143" cy="-42.857142857142854" r="3.3333333333333335" transform="rotate(180)" fill="white"/>
+      <circle cx="-42.857142857142854" cy="-7.142857142857143" r="3.3333333333333335" transform="rotate(270)" fill="white"/>
+      <circle cx="-7.142857142857143" cy="-42.857142857142854" r="3.3333333333333335" transform="rotate(270)" fill="white"/>
+    </g>
+    <g transform="rotate(45)" fill="#54678a">
+      <rect x="-16.071428571428573" y="-1.0714285714285714" width="10.714285714285714" height="2.857142857142857" transform="rotate(0) scale(1.1 1.1)"/>
+      <rect x="-16.071428571428573" y="-1.0714285714285714" width="10.714285714285714" height="2.857142857142857" transform="rotate(90) scale(1.1 1.1)"/>
+      <rect x="-16.071428571428573" y="-1.0714285714285714" width="10.714285714285714" height="2.857142857142857" transform="rotate(180) scale(1.1 1.1)"/>
+      <rect x="-16.071428571428573" y="-1.0714285714285714" width="10.714285714285714" height="2.857142857142857" transform="rotate(270) scale(1.1 1.1)"/>
+    </g>
+    <g fill="#54678a">
+      <path d="M -21.428571428571427 0 Q -14.285714285714286  -4.285714285714286  -7.142857142857143  0 Q -14.285714285714286  4.285714285714286  -21.428571428571427  0" transform="rotate(0) scale(1.1 1.1)"/>
+      <path d="M -21.428571428571427 0 Q -14.285714285714286  -4.285714285714286  -7.142857142857143  0 Q -14.285714285714286  4.285714285714286  -21.428571428571427  0" transform="rotate(90) scale(1.1 1.1)"/>
+      <path d="M -21.428571428571427 0 Q -14.285714285714286  -4.285714285714286  -7.142857142857143  0 Q -14.285714285714286  4.285714285714286  -21.428571428571427  0" transform="rotate(180) scale(1.1 1.1)"/>
+      <path d="M -21.428571428571427 0 Q -14.285714285714286  -4.285714285714286  -7.142857142857143  0 Q -14.285714285714286  4.285714285714286  -21.428571428571427  0" transform="rotate(270) scale(1.1 1.1)"/>
+    </g>
+
+    <path d= "M 0 0 0 -65" stroke="black" fill="none" stroke-dasharray="3,3"> </path>
+    <text x="-20" y="-70" font-family="Arial" font-size="10" fill="black"> Isen Tanahan </text>
+  </g>
+</svg>
