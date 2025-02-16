@@ -315,11 +315,11 @@ function drawTumpal(x, y, id = 123, s = 200, trig_degree = 45, rotDeg= 0, mainCo
             R_new = 2.5 * R;
         }
 
-        else if (trig_degree === 54) {
+        else if (trig_degree >= 54 && trig_degree < 70) {
             R_new = 1.5  * R;
         }
 
-        else if (trig_degree === 72) {
+        else if (trig_degree >= 70) {
             R_new = 2.5  * R;
         }
 
@@ -439,140 +439,33 @@ function createContextMenu(event, options) {
         }
 
       if (option.label === 'Add Square'){
-          console.log("Chiho Daisuki!");
-
           elid = `container-${Date.now()}-${Math.floor(Math.random() * 1000000)}`;
 
-          if(option.dir === 'Left' && option.neighbor === 'Square'){
-            const bcd = new SquareTumpal(option.x - Math.cos(option.rot_deg) * option.l , option.y - Math.sin(option.rot_deg) * option.l , option.l, 'square', option.rot_degree, elid);
-            bcd.draw();
-          }
-          else if(option.dir === 'Down' && option.neighbor === 'Square'){
-            const bcd = new SquareTumpal(option.x - Math.sin(option.rot_deg) * option.l, option.y + Math.cos(option.rot_deg) * option.l, option.l, 'square', option.rot_degree, elid);
-            bcd.draw();
-          }
 
-          else if(option.dir === 'Up' && option.neighbor === 'Square'){
-            const bcd = new SquareTumpal(option.x + Math.sin(option.rot_deg) * option.l, option.y  - Math.cos(option.rot_deg) * option.l , option.l, 'square', option.rot_degree, elid);
+            const bcd = new PolygonTumpal(option.x + Math.cos(option.directionDegrees ) * (Math.tan(option.isoscelesAngle * Math.PI/180) * 0.5 * option.l +  0.5 * option.l )
+                        , option.y + Math.sin(option.directionDegrees ) * (Math.tan(option.isoscelesAngle * Math.PI/180) * 0.5 * option.l + 0.5 * option.l)
+                        , option.l
+                        , 4
+                        , option.directionDegrees * 180 / Math.PI
+                        , `container-${Date.now()}-${Math.floor(Math.random() * 1000000)}`);
             bcd.draw();
-          }
-
-          else if(option.dir === 'Right' && option.neighbor === 'Square'){
-            const bcd = new SquareTumpal(option.x + Math.cos(option.rot_deg) * option.l , option.y  + Math.sin(option.rot_deg) * option.l , option.l, 'square', option.rot_degree, elid);
-            bcd.draw();
-          }
-
-          else if(option.dir === 'Down' && option.neighbor === 'Triangle'){
-            const bcd = new SquareTumpal(option.x - Math.sin(option.rot_deg) * (option.l * 0.5 + getheight(option.l)/3), option.y + Math.cos(option.rot_deg) * (option.l * 0.5 + getheight(option.l)/3), option.l, 'square', option.rot_degree, elid);
-            bcd.draw();
-          }
-
-          else if(option.dir === 'Left' && option.neighbor === 'Triangle'){
-            const bcd = new SquareTumpal(option.x - Math.sin(option.rot_deg - 2 /3 * 2 * Math.PI) * (option.l * 0.5 + getheight(option.l)/3), option.y + Math.cos(option.rot_deg - 2 /3 * 2 * Math.PI) * (option.l * 0.5 + getheight(option.l)/3), option.l, 'square', option.rot_degree - 60, elid);
-            bcd.draw();
-          }
-
-          else if(option.dir === 'Right' && option.neighbor === 'Triangle'){
-            console.log("Chiho channn");
-            const bcd = new SquareTumpal(option.x - Math.sin(option.rot_deg + 2 /3 * 2 * Math.PI) * (option.l * 0.5 + getheight(option.l)/3), option.y + Math.cos(option.rot_deg + 2 /3 * 2 * Math.PI) * (option.l * 0.5 + getheight(option.l)/3), option.l, 'square', option.rot_degree + 60, elid);
-            bcd.draw();
-          }
 
 
-          else if(option.dir === 'Down' && option.neighbor === 'Hexagon'){
-            const bcd = new SquareTumpal(option.x - Math.sin(option.rot_deg) * (option.l * 0.5 + getheight(option.l)), option.y + Math.cos(option.rot_deg) * (option.l * 0.5 + getheight(option.l)), option.l, 'square', option.rot_degree, elid);
-            bcd.draw();
-          }
-          else if(option.dir === 'Down Left' && option.neighbor === 'Hexagon'){
-            const bcd = new SquareTumpal(option.x - Math.sin(option.rot_deg + Math.PI / 3) * (option.l * 0.5 + getheight(option.l)), option.y + Math.cos(option.rot_deg + Math.PI / 3) * (option.l * 0.5 + getheight(option.l)), option.l, 'square', option.rot_degree + 60, elid);
-            bcd.draw();
-          }
 
-          else if(option.dir === 'Up Left' && option.neighbor === 'Hexagon'){
-            const bcd = new SquareTumpal(option.x - Math.sin(option.rot_deg + 2 * Math.PI / 3) * (option.l * 0.5 + getheight(option.l)), option.y + Math.cos(option.rot_deg + 2 * Math.PI / 3) * (option.l * 0.5 + getheight(option.l)), option.l, 'square', option.rot_degree + 120, elid);
-            bcd.draw();
-          }
-
-          else if(option.dir === 'Up' && option.neighbor === 'Hexagon'){
-            const bcd = new SquareTumpal(option.x - Math.sin(option.rot_deg + 3 * Math.PI / 3) * (option.l * 0.5 + getheight(option.l)), option.y + Math.cos(option.rot_deg + 3 * Math.PI / 3) * (option.l * 0.5 + getheight(option.l)), option.l, 'square', option.rot_degree + 180, elid);
-            bcd.draw();
-          }
-
-          else if(option.dir === 'Up Right' && option.neighbor === 'Hexagon'){
-            const bcd = new SquareTumpal(option.x - Math.sin(option.rot_deg + 4 * Math.PI / 3) * (option.l * 0.5 + getheight(option.l)), option.y + Math.cos(option.rot_deg + 4 * Math.PI / 3) * (option.l * 0.5 + getheight(option.l)), option.l, 'square', option.rot_degree + 240, elid);
-            bcd.draw();
-          }
-
-          else if(option.dir === 'Down Right' && option.neighbor === 'Hexagon'){
-            const bcd = new SquareTumpal(option.x - Math.sin(option.rot_deg + 5 * Math.PI / 3) * (option.l * 0.5 + getheight(option.l)), option.y + Math.cos(option.rot_deg + 5 * Math.PI / 3) * (option.l * 0.5 + getheight(option.l)), option.l, 'square', option.rot_degree + 300, elid);
-            bcd.draw();
-          }
 
 
       }
 
       else if (option.label === 'Add Triangle'){
-          console.log("Chiho Daisuki!");
 
-          if(option.dir === 'Down' && option.neighbor === 'Triangle' ){
-            const bcd = new TriangleTumpal(option.x + Math.cos(option.rot_deg + Math.PI/2) * getheight(option.l) * 2/3 , option.y + Math.sin(option.rot_deg + Math.PI/2) * getheight(option.l) * 2/3, option.l, 'triangle', option.rot_degree + 60, `container-${Date.now()}-${Math.floor(Math.random() * 1000000)}`);
+            const bcd = new PolygonTumpal(option.x + Math.cos(option.directionDegrees ) * (Math.tan(option.isoscelesAngle * Math.PI/180) * 0.5 * option.l + Math.tan(60 * Math.PI/180) * 0.5 * option.l/3 )
+                        , option.y + Math.sin(option.directionDegrees ) * (Math.tan(option.isoscelesAngle * Math.PI/180) * 0.5 * option.l + Math.tan(60 * Math.PI/180) * 0.5 * option.l/3)
+                        , option.l
+                        , 3
+                        , -30 + option.directionDegrees * 180 / Math.PI
+                        , `container-${Date.now()}-${Math.floor(Math.random() * 1000000)}`);
             bcd.draw();
-          }
-          else if(option.dir === 'Left' && option.neighbor === 'Triangle' ){
-            const bcd = new TriangleTumpal(option.x + Math.cos(option.rot_deg + Math.PI/2 - 2/3 * 2 * Math.PI) * getheight(option.l) * 2/3 , option.y + Math.sin(option.rot_deg + Math.PI/2 - 2/3 * 2 * Math.PI) * getheight(option.l) * 2/3, option.l, 'triangle', option.rot_degree + 60, `container-${Date.now()}-${Math.floor(Math.random() * 1000000)}`);
-            bcd.draw();
-          }
 
-          else if(option.dir === 'Right' && option.neighbor === 'Triangle' ){
-            const bcd = new TriangleTumpal(option.x + Math.cos(option.rot_deg + Math.PI/2 - 2 * 2/3 * 2 * Math.PI) * getheight(option.l) * 2/3 , option.y + Math.sin(option.rot_deg + Math.PI/2 - 2 * 2/3 * 2 * Math.PI) * getheight(option.l) * 2/3, option.l, 'triangle', option.rot_degree + 60, `container-${Date.now()}-${Math.floor(Math.random() * 1000000)}`);
-            bcd.draw();
-            console.log("Chihoooo");
-          }
-
-          else if (option.dir === 'Down' && option.neighbor === 'Square' ){
-            const bcd = new TriangleTumpal(option.x + Math.cos(option.rot_deg + Math.PI/2) * (option.l * 0.5 + getheight(option.l)/3) , option.y + Math.sin(option.rot_deg + Math.PI/2) * (option.l * 0.5 + getheight(option.l)/3), option.l, 'triangle', option.rot_degree + 60, `container-${Date.now()}-${Math.floor(Math.random() * 1000000)}`);
-            bcd.draw();
-          }
-          else if (option.dir === 'Right' && option.neighbor === 'Square' ){
-            const bcd = new TriangleTumpal(option.x + Math.cos(option.rot_deg + Math.PI/2 - Math.PI/2) * (option.l * 0.5 + getheight(option.l)/3) , option.y + Math.sin(option.rot_deg + Math.PI/2 - Math.PI/2) * (option.l * 0.5 + getheight(option.l)/3), option.l, 'triangle', option.rot_degree + 60 - 90, `container-${Date.now()}-${Math.floor(Math.random() * 1000000)}`);
-            bcd.draw();
-          }
-          else if (option.dir === 'Up' && option.neighbor === 'Square' ){
-            const bcd = new TriangleTumpal(option.x + Math.cos(option.rot_deg + Math.PI/2 - 2 * Math.PI/2) * (option.l * 0.5 + getheight(option.l)/3) , option.y + Math.sin(option.rot_deg + Math.PI/2 - 2 *  Math.PI/2) * (option.l * 0.5 + getheight(option.l)/3), option.l, 'triangle', option.rot_degree + 60 - 180, `container-${Date.now()}-${Math.floor(Math.random() * 1000000)}`);
-            bcd.draw();
-          }
-          else if (option.dir === 'Left' && option.neighbor === 'Square' ){
-            const bcd = new TriangleTumpal(option.x + Math.cos(option.rot_deg + Math.PI/2 - 3 * Math.PI/2) * (option.l * 0.5 + getheight(option.l)/3) , option.y + Math.sin(option.rot_deg + Math.PI/2 - 3 *  Math.PI/2) * (option.l * 0.5 + getheight(option.l)/3), option.l, 'triangle', option.rot_degree + 60 - 270, `container-${Date.now()}-${Math.floor(Math.random() * 1000000)}`);
-            bcd.draw();
-          }
-
-
-
-          else if(option.dir === 'Down' && option.neighbor === 'Hexagon' ){
-            const bcd = new TriangleTumpal(option.x + Math.cos(option.rot_deg + Math.PI/2) * getheight(option.l) * 4/3 , option.y + Math.sin(option.rot_deg + Math.PI/2) * getheight(option.l) * 4/3, option.l, 'triangle', option.rot_degree + 60, `container-${Date.now()}-${Math.floor(Math.random() * 1000000)}`);
-            bcd.draw();
-          }
-          else if(option.dir === 'Down Left' && option.neighbor === 'Hexagon' ){
-            const bcd = new TriangleTumpal(option.x + Math.cos(option.rot_deg + Math.PI/2 + Math.PI/3) * getheight(option.l) * 4/3 , option.y + Math.sin(option.rot_deg + Math.PI/2 + Math.PI/3) * getheight(option.l) * 4/3, option.l, 'triangle', option.rot_degree, `container-${Date.now()}-${Math.floor(Math.random() * 1000000)}`);
-            bcd.draw();
-          }
-          else if(option.dir === 'Up Left' && option.neighbor === 'Hexagon' ){
-            const bcd = new TriangleTumpal(option.x + Math.cos(option.rot_deg + Math.PI/2 + 2 * Math.PI/3) * getheight(option.l) * 4/3 , option.y + Math.sin(option.rot_deg + Math.PI/2 + 2 * Math.PI/3) * getheight(option.l) * 4/3, option.l, 'triangle', option.rot_degree + 60, `container-${Date.now()}-${Math.floor(Math.random() * 1000000)}`);
-            bcd.draw();
-          }
-          else if(option.dir === 'Up' && option.neighbor === 'Hexagon' ){
-            const bcd = new TriangleTumpal(option.x + Math.cos(option.rot_deg + Math.PI/2 + 3 * Math.PI/3) * getheight(option.l) * 4/3 , option.y + Math.sin(option.rot_deg + Math.PI/2 + 3 * Math.PI/3) * getheight(option.l) * 4/3, option.l, 'triangle', option.rot_degree + 0, `container-${Date.now()}-${Math.floor(Math.random() * 1000000)}`);
-            bcd.draw();
-          }
-          else if(option.dir === 'Up Right' && option.neighbor === 'Hexagon' ){
-            const bcd = new TriangleTumpal(option.x + Math.cos(option.rot_deg + Math.PI/2 + 4 * Math.PI/3) * getheight(option.l) * 4/3 , option.y + Math.sin(option.rot_deg + Math.PI/2 + 4 * Math.PI/3) * getheight(option.l) * 4/3, option.l, 'triangle', option.rot_degree + 60, `container-${Date.now()}-${Math.floor(Math.random() * 1000000)}`);
-            bcd.draw();
-          }
-
-          else if(option.dir === 'Down Right' && option.neighbor === 'Hexagon' ){
-            const bcd = new TriangleTumpal(option.x + Math.cos(option.rot_deg + Math.PI/2 + 5 * Math.PI/3) * getheight(option.l) * 4/3 , option.y + Math.sin(option.rot_deg + Math.PI/2 + 5 * Math.PI/3) * getheight(option.l) * 4/3, option.l, 'triangle', option.rot_degree + 0, `container-${Date.now()}-${Math.floor(Math.random() * 1000000)}`);
-            bcd.draw();
-          }
 
       }
 
@@ -580,76 +473,48 @@ function createContextMenu(event, options) {
       else if (option.label === 'Add Hexagon'){
                   elid = `container-${Date.now()}-${Math.floor(Math.random() * 1000000)}`;
 
-          console.log("Chiho Daisuki!");
-
-          if(option.dir === 'Down' && option.neighbor === 'Hexagon' ){
-            const bcd = new HexagonTumpal(option.x + Math.cos(option.rot_deg + Math.PI/2) * getheight(option.l) * 2 , option.y + Math.sin(option.rot_deg + Math.PI/2) * getheight(option.l) * 2, option.l, 'hexagon', option.rot_degree + 60, elid);
-            bcd.draw();
-          }
-
-          else if(option.dir === 'Down Left' && option.neighbor === 'Hexagon' ){
-            const bcd = new HexagonTumpal(option.x + Math.cos(option.rot_deg + Math.PI/2  + Math.PI/3) * getheight(option.l) * 2 , option.y + Math.sin(option.rot_deg + Math.PI/2 + Math.PI/3) * getheight(option.l) * 2, option.l, 'hexagon', option.rot_degree + 60, elid);
-            bcd.draw();
-          }
-
-          else if(option.dir === 'Up Left' && option.neighbor === 'Hexagon' ){
-            const bcd = new HexagonTumpal(option.x + Math.cos(option.rot_deg + Math.PI/2  + 2 * Math.PI/3) * getheight(option.l) * 2 , option.y + Math.sin(option.rot_deg + Math.PI/2 + 2 * Math.PI/3) * getheight(option.l) * 2, option.l, 'hexagon', option.rot_degree + 60, elid);
-            bcd.draw();
-          }
-
-          else if(option.dir === 'Up' && option.neighbor === 'Hexagon' ){
-            const bcd = new HexagonTumpal(option.x + Math.cos(option.rot_deg + Math.PI/2  + 3 * Math.PI/3) * getheight(option.l) * 2 , option.y + Math.sin(option.rot_deg + Math.PI/2 + 3 * Math.PI/3) * getheight(option.l) * 2, option.l, 'hexagon', option.rot_degree + 60, elid);
-            bcd.draw();
-          }
-
-          else if(option.dir === 'Up Right' && option.neighbor === 'Hexagon' ){
-            const bcd = new HexagonTumpal(option.x + Math.cos(option.rot_deg + Math.PI/2  + 4 * Math.PI/3) * getheight(option.l) * 2 , option.y + Math.sin(option.rot_deg + Math.PI/2 + 4 * Math.PI/3) * getheight(option.l) * 2, option.l, 'hexagon', option.rot_degree + 60, elid);
-            bcd.draw();
-          }
-
-          else if(option.dir === 'Down Right' && option.neighbor === 'Hexagon' ){
-            const bcd = new HexagonTumpal(option.x + Math.cos(option.rot_deg + Math.PI/2  + 5 * Math.PI/3) * getheight(option.l) * 2 , option.y + Math.sin(option.rot_deg + Math.PI/2 + 5 * Math.PI/3) * getheight(option.l) * 2, option.l, 'hexagon', option.rot_degree + 60, elid);
-            bcd.draw();
-          }
 
 
-          else if(option.dir === 'Down' && option.neighbor === 'Triangle' ){
-            const bcd = new HexagonTumpal(option.x + Math.cos(option.rot_deg + Math.PI/2) * getheight(option.l) * 4/3 , option.y + Math.sin(option.rot_deg + Math.PI/2) * getheight(option.l) * 4/3, option.l, 'hexagon', option.rot_degree + 60, elid);
+            const bcd = new PolygonTumpal(option.x + Math.cos(option.directionDegrees ) * (Math.tan(option.isoscelesAngle * Math.PI/180) * 0.5 * option.l + Math.tan(60 * Math.PI/180) * 0.5 * option.l )
+                        , option.y + Math.sin(option.directionDegrees ) * (Math.tan(option.isoscelesAngle * Math.PI/180) * 0.5 * option.l + Math.tan(60 * Math.PI/180) * 0.5 * option.l)
+                        , option.l
+                        , 6
+                        , -30 + option.directionDegrees * 180 / Math.PI
+                        , `container-${Date.now()}-${Math.floor(Math.random() * 1000000)}`);
             bcd.draw();
-          }
-
-          else if(option.dir === 'Left' && option.neighbor === 'Triangle' ){
-            const bcd = new HexagonTumpal(option.x + Math.cos(option.rot_deg + Math.PI/2 + 2 * Math.PI/3) * getheight(option.l) * 4/3 , option.y + Math.sin(option.rot_deg + Math.PI/2 + 2 * Math.PI /3) * getheight(option.l) * 4/3, option.l, 'hexagon', option.rot_degree + 60, elid);
-            bcd.draw();
-          }
-          else if(option.dir === 'Right' && option.neighbor === 'Triangle' ){
-            const bcd = new HexagonTumpal(option.x + Math.cos(option.rot_deg + Math.PI/2 + 2 * 2 * Math.PI/3) * getheight(option.l) * 4/3 , option.y + Math.sin(option.rot_deg + Math.PI/2 + 2 * 2 * Math.PI /3) * getheight(option.l) * 4/3, option.l, 'hexagon', option.rot_degree + 60, elid);
-            bcd.draw();
-          }
-
-
-
-          else if(option.dir === 'Left' && option.neighbor === 'Square'){
-            const bcd = new HexagonTumpal(option.x - Math.sin(option.rot_deg + Math.PI/2) * (option.l * 0.5 + getheight(option.l)), option.y + Math.cos(option.rot_deg + Math.PI /2) * (option.l * 0.5 + getheight(option.l)), option.l, 'hexagon', option.rot_degree, elid);
-            bcd.draw();
-          }
-
-          else if(option.dir === 'Up' && option.neighbor === 'Square'){
-            const bcd = new HexagonTumpal(option.x - Math.sin(option.rot_deg + 2 * Math.PI/2) * (option.l * 0.5 + getheight(option.l)), option.y + Math.cos(option.rot_deg + 2 * Math.PI /2) * (option.l * 0.5 + getheight(option.l)), option.l, 'hexagon', option.rot_degree, elid);
-            bcd.draw();
-          }
-          else if(option.dir === 'Right' && option.neighbor === 'Square'){
-            const bcd = new HexagonTumpal(option.x - Math.sin(option.rot_deg + 3 * Math.PI/2) * (option.l * 0.5 + getheight(option.l)), option.y + Math.cos(option.rot_deg + 3 * Math.PI /2) * (option.l * 0.5 + getheight(option.l)), option.l, 'hexagon', option.rot_degree, elid);
-            bcd.draw();
-          }
-          else if(option.dir === 'Down' && option.neighbor === 'Square'){
-            const bcd = new HexagonTumpal(option.x - Math.sin(option.rot_deg + 4 * Math.PI/2) * (option.l * 0.5 + getheight(option.l)), option.y + Math.cos(option.rot_deg + 4 * Math.PI /2) * (option.l * 0.5 + getheight(option.l)), option.l, 'hexagon', option.rot_degree, elid);
-            bcd.draw();
-          }
           
       }
 
 
+      else if (option.label === 'Add Octagon'){
+                  elid = `container-${Date.now()}-${Math.floor(Math.random() * 1000000)}`;
+
+
+
+            const bcd = new PolygonTumpal(option.x + Math.cos(option.directionDegrees ) * (Math.tan(option.isoscelesAngle * Math.PI/180) * 0.5 * option.l + Math.tan(67.5 * Math.PI/180) * 0.5 * option.l )
+                        , option.y + Math.sin(option.directionDegrees ) * (Math.tan(option.isoscelesAngle * Math.PI/180) * 0.5 * option.l + Math.tan(67.5 * Math.PI/180) * 0.5 * option.l)
+                        , option.l
+                        , 8
+                        , -45 + option.directionDegrees * 180 / Math.PI
+                        , `container-${Date.now()}-${Math.floor(Math.random() * 1000000)}`);
+            bcd.draw();
+          
+      }
+
+      else if (option.label === 'Add Dodecagon'){
+                  elid = `container-${Date.now()}-${Math.floor(Math.random() * 1000000)}`;
+
+
+
+            const bcd = new PolygonTumpal(option.x + Math.cos(option.directionDegrees ) * (Math.tan(option.isoscelesAngle * Math.PI/180) * 0.5 * option.l + Math.tan(75 * Math.PI/180) * 0.5 * option.l )
+                        , option.y + Math.sin(option.directionDegrees ) * (Math.tan(option.isoscelesAngle * Math.PI/180) * 0.5 * option.l + Math.tan(75 * Math.PI/180) * 0.5 * option.l)
+                        , option.l
+                        , 12
+                        , -30 + option.directionDegrees * 180 / Math.PI
+                        , `container-${Date.now()}-${Math.floor(Math.random() * 1000000)}`);
+            bcd.draw();
+          
+      }
 
 
       menu.remove(); // Remove the menu after an option is clicked
@@ -688,1064 +553,163 @@ setTimeout(() => {
   }
 
 
-    class SquareTumpal {
-        constructor(cx, cy, l, motive, rot_deg = 0, id = 123) {
-          this.cx = cx;
-          this.cy = cy;
-          this.l = l;
-          this.motive = motive;
-          this.rot_deg = rot_deg * 2 * Math.PI / 360;
-          this.rot_degree = rot_deg;
-          this.id = id;
 
-        }
-          draw() {
-            // add function to draw border path
-            if (this.motive === 'square'){
-                for (let j=0; j<4; j++){
-                  drawTumpal(this.cx, this.cy, this.id, this.l, 45, this.rot_degree +  90 * j);
-                }
-            }
-          
 
 
 
-
-    const r_sq = getRadius(this.l , 4);
-
-    let outline1 = document.createElementNS(svgURI, "path");
-    // let outline_sentence = `M ${this.cx + r_sq * Math.cos(this.rot_deg + Math.PI/4 +  0 * Math.PI/2)} ${this.cy + r_sq * Math.sin(this.rot_deg + Math.PI/4 +   0 * Math.PI/2)} 
-    //                     L ${this.cx + r_sq * Math.cos(this.rot_deg + Math.PI/4 +  1 * Math.PI/2)} ${this.cy + r_sq * Math.sin(this.rot_deg + Math.PI/4 +   1 * Math.PI/2)}
-    //                     L ${this.cx + r_sq * Math.cos(this.rot_deg + Math.PI/4 +  2 * Math.PI/2)} ${this.cy + r_sq * Math.sin(this.rot_deg + Math.PI/4 +   2 * Math.PI/2)}
-    //                     L ${this.cx + r_sq * Math.cos(this.rot_deg + Math.PI/4 +  3 * Math.PI/2)} ${this.cy + r_sq * Math.sin(this.rot_deg + Math.PI/4 +   3 * Math.PI/2)}
-    //                     Z`;
-
-
-    let outline_sentence1 = `M ${this.cx} ${this.cy} 
-                        L ${this.cx + r_sq * Math.cos(this.rot_deg + Math.PI/4 +  1 * Math.PI/2)} ${this.cy + r_sq * Math.sin(this.rot_deg + Math.PI/4 +   1 * Math.PI/2)}
-                        L ${this.cx + r_sq * Math.cos(this.rot_deg + Math.PI/4 +  2 * Math.PI/2)} ${this.cy + r_sq * Math.sin(this.rot_deg + Math.PI/4 +   2 * Math.PI/2)}
-                        Z`;
-
-
-    outline1.setAttribute("d", outline_sentence1);
-    outline1.setAttribute("fill", "transparent");
-    outline1.setAttribute("stroke", "transparent");
-    outline1.setAttribute("stroke-width", "2");    // Ensures stroke is visible and hoverable
-    outline1.setAttribute("pointer-events", "visiblePainted");
-    svg.setAttribute("pointer-events", "none");
-    outline1.setAttribute("z-index", "10");
-    outline1.setAttribute("id", this.id);
-    svg.appendChild(outline1);
-
-
-    let outline2 = document.createElementNS(svgURI, "path");
-    let outline_sentence2 = `M ${this.cx} ${this.cy} 
-                        L ${this.cx + r_sq * Math.cos(this.rot_deg + Math.PI/4 +  0 * Math.PI/2)} ${this.cy + r_sq * Math.sin(this.rot_deg + Math.PI/4 +   0 * Math.PI/2)}
-                        L ${this.cx + r_sq * Math.cos(this.rot_deg + Math.PI/4 +  1 * Math.PI/2)} ${this.cy + r_sq * Math.sin(this.rot_deg + Math.PI/4 +   1 * Math.PI/2)}
-                        Z`;
-
-
-    outline2.setAttribute("d", outline_sentence2);
-    outline2.setAttribute("fill", "transparent");
-    outline2.setAttribute("stroke", "transparent");
-    outline2.setAttribute("stroke-width", "2");    // Ensures stroke is visible and hoverable
-    outline2.setAttribute("pointer-events", "visiblePainted");
-    svg.setAttribute("pointer-events", "none");
-    outline2.setAttribute("z-index", "10");
-        outline2.setAttribute("id", this.id);
-
-    svg.appendChild(outline2);
-
-
-
-    let outline3 = document.createElementNS(svgURI, "path");
-    let outline_sentence3 = `M ${this.cx} ${this.cy} 
-                        L ${this.cx + r_sq * Math.cos(this.rot_deg + Math.PI/4 +  2 * Math.PI/2)} ${this.cy + r_sq * Math.sin(this.rot_deg + Math.PI/4 +   2 * Math.PI/2)}
-                        L ${this.cx + r_sq * Math.cos(this.rot_deg + Math.PI/4 +  3 * Math.PI/2)} ${this.cy + r_sq * Math.sin(this.rot_deg + Math.PI/4 +   3 * Math.PI/2)}
-                        Z`;
-
-
-    outline3.setAttribute("d", outline_sentence3);
-    outline3.setAttribute("fill", "transparent");
-    outline3.setAttribute("stroke", "transparent");
-    outline3.setAttribute("stroke-width", "2");    // Ensures stroke is visible and hoverable
-    outline3.setAttribute("pointer-events", "visiblePainted");
-    svg.setAttribute("pointer-events", "none");
-    outline3.setAttribute("z-index", "10");
-    outline3.setAttribute("id", this.id);
-    svg.appendChild(outline3);
-
-
-
-    let outline4 = document.createElementNS(svgURI, "path");
-    let outline_sentence4 = `M ${this.cx} ${this.cy} 
-                        L ${this.cx + r_sq * Math.cos(this.rot_deg + Math.PI/4 +  3 * Math.PI/2)} ${this.cy + r_sq * Math.sin(this.rot_deg + Math.PI/4 +   3 * Math.PI/2)}
-                        L ${this.cx + r_sq * Math.cos(this.rot_deg + Math.PI/4 +  4 * Math.PI/2)} ${this.cy + r_sq * Math.sin(this.rot_deg + Math.PI/4 +   4 * Math.PI/2)}
-                        Z`;
-
-
-    outline4.setAttribute("d", outline_sentence4);
-    outline4.setAttribute("fill", "transparent");
-    outline4.setAttribute("stroke", "transparent");
-    outline4.setAttribute("stroke-width", "2");    // Ensures stroke is visible and hoverable
-    outline4.setAttribute("pointer-events", "visiblePainted");
-    svg.setAttribute("pointer-events", "none");
-    outline4.setAttribute("z-index", "10");
-    outline4.setAttribute("id", this.id);
-    svg.appendChild(outline4);
-
-
-    // Add event listeners for hover
-    outline1.addEventListener("mouseover", () => {
-      outline1.setAttribute("stroke", "gold"); // Change to hover color
-    });
-
-
-    outline1.addEventListener("mouseout", () => {
-      outline1.setAttribute("stroke", "transparent"); // Reset to original color
-    });
-
-
-    // Add event listeners for hover
-    outline2.addEventListener("mouseover", () => {
-      outline2.setAttribute("stroke", "gold"); // Change to hover color
-    });
-
-
-    outline2.addEventListener("mouseout", () => {
-      outline2.setAttribute("stroke", "transparent"); // Reset to original color
-    });
-
-
-    // Add event listeners for hover
-    outline3.addEventListener("mouseover", () => {
-      outline3.setAttribute("stroke", "gold"); // Change to hover color
-    });
-
-
-    outline3.addEventListener("mouseout", () => {
-      outline3.setAttribute("stroke", "transparent"); // Reset to original color
-    });
-
-    // Add event listeners for hover
-    outline4.addEventListener("mouseover", () => {
-      outline4.setAttribute("stroke", "gold"); // Change to hover color
-    });
-
-
-    outline4.addEventListener("mouseout", () => {
-      outline4.setAttribute("stroke", "transparent"); // Reset to original color
-    });
-
-
-
-// Attach the right-click event (contextmenu) to the outline element
-outline1.addEventListener("click", (event) => {
-  createContextMenu(event, [
-    {
-      label: "Add Square",
-      x: this.cx,
-      y: this.cy,
-      l: this.l,
-      rot_deg: this.rot_deg,
-      rot_degree: this.rot_degree,
-      dir: "Left",
-      neighbor: "Square"
-    },
-    {
-          label: "Add Triangle",
-          x: this.cx,
-          y: this.cy,
-          l: this.l,
-          rot_deg: this.rot_deg,
-          rot_degree: this.rot_degree,
-          dir: "Left",
-          neighbor: "Square"
-        },
-
-    {
-          label: "Add Hexagon",
-          x: this.cx,
-          y: this.cy,
-          l: this.l,
-          rot_deg: this.rot_deg,
-          rot_degree: this.rot_degree,
-          dir: "Left",
-          neighbor: "Square"
-        },
-
-    {
-      label: "Remove",
-      id: this.id
-    },
-  ]);
-});
-
-outline2.addEventListener("click", (event) => {
-  createContextMenu(event, [
-    {
-      label: "Add Square",
-      x: this.cx,
-      y: this.cy,
-      l: this.l,
-      rot_deg: this.rot_deg,
-      rot_degree: this.rot_degree,
-      dir: "Down",
-      neighbor: "Square"
-    },
-
-        {
-          label: "Add Triangle",
-          x: this.cx,
-          y: this.cy,
-          l: this.l,
-          rot_deg: this.rot_deg,
-          rot_degree: this.rot_degree,
-          dir: "Down",
-          neighbor: "Square"
-        },
-
-    {
-          label: "Add Hexagon",
-          x: this.cx,
-          y: this.cy,
-          l: this.l,
-          rot_deg: this.rot_deg,
-          rot_degree: this.rot_degree,
-          dir: "Down",
-          neighbor: "Square"
-        },
-
-    {
-      label: "Remove",
-      id: this.id
-
-    },
-  ]);
-});
-
-outline3.addEventListener("click", (event) => {
-  createContextMenu(event, [
-    {
-      label: "Add Square",
-      x: this.cx,
-      y: this.cy,
-      l: this.l,
-      rot_deg: this.rot_deg,
-      rot_degree: this.rot_degree,
-      dir: "Up",
-      neighbor: "Square"
-    },
-    {
-          label: "Add Triangle",
-          x: this.cx,
-          y: this.cy,
-          l: this.l,
-          rot_deg: this.rot_deg,
-          rot_degree: this.rot_degree,
-          dir: "Up",
-          neighbor: "Square"
-        },
-
-        {
-          label: "Add Hexagon",
-          x: this.cx,
-          y: this.cy,
-          l: this.l,
-          rot_deg: this.rot_deg,
-          rot_degree: this.rot_degree,
-          dir: "Up",
-          neighbor: "Square"
-        },
-
-    {
-      label: "Remove",
-      id: this.id
-
-    },
-  ]);
-});
-
-
-outline4.addEventListener("click", (event) => {
-  createContextMenu(event, [
-    {
-      label: "Add Square",
-      x: this.cx,
-      y: this.cy,
-      l: this.l,
-      rot_deg: this.rot_deg,
-      rot_degree: this.rot_degree,
-      dir: "Right",
-      neighbor: "Square"
-    },
-
-        {
-          label: "Add Triangle",
-          x: this.cx,
-          y: this.cy,
-          l: this.l,
-          rot_deg: this.rot_deg,
-          rot_degree: this.rot_degree,
-          dir: "Right",
-          neighbor: "Square"
-        },
-
-        {
-          label: "Add Hexagon",
-          x: this.cx,
-          y: this.cy,
-          l: this.l,
-          rot_deg: this.rot_deg,
-          rot_degree: this.rot_degree,
-          dir: "Right",
-          neighbor: "Square"
-        },
-
-
-    {
-      label: "Remove",
-      id: this.id
-
-    },
-  ]);
-});
-
-
-
-
-
-            }
+class PolygonTumpal {
+    /*
+        Class to draw any n-gon decorated with traditional batik tumpal pattern. 
+        cx: x center of circle circumscribing the polygon 
+        cy: y center of circle circumscribing the polygon
+        l: side length of the polygon 
+        sides: number of sided of the polygon
+        rotAngInDeg: rotation angle in degree 
+        id: this object id for reference 
+    */
+    constructor(cx, cy, sideLength, sides, rotationDegrees = 0, id = 123) {
+        this.cx = cx;
+        this.cy = cy;
+        this.sideLength = sideLength;
+        this.sides = sides;
+        this.rotationDegrees = rotationDegrees;
+        this.id = id;
+        this.isoscelesAngle = 90 - 180 / sides;
+        this.r = getRadius(sideLength, sides);
     }
 
+    radians(degree) {
+        return (degree * Math.PI) / 180;
+    }
 
-
-
-  class TriangleTumpal {
-        constructor(cx, cy, l, motive , rot_deg = 0, id = 123) {
-          this.cx = cx;
-          this.cy = cy;
-          this.l = l;
-          this.motive = motive;
-          this.rot_deg = rot_deg * 2 * Math.PI / 360;
-          this.rot_degree = rot_deg;
-          this.id = id;
+    draw(){
+        // Draw Batik Tumpal
+        for (let i=0; i< this.sides; i++){
+            drawTumpal(this.cx, this.cy, this.id, this.sideLength, this.isoscelesAngle, 360/this.sides * i  + this.rotationDegrees);
         }
-          draw() {
-            if (this.motive === 'triangle') {
-                for (let j=0; j<3; j++){
-                  drawTumpal(this.cx, this.cy, this.id, this.l, 30, this.rot_degree + 120 * j);
-                }
-            }
 
-    const r_tri = getRadius(this.l , 3);
+
+        let height = Math.tan(this.isoscelesAngle * Math.PI/180) * 0.5 * this.sideLength;
+        let width = 0.5 * this.sideLength;
+        let degree = Math.atan2(height, width);
 
 
 
-    let outline1 = document.createElementNS(svgURI, "path");
-    // let outline_sentence = `M ${this.cx + r_sq * Math.cos(this.rot_deg + Math.PI/4 +  0 * Math.PI/2)} ${this.cy + r_sq * Math.sin(this.rot_deg + Math.PI/4 +   0 * Math.PI/2)} 
-    //                     L ${this.cx + r_sq * Math.cos(this.rot_deg + Math.PI/4 +  1 * Math.PI/2)} ${this.cy + r_sq * Math.sin(this.rot_deg + Math.PI/4 +   1 * Math.PI/2)}
-    //                     L ${this.cx + r_sq * Math.cos(this.rot_deg + Math.PI/4 +  2 * Math.PI/2)} ${this.cy + r_sq * Math.sin(this.rot_deg + Math.PI/4 +   2 * Math.PI/2)}
-    //                     L ${this.cx + r_sq * Math.cos(this.rot_deg + Math.PI/4 +  3 * Math.PI/2)} ${this.cy + r_sq * Math.sin(this.rot_deg + Math.PI/4 +   3 * Math.PI/2)}
-    //                     Z`;
 
-
-    let outline_sentence1 = `M ${this.cx} ${this.cy} 
-                        L ${this.cx + r_tri * Math.cos(this.rot_deg  + Math.PI/6 + 0 * 2 * Math.PI/3)} ${this.cy + r_tri * Math.sin(this.rot_deg + Math.PI/6 +  0 * 2 * Math.PI/3)}
-                        L ${this.cx + r_tri * Math.cos(this.rot_deg  + Math.PI/6 + 1 * 2 * Math.PI/3)} ${this.cy + r_tri * Math.sin(this.rot_deg + Math.PI/6 +  1 * 2 * Math.PI/3)}
+        for (let i=0; i< this.sides; i++){
+            let outline1 = document.createElementNS(svgURI, "path");
+            let outline_sentence1 = `M ${this.cx} ${this.cy} 
+                        L ${this.cx + Math.cos(this.rotationDegrees * Math.PI/180 + degree + i * 2 * Math.PI/this.sides) * this.r} ${this.cy + Math.sin(this.rotationDegrees * Math.PI/180 + degree + i * 2 * Math.PI/this.sides) * this.r }
+                        L ${this.cx + Math.cos(this.rotationDegrees * Math.PI/180 + degree + (i+1) * 2 * Math.PI/this.sides) * this.r } ${this.cy + Math.sin(this.rotationDegrees * Math.PI/180 + degree + (i+1) * 2 * Math.PI/this.sides) * this.r}
                         Z`;
 
+            outline1.setAttribute("d", outline_sentence1);
+            outline1.setAttribute("fill", "transparent");
+            outline1.setAttribute("stroke", "transparent");
+            outline1.setAttribute("stroke-width", "2");    // Ensures stroke is visible and hoverable
+            outline1.setAttribute("pointer-events", "visiblePainted");
+            svg.setAttribute("pointer-events", "none");
+            outline1.setAttribute("z-index", "10");
+            outline1.setAttribute("id", this.id);
+            svg.appendChild(outline1);
 
-    outline1.setAttribute("d", outline_sentence1);
-    outline1.setAttribute("fill", "transparent");
-    outline1.setAttribute("stroke", "transparent");
-    outline1.setAttribute("stroke-width", "2");    // Ensures stroke is visible and hoverable
-    outline1.setAttribute("pointer-events", "visiblePainted");
-    svg.setAttribute("pointer-events", "none");
-    outline1.setAttribute("z-index", "10");
-    outline1.setAttribute("id", this.id);
-    svg.appendChild(outline1);
-
-
-    // Add event listeners for hover
-    outline1.addEventListener("mouseover", () => {
-      outline1.setAttribute("stroke", "gold"); // Change to hover color
-    });
+            // Add event listeners for hover
+            outline1.addEventListener("mouseover", () => {
+              outline1.setAttribute("stroke", "gold"); // Change to hover color
+            });
 
 
-    outline1.addEventListener("mouseout", () => {
-      outline1.setAttribute("stroke", "transparent"); // Reset to original color
-    });
+            outline1.addEventListener("mouseout", () => {
+              outline1.setAttribute("stroke", "transparent"); // Reset to original color
+            });
+
+
+            outline1.addEventListener("click", (event) => {
+            createContextMenu(event, [
+            {
+              label: "Add Triangle",
+              x: this.cx,
+              y: this.cy,
+              l: this.sideLength,
+              rotationDegrees: this.rotationDegrees,
+              directionDegrees: ( (this.rotationDegrees * Math.PI/180 + degree + i * 2 * Math.PI/this.sides) + (this.rotationDegrees * Math.PI/180 + degree + (i+1) * 2 * Math.PI/this.sides))/2 ,
+              neighborSides: this.sides,
+              isoscelesAngle: this.isoscelesAngle
+            },
+
+            {
+              label: "Add Square",
+              x: this.cx,
+              y: this.cy,
+              l: this.sideLength,
+              rotationDegrees: this.rotationDegrees,
+              directionDegrees: ( (this.rotationDegrees * Math.PI/180 + degree + i * 2 * Math.PI/this.sides) + (this.rotationDegrees * Math.PI/180 + degree + (i+1) * 2 * Math.PI/this.sides))/2 ,
+              neighborSides: this.sides,
+              isoscelesAngle: this.isoscelesAngle
+            },
+            {
+              label: "Add Hexagon",
+              x: this.cx,
+              y: this.cy,
+              l: this.sideLength,
+              rotationDegrees: this.rotationDegrees,
+              directionDegrees: ( (this.rotationDegrees * Math.PI/180 + degree + i * 2 * Math.PI/this.sides) + (this.rotationDegrees * Math.PI/180 + degree + (i+1) * 2 * Math.PI/this.sides))/2 ,
+              neighborSides: this.sides,
+              isoscelesAngle: this.isoscelesAngle
+            },
+
+            {
+              label: "Add Octagon",
+              x: this.cx,
+              y: this.cy,
+              l: this.sideLength,
+              rotationDegrees: this.rotationDegrees,
+              directionDegrees: ( (this.rotationDegrees * Math.PI/180 + degree + i * 2 * Math.PI/this.sides) + (this.rotationDegrees * Math.PI/180 + degree + (i+1) * 2 * Math.PI/this.sides))/2 ,
+              neighborSides: this.sides,
+              isoscelesAngle: this.isoscelesAngle
+            },
+            {
+              label: "Add Dodecagon",
+              x: this.cx,
+              y: this.cy,
+              l: this.sideLength,
+              rotationDegrees: this.rotationDegrees,
+              directionDegrees: ( (this.rotationDegrees * Math.PI/180 + degree + i * 2 * Math.PI/this.sides) + (this.rotationDegrees * Math.PI/180 + degree + (i+1) * 2 * Math.PI/this.sides))/2 ,
+              neighborSides: this.sides,
+              isoscelesAngle: this.isoscelesAngle
+            },
+
+            {
+                label: "Remove",
+                id: this.id
+            },
+            ]);
+            });
+        }
 
 
 
-    let outline2 = document.createElementNS(svgURI, "path");
-    let outline_sentence2 = `M ${this.cx} ${this.cy} 
-                        L ${this.cx + r_tri * Math.cos(this.rot_deg  + Math.PI/6 + 1 * 2 * Math.PI/3)} ${this.cy + r_tri * Math.sin(this.rot_deg + Math.PI/6 +  1 * 2 * Math.PI/3)}
-                        L ${this.cx + r_tri * Math.cos(this.rot_deg  + Math.PI/6 + 2 * 2 * Math.PI/3)} ${this.cy + r_tri * Math.sin(this.rot_deg + Math.PI/6 +  2 * 2 * Math.PI/3)}
-                        Z`;
 
 
-    outline2.setAttribute("d", outline_sentence2);
-    outline2.setAttribute("fill", "transparent");
-    outline2.setAttribute("stroke", "transparent");
-    outline2.setAttribute("stroke-width", "2");    // Ensures stroke is visible and hoverable
-    outline2.setAttribute("pointer-events", "visiblePainted");
-    outline2.setAttribute("z-index", "10");
-    outline2.setAttribute("id", this.id);
-
-    svg.appendChild(outline2);
-
-
-    // Add event listeners for hover
-    outline2.addEventListener("mouseover", () => {
-      outline2.setAttribute("stroke", "gold"); // Change to hover color
-    });
-
-
-    outline2.addEventListener("mouseout", () => {
-      outline2.setAttribute("stroke", "transparent"); // Reset to original color
-    });
-
-
-    let outline3 = document.createElementNS(svgURI, "path");
-    let outline_sentence3 = `M ${this.cx} ${this.cy} 
-                        L ${this.cx + r_tri * Math.cos(this.rot_deg  + Math.PI/6 + 2 * 2 * Math.PI/3)} ${this.cy + r_tri * Math.sin(this.rot_deg + Math.PI/6 +  2 * 2 * Math.PI/3)}
-                        L ${this.cx + r_tri * Math.cos(this.rot_deg  + Math.PI/6 + 3 * 2 * Math.PI/3)} ${this.cy + r_tri * Math.sin(this.rot_deg + Math.PI/6 +  3 * 2 * Math.PI/3)}
-                        Z`;
-
-
-    outline3.setAttribute("d", outline_sentence3);
-    outline3.setAttribute("fill", "transparent");
-    outline3.setAttribute("stroke", "transparent");
-    outline3.setAttribute("stroke-width", "2");    // Ensures stroke is visible and hoverable
-    outline3.setAttribute("pointer-events", "visiblePainted");
-    outline3.setAttribute("z-index", "10");
-    outline3.setAttribute("id", this.id);
-    svg.appendChild(outline3);
-
-
-    // Add event listeners for hover
-    outline3.addEventListener("mouseover", () => {
-      outline3.setAttribute("stroke", "gold"); // Change to hover color
-    });
-
-
-    outline3.addEventListener("mouseout", () => {
-      outline3.setAttribute("stroke", "transparent"); // Reset to original color
-    });
-
-
-
-    outline1.addEventListener("click", (event) => {
-      createContextMenu(event, [
-        {
-          label: "Add Triangle",
-          x: this.cx,
-          y: this.cy,
-          l: this.l,
-          rot_deg: this.rot_deg,
-          rot_degree: this.rot_degree,
-          dir: "Down",
-          neighbor: "Triangle"
-        },
-
-        {
-          label: "Add Square",
-          x: this.cx,
-          y: this.cy,
-          l: this.l,
-          rot_deg: this.rot_deg,
-          rot_degree: this.rot_degree,
-          dir: "Down",
-          neighbor: "Triangle"
-
-        },
-        {
-          label: "Add Hexagon",
-          x: this.cx,
-          y: this.cy,
-          l: this.l,
-          rot_deg: this.rot_deg,
-          rot_degree: this.rot_degree,
-          dir: "Down",
-          neighbor: "Triangle"
-        },
-
-
-        {
-      label: "Remove",
-      id: this.id
-    
-        },
-      ]);
-    });
-
-
-    outline2.addEventListener("click", (event) => {
-      createContextMenu(event, [
-        {
-          label: "Add Triangle",
-          x: this.cx,
-          y: this.cy,
-          l: this.l,
-          rot_deg: this.rot_deg,
-          rot_degree: this.rot_degree,
-          dir: "Left",
-          neighbor: "Triangle"
-        },
-         {
-          label: "Add Square",
-          x: this.cx,
-          y: this.cy,
-          l: this.l,
-          rot_deg: this.rot_deg,
-          rot_degree: this.rot_degree,
-          dir: "Left",
-          neighbor: "Triangle"
-
-        },
-
-        {
-          label: "Add Hexagon",
-          x: this.cx,
-          y: this.cy,
-          l: this.l,
-          rot_deg: this.rot_deg,
-          rot_degree: this.rot_degree,
-          dir: "Left",
-          neighbor: "Triangle"
-
-        },
-
-        {
-      label: "Remove",
-      id: this.id
-    
-        },
-      ]);
-    });
-
-
-    outline3.addEventListener("click", (event) => {
-      createContextMenu(event, [
-        {
-          label: "Add Triangle",
-          x: this.cx,
-          y: this.cy,
-          l: this.l,
-          rot_deg: this.rot_deg,
-          rot_degree: this.rot_degree,
-          dir: "Right",
-          neighbor: "Triangle"
-        },
-         {
-          label: "Add Square",
-          x: this.cx,
-          y: this.cy,
-          l: this.l,
-          rot_deg: this.rot_deg,
-          rot_degree: this.rot_degree,
-          dir: "Right",
-          neighbor: "Triangle"
-
-        },
-        {
-          label: "Add Hexagon",
-          x: this.cx,
-          y: this.cy,
-          l: this.l,
-          rot_deg: this.rot_deg,
-          rot_degree: this.rot_degree,
-          dir: "Right",
-          neighbor: "Triangle"
-
-        },
-        {
-      label: "Remove",
-      id: this.id
-    
-        },
-      ]);
-    });
-            }
 
     }
 
 
 
 
-     class HexagonTumpal {
-        constructor(cx, cy, l, motive , rot_deg = 0, id = 123) {
-          this.cx = cx;
-          this.cy = cy;
-          this.l = l;
-          this.motive = motive;
-          this.rot_deg = rot_deg * 2 * Math.PI / 360;
-          this.rot_degree = rot_deg;
-          this.id = id;
-        }
-          draw() {
-            if (this.motive === 'hexagon') {
-                for (let j=0; j<6; j++){
-                  drawTumpal(this.cx, this.cy, this.id, this.l, 60,  60 * j);
-                }
-            }
 
-    const r_hex = getRadius(this.l , 6);
 
 
+}
 
-    let outline1 = document.createElementNS(svgURI, "path");
-    // let outline_sentence = `M ${this.cx + r_sq * Math.cos(this.rot_deg + Math.PI/4 +  0 * Math.PI/2)} ${this.cy + r_sq * Math.sin(this.rot_deg + Math.PI/4 +   0 * Math.PI/2)} 
-    //                     L ${this.cx + r_sq * Math.cos(this.rot_deg + Math.PI/4 +  1 * Math.PI/2)} ${this.cy + r_sq * Math.sin(this.rot_deg + Math.PI/4 +   1 * Math.PI/2)}
-    //                     L ${this.cx + r_sq * Math.cos(this.rot_deg + Math.PI/4 +  2 * Math.PI/2)} ${this.cy + r_sq * Math.sin(this.rot_deg + Math.PI/4 +   2 * Math.PI/2)}
-    //                     L ${this.cx + r_sq * Math.cos(this.rot_deg + Math.PI/4 +  3 * Math.PI/2)} ${this.cy + r_sq * Math.sin(this.rot_deg + Math.PI/4 +   3 * Math.PI/2)}
-    //                     Z`;
 
 
-    let outline_sentence1 = `M ${this.cx} ${this.cy} 
-                        L ${this.cx + r_hex * Math.cos(this.rot_deg  + Math.PI/3 + 0 *  Math.PI/3)} ${this.cy + r_hex * Math.sin(this.rot_deg + Math.PI/3 +  0   * Math.PI/3)}
-                        L ${this.cx + r_hex * Math.cos(this.rot_deg  + Math.PI/3 + 1 *  Math.PI/3)} ${this.cy + r_hex * Math.sin(this.rot_deg + Math.PI/3 +  1   * Math.PI/3)}
-                        Z`;
 
 
-    outline1.setAttribute("d", outline_sentence1);
-    outline1.setAttribute("fill", "transparent");
-    outline1.setAttribute("stroke", "transparent");
-    outline1.setAttribute("stroke-width", "2");    // Ensures stroke is visible and hoverable
-    outline1.setAttribute("pointer-events", "visiblePainted");
-    svg.setAttribute("pointer-events", "none");
-    outline1.setAttribute("z-index", "10");
-    outline1.setAttribute("id", this.id);
-    svg.appendChild(outline1);
 
+    abc = new PolygonTumpal(svg.getAttribute("width")/2, svg.getAttribute("height")/2, svg.getAttribute("height")/8, 4, 0, `container-${Date.now()}-${Math.floor(Math.random() * 1000000)}`);
+    abc.draw();
 
-    // Add event listeners for hover
-    outline1.addEventListener("mouseover", () => {
-      outline1.setAttribute("stroke", "gold"); // Change to hover color
-    });
-
-
-    outline1.addEventListener("mouseout", () => {
-      outline1.setAttribute("stroke", "transparent"); // Reset to original color
-    });
-
-
-
-    let outline2 = document.createElementNS(svgURI, "path");
-    let outline_sentence2 = `M ${this.cx} ${this.cy} 
-                        L ${this.cx + r_hex * Math.cos(this.rot_deg  + Math.PI/3 + 1 *  Math.PI/3)} ${this.cy + r_hex * Math.sin(this.rot_deg + Math.PI/3 +  1   * Math.PI/3)}
-                        L ${this.cx + r_hex * Math.cos(this.rot_deg  + Math.PI/3 + 2 *  Math.PI/3)} ${this.cy + r_hex * Math.sin(this.rot_deg + Math.PI/3 +  2   * Math.PI/3)}
-                        Z`;
-
-    outline2.setAttribute("d", outline_sentence2);
-    outline2.setAttribute("fill", "transparent");
-    outline2.setAttribute("stroke", "transparent");
-    outline2.setAttribute("stroke-width", "2");    // Ensures stroke is visible and hoverable
-    outline2.setAttribute("pointer-events", "visiblePainted");
-    outline2.setAttribute("z-index", "10");
-    outline2.setAttribute("id", this.id);
-    svg.appendChild(outline2);
-
-
-    // Add event listeners for hover
-    outline2.addEventListener("mouseover", () => {
-      outline2.setAttribute("stroke", "gold"); // Change to hover color
-    });
-
-
-    outline2.addEventListener("mouseout", () => {
-      outline2.setAttribute("stroke", "transparent"); // Reset to original color
-    });
-
-
-    let outline3 = document.createElementNS(svgURI, "path");
-    let outline_sentence3 = `M ${this.cx} ${this.cy} 
-                        L ${this.cx + r_hex * Math.cos(this.rot_deg  + Math.PI/3 + 2 *  Math.PI/3)} ${this.cy + r_hex * Math.sin(this.rot_deg + Math.PI/3 +  2   * Math.PI/3)}
-                        L ${this.cx + r_hex * Math.cos(this.rot_deg  + Math.PI/3 + 3 *  Math.PI/3)} ${this.cy + r_hex * Math.sin(this.rot_deg + Math.PI/3 +  3   * Math.PI/3)}
-                        Z`;
-
-
-    outline3.setAttribute("d", outline_sentence3);
-    outline3.setAttribute("fill", "transparent");
-    outline3.setAttribute("stroke", "transparent");
-    outline3.setAttribute("stroke-width", "2");    // Ensures stroke is visible and hoverable
-    outline3.setAttribute("pointer-events", "visiblePainted");
-    outline3.setAttribute("z-index", "10");
-    outline3.setAttribute("id", this.id);
-    svg.appendChild(outline3);
-
-
-    // Add event listeners for hover
-    outline3.addEventListener("mouseover", () => {
-      outline3.setAttribute("stroke", "gold"); // Change to hover color
-    });
-
-
-    outline3.addEventListener("mouseout", () => {
-      outline3.setAttribute("stroke", "transparent"); // Reset to original color
-    });
-
-
-
-
-    let outline4 = document.createElementNS(svgURI, "path");
-    let outline_sentence4 = `M ${this.cx} ${this.cy} 
-                        L ${this.cx + r_hex * Math.cos(this.rot_deg  + Math.PI/3 + 3 *  Math.PI/3)} ${this.cy + r_hex * Math.sin(this.rot_deg + Math.PI/3 +  3   * Math.PI/3)}
-                        L ${this.cx + r_hex * Math.cos(this.rot_deg  + Math.PI/3 + 4 *  Math.PI/3)} ${this.cy + r_hex * Math.sin(this.rot_deg + Math.PI/3 +  4   * Math.PI/3)}
-                        Z`;
-
-
-    outline4.setAttribute("d", outline_sentence4);
-    outline4.setAttribute("fill", "transparent");
-    outline4.setAttribute("stroke", "transparent");
-    outline4.setAttribute("stroke-width", "2");    // Ensures stroke is visible and hoverable
-    outline4.setAttribute("pointer-events", "visiblePainted");
-    outline4.setAttribute("z-index", "10");
-    outline4.setAttribute("id", this.id);
-    svg.appendChild(outline4);
-
-
-    // Add event listeners for hover
-    outline4.addEventListener("mouseover", () => {
-      outline4.setAttribute("stroke", "gold"); // Change to hover color
-    });
-
-
-    outline4.addEventListener("mouseout", () => {
-      outline4.setAttribute("stroke", "transparent"); // Reset to original color
-    });
-
-
-
-    let outline5 = document.createElementNS(svgURI, "path");
-    let outline_sentence5 = `M ${this.cx} ${this.cy} 
-                        L ${this.cx + r_hex * Math.cos(this.rot_deg  + Math.PI/3 + 4 *  Math.PI/3)} ${this.cy + r_hex * Math.sin(this.rot_deg + Math.PI/3 +  4   * Math.PI/3)}
-                        L ${this.cx + r_hex * Math.cos(this.rot_deg  + Math.PI/3 + 5 *  Math.PI/3)} ${this.cy + r_hex * Math.sin(this.rot_deg + Math.PI/3 +  5   * Math.PI/3)}
-                        Z`;
-
-
-    outline5.setAttribute("d", outline_sentence5);
-    outline5.setAttribute("fill", "transparent");
-    outline5.setAttribute("stroke", "transparent");
-    outline5.setAttribute("stroke-width", "2");    // Ensures stroke is visible and hoverable
-    outline5.setAttribute("pointer-events", "visiblePainted");
-    outline5.setAttribute("z-index", "10");
-    outline5.setAttribute("id", this.id);
-    svg.appendChild(outline5);
-
-
-    // Add event listeners for hover
-    outline5.addEventListener("mouseover", () => {
-      outline5.setAttribute("stroke", "gold"); // Change to hover color
-    });
-
-
-    outline5.addEventListener("mouseout", () => {
-      outline5.setAttribute("stroke", "transparent"); // Reset to original color
-    });
-
-
-
-
-    let outline6 = document.createElementNS(svgURI, "path");
-    let outline_sentence6 = `M ${this.cx} ${this.cy} 
-                        L ${this.cx + r_hex * Math.cos(this.rot_deg  + Math.PI/3 + 5 *  Math.PI/3)} ${this.cy + r_hex * Math.sin(this.rot_deg + Math.PI/3 +  5   * Math.PI/3)}
-                        L ${this.cx + r_hex * Math.cos(this.rot_deg  + Math.PI/3 + 6 *  Math.PI/3)} ${this.cy + r_hex * Math.sin(this.rot_deg + Math.PI/3 +  6   * Math.PI/3)}
-                        Z`;
-
-
-    outline6.setAttribute("d", outline_sentence6);
-    outline6.setAttribute("fill", "transparent");
-    outline6.setAttribute("stroke", "transparent");
-    outline6.setAttribute("stroke-width", "2");    // Ensures stroke is visible and hoverable
-    outline6.setAttribute("pointer-events", "visiblePainted");
-    outline6.setAttribute("z-index", "10");
-    outline6.setAttribute("id", this.id);
-
-    svg.appendChild(outline6);
-
-
-    // Add event listeners for hover
-    outline6.addEventListener("mouseover", () => {
-      outline6.setAttribute("stroke", "gold"); // Change to hover color
-    });
-
-
-    outline6.addEventListener("mouseout", () => {
-      outline6.setAttribute("stroke", "transparent"); // Reset to original color
-    });
-
-
-
-
-
-
-    outline1.addEventListener("click", (event) => {
-      createContextMenu(event, [
-        {
-          label: "Add Triangle",
-          x: this.cx,
-          y: this.cy,
-          l: this.l,
-          rot_deg: this.rot_deg,
-          rot_degree: this.rot_degree,
-          dir: "Down",
-          neighbor: "Hexagon"
-        },
-
-        {
-          label: "Add Square",
-          x: this.cx,
-          y: this.cy,
-          l: this.l,
-          rot_deg: this.rot_deg,
-          rot_degree: this.rot_degree,
-          dir: "Down",
-          neighbor: "Hexagon"
-
-        },
-
-        {
-          label: "Add Hexagon",
-          x: this.cx,
-          y: this.cy,
-          l: this.l,
-          rot_deg: this.rot_deg,
-          rot_degree: this.rot_degree,
-          dir: "Down",
-          neighbor: "Hexagon"
-        },
-
-
-        {
-      label: "Remove",
-      id: this.id
-    
-        },
-      ]);
-    });
-
-
-    outline2.addEventListener("click", (event) => {
-      createContextMenu(event, [
-        {
-          label: "Add Hexagon",
-          x: this.cx,
-          y: this.cy,
-          l: this.l,
-          rot_deg: this.rot_deg,
-          rot_degree: this.rot_degree,
-          dir: "Down Left",
-          neighbor: "Hexagon"
-        },
-        {
-          label: "Add Triangle",
-          x: this.cx,
-          y: this.cy,
-          l: this.l,
-          rot_deg: this.rot_deg,
-          rot_degree: this.rot_degree,
-          dir: "Down Left",
-          neighbor: "Hexagon"
-        },
-         {
-          label: "Add Square",
-          x: this.cx,
-          y: this.cy,
-          l: this.l,
-          rot_deg: this.rot_deg,
-          rot_degree: this.rot_degree,
-          dir: "Down Left",
-          neighbor: "Hexagon"
-
-        },
-        {
-      label: "Remove",
-      id: this.id
-    
-        },
-      ]);
-    });
-
-
-    outline3.addEventListener("click", (event) => {
-      createContextMenu(event, [
-        {
-          label: "Add Hexagon",
-          x: this.cx,
-          y: this.cy,
-          l: this.l,
-          rot_deg: this.rot_deg,
-          rot_degree: this.rot_degree,
-          dir: "Up Left",
-          neighbor: "Hexagon"
-        },
-
-        {
-          label: "Add Triangle",
-          x: this.cx,
-          y: this.cy,
-          l: this.l,
-          rot_deg: this.rot_deg,
-          rot_degree: this.rot_degree,
-          dir: "Up Left",
-          neighbor: "Hexagon"
-        },
-         {
-          label: "Add Square",
-          x: this.cx,
-          y: this.cy,
-          l: this.l,
-          rot_deg: this.rot_deg,
-          rot_degree: this.rot_degree,
-          dir: "Up Left",
-          neighbor: "Hexagon"
-
-        },
-        {
-      label: "Remove",
-      id: this.id
-    
-        },
-      ]);
-    });
-
-
-
-    outline4.addEventListener("click", (event) => {
-      createContextMenu(event, [
-        {
-          label: "Add Hexagon",
-          x: this.cx,
-          y: this.cy,
-          l: this.l,
-          rot_deg: this.rot_deg,
-          rot_degree: this.rot_degree,
-          dir: "Up",
-          neighbor: "Hexagon"
-        },
-
-        {
-          label: "Add Triangle",
-          x: this.cx,
-          y: this.cy,
-          l: this.l,
-          rot_deg: this.rot_deg,
-          rot_degree: this.rot_degree,
-          dir: "Up",
-          neighbor: "Hexagon"
-        },
-         {
-          label: "Add Square",
-          x: this.cx,
-          y: this.cy,
-          l: this.l,
-          rot_deg: this.rot_deg,
-          rot_degree: this.rot_degree,
-          dir: "Up",
-          neighbor: "Hexagon"
-
-        },
-        {
-      label: "Remove",
-      id: this.id
-    
-        },
-      ]);
-    });
-
-
-    outline5.addEventListener("click", (event) => {
-      createContextMenu(event, [
-        {
-          label: "Add Hexagon",
-          x: this.cx,
-          y: this.cy,
-          l: this.l,
-          rot_deg: this.rot_deg,
-          rot_degree: this.rot_degree,
-          dir: "Up Right",
-          neighbor: "Hexagon"
-        },
-
-        {
-          label: "Add Triangle",
-          x: this.cx,
-          y: this.cy,
-          l: this.l,
-          rot_deg: this.rot_deg,
-          rot_degree: this.rot_degree,
-          dir: "Up Right",
-          neighbor: "Hexagon"
-        },
-         {
-          label: "Add Square",
-          x: this.cx,
-          y: this.cy,
-          l: this.l,
-          rot_deg: this.rot_deg,
-          rot_degree: this.rot_degree,
-          dir: "Up Right",
-          neighbor: "Hexagon"
-
-        },
-        {
-      label: "Remove",
-      id: this.id
-    
-        },
-      ]);
-    });
-
-
-    outline6.addEventListener("click", (event) => {
-      createContextMenu(event, [
-        {
-          label: "Add Hexagon",
-          x: this.cx,
-          y: this.cy,
-          l: this.l,
-          rot_deg: this.rot_deg,
-          rot_degree: this.rot_degree,
-          dir: "Down Right",
-          neighbor: "Hexagon"
-        },
-
-        {
-          label: "Add Triangle",
-          x: this.cx,
-          y: this.cy,
-          l: this.l,
-          rot_deg: this.rot_deg,
-          rot_degree: this.rot_degree,
-          dir: "Down Right",
-          neighbor: "Hexagon"
-        },
-         {
-          label: "Add Square",
-          x: this.cx,
-          y: this.cy,
-          l: this.l,
-          rot_deg: this.rot_deg,
-          rot_degree: this.rot_degree,
-          dir: "Down Right",
-          neighbor: "Hexagon"
-
-        },
-        {
-      label: "Remove",
-      id: this.id
-    
-        },
-      ]);
-    });
-            }
-    }
-
-      abc = new HexagonTumpal(svg.getAttribute("width")/2, svg.getAttribute("height")/2, svg.getAttribute("height")/4, 'hexagon', 0, `container-${Date.now()}-${Math.floor(Math.random() * 1000000)}`);
-      abc.draw(); 
   </script>
   <script>
 document.getElementById("CanvasSize").addEventListener("change", function() {
