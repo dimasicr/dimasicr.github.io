@@ -297,7 +297,7 @@ function draw_polygon(n, x,y, r, rot_deg){
     isen_circle2.setAttribute("ry", r / 40);
 
     isen_circle2.setAttribute("fill", mainColor);
-    group.appendChild(isen_circle2);
+    // group.appendChild(isen_circle2);
 
     }
 
@@ -309,7 +309,7 @@ function draw_polygon(n, x,y, r, rot_deg){
     isen_circle2.setAttribute("rx", r / 40);
     isen_circle2.setAttribute("ry", r / 40);
     isen_circle2.setAttribute("fill", mainColor);
-    group.appendChild(isen_circle2);
+    // group.appendChild(isen_circle2);
     }
 
 
