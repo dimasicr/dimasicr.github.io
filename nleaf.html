@@ -71,6 +71,11 @@ refreshBtn.addEventListener("click", () => {
 });
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.width);
+      ctx.fillStyle = "#05565a";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.strokeStyle = "#ffffff";
+    ctx.lineWidth = 3;
       ctx.save();
       ctx.translate(canvas.width/2, canvas.width/2);
       r = canvas.width * 0.3;
@@ -85,7 +90,7 @@ refreshBtn.addEventListener("click", () => {
       Dy = Math.sin(4 * 2 * Math.PI/ 4 - 1 * Math.PI /4) * r;
 
       // Draw Square Outline
-      ctx.strokeStyle = 'black'; ctx.setLineDash([]);ctx.lineWidth = 0.8;
+          ctx.strokeStyle = "#ffffff"; ctx.setLineDash([]);ctx.lineWidth = 0.8;
       animateLine(Ax, Ay, Bx, By, step, step > 0 );
       ctx.strokeStyle = 'gray'; ctx.setLineDash([3, 3]);
       animateLine(Ax, Ay, Bx - 0.6 * Math.abs(Bx - Ax), By, step - 20, step - 20 > 0 );
@@ -112,7 +117,7 @@ refreshBtn.addEventListener("click", () => {
       animateLine(Bx - 0.3 *  Math.abs(Bx - Ax), 0.5 * (By + Cy), Dx + 0.3 *  Math.abs(Bx - Ax), 0.5 * (By + Cy), step - 400, step - 400 > 0 );
 
       // Draw Kawung
-      ctx.strokeStyle = 'black';ctx.setLineDash([]); ctx.lineWidth = 0.4;
+          ctx.strokeStyle = "#ffffff";ctx.setLineDash([]); ctx.lineWidth = 0.4;
       animateBezier(0, 0, (Ax + Bx) /2, (Ay+By)/2, Bx, By, step -  420, step - 420 > 0);
       animateBezier(0, 0, (Bx + Cx) /2, (By+Cy)/2, Bx, By, step -  440, step - 440 > 0);
       animateBezier(0, 0, (Bx + Cx) /2, (By+Cy)/2, Cx, Cy, step -  460, step - 460 > 0);
@@ -127,9 +132,9 @@ refreshBtn.addEventListener("click", () => {
       requestAnimationFrame(draw);
     }
 
-    if (screenWidth > 400){
-        canvas.width = 400;
-        canvas.height = 400;
+    if (screenWidth > 600){
+        canvas.width = 600;
+        canvas.height = 600;
     }
     else {
         canvas.width = screenWidth * screenWidth / canvas.width;
