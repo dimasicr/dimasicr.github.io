@@ -252,6 +252,8 @@ function draw_polygon(n, x,y, r, rot_deg){
   // Create polygon element
   const polygon = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
   polygon.setAttribute("points", pointsString);
+  polygon.setAttribute("fill", "none");
+
 
   // Append polygon to group
   group.appendChild(polygon);
