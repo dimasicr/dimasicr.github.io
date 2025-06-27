@@ -230,7 +230,7 @@ function draw_polygon(n, x,y, r, rot_deg){
   container.appendChild(group);
 
 
-  // Input all 12 vertices
+  // Input all n vertices
   for (let i = 0; i< n; i++){
     if (selectPadding.value !== 'padding') {
       x = Math.cos(deg * (i+1) ) * r;
@@ -245,6 +245,16 @@ function draw_polygon(n, x,y, r, rot_deg){
     }
 
   }
+
+  // Convert vertices to points string for polygon
+  const pointsString = vertices.map(p => `${p[0]},${p[1]}`).join(" ");
+
+  // Create polygon element
+  const polygon = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+  polygon.setAttribute("points", pointsString);
+
+  // Append polygon to group
+  group.appendChild(polygon);
 
 
   for (let j = 0; j < n; j++) {
