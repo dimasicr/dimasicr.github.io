@@ -35,8 +35,9 @@
         </div>
 
 <select name="PatternType" id="PatternType" class="btns" style="margin-top: 10px;">
-    <option value="Sun" > Sun </option>
+    <option value="Sun"  > Sun </option>
     <option value="Moon"> Moon </option>
+    <option value="Star" > Star </option>
 </select>
 
             <button id="download-btn">
@@ -192,11 +193,434 @@ else {
 
 
 
+    function polygonAndStarPaths(n, r, options = {}) {
+      if (!Number.isInteger(n) || n < 3) {
+        throw new Error("n must be an integer ≥ 3");
+      }
+      const {
+        cx = 0,
+        cy = 0,
+        rotation = 0,
+        k: kInput
+      } = options;
+
+      let k = (kInput ?? 2) | 0;
+      const kMax = Math.floor((n - 1) / 2);
+      if (k < 1) k = 1;
+      if (k > kMax) k = kMax;
+
+      const verts = [];
+
+      let balancer = - Math.PI/2 - Math.PI/ (n);
+      const base = rotation - balancer;
+      for (let i = 0; i < n; i++) {
+        const a = base + (2 * Math.PI * i) / n;
+        verts.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]);
+      }
+
+      const toPath = (points) =>
+        `M ${points[0][0]} ${points[0][1]} ` +
+        points.slice(1).map(p => `L ${p[0]} ${p[1]}`).join(" ") +
+        " Z";
+
+      const polygonPath = toPath(verts);
 
 
+      return polygonPath;
+    }
+
+
+/**
+ * Build SVG path for the outer boundary of a star polygon.
+ * - n: number of polygon sides
+ * - r: circumradius
+ * - options: { cx, cy, rotation, k }
+ *
+ * Unlike the old version, this one returns ONLY the outer outline
+ * (no intersecting diagonals).
+ */
+function starOutlinePath(n, r, options = {}) {
+  if (!Number.isInteger(n) || n < 5) {
+    throw new Error("n must be ≥ 5 for a star outline");
+  }
+  const { cx = 0, cy = 0, rotation = 0, k: kInput } = options;
+  let k = (kInput ?? 2) | 0;
+
+  // inner radius calculation (geometry of star polygons)
+  // Formula: rin = r * cos(πk/n) / cos(π/n - πk/n)
+  const rin = r * Math.cos((Math.PI * k) / n) / Math.cos(Math.PI / n - (Math.PI * k) / n);
+
+  const points = [];
+        let balancer = - Math.PI/2 - Math.PI/ (n);
+
+  const base = rotation - balancer;
+
+  for (let i = 0; i < n; i++) {
+    // outer vertex
+    const aOuter = base + (2 * Math.PI * i) / n;
+    points.push([cx + r * Math.cos(aOuter), cy + r * Math.sin(aOuter)]);
+
+    // inner vertex
+    const aInner = base + (2 * Math.PI * i) / n + Math.PI / n;
+    points.push([cx + rin * Math.cos(aInner), cy + rin * Math.sin(aInner)]);
+  }
+
+  // Build path string
+  const path = `M ${points[0][0]} ${points[0][1]} ` +
+               points.slice(1).map(p => `L ${p[0]} ${p[1]}`).join(" ") +
+               " Z";
+
+  return path;
+}
+
+
+/**
+ * Calculate the angle between a star polygon valley and its enclosing polygon side.
+ *
+ * @param {number} n - number of polygon sides (must be >= 5)
+ * @param {number} k - step parameter for the star polygon
+ * @returns {object} - angles in radians and degrees
+ */
+function valleySideAngle(n, k) {
+  if (!Number.isInteger(n) || n < 5) {
+    throw new Error("n must be ≥ 5");
+  }
+  if (!Number.isInteger(k) || k <= 0 || k >= n/2) {
+    throw new Error("k must be an integer in range 1..(n/2 - 1)");
+  }
+
+  // Ratio rin/r (inner to outer radius)
+  const rinOverR = Math.cos(Math.PI * k / n) /
+                   Math.cos(Math.PI / n - Math.PI * k / n);
+
+  // φ = acute angle between enclosing side and valley-to-vertex edge
+  const phi = Math.atan(
+    (Math.cos(Math.PI / n) - rinOverR) / Math.sin(Math.PI / n)
+  );
+
+  // notch angle at the valley (between two star edges)
+  const psi = Math.PI - 2 * phi;
+
+  return {
+    phiRadians: phi,
+    phiDegrees: phi * 180 / Math.PI,
+    psiRadians: psi,
+    psiDegrees: psi * 180 / Math.PI
+  };
+}
     
 
 
+
+function drawTumpalInner(x, y, id = 123, s = 200, trig_degree = 45, rotDeg= 0, mainColor="#d7c093", secondaryColor="white", strokeColor = "gold", use_outline=false, tertiaryColor = "gold", use_middle_upper=true){  
+    let container = document.createElementNS(svgURI, "g");
+    container.setAttribute("transform", `translate(${x}, ${y}) rotate(${rotDeg})`);
+    container.setAttribute("stroke-width", 0.1);
+    container.setAttribute("id", id);
+    svg.appendChild(container);
+
+    const h = Math.tan(trig_degree/360 * 2 * Math.PI) * (0.5 * s);
+    let outline = document.createElementNS(svgURI, "path");
+    outline_sentence = `M0 0  ${0.5 * s} ${h}  ${-0.5 * s} ${h} Z`;
+    outline.setAttribute("d", outline_sentence);
+    outline.setAttribute("fill", "none");
+    outline.setAttribute("stroke", strokeColor);
+    if (use_outline){
+        container.appendChild(outline);
+    }
+    if (trig_degree <= 15){
+        R = s / 25;
+    }
+    else if (trig_degree <= 22.5){
+        R = s / 20;
+    }
+    else if (trig_degree <= 45) {
+        R = s /15;
+    }
+    else {
+        R = s / 10;
+    }
+
+    Xc = 0.5 * s - R / Math.tan(0.5 * trig_degree/360 * 2 * Math.PI)
+    
+    tpl_pth = `M0 ${h}  C ${Xc * 0.5} ${h}  ${Xc * 0.5} ${h - 2*R} ${Xc} ${h - 2* R} A${R} ${R} 0 0 1 ${Xc} ${h} A ${0.5 * R} ${0.5* R} 0 0 1 ${Xc} ${h - R} C${Xc - R} ${h - R} ${Xc - R} ${h}  ${Xc - 2 * R} ${h} Z`;
+    tpl = document.createElementNS(svgURI, "path");
+    tpl.setAttribute("d", tpl_pth);
+    tpl.setAttribute("fill", mainColor);
+    tpl.setAttribute("stroke", strokeColor);
+    // container.appendChild(tpl);
+
+
+    tpl2 = tpl.cloneNode(true);
+    tpl2.setAttribute("transform", "scale(-1 1)");
+    // container.appendChild(tpl2);
+
+
+    tpl3 = tpl.cloneNode(true);
+    tpl3.setAttribute("transform", `rotate(90 0 ${h}) scale(-1 1)`);
+    tpl4 = tpl.cloneNode(true);
+    tpl4.setAttribute("transform", `rotate(-90 0 ${h})`);
+
+    tpl3.setAttribute("fill", "white");
+    tpl4.setAttribute("fill", "white");
+
+    // if (mainColor === "#b49084") {
+    //     tpl3.setAttribute("fill", "#e8eadd");
+    //     tpl4.setAttribute("fill", "#e8eadd");
+    // }
+
+    // else if (mainColor === "#6ca1d2") {
+    //     tpl3.setAttribute("fill", "#cddae8");
+    //     tpl4.setAttribute("fill", "#cddae8");
+    // }
+    // else if (mainColor === "#c8c8cf") {
+    //     tpl3.setAttribute("fill", "#F7F0F5");
+    //     tpl4.setAttribute("fill", "#F7F0F5");
+    // }
+
+
+
+        if (trig_degree === 60) {
+            R_new = 2 * R;
+        }
+        else if (trig_degree === 45) {
+            R_new = R;
+        }
+        else if (trig_degree === 67.5) {
+            R_new = 2.5 * R;
+        }
+        else if (trig_degree === 75) {
+            R_new = 2.5 * R;
+        }
+
+        else if (trig_degree === 54) {
+            R_new = 1.5  * R;
+        }
+
+        else if (trig_degree === 72) {
+            R_new = 2.5  * R;
+        }
+        else if (trig_degree > 60) {
+            R_new = 2.5  * R;
+        }
+        else {
+            R_new = R;
+        }
+
+        if (trig_degree > 31){
+            // container.appendChild(tpl3);
+            // container.appendChild(tpl4);
+            tpl5 = tpl.cloneNode(true);
+            tpl5.setAttribute("d", `M 0 0 C 0 ${ 0.5 * (h - Xc - R - 0.4 * R_new) } ${0.4 * R_new}  ${ 0.5 * (h - Xc - R - 0.4 * R_new) } ${0.4 * R_new} ${h - Xc - R - 0.4 * R_new} A${0.2 * R_new} ${0.2 * R_new} 0 0 0 ${0} ${h - Xc - R - 0.4 * R_new} A${0.4 * R_new} ${0.4 * R_new} 0 0 0 ${0.8 * R_new} ${ h - Xc - R - 0.4 * R_new} C${0.8 * R_new} ${0.5 * (h - Xc - R - 0.4 * R_new) } ${0} ${0.5 * (h - Xc - R - 0.4 * R_new)} 0 0`);
+            tpl6 = tpl5.cloneNode(true);
+            tpl6.setAttribute("transform", `scale(-1, 1)`);
+
+            if (use_middle_upper){
+                container.appendChild(tpl3);
+                container.appendChild(tpl4);
+                container.appendChild(tpl5);
+                container.appendChild(tpl6);
+            }
+        }
+        else {
+            tpl3 = tpl.cloneNode(true);
+            tpl3.setAttribute("d", `M ${0} ${h} C ${0} ${h- 0.3 * (2 * R + s/30)} ${s/30} ${h- 0.3 * (2 * R + s/30)}  ${s/30} ${h-2 * R + s/30} A ${s/60} ${s/60} 0 0 1 ${0} ${h-2 * R + s /30} A${s/30} ${s/30} 0 0 1 ${2 * s/30} ${h-2 * R + s /30} C${2 * s/30} ${h- 0.3 * (2 * R + s/30)} ${0} ${h- 0.3 * (2 * R + s/30)} ${0} ${h} `);
+            
+
+            tpl4 = tpl3.cloneNode(true);
+            tpl4.setAttribute("transform", `scale(-1, 1)`);
+
+            tpl3.setAttribute("fill", "white");
+            tpl4.setAttribute("fill", "white");
+
+            // if (mainColor === "#b49084") {
+            //     tpl3.setAttribute("fill", "#e8eadd");
+            //     tpl4.setAttribute("fill", "#e8eadd");
+            // }
+            // else if (mainColor === "#6ca1d2") {
+            //     tpl3.setAttribute("fill", "#cddae8");
+            //     tpl4.setAttribute("fill", "#cddae8");
+            // }
+            
+             
+
+
+
+            tpl5 = tpl.cloneNode(true);
+            tpl5.setAttribute("d", `M ${0} ${0} C ${0} ${0.5 *  (h-2 * R - s /30) }  ${s/30}  ${0.5 *  (h-2 * R - s /30) }  ${s/30}  ${h-2 * R - s /30} A${s / 60} ${s / 60} 0 0 0 ${0} ${h-2 * R - s /30} A${s / 30} ${s / 30} 0 0 0 ${2 * s / 30} ${h-2 * R - s /30} C ${2 * s / 30} ${ 0.5 *  (h-2 * R - s /30) } ${0} ${ 0.5 *  (h-2 * R - s /30) }   ${0} ${0}`);
+            
+
+            tpl6 = tpl5.cloneNode(true);
+            tpl6.setAttribute("transform", `scale(-1, 1)`);
+
+            if (use_middle_upper){
+                container.appendChild(tpl3);
+                container.appendChild(tpl4); 
+                container.appendChild(tpl5);
+                container.appendChild(tpl6); 
+            } 
+        }
+
+    
+
+}
+
+
+
+function drawTumpalStar(x, y, id = 123, s = 200, trig_degree = 45, rotDeg= 0, mainColor="#d7c093", secondaryColor="white", strokeColor = "gold", use_outline=false, tertiaryColor = "gold", use_middle_upper=true){  
+    let container = document.createElementNS(svgURI, "g");
+    container.setAttribute("transform", `translate(${x}, ${y}) rotate(${rotDeg})`);
+    container.setAttribute("stroke-width", 0.1);
+    container.setAttribute("id", id);
+    svg.appendChild(container);
+
+    const h = Math.tan(trig_degree/360 * 2 * Math.PI) * (0.5 * s);
+    let outline = document.createElementNS(svgURI, "path");
+    outline_sentence = `M0 0  ${0.5 * s} ${h}  ${-0.5 * s} ${h} Z`;
+    outline.setAttribute("d", outline_sentence);
+    outline.setAttribute("fill", "none");
+    outline.setAttribute("stroke", strokeColor);
+    if (use_outline){
+        container.appendChild(outline);
+    }
+    if (trig_degree <= 15){
+        R = s / 25;
+    }
+    else if (trig_degree <= 22.5){
+        R = s / 20;
+    }
+    else if (trig_degree <= 45) {
+        R = s /15;
+    }
+    else {
+        R = s / 10;
+    }
+
+    Xc = 0.5 * s - R / Math.tan(0.5 * trig_degree/360 * 2 * Math.PI)
+    
+    tpl_pth = `M0 ${h}  C ${Xc * 0.5} ${h}  ${Xc * 0.5} ${h - 2*R} ${Xc} ${h - 2* R} A${R} ${R} 0 0 1 ${Xc} ${h} A ${0.5 * R} ${0.5* R} 0 0 1 ${Xc} ${h - R} C${Xc - R} ${h - R} ${Xc - R} ${h}  ${Xc - 2 * R} ${h} Z`;
+    tpl = document.createElementNS(svgURI, "path");
+    tpl.setAttribute("d", tpl_pth);
+    tpl.setAttribute("fill", mainColor);
+    tpl.setAttribute("stroke", strokeColor);
+    container.appendChild(tpl);
+
+
+    tpl2 = tpl.cloneNode(true);
+    tpl2.setAttribute("transform", "scale(-1 1)");
+    container.appendChild(tpl2);
+
+
+    tpl3 = tpl.cloneNode(true);
+    tpl3.setAttribute("transform", `rotate(90 0 ${h}) scale(-1 1)`);
+    tpl4 = tpl.cloneNode(true);
+    tpl4.setAttribute("transform", `rotate(-90 0 ${h})`);
+
+    tpl3.setAttribute("fill", "white");
+    tpl4.setAttribute("fill", "white");
+
+    // if (mainColor === "#b49084") {
+    //     tpl3.setAttribute("fill", "#e8eadd");
+    //     tpl4.setAttribute("fill", "#e8eadd");
+    // }
+
+    // else if (mainColor === "#6ca1d2") {
+    //     tpl3.setAttribute("fill", "#cddae8");
+    //     tpl4.setAttribute("fill", "#cddae8");
+    // }
+    // else if (mainColor === "#c8c8cf") {
+    //     tpl3.setAttribute("fill", "#F7F0F5");
+    //     tpl4.setAttribute("fill", "#F7F0F5");
+    // }
+
+
+
+        if (trig_degree === 60) {
+            R_new = 2 * R;
+        }
+        else if (trig_degree === 45) {
+            R_new = R;
+        }
+        else if (trig_degree === 67.5) {
+            R_new = 2.5 * R;
+        }
+        else if (trig_degree === 75) {
+            R_new = 2.5 * R;
+        }
+
+        else if (trig_degree === 54) {
+            R_new = 1.5  * R;
+        }
+        else if (trig_degree === 36) {
+            R_new = 1.5  * R;
+        }
+        else if (trig_degree === 72) {
+            R_new = 2.5  * R;
+        }
+        else if (trig_degree > 60) {
+            R_new = 2.5  * R;
+        }
+        else {
+            R_new = R;
+        }
+
+        if (trig_degree > 36){
+            // container.appendChild(tpl3);
+            // container.appendChild(tpl4);
+            tpl5 = tpl.cloneNode(true);
+            tpl5.setAttribute("d", `M 0 0 C 0 ${ 0.5 * (h - Xc - R - 0.4 * R_new) } ${0.4 * R_new}  ${ 0.5 * (h - Xc - R - 0.4 * R_new) } ${0.4 * R_new} ${h - Xc - R - 0.4 * R_new} A${0.2 * R_new} ${0.2 * R_new} 0 0 0 ${0} ${h - Xc - R - 0.4 * R_new} A${0.4 * R_new} ${0.4 * R_new} 0 0 0 ${0.8 * R_new} ${ h - Xc - R - 0.4 * R_new} C${0.8 * R_new} ${0.5 * (h - Xc - R - 0.4 * R_new) } ${0} ${0.5 * (h - Xc - R - 0.4 * R_new)} 0 0`);
+            tpl6 = tpl5.cloneNode(true);
+            tpl6.setAttribute("transform", `scale(-1, 1)`);
+
+            if (use_middle_upper){
+                container.appendChild(tpl3);
+                container.appendChild(tpl4);
+                container.appendChild(tpl5);
+                container.appendChild(tpl6);
+            }
+        }
+        else {
+            tpl3 = tpl.cloneNode(true);
+            tpl3.setAttribute("d", `M ${0} ${h} C ${0} ${h- 0.3 * (2 * R + s/30)} ${s/30} ${h- 0.3 * (2 * R + s/30)}  ${s/30} ${h-2 * R + s/30} A ${s/60} ${s/60} 0 0 1 ${0} ${h-2 * R + s /30} A${s/30} ${s/30} 0 0 1 ${2 * s/30} ${h-2 * R + s /30} C${2 * s/30} ${h- 0.3 * (2 * R + s/30)} ${0} ${h- 0.3 * (2 * R + s/30)} ${0} ${h} `);
+            
+
+            tpl4 = tpl3.cloneNode(true);
+            tpl4.setAttribute("transform", `scale(-1, 1)`);
+
+            tpl3.setAttribute("fill", "white");
+            tpl4.setAttribute("fill", "white");
+
+            // if (mainColor === "#b49084") {
+            //     tpl3.setAttribute("fill", "#e8eadd");
+            //     tpl4.setAttribute("fill", "#e8eadd");
+            // }
+            // else if (mainColor === "#6ca1d2") {
+            //     tpl3.setAttribute("fill", "#cddae8");
+            //     tpl4.setAttribute("fill", "#cddae8");
+            // }
+            
+             
+
+
+
+            tpl5 = tpl.cloneNode(true);
+            tpl5.setAttribute("d", `M ${0} ${0} C ${0} ${0.5 *  (h-2 * R - s /30) }  ${s/30}  ${0.5 *  (h-2 * R - s /30) }  ${s/30}  ${h-2 * R - s /30} A${s / 60} ${s / 60} 0 0 0 ${0} ${h-2 * R - s /30} A${s / 30} ${s / 30} 0 0 0 ${2 * s / 30} ${h-2 * R - s /30} C ${2 * s / 30} ${ 0.5 *  (h-2 * R - s /30) } ${0} ${ 0.5 *  (h-2 * R - s /30) }   ${0} ${0}`);
+            
+
+            tpl6 = tpl5.cloneNode(true);
+            tpl6.setAttribute("transform", `scale(-1, 1)`);
+
+            if (use_middle_upper){
+                container.appendChild(tpl3);
+                container.appendChild(tpl4); 
+                container.appendChild(tpl5);
+                container.appendChild(tpl6); 
+            } 
+        }
+
+    
+
+}
 
 function removeSvgChildById(svgContainer, targetId) {
   // Get all child elements
@@ -918,6 +1342,10 @@ class PolygonTumpal {
         this.id = id;
         this.isoscelesAngle = 90 - 180 / sides;
         this.r = getRadius(sideLength, sides);
+        this.polygonPath = polygonAndStarPaths(this.sides, this.r, { cx: 0, cy: 0, k: 2 });
+        if (sides >= 5){
+            this.starOutlinePathString = starOutlinePath(this.sides, this.r, { cx: 0, cy: 0, k: 2 });
+        }
     }
 
     radians(degree) {
@@ -925,18 +1353,69 @@ class PolygonTumpal {
     }
 
     draw(){
-        // Draw Batik Tumpal
-        for (let i=0; i< this.sides; i++){
-            const patternType = document.getElementById("PatternType").value;
+        let patternType = document.getElementById("PatternType").value;
 
-            if (patternType === 'Sun'){
-                drawTumpal(this.cx, this.cy, this.id, this.sideLength, this.isoscelesAngle, 360/this.sides * i  + this.rotationDegrees);
-            }
-            else {
-                drawAlternateTumpal(this.cx, this.cy, this.id, this.sideLength, this.isoscelesAngle, 360/this.sides * i  + this.rotationDegrees);
-            }
+
+            if (patternType === 'Star') {
+        let poly = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        poly.setAttribute("d", this.polygonPath);
+        poly.setAttribute("fill", "#493118");
+        poly.setAttribute("stroke", "none");
+        poly.setAttribute("stroke-width", "2");
+        poly.setAttribute("id", this.id);
+        poly.setAttribute("transform", `translate(${this.cx}, ${this.cy}) rotate(${this.rotationDegrees})`);
+        svg.appendChild(poly);
 
         }
+        // Draw Batik Tumpal
+        for (let i=0; i< this.sides; i++){
+
+
+
+
+    if (patternType === 'Star') {
+
+
+        if (this.sides >= 5) {
+        let starOutline = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        starOutline.setAttribute("d", this.starOutlinePathString);
+        starOutline.setAttribute("fill", "none");
+        starOutline.setAttribute("stroke", "#d7c093");
+        starOutline.setAttribute("stroke-width", "2");
+        starOutline.setAttribute("id", this.id);
+        starOutline.setAttribute("transform", `translate(${this.cx}, ${this.cy}) rotate(${this.rotationDegrees})`);
+        svg.appendChild(starOutline);
+        let x1 = this.r * Math.cos(2 * Math.PI/this.sides);
+        let y1 = this.r * Math.sin(2 * Math.PI/this.sides);
+        let x2 = this.r * Math.cos(2 * Math.PI/this.sides * 2);
+        let y2 = this.r * Math.sin(2 * Math.PI/this.sides * 2);
+        let dist = Math.sqrt((x2 - x1)**2 + (y2 - y1)**2);
+        for (let i=0; i <this.sides; i++){
+            drawTumpalInner(this.cx, this.cy, this.id, this.r /2, 180 - 90 - (360 / this.sides) / 2 , 360/this.sides * i - 360/(2*this.sides) + this.rotationDegrees );
+            let balancer = - Math.PI/2 - Math.PI/ (this.sides);
+            let base = this.rotationDegrees * 2 * Math.PI / 360 - balancer;
+            let aInner = base + (2 * Math.PI * i) / this.sides + Math.PI / this.sides;
+            let rin = this.r * Math.cos((Math.PI * 2) / this.sides) / Math.cos(Math.PI / this.sides - (Math.PI * 2) / this.sides);
+            let trig_deg = valleySideAngle(this.sides, 2).phiDegrees;
+            drawTumpalStar(this.cx + rin * Math.cos(aInner), this.cy + rin * Math.sin(aInner), this.id, dist, trig_deg, 2 * trig_deg + 360/this.sides * i + this.rotationDegrees);
+        }
+        }
+
+    }
+
+
+        if (patternType === 'Moon'){
+                drawAlternateTumpal(this.cx, this.cy, this.id, this.sideLength, this.isoscelesAngle, 360/this.sides * i  + this.rotationDegrees);
+            }
+            else if (patternType === 'Star' && this.sides < 5){
+                 drawTumpalStar(this.cx, this.cy, this.id, this.sideLength, this.isoscelesAngle, 360/this.sides * i  + this.rotationDegrees);
+            }
+            else if (patternType === 'Sun'){
+                 drawTumpal(this.cx, this.cy, this.id, this.sideLength, this.isoscelesAngle, 360/this.sides * i  + this.rotationDegrees);
+            }
+        }
+
+
 
 
         let height = Math.tan(this.isoscelesAngle * Math.PI/180) * 0.5 * this.sideLength;
