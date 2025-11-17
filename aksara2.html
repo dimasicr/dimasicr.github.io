@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Petik Aksara</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #222;
+      color: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      font-size: 24px;
+    }
+
+    #game-container {
+      background: #333;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 700px;
+      width: 100%;
+      box-shadow: 0 0 10px rgba(0,0,0,0.4);
+    }
+
+    #info { margin-bottom: 10px; font-size: 14px; color: #ccc; }
+
+    #tiles-container {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin: 15px 0;
+      flex-wrap: wrap;
+    }
+
+    .tile {
+      background: #444;
+      border-radius: 6px;
+      padding: 8px;
+      cursor: grab;
+      min-width: 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border: 2px solid transparent;
+      transition: background 0.15s;
+    }
+    .tile:hover { background: #4a4a4a; }
+
+    .current-letter {
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    /* 4 letters in 1 row */
+    .options {
+      display: flex;
+      gap: 4px;
+      justify-content: center;
+      flex-wrap: nowrap;
+    }
+
+    .letter-option {
+      background: #555;
+      border-radius: 4px;
+      padding: 4px 6px;
+      text-align: center;
+      font-size: 14px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .letter-option.selected-option {
+      background: #ffb347;
+      color: #222;
+      font-weight: bold;
+    }
+
+    #controls {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    button {
+      padding: 8px 14px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    #check-btn { background: #4caf50; color: #fff; }
+    #restart-btn { background: #2196f3; color: #fff; }
+
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    #message { margin-top: 10px; height: 20px; text-align: center; }
+    #attempts { font-weight: bold; }
+    #last-guess { margin-top: 6px; font-size: 14px; color: #ddd; }
+
+    /* History styles */
+    #history-container {
+      margin-top: 15px;
+      border-top: 1px solid #555;
+      padding-top: 10px;
+    }
+
+    #history {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      max-height: 220px;
+      overflow-y: auto;
+    }
+
+    .history-row { display: flex; gap: 4px; justify-content: center; }
+
+    .history-letter {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .correct { background: #4caf50; color: #fff; }
+    .present { background: #ffb347; color: #222; }
+    .absent { background: #555; color: #eee; }
+    .duplicate-warning { color: #ffb347; }
+    .invalid-warning { color: #ff7f7f; }
+  </style>
+</head>
+<body>
+  <h1>Petik Aksara</h1>
+
+  <div id="game-container">
+    <div id="info">
+      Guess the hidden word in <span id="attempts">5</span> attempts.<br>
+      👉 Drag tiles to reorder them.<br>
+      👉 Click letters inside tile to choose it.<br>
+    </div>
+
+    <div id="tiles-container"></div>
+
+    <div id="controls">
+      <button id="check-btn">Check</button>
+      <button id="restart-btn">Restart</button>
+    </div>
+
+    <div id="message"></div>
+    <div id="last-guess"></div>
+
+    <div id="history-container">
+      <div id="history-title">Previous guesses:</div>
+      <div id="history"></div>
+    </div>
+  </div>
+
+  <!-- Load dictionary FIRST -->
+  <script src="valid-3-6.js"></script>
+
+  <script>
+    /* -------------------------------
+       CONFIGURABLE LEVEL
+    --------------------------------*/
+    const LEVEL = {
+      answer: "CAT",
+      tiles: [
+        ["G", "B", "C", "S"],
+        ["O", "I", "E", "A"],
+        ["E", "T", "D", "N"]
+      ]
+    };
+
+    const MAX_ATTEMPTS = 7;
+
+    let answer = "";
+    let attemptsLeft = MAX_ATTEMPTS;
+    let gameOver = false;
+    let wrongGuessesSet = new Set();
+    let dragSrcTile = null;
+
+    const tilesContainer = document.getElementById("tiles-container");
+    const attemptsSpan = document.getElementById("attempts");
+    const messageDiv = document.getElementById("message");
+    const lastGuessDiv = document.getElementById("last-guess");
+    const historyDiv = document.getElementById("history");
+
+    /* ---- DRAG & DROP ---- */
+    function handleDragStart(e) {
+      if (gameOver) return;
+      dragSrcTile = this;
+      e.dataTransfer.setData("text/plain", "");
+    }
+    function handleDragOver(e) { e.preventDefault(); }
+    function handleDrop(e) {
+      if (!dragSrcTile || dragSrcTile === this) return;
+      const tiles = [...tilesContainer.children];
+      const srcIndex = tiles.indexOf(dragSrcTile);
+      const tgtIndex = tiles.indexOf(this);
+      if (srcIndex < tgtIndex)
+        tilesContainer.insertBefore(dragSrcTile, this.nextSibling);
+      else
+        tilesContainer.insertBefore(dragSrcTile, this);
+    }
+
+    /* ---- TILE CREATION ---- */
+    function createTile(options) {
+      const tile = document.createElement("div");
+      tile.className = "tile";
+      tile.setAttribute("draggable", "true");
+
+      const current = document.createElement("div");
+      current.className = "current-letter";
+
+      const opts = document.createElement("div");
+      opts.className = "options";
+
+      tile.dataset.currentLetter = options[0];
+      current.textContent = options[0];
+
+      options.forEach(letter => {
+        const opt = document.createElement("div");
+        opt.className = "letter-option";
+        opt.textContent = letter;
+
+        if (letter === options[0])
+          opt.classList.add("selected-option");
+
+        opt.addEventListener("click", (ev) => {
+          ev.stopPropagation();
+          setTileLetter(tile, letter);
+        });
+
+        opts.appendChild(opt);
+      });
+
+      tile.appendChild(current);
+      tile.appendChild(opts);
+
+      tile.addEventListener("dragstart", handleDragStart);
+      tile.addEventListener("dragover", handleDragOver);
+      tile.addEventListener("drop", handleDrop);
+
+      return tile;
+    }
+
+    function setTileLetter(tile, letter) {
+      tile.dataset.currentLetter = letter;
+      tile.querySelector(".current-letter").textContent = letter;
+
+      tile.querySelectorAll(".letter-option").forEach(l => {
+        l.classList.toggle("selected-option", l.textContent === letter);
+      });
+    }
+
+    /* ---- GAME LOGIC ---- */
+
+    function getCurrentGuess() {
+      return [...tilesContainer.querySelectorAll(".tile")]
+        .map(tile => tile.dataset.currentLetter)
+        .join("");
+    }
+
+    function evaluateGuess(guess, answer) {
+      const result = Array(answer.length).fill("absent");
+      const count = {};
+
+      for (let c of answer) count[c] = (count[c] || 0) + 1;
+
+      for (let i = 0; i < answer.length; i++) {
+        if (guess[i] === answer[i]) {
+          result[i] = "correct";
+          count[guess[i]]--;
+        }
+      }
+
+      for (let i = 0; i < answer.length; i++) {
+        if (result[i] !== "correct" && count[guess[i]] > 0) {
+          result[i] = "present";
+          count[guess[i]]--;
+        }
+      }
+      return result;
+    }
+
+    function addGuessToHistory(guess, evals) {
+      const row = document.createElement("div");
+      row.className = "history-row";
+
+      for (let i = 0; i < guess.length; i++) {
+        const box = document.createElement("div");
+        box.className = "history-letter " + evals[i];
+        box.textContent = guess[i];
+        row.appendChild(box);
+      }
+      historyDiv.appendChild(row);
+    }
+
+    function checkGuess() {
+      if (gameOver) return;
+
+      const guess = getCurrentGuess().toUpperCase();
+      lastGuessDiv.textContent = "Your guess: " + guess;
+
+      /* ---- VALID WORD CHECK ---- */
+      if (typeof VALID_WORDS === "undefined") {
+        messageDiv.textContent = "Dictionary not loaded.";
+        return;
+      }
+      if (!VALID_WORDS.includes(guess)) {
+        messageDiv.innerHTML = '<span class="invalid-warning">"' + guess +
+          '" is not a valid English word.</span>';
+        return;
+      }
+
+      /* ---- DUPLICATE WRONG GUESS ---- */
+      if (wrongGuessesSet.has(guess)) {
+        messageDiv.innerHTML =
+          '<span class="duplicate-warning">You already tried "' +
+          guess + '".</span>';
+        return;
+      }
+
+      const evals = evaluateGuess(guess, answer);
+      addGuessToHistory(guess, evals);
+
+      if (guess === answer) {
+        attemptsLeft--;
+        attemptsSpan.textContent = attemptsLeft;
+        messageDiv.textContent = "🎉 Correct!";
+        gameOver = true;
+        document.getElementById("check-btn").disabled = true;
+        return;
+      }
+
+      wrongGuessesSet.add(guess);
+      attemptsLeft--;
+      attemptsSpan.textContent = attemptsLeft;
+
+      if (attemptsLeft <= 0) {
+        messageDiv.textContent = "❌ Out of attempts! Word was: " + answer;
+        gameOver = true;
+        document.getElementById("check-btn").disabled = true;
+      } else {
+        messageDiv.textContent = "Not quite. Try again!";
+      }
+    }
+
+    function initGame() {
+      tilesContainer.innerHTML = "";
+      historyDiv.innerHTML = "";
+      messageDiv.textContent = "";
+      lastGuessDiv.textContent = "";
+      wrongGuessesSet.clear();
+      gameOver = false;
+
+      answer = LEVEL.answer.toUpperCase();
+      attemptsLeft = MAX_ATTEMPTS;
+      attemptsSpan.textContent = attemptsLeft;
+
+      LEVEL.tiles.forEach(options => {
+        tilesContainer.appendChild(createTile(options.map(x => x.toUpperCase())));
+      });
+    }
+
+    document.getElementById("check-btn").onclick = checkGuess;
+    document.getElementById("restart-btn").onclick = initGame;
+    document.addEventListener("keydown", e => { if (e.key === "Enter") checkGuess(); });
+
+    initGame();
+  </script>
+</body>
+</html>
