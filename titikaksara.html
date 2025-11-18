@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Petik Aksara – Points Word Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #222;
+      color: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 8px;
+    }
+
+    #game-container {
+      background: #333;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 0 10px rgba(0,0,0,0.4);
+    }
+
+    #status-bar {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    #word-display {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin: 15px 0;
+    }
+
+    .letter-box {
+      width: 36px;
+      height: 36px;
+      border-radius: 4px;
+      border: 2px solid #555;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: bold;
+      text-transform: uppercase;
+      background: #222;
+    }
+
+    .letter-box.revealed {
+      background: #4caf50;
+      border-color: #81c784;
+      color: #fff;
+    }
+
+    .letter-box.vowel-hint:not(.revealed) {
+      border-style: dashed;
+      border-color: #ffb347;
+    }
+
+    #guess-form {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+
+    #guess-input {
+      padding: 6px 8px;
+      border-radius: 4px;
+      border: 1px solid #555;
+      background: #222;
+      color: #f5f5f5;
+      font-size: 16px;
+      text-transform: uppercase;
+      width: 150px;
+      text-align: center;
+    }
+
+    button {
+      padding: 6px 10px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    #guess-btn {
+      background: #4caf50;
+      color: #fff;
+    }
+
+    #hints {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    #open-letter-btn {
+      background: #ffb347;
+      color: #222;
+    }
+
+    #show-vowels-btn {
+      background: #ff9800;
+      color: #222;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    #message {
+      min-height: 20px;
+      text-align: center;
+      margin-bottom: 5px;
+    }
+
+    #round-result {
+      font-size: 13px;
+      color: #ddd;
+      min-height: 18px;
+      margin-bottom: 8px;
+    }
+
+    #guesses-log {
+      margin-top: 10px;
+      font-size: 13px;
+      max-height: 180px;
+      overflow-y: auto;
+      padding-top: 5px;
+      border-top: 1px solid #555;
+    }
+
+    .guess-entry {
+      margin-bottom: 3px;
+    }
+
+    .pos-plus { color: #81c784; }
+    .pos-minus1 { color: #ffb347; }
+    .pos-minus2 { color: #ef9a9a; }
+
+    .lose { color: #ef9a9a; font-weight: bold; }
+    .win { color: #81c784; font-weight: bold; }
+
+  </style>
+</head>
+<body>
+  <h1>Petik Aksara – Points Word Game</h1>
+
+  <div id="game-container">
+    <div id="status-bar">
+      <div>Points: <span id="points">15</span></div>
+      <div>Word length: <span id="word-length"></span></div>
+    </div>
+
+    <div id="word-display"></div>
+
+    <form id="guess-form">
+      <input id="guess-input" type="text" autocomplete="off" placeholder="Your guess" />
+      <button type="submit" id="guess-btn">Guess</button>
+    </form>
+
+    <div id="hints">
+      <button id="open-letter-btn">Open 1 Letter (-5)</button>
+      <button id="show-vowels-btn">Show Vowels (-5)</button>
+    </div>
+
+    <div id="message"></div>
+    <div id="round-result"></div>
+
+    <div id="guesses-log"></div>
+  </div>
+
+  <script>
+    // ------------------------------
+    // CONFIG
+    // ------------------------------
+
+    const START_POINTS = 20;
+
+    // You can change the word list or even fix the secretWord manually.
+    const WORD_LIST = [
+      "ZEALOT"
+    ];
+
+    // Choose a random word from list
+    function pickRandomWord() {
+      const idx = Math.floor(Math.random() * WORD_LIST.length);
+      return WORD_LIST[idx].toUpperCase();
+    }
+
+    // ------------------------------
+    // GAME STATE
+    // ------------------------------
+
+    let secretWord = pickRandomWord();
+    // If you want a fixed word, use:
+    // let secretWord = "FIRE";
+    let revealed = Array(secretWord.length).fill(null);
+    let points = START_POINTS;
+    let gameOver = false;
+    let vowelHintUsed = false;
+
+    // ------------------------------
+    // DOM ELEMENTS
+    // ------------------------------
+
+    const pointsSpan = document.getElementById("points");
+    const wordLengthSpan = document.getElementById("word-length");
+    const wordDisplay = document.getElementById("word-display");
+    const guessForm = document.getElementById("guess-form");
+    const guessInput = document.getElementById("guess-input");
+    const guessBtn = document.getElementById("guess-btn");
+    const openLetterBtn = document.getElementById("open-letter-btn");
+    const showVowelsBtn = document.getElementById("show-vowels-btn");
+    const messageDiv = document.getElementById("message");
+    const roundResultDiv = document.getElementById("round-result");
+    const guessesLog = document.getElementById("guesses-log");
+
+    // ------------------------------
+    // HELPER FUNCTIONS
+    // ------------------------------
+
+    function isVowel(ch) {
+      return ["A","E","I","O","U"].includes(ch);
+    }
+
+    function updatePoints(delta) {
+      points += delta;
+      pointsSpan.textContent = points;
+      if (points <= 0) {
+        endGame(false, "Points reached zero or below.");
+      }
+    }
+
+    function renderWord() {
+      wordDisplay.innerHTML = "";
+      for (let i = 0; i < secretWord.length; i++) {
+        const box = document.createElement("div");
+        box.classList.add("letter-box");
+        box.dataset.index = i;
+        const letter = revealed[i];
+        if (letter) {
+          box.textContent = letter;
+          box.classList.add("revealed");
+        } else {
+          box.textContent = "?";
+        }
+        wordDisplay.appendChild(box);
+      }
+    }
+
+    function applyVowelHintVisual() {
+      const boxes = wordDisplay.querySelectorAll(".letter-box");
+      boxes.forEach((box, i) => {
+        const ch = secretWord[i];
+        if (isVowel(ch)) {
+          box.classList.add("vowel-hint");
+        }
+      });
+    }
+
+    function disableControls() {
+      guessBtn.disabled = true;
+      openLetterBtn.disabled = true;
+      showVowelsBtn.disabled = true;
+      guessInput.disabled = true;
+    }
+
+    function endGame(won, reason = "") {
+      if (gameOver) return;
+      gameOver = true;
+      disableControls();
+      if (won) {
+        messageDiv.innerHTML = `<span class="win">You win! The word was "${secretWord}".</span>`;
+      } else {
+        messageDiv.innerHTML = `<span class="lose">You lose! The word was "${secretWord}".</span>`;
+      }
+      if (reason) {
+        roundResultDiv.textContent = reason;
+      }
+    }
+
+    function checkWin() {
+      return revealed.every((ch) => ch !== null);
+    }
+
+    function logGuess(guess, totalDelta, perLetterDeltas) {
+      const entry = document.createElement("div");
+      entry.classList.add("guess-entry");
+
+      // Build colored feedback for each letter
+      let lettersHtml = "";
+      for (let i = 0; i < guess.length; i++) {
+        const ch = guess[i];
+        const d = perLetterDeltas[i];
+        let cls = "";
+        if (d === 1) cls = "pos-plus";
+        else if (d === -1) cls = "pos-minus1";
+        else if (d === -2) cls = "pos-minus2";
+        lettersHtml += `<span class="${cls}">${ch}</span>`;
+        if (i < guess.length - 1) lettersHtml += " ";
+      }
+
+      const sign = totalDelta >= 0 ? "+" : "";
+      entry.innerHTML = `${lettersHtml} &nbsp; (total: <strong>${sign}${totalDelta}</strong>)`;
+      guessesLog.prepend(entry);
+    }
+
+    // ------------------------------
+    // SCORING A GUESS
+    // ------------------------------
+
+    function scoreGuess(guess) {
+      const word = secretWord;
+      const len = word.length;
+      const perLetterDeltas = new Array(len).fill(0);
+      let totalDelta = 0;
+
+      for (let i = 0; i < len; i++) {
+        const g = guess[i];
+        const s = word[i];
+        if (g === s) {
+          perLetterDeltas[i] = 1; // correct pos
+        } else if (word.includes(g)) {
+          perLetterDeltas[i] = -1; // in word but wrong pos
+        } else {
+          perLetterDeltas[i] = -2; // not in word
+        }
+        totalDelta += perLetterDeltas[i];
+      }
+
+      return { totalDelta, perLetterDeltas };
+    }
+
+    function applyCorrectReveals(guess) {
+      for (let i = 0; i < secretWord.length; i++) {
+        if (guess[i] === secretWord[i]) {
+          revealed[i] = secretWord[i];
+        }
+      }
+      renderWord();
+    }
+
+    // ------------------------------
+    // HINT ACTIONS
+    // ------------------------------
+
+    function openRandomLetter() {
+      if (gameOver) return;
+      if (points <= 5) {
+        messageDiv.textContent = "Not enough points to open a letter (need > 5).";
+        return;
+      }
+      const unrevealedIndices = [];
+      for (let i = 0; i < revealed.length; i++) {
+        if (revealed[i] === null) unrevealedIndices.push(i);
+      }
+      if (unrevealedIndices.length === 0) {
+        messageDiv.textContent = "All letters already revealed!";
+        return;
+      }
+      const idx = unrevealedIndices[Math.floor(Math.random() * unrevealedIndices.length)];
+      revealed[idx] = secretWord[idx];
+      updatePoints(-5);
+      if (gameOver) return;
+      messageDiv.textContent = `Opened a letter at position ${idx + 1}.`;
+      renderWord();
+      if (checkWin()) {
+        endGame(true, "You revealed all letters!");
+      }
+    }
+
+    function showVowelsHint() {
+      if (gameOver) return;
+      if (vowelHintUsed) {
+        messageDiv.textContent = "You already used the vowel hint.";
+        return;
+      }
+      if (points <= 5) {
+        messageDiv.textContent = "Not enough points to show vowels (need > 5).";
+        return;
+      }
+      vowelHintUsed = true;
+      updatePoints(-5);
+      if (gameOver) return;
+      applyVowelHintVisual();
+      messageDiv.textContent = "Vowels positions are now marked with dashed borders.";
+    }
+
+    // ------------------------------
+    // INIT & EVENT HANDLERS
+    // ------------------------------
+
+    function init() {
+      wordLengthSpan.textContent = secretWord.length;
+      pointsSpan.textContent = points;
+      renderWord();
+      messageDiv.textContent = "Type a word of the same length and press Guess.";
+    }
+
+    guessForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (gameOver) return;
+
+      let guess = guessInput.value.trim().toUpperCase();
+      if (!guess) {
+        messageDiv.textContent = "Please enter a guess.";
+        return;
+      }
+      if (guess.length !== secretWord.length) {
+        messageDiv.textContent = `Your guess must be ${secretWord.length} letters long.`;
+        return;
+      }
+
+      // Score the guess
+      const { totalDelta, perLetterDeltas } = scoreGuess(guess);
+      updatePoints(totalDelta);
+      if (gameOver) return;
+
+      applyCorrectReveals(guess);
+      logGuess(guess, totalDelta, perLetterDeltas);
+
+      let summaryParts = [];
+      let plusCount = perLetterDeltas.filter(d => d === 1).length;
+      let minus1Count = perLetterDeltas.filter(d => d === -1).length;
+      let minus2Count = perLetterDeltas.filter(d => d === -2).length;
+
+      if (plusCount) summaryParts.push(`+1 × ${plusCount} (correct position)`);
+      if (minus1Count) summaryParts.push(`-1 × ${minus1Count} (in word, wrong position)`);
+      if (minus2Count) summaryParts.push(`-2 × ${minus2Count} (not in word)`);
+
+      const sign = totalDelta >= 0 ? "+" : "";
+      roundResultDiv.textContent = `This guess: ${summaryParts.join(", ")} → total ${sign}${totalDelta} points.`;
+
+      if (guess === secretWord || checkWin()) {
+        endGame(true, "You guessed the hidden word!");
+      } else {
+        messageDiv.textContent = "Guess again!";
+      }
+
+      guessInput.value = "";
+      guessInput.focus();
+    });
+
+    openLetterBtn.addEventListener("click", openRandomLetter);
+    showVowelsBtn.addEventListener("click", showVowelsHint);
+
+    // Start the game
+    init();
+  </script>
+</body>
+</html>
