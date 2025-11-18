@@ -14,7 +14,9 @@
       padding: 20px;
     }
 
-    h1 { margin-bottom: 8px; }
+    h1 {
+      margin-bottom: 8px;
+    }
 
     #game-container {
       background: #333;
@@ -91,14 +93,45 @@
       font-size: 14px;
     }
 
-    #guess-btn { background: #4caf50; color: #fff; }
-    #open-letter-btn { background: #ffb347; color: #222; }
-    #show-vowels-btn { background: #ff9800; color: #222; }
+    #guess-btn {
+      background: #4caf50;
+      color: #fff;
+    }
 
-    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    #hints {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
 
-    #message { min-height: 20px; text-align: center; margin-bottom: 5px; }
-    #round-result { font-size: 13px; color: #ddd; min-height: 18px; margin-bottom: 8px; }
+    #open-letter-btn {
+      background: #ffb347;
+      color: #222;
+    }
+
+    #show-vowels-btn {
+      background: #ff9800;
+      color: #222;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    #message {
+      min-height: 20px;
+      text-align: center;
+      margin-bottom: 5px;
+    }
+
+    #round-result {
+      font-size: 13px;
+      color: #ddd;
+      min-height: 18px;
+      margin-bottom: 8px;
+    }
 
     #guesses-log {
       margin-top: 10px;
@@ -109,7 +142,10 @@
       border-top: 1px solid #555;
     }
 
-    .guess-entry { margin-bottom: 3px; }
+    .guess-entry {
+      margin-bottom: 3px;
+    }
+
     .pos-plus { color: #81c784; }
     .pos-minus1 { color: #ffb347; }
     .pos-minus2 { color: #ef9a9a; }
@@ -124,7 +160,7 @@
 
   <div id="game-container">
     <div id="status-bar">
-      <div>Points: <span id="points">25</span></div>
+      <div>Points: <span id="points">15</span></div>
       <div>Word length: <span id="word-length"></span></div>
     </div>
 
@@ -148,19 +184,20 @@
 
   <script>
     // ------------------------------
-    // CONFIG (updated)
+    // CONFIG
     // ------------------------------
 
-    const START_POINTS = 25;     // ★ Changed from 15
-    const COST_OPEN_LETTER = 10; // ★ Changed from 5
-    const COST_VOWEL_HINT = 5;   // ★ Stays 5
+    const START_POINTS = 20;
 
+    // You can change the word list or even fix the secretWord manually.
     const WORD_LIST = [
-      "GRACE", "PLAIN" , "TRADE", "FRAUD", "CROWN"
+      "GRACE", "TRADE", "FRAUD", "CROWN"
     ];
 
+    // Choose a random word from list
     function pickRandomWord() {
-      return WORD_LIST[Math.floor(Math.random() * WORD_LIST.length)].toUpperCase();
+      const idx = Math.floor(Math.random() * WORD_LIST.length);
+      return WORD_LIST[idx].toUpperCase();
     }
 
     // ------------------------------
@@ -168,6 +205,8 @@
     // ------------------------------
 
     let secretWord = pickRandomWord();
+    // If you want a fixed word, use:
+    // let secretWord = "FIRE";
     let revealed = Array(secretWord.length).fill(null);
     let points = START_POINTS;
     let gameOver = false;
@@ -176,6 +215,7 @@
     // ------------------------------
     // DOM ELEMENTS
     // ------------------------------
+
     const pointsSpan = document.getElementById("points");
     const wordLengthSpan = document.getElementById("word-length");
     const wordDisplay = document.getElementById("word-display");
@@ -189,7 +229,7 @@
     const guessesLog = document.getElementById("guesses-log");
 
     // ------------------------------
-    // HELPERS
+    // HELPER FUNCTIONS
     // ------------------------------
 
     function isVowel(ch) {
@@ -199,7 +239,9 @@
     function updatePoints(delta) {
       points += delta;
       pointsSpan.textContent = points;
-      if (points <= 0) endGame(false, "Points reached zero.");
+      if (points <= 0) {
+        endGame(false, "Points reached zero or below.");
+      }
     }
 
     function renderWord() {
@@ -207,18 +249,24 @@
       for (let i = 0; i < secretWord.length; i++) {
         const box = document.createElement("div");
         box.classList.add("letter-box");
+        box.dataset.index = i;
         const letter = revealed[i];
-        box.textContent = letter ? letter : "?";
-        if (letter) box.classList.add("revealed");
+        if (letter) {
+          box.textContent = letter;
+          box.classList.add("revealed");
+        } else {
+          box.textContent = "?";
+        }
         wordDisplay.appendChild(box);
       }
     }
 
     function applyVowelHintVisual() {
-      const boxes = document.querySelectorAll(".letter-box");
-      boxes.forEach((b, i) => {
-        if (isVowel(secretWord[i])) {
-          b.classList.add("vowel-hint");
+      const boxes = wordDisplay.querySelectorAll(".letter-box");
+      boxes.forEach((box, i) => {
+        const ch = secretWord[i];
+        if (isVowel(ch)) {
+          box.classList.add("vowel-hint");
         }
       });
     }
@@ -234,36 +282,66 @@
       if (gameOver) return;
       gameOver = true;
       disableControls();
-      messageDiv.innerHTML = won
-        ? `<span class="win">You win! Word was "${secretWord}".</span>`
-        : `<span class="lose">You lose! Word was "${secretWord}".</span>`;
-      roundResultDiv.textContent = reason;
+      if (won) {
+        messageDiv.innerHTML = `<span class="win">You win! The word was "${secretWord}".</span>`;
+      } else {
+        messageDiv.innerHTML = `<span class="lose">You lose! The word was "${secretWord}".</span>`;
+      }
+      if (reason) {
+        roundResultDiv.textContent = reason;
+      }
     }
 
     function checkWin() {
-      return revealed.every(x => x !== null);
+      return revealed.every((ch) => ch !== null);
+    }
+
+    function logGuess(guess, totalDelta, perLetterDeltas) {
+      const entry = document.createElement("div");
+      entry.classList.add("guess-entry");
+
+      // Build colored feedback for each letter
+      let lettersHtml = "";
+      for (let i = 0; i < guess.length; i++) {
+        const ch = guess[i];
+        const d = perLetterDeltas[i];
+        let cls = "";
+        if (d === 1) cls = "pos-plus";
+        else if (d === -1) cls = "pos-minus1";
+        else if (d === -2) cls = "pos-minus2";
+        lettersHtml += `<span class="${cls}">${ch}</span>`;
+        if (i < guess.length - 1) lettersHtml += " ";
+      }
+
+      const sign = totalDelta >= 0 ? "+" : "";
+      entry.innerHTML = `${lettersHtml} &nbsp; (total: <strong>${sign}${totalDelta}</strong>)`;
+      guessesLog.prepend(entry);
     }
 
     // ------------------------------
-    // SCORE GUESS
+    // SCORING A GUESS
     // ------------------------------
 
     function scoreGuess(guess) {
-      const result = [];
-      let total = 0;
-      for (let i = 0; i < secretWord.length; i++) {
-        if (guess[i] === secretWord[i]) {
-          result[i] = 1;
-          total += 1;
-        } else if (secretWord.includes(guess[i])) {
-          result[i] = -1;
-          total -= 1;
+      const word = secretWord;
+      const len = word.length;
+      const perLetterDeltas = new Array(len).fill(0);
+      let totalDelta = 0;
+
+      for (let i = 0; i < len; i++) {
+        const g = guess[i];
+        const s = word[i];
+        if (g === s) {
+          perLetterDeltas[i] = 1; // correct pos
+        } else if (word.includes(g)) {
+          perLetterDeltas[i] = -1; // in word but wrong pos
         } else {
-          result[i] = -2;
-          total -= 2;
+          perLetterDeltas[i] = -2; // not in word
         }
+        totalDelta += perLetterDeltas[i];
       }
-      return { total, result };
+
+      return { totalDelta, perLetterDeltas };
     }
 
     function applyCorrectReveals(guess) {
@@ -275,50 +353,112 @@
       renderWord();
     }
 
-    function logGuess(guess, total, result) {
-      const entry = document.createElement("div");
-      entry.className = "guess-entry";
-      let html = "";
-      for (let i = 0; i < guess.length; i++) {
-        let cls = result[i] === 1 ? "pos-plus" :
-                  result[i] === -1 ? "pos-minus1" : "pos-minus2";
-        html += `<span class="${cls}">${guess[i]}</span> `;
-      }
-      const sign = total >= 0 ? "+" : "";
-      entry.innerHTML = `${html} (total: <strong>${sign}${total}</strong>)`;
-      guessesLog.prepend(entry);
-    }
-
     // ------------------------------
-    // HINT: OPEN LETTER  (cost 10)
+    // HINT ACTIONS
     // ------------------------------
 
     function openRandomLetter() {
-      if (points < COST_OPEN_LETTER + 1) {
-        messageDiv.textContent = "Not enough points!";
-        return;
-      }
-
-      const hidden = [];
-      for (let i = 0; i < revealed.length; i++) {
-        if (!revealed[i]) hidden.push(i);
-      }
-      if (hidden.length === 0) {
-        messageDiv.textContent = "All letters already revealed.";
-        return;
-      }
-
-      const pick = hidden[Math.floor(Math.random() * hidden.length)];
-      revealed[pick] = secretWord[pick];
-
-      updatePoints(-COST_OPEN_LETTER);
       if (gameOver) return;
-
-      messageDiv.textContent = `Opened a letter at position ${pick + 1}.`;
+      if (points <= 10) {
+        messageDiv.textContent = "Not enough points to open a letter (need > 10).";
+        return;
+      }
+      const unrevealedIndices = [];
+      for (let i = 0; i < revealed.length; i++) {
+        if (revealed[i] === null) unrevealedIndices.push(i);
+      }
+      if (unrevealedIndices.length === 0) {
+        messageDiv.textContent = "All letters already revealed!";
+        return;
+      }
+      const idx = unrevealedIndices[Math.floor(Math.random() * unrevealedIndices.length)];
+      revealed[idx] = secretWord[idx];
+      updatePoints(-10);
+      if (gameOver) return;
+      messageDiv.textContent = `Opened a letter at position ${idx + 1}.`;
       renderWord();
+      if (checkWin()) {
+        endGame(true, "You revealed all letters!");
+      }
+    }
 
-      if (checkWin()) endGame(true, "You revealed all letters!");
+    function showVowelsHint() {
+      if (gameOver) return;
+      if (vowelHintUsed) {
+        messageDiv.textContent = "You already used the vowel hint.";
+        return;
+      }
+      if (points <= 5) {
+        messageDiv.textContent = "Not enough points to show vowels (need > 5).";
+        return;
+      }
+      vowelHintUsed = true;
+      updatePoints(-5);
+      if (gameOver) return;
+      applyVowelHintVisual();
+      messageDiv.textContent = "Vowels positions are now marked with dashed borders.";
     }
 
     // ------------------------------
-    // HINT: SHOW VOWELS (cost 5)
+    // INIT & EVENT HANDLERS
+    // ------------------------------
+
+    function init() {
+      wordLengthSpan.textContent = secretWord.length;
+      pointsSpan.textContent = points;
+      renderWord();
+      messageDiv.textContent = "Type a word of the same length and press Guess.";
+    }
+
+    guessForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (gameOver) return;
+
+      let guess = guessInput.value.trim().toUpperCase();
+      if (!guess) {
+        messageDiv.textContent = "Please enter a guess.";
+        return;
+      }
+      if (guess.length !== secretWord.length) {
+        messageDiv.textContent = `Your guess must be ${secretWord.length} letters long.`;
+        return;
+      }
+
+      // Score the guess
+      const { totalDelta, perLetterDeltas } = scoreGuess(guess);
+      updatePoints(totalDelta);
+      if (gameOver) return;
+
+      applyCorrectReveals(guess);
+      logGuess(guess, totalDelta, perLetterDeltas);
+
+      let summaryParts = [];
+      let plusCount = perLetterDeltas.filter(d => d === 1).length;
+      let minus1Count = perLetterDeltas.filter(d => d === -1).length;
+      let minus2Count = perLetterDeltas.filter(d => d === -2).length;
+
+      if (plusCount) summaryParts.push(`+1 × ${plusCount} (correct position)`);
+      if (minus1Count) summaryParts.push(`-1 × ${minus1Count} (in word, wrong position)`);
+      if (minus2Count) summaryParts.push(`-2 × ${minus2Count} (not in word)`);
+
+      const sign = totalDelta >= 0 ? "+" : "";
+      roundResultDiv.textContent = `This guess: ${summaryParts.join(", ")} → total ${sign}${totalDelta} points.`;
+
+      if (guess === secretWord || checkWin()) {
+        endGame(true, "You guessed the hidden word!");
+      } else {
+        messageDiv.textContent = "Guess again!";
+      }
+
+      guessInput.value = "";
+      guessInput.focus();
+    });
+
+    openLetterBtn.addEventListener("click", openRandomLetter);
+    showVowelsBtn.addEventListener("click", showVowelsHint);
+
+    // Start the game
+    init();
+  </script>
+</body>
+</html>
