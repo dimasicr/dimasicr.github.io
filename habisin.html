@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Column Queue Word Game</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f5f5;
+      color: #222;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 4px;
+      font-size: 26px;
+    }
+
+    #subtitle {
+      font-size: 14px;
+      margin-bottom: 16px;
+      color: #555;
+    }
+
+    #game-container {
+      background: #ffffff;
+      padding: 16px 20px 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.1);
+      max-width: 480px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    #level-title {
+      font-size: 15px;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    #board {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 12px;
+      justify-content: center;
+    }
+
+    .tile {
+      width: 60px;
+      height: 60px;
+      border-radius: 8px;
+      background: #ffecb3;
+      border: 2px solid #ff9800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: bold;
+      text-transform: uppercase;
+      user-select: none;
+      box-sizing: border-box;
+      transition: transform 0.07s ease, box-shadow 0.07s ease, background 0.1s, border-color 0.1s;
+    }
+
+    .tile.empty {
+      background: #e0e0e0;
+      border-color: #bdbdbd;
+      color: #9e9e9e;
+    }
+
+    .tile.active {
+      cursor: pointer;
+      background: #fff3cd;
+    }
+
+    .tile.active:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    .tile.selected {
+      background: #ffb74d;
+      border-color: #f57c00;
+      box-shadow: 0 0 10px rgba(245,124,0,0.7);
+    }
+
+    #panel {
+      margin-top: 10px;
+      border-top: 1px solid #ddd;
+      padding-top: 10px;
+      font-size: 14px;
+    }
+
+    #current-word-box {
+      margin-bottom: 8px;
+    }
+
+    #current-word-label {
+      font-weight: 600;
+      margin-right: 4px;
+    }
+
+    #current-word {
+      font-family: "Fira Mono", Menlo, Consolas, monospace;
+      letter-spacing: 2px;
+      font-size: 18px;
+    }
+
+    #buttons {
+      margin-bottom: 8px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 13px;
+      cursor: pointer;
+      background: #ffb74d;
+      color: #222;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      transition: background 0.1s ease, transform 0.07s ease, box-shadow 0.07s ease;
+    }
+
+    button:hover {
+      background: #ffa726;
+      transform: translateY(-1px);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+    }
+
+    button:disabled {
+      background: #bdbdbd;
+      color: #666;
+      cursor: default;
+      transform: none;
+      box-shadow: none;
+    }
+
+    #message {
+      min-height: 18px;
+      margin-bottom: 4px;
+      font-size: 13px;
+      color: #444;
+    }
+
+    #found-words-title {
+      font-weight: 600;
+      margin-top: 4px;
+      margin-bottom: 2px;
+    }
+
+    #found-words {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+      font-size: 13px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    #found-words li {
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: #eeeeee;
+      border: 1px solid #bdbdbd;
+      font-family: "Fira Mono", Menlo, Consolas, monospace;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    #hint {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #777;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+  <h1>Column Queue Word Game</h1>
+  <div id="subtitle">Use only the bottom letter of each column to clear all tiles.</div>
+
+  <div id="game-container">
+    <div id="level-title"></div>
+    <div id="board"></div>
+
+    <div id="panel">
+      <div id="current-word-box">
+        <span id="current-word-label">Current word:</span>
+        <span id="current-word"></span>
+      </div>
+
+      <div id="buttons">
+        <button id="submit-word-btn">Submit word</button>
+        <button id="clear-word-btn">Clear selection</button>
+        <button id="reset-level-btn">Reset level</button>
+      </div>
+
+      <div id="message"></div>
+
+      <div id="found-words-title">Found words:</div>
+      <ul id="found-words"></ul>
+
+      <div id="hint">
+        Rules:<br />
+        • You may only click the <strong>bottom-most remaining letter</strong> of each column.<br />
+        • Each letter you click is appended to the current word.<br />
+        • A word is accepted only if it is a valid 3–6 letter English word (checked against the dictionary).<br />
+        • Accepted letters disappear from the board. Clear all tiles to win.
+      </div>
+    </div>
+  </div>
+
+  <!-- Your dictionary file: must define `const VALID_WORDS = [ "CAT", "DOG", ... ]` in UPPERCASE -->
+  <script src="valid-3-6.js"></script>
+
+  <script>
+    // Optional safety check
+    if (typeof VALID_WORDS === "undefined") {
+      console.error("VALID_WORDS is not defined. Make sure valid-3-6.js is loaded.");
+      alert("Error: valid-3-6.js not loaded or VALID_WORDS not defined.");
+    }
+
+    // LEVEL CONFIG (letters only; validity comes from VALID_WORDS)
+    const levels = [
+      {
+        name: "Level 1 – 3×3",
+        grid: [
+          ["R","U","N"],
+          ["T","I","F"],
+          ["C","A","S"]
+        ]
+      }
+    ];
+
+    // GAME STATE
+    let currentLevelIndex = 0;
+    let board = [];         // 2D array of letters or null
+    let selectionPath = []; // [{row, col, letter}]
+    let foundWords = [];    // stored as UPPERCASE
+    let gameOver = false;
+
+    // DOM
+    const levelTitleEl = document.getElementById("level-title");
+    const boardEl = document.getElementById("board");
+    const currentWordEl = document.getElementById("current-word");
+    const messageEl = document.getElementById("message");
+    const foundWordsEl = document.getElementById("found-words");
+    const submitBtn = document.getElementById("submit-word-btn");
+    const clearBtn = document.getElementById("clear-word-btn");
+    const resetBtn = document.getElementById("reset-level-btn");
+
+    // INIT
+    function initLevel(index) {
+      const level = levels[index];
+      currentLevelIndex = index;
+      gameOver = false;
+      selectionPath = [];
+      foundWords = [];
+
+      // deep copy grid into board
+      board = level.grid.map(row => row.slice());
+
+      levelTitleEl.textContent = level.name;
+      renderBoard();
+      renderCurrentWord();
+      renderFoundWords();
+      setMessage("Click the bottom letters of each column to build a word.");
+      updateButtons();
+    }
+
+    // ACTIVE CELLS = bottom-most non-null, non-selected in each column
+    function computeActiveCells() {
+      const rows = board.length;
+      const cols = board[0].length;
+      const activeSet = new Set();
+
+      function isSelected(r, c) {
+        return selectionPath.some(p => p.row === r && p.col === c);
+      }
+
+      for (let c = 0; c < cols; c++) {
+        for (let r = rows - 1; r >= 0; r--) {
+          if (board[r][c] !== null && !isSelected(r, c)) {
+            activeSet.add(r + "," + c);
+            break;
+          }
+        }
+      }
+
+      return activeSet;
+    }
+
+    // RENDER BOARD
+    function renderBoard() {
+      const rows = board.length;
+      const cols = board[0].length;
+      const activeSet = computeActiveCells();
+
+      boardEl.style.gridTemplateColumns = `repeat(${cols}, 60px)`;
+      boardEl.innerHTML = "";
+
+      function isSelected(r, c) {
+        return selectionPath.some(p => p.row === r && p.col === c);
+      }
+
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const tile = document.createElement("div");
+          const letter = board[r][c];
+          const key = r + "," + c;
+          const selected = isSelected(r, c);
+          const isActive = activeSet.has(key);
+
+          if (letter === null) {
+            tile.className = "tile empty";
+            tile.textContent = "";
+          } else {
+            tile.className = "tile";
+            if (selected) tile.classList.add("selected");
+            else if (isActive) tile.classList.add("active");
+
+            tile.textContent = letter;
+
+            if (!gameOver && isActive && !selected) {
+              tile.addEventListener("click", () => onTileClick(r, c));
+            }
+          }
+
+          boardEl.appendChild(tile);
+        }
+      }
+    }
+
+    // HANDLE TILE CLICK
+    function onTileClick(row, col) {
+      if (gameOver) return;
+
+      const activeSet = computeActiveCells();
+      const key = row + "," + col;
+
+      if (!activeSet.has(key)) {
+        setMessage("You can only use the bottom-most remaining letter of each column.");
+        return;
+      }
+
+      const letter = board[row][col];
+      selectionPath.push({ row, col, letter });
+      renderBoard();
+      renderCurrentWord();
+      setMessage(`Added "${letter}" to the word.`);
+    }
+
+    // RENDER CURRENT WORD
+    function renderCurrentWord() {
+      const word = selectionPath.map(p => p.letter).join("");
+      currentWordEl.textContent = word;
+    }
+
+    // RENDER FOUND WORDS
+    function renderFoundWords() {
+      foundWordsEl.innerHTML = "";
+      if (foundWords.length === 0) return;
+
+      for (const w of foundWords) {
+        const li = document.createElement("li");
+        li.textContent = w;
+        foundWordsEl.appendChild(li);
+      }
+    }
+
+    function setMessage(text) {
+      messageEl.textContent = text || "";
+    }
+
+    function updateButtons() {
+      submitBtn.disabled = gameOver;
+      clearBtn.disabled = gameOver;
+      resetBtn.disabled = false;
+    }
+
+    // CLEAR SELECTION
+    function clearSelection() {
+      selectionPath = [];
+      renderBoard();
+      renderCurrentWord();
+      setMessage("Selection cleared.");
+    }
+
+    // CHECK BOARD CLEARED
+    function isBoardCleared() {
+      for (let r = 0; r < board.length; r++) {
+        for (let c = 0; c < board[0].length; c++) {
+          if (board[r][c] !== null) return false;
+        }
+      }
+      return true;
+    }
+
+    // SUBMIT WORD – uses VALID_WORDS in UPPERCASE
+    function submitWord() {
+      if (gameOver) return;
+
+      if (selectionPath.length === 0) {
+        setMessage("Select some letters first.");
+        return;
+      }
+
+      const raw = selectionPath.map(p => p.letter).join("");
+      const wordUpper = raw.toUpperCase();
+
+      // length constraint: 3–6 letters
+      if (wordUpper.length < 3 || wordUpper.length > 6) {
+        setMessage(`"${wordUpper}" must be 3 to 6 letters long.`);
+        selectionPath = [];
+        renderBoard();
+        renderCurrentWord();
+        return;
+      }
+
+      // check dictionary (VALID_WORDS is all UPPERCASE)
+      if (!Array.isArray(VALID_WORDS) || !VALID_WORDS.includes(wordUpper)) {
+        setMessage(`"${wordUpper}" is not a valid English word.`);
+        selectionPath = [];
+        renderBoard();
+        renderCurrentWord();
+        return;
+      }
+
+      // prevent reusing the same word
+      if (foundWords.includes(wordUpper)) {
+        setMessage(`"${wordUpper}" already used. Try another word.`);
+        selectionPath = [];
+        renderBoard();
+        renderCurrentWord();
+        return;
+      }
+
+      // remove tiles
+      for (const p of selectionPath) {
+        board[p.row][p.col] = null;
+      }
+      foundWords.push(wordUpper);
+      selectionPath = [];
+
+      renderBoard();
+      renderCurrentWord();
+      renderFoundWords();
+
+      if (isBoardCleared()) {
+        gameOver = true;
+        setMessage(`Great! You cleared all tiles with: ${foundWords.join(", ")}.`);
+        updateButtons();
+      } else {
+        setMessage(`Accepted "${wordUpper}". Keep going!`);
+      }
+    }
+
+    // BUTTON EVENTS
+    submitBtn.addEventListener("click", submitWord);
+    clearBtn.addEventListener("click", clearSelection);
+    resetBtn.addEventListener("click", () => initLevel(currentLevelIndex));
+
+    // START
+    initLevel(0);
+  </script>
+</body>
+</html>
