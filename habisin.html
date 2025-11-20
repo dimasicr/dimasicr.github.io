@@ -30,15 +30,31 @@
       padding: 16px 20px 20px;
       border-radius: 10px;
       box-shadow: 0 0 12px rgba(0,0,0,0.1);
-      max-width: 480px;
+      max-width: 520px;
       width: 100%;
       box-sizing: border-box;
     }
 
+    #top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
     #level-title {
       font-size: 15px;
-      margin-bottom: 10px;
       font-weight: 600;
+    }
+
+    #level-select {
+      font-size: 13px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      background: #fafafa;
     }
 
     #board {
@@ -62,7 +78,7 @@
       text-transform: uppercase;
       user-select: none;
       box-sizing: border-box;
-      transition: transform 0.07s ease, box-shadow 0.07s ease, background 0.1s, border-color 0.1s;
+      transition: box-shadow 0.07s ease, background 0.1s, border-color 0.1s, opacity 0.1s;
     }
 
     .tile.empty {
@@ -77,14 +93,14 @@
     }
 
     .tile.active:hover {
-      transform: translateY(-2px);
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
 
+    /* Selected tiles: visually "taken" out (no letter, faded) */
     .tile.selected {
-      background: #ffb74d;
-      border-color: #f57c00;
-      box-shadow: 0 0 10px rgba(245,124,0,0.7);
+      background: #ffe0b2;
+      border-color: #ffb74d;
+      opacity: 0.5;
     }
 
     #panel {
@@ -107,6 +123,43 @@
       font-family: "Fira Mono", Menlo, Consolas, monospace;
       letter-spacing: 2px;
       font-size: 18px;
+      vertical-align: middle;
+    }
+
+    /* Container for the "moved" tiles forming the word */
+    #current-word-tiles {
+      margin-top: 6px;
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      min-height: 40px;
+    }
+
+    .word-tile {
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      background: #ffecb3;
+      border: 2px solid #ff9800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: bold;
+      text-transform: uppercase;
+      box-sizing: border-box;
+      animation: pop-in 0.12s ease-out;
+    }
+
+    @keyframes pop-in {
+      from {
+        transform: scale(0.7);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
     }
 
     #buttons {
@@ -192,13 +245,21 @@
   <div id="subtitle">Use only the bottom letter of each column to clear all tiles.</div>
 
   <div id="game-container">
-    <div id="level-title"></div>
+    <div id="top-bar">
+      <div id="level-title"></div>
+      <div>
+        <label for="level-select" style="font-size:13px;margin-right:4px;">Level:</label>
+        <select id="level-select"></select>
+      </div>
+    </div>
+
     <div id="board"></div>
 
     <div id="panel">
       <div id="current-word-box">
         <span id="current-word-label">Current word:</span>
         <span id="current-word"></span>
+        <div id="current-word-tiles"></div>
       </div>
 
       <div id="buttons">
@@ -215,14 +276,16 @@
       <div id="hint">
         Rules:<br />
         • You may only click the <strong>bottom-most remaining letter</strong> of each column.<br />
-        • Each letter you click is appended to the current word.<br />
-        • A word is accepted only if it is a valid 3–6 letter English word (checked against the dictionary).<br />
-        • Accepted letters disappear from the board. Clear all tiles to win.
+        • Each letter you click is appended to the word row at the bottom.<br />
+        • On an <strong>N×N</strong> board, only <strong>N-letter</strong> words are accepted (3×3 → 3 letters, 4×4 → 4 letters, 5×5 → 5 letters, etc.).<br />
+        • Words are checked against the dictionary (<code>VALID_WORDS</code>, uppercase).<br />
+        • Selected tiles appear empty in the grid (as if taken) and show up below, chained to form the word.<br />
+        • Accepted words remove tiles permanently. Clear all tiles to win.
       </div>
     </div>
   </div>
 
-  <!-- Your dictionary file: must define `const VALID_WORDS = [ "CAT", "DOG", ... ]` in UPPERCASE -->
+  <!-- Dictionary: must define const VALID_WORDS = ["CAT","DOG",...] in UPPERCASE -->
   <script src="valid-3-6.js"></script>
 
   <script>
@@ -241,6 +304,25 @@
           ["T","I","F"],
           ["C","A","S"]
         ]
+      },
+      {
+        name: "Level 2 – 4×4",
+        grid: [
+          ["I","N","G","S"],
+          ["D","K","T","A"],
+          ["I","U","R","P"],
+          ["F","O","B","R"]
+        ]
+      },
+      {
+        name: "Level 3 – 5×5",
+        grid: [
+          ["H","T","N","D","M"],
+          ["O","U","W","U","N"],
+          ["E","T","O","S","O"],
+          ["Z","U","L","C","L"],
+          ["T","R","G","S","A"]
+        ]
       }
     ];
 
@@ -253,15 +335,34 @@
 
     // DOM
     const levelTitleEl = document.getElementById("level-title");
+    const levelSelectEl = document.getElementById("level-select");
     const boardEl = document.getElementById("board");
     const currentWordEl = document.getElementById("current-word");
+    const currentWordTilesEl = document.getElementById("current-word-tiles");
     const messageEl = document.getElementById("message");
     const foundWordsEl = document.getElementById("found-words");
     const submitBtn = document.getElementById("submit-word-btn");
     const clearBtn = document.getElementById("clear-word-btn");
     const resetBtn = document.getElementById("reset-level-btn");
 
-    // INIT
+    // Populate level selector
+    function initLevelSelect() {
+      levelSelectEl.innerHTML = "";
+      levels.forEach((lvl, idx) => {
+        const opt = document.createElement("option");
+        opt.value = idx;
+        opt.textContent = lvl.name;
+        levelSelectEl.appendChild(opt);
+      });
+      levelSelectEl.value = currentLevelIndex;
+    }
+
+    levelSelectEl.addEventListener("change", () => {
+      const idx = parseInt(levelSelectEl.value, 10);
+      initLevel(idx);
+    });
+
+    // INIT LEVEL
     function initLevel(index) {
       const level = levels[index];
       currentLevelIndex = index;
@@ -273,6 +374,7 @@
       board = level.grid.map(row => row.slice());
 
       levelTitleEl.textContent = level.name;
+      levelSelectEl.value = index.toString();
       renderBoard();
       renderCurrentWord();
       renderFoundWords();
@@ -331,7 +433,8 @@
             if (selected) tile.classList.add("selected");
             else if (isActive) tile.classList.add("active");
 
-            tile.textContent = letter;
+            // If selected, we hide the letter in the grid to simulate "taken out"
+            tile.textContent = selected ? "" : letter;
 
             if (!gameOver && isActive && !selected) {
               tile.addEventListener("click", () => onTileClick(r, c));
@@ -362,10 +465,18 @@
       setMessage(`Added "${letter}" to the word.`);
     }
 
-    // RENDER CURRENT WORD
+    // RENDER CURRENT WORD & WORD TILES
     function renderCurrentWord() {
       const word = selectionPath.map(p => p.letter).join("");
       currentWordEl.textContent = word;
+
+      currentWordTilesEl.innerHTML = "";
+      for (const p of selectionPath) {
+        const t = document.createElement("div");
+        t.className = "word-tile";
+        t.textContent = p.letter;
+        currentWordTilesEl.appendChild(t);
+      }
     }
 
     // RENDER FOUND WORDS
@@ -390,7 +501,7 @@
       resetBtn.disabled = false;
     }
 
-    // CLEAR SELECTION
+    // CLEAR SELECTION (put letters back visually)
     function clearSelection() {
       selectionPath = [];
       renderBoard();
@@ -408,7 +519,7 @@
       return true;
     }
 
-    // SUBMIT WORD – uses VALID_WORDS in UPPERCASE
+    // SUBMIT WORD – uses VALID_WORDS in UPPERCASE and enforces length = board size
     function submitWord() {
       if (gameOver) return;
 
@@ -420,9 +531,11 @@
       const raw = selectionPath.map(p => p.letter).join("");
       const wordUpper = raw.toUpperCase();
 
-      // length constraint: 3–6 letters
-      if (wordUpper.length < 3 || wordUpper.length > 6) {
-        setMessage(`"${wordUpper}" must be 3 to 6 letters long.`);
+      // required length: number of columns (since it's N×N)
+      const requiredLength = board[0].length;
+
+      if (wordUpper.length !== requiredLength) {
+        setMessage(`"${wordUpper}" must be exactly ${requiredLength} letters long on this level.`);
         selectionPath = [];
         renderBoard();
         renderCurrentWord();
@@ -447,7 +560,7 @@
         return;
       }
 
-      // remove tiles
+      // remove tiles permanently from the board
       for (const p of selectionPath) {
         board[p.row][p.col] = null;
       }
@@ -473,6 +586,7 @@
     resetBtn.addEventListener("click", () => initLevel(currentLevelIndex));
 
     // START
+    initLevelSelect();
     initLevel(0);
   </script>
 </body>
