@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Swap and Weave</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #222;
+      color: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      margin: 0;
+    }
+
+    /* -------- BRANDING -------- */
+    #brand {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin-top: 10px;
+      margin-bottom: 8px;
+    }
+
+    .brand-weave {
+      font-family: "Georgia", serif;
+      font-size: clamp(24px, 6vw, 32px);
+      font-weight: bold;
+    }
+
+    .brand-txt {
+      font-family: "Courier New", monospace;
+      font-size: clamp(18px, 5vw, 24px);
+      font-weight: bold;
+      color: #ffb347;
+      border-right: 2px solid #ffb347;
+      padding-right: 4px;
+      animation: caret-blink 0.9s step-end infinite;
+      min-width: 3ch;
+    }
+
+    @keyframes caret-blink {
+      0%, 100% { border-color: transparent; }
+      50% { border-color: #ffb347; }
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(20px, 5vw, 26px);
+      text-align: center;
+    }
+
+    #tagline {
+      font-size: 11px;
+      text-align: center;
+      color: #aaa;
+      margin-bottom: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+    }
+
+    #game-container {
+      background: #333;
+      padding: 20px;
+      border-radius: 8px;
+      width: 100%;
+      max-width: 700px;
+    }
+
+    #info {
+      margin-bottom: 10px;
+      text-align: center;
+      line-height: 1.5em;
+      font-size: 14px;
+    }
+
+    #tiles-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 15px 0;
+      flex-wrap: nowrap;
+      transform-origin: center;
+    }
+
+    .tile {
+      background: #444;
+      padding: 8px;
+      border-radius: 6px;
+      min-width: 80px;
+      text-align: center;
+      cursor: grab;
+    }
+
+    .current-letter {
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    .options { display: flex; gap: 4px; justify-content: center; }
+
+    .letter-option {
+      background: #555;
+      padding: 4px;
+      border-radius: 4px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .selected-option {
+      background: #ffb347;
+      color: #222;
+      font-weight: bold;
+    }
+
+    button {
+      padding: 8px 14px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    #check-btn { background: #4caf50; color: white; }
+    #restart-btn { background: #2196f3; color: white; }
+    #share-btn { 
+      background: #ffb347; 
+      color: #222; 
+      margin-top: 12px;
+      display: none;
+    }
+
+    #history {
+      margin-top: 10px;
+      text-align:center;
+    }
+
+    .history-letter {
+      width: 28px; height: 28px;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 4px;
+      margin: 2px;
+      font-weight: bold;
+    }
+
+    .correct { background: #4caf50; }
+    .present { background: #ffb347; color: #222; }
+    .absent { background: #555; }
+
+    /* WORD REVEAL */
+    #definition-box {
+      margin-top: 20px;
+      background: #1c1c1c;
+      padding: 14px;
+      border-radius: 6px;
+      line-height: 1.4em;
+      border-left: 3px solid #ffb347;
+      max-width: 90%;
+      display: none;
+      text-align:center;
+      margin-left:auto;
+      margin-right:auto;
+    }
+
+    #definition-word {
+      font-weight: bold;
+      color: #ffb347;
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    @media(max-width:360px){
+      #tiles-container { transform: scale(.85); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BRAND -->
+  <div id="brand">
+    <span class="brand-weave">Weave</span>
+    <span class="brand-txt" id="brand-txt"></span>
+  </div>
+
+  <h1>Swap and Weave</h1>
+  <div id="tagline">by WeaveTXT</div>
+
+  <div id="game-container">
+    <div id="info">
+      Guess the hidden word in <strong id="attempts">6</strong> attempts.<br>
+      👉 Drag tiles to reorder them.<br>
+      👉 Click letters inside a tile to choose it.
+    </div>
+
+    <div id="tiles-container"></div>
+
+    <div style="display:flex; gap:10px; justify-content:center;">
+      <button id="check-btn">Check</button>
+      <button id="restart-btn">Restart</button>
+    </div>
+
+    <div id="message" style="text-align:center; margin-top:10px; height:20px;"></div>
+    <div id="history"></div>
+  </div>
+
+  <!-- Definition Reveal Block -->
+  <div id="definition-box">
+    <div id="definition-word"></div>
+    <div id="definition-text"></div>
+  </div>
+
+  <button id="share-btn">Share Result 📤</button>
+
+<script src="valid-3-6.js"></script>
+<script>
+/* ------------------ SETTINGS ------------------ */
+const LEVEL = {
+  answer: "CLAD",
+  tiles: [
+    ["D","C","L","B"],
+    ["E","A","O","L"],
+    ["L","N","D","R"],
+    ["A","I","E","U"]
+    
+  ]
+};
+
+const WORD_INFO = {
+  definition: "past participle of clothe",
+  example: "They were clad in T-shirts and shorts."
+};
+
+const TYPE_SPEED = 25;
+
+/* ------------------ STATE ------------------ */
+let attemptsLeft = 6;
+let gameOver = false;
+let solved = false;
+let dragSrc = null;
+
+/* ------------------ DOM ------------------ */
+const tilesContainer = document.getElementById("tiles-container");
+const attemptsSpan = document.getElementById("attempts");
+const messageDiv = document.getElementById("message");
+const historyDiv = document.getElementById("history");
+const shareBtn = document.getElementById("share-btn");
+
+const definitionBox = document.getElementById("definition-box");
+const definitionWord = document.getElementById("definition-word");
+const definitionText = document.getElementById("definition-text");
+
+/* --------- LOOPING TXT ANIMATION --------- */
+(function animateTXT(){
+  const el = document.getElementById("brand-txt");
+  const word = "TXT";
+  let i = 0;
+  let forward = true;
+
+  function loop(){
+    el.textContent = word.slice(0, i);
+
+    if(forward){
+      i++;
+      if(i > word.length){
+        forward = false;
+        setTimeout(loop, 900);
+        return;
+      }
+    } else {
+      i--;
+      if(i < 0){
+        forward = true;
+        setTimeout(loop, 600);
+        return;
+      }
+    }
+    setTimeout(loop, 120);
+  }
+
+  loop();
+})();
+
+/* ------------------ TILE SYSTEM ------------------ */
+function createTile(options){
+  const tile=document.createElement("div");
+  tile.className="tile";
+  
+  const cur=document.createElement("div");
+  cur.className="current-letter";
+  cur.textContent=options[0];
+  tile.appendChild(cur);
+
+  tile.dataset.letter=options[0];
+  
+  const row=document.createElement("div");
+  row.className="options";
+
+  options.forEach(letter=>{
+    const box=document.createElement("div");
+    box.className="letter-option";
+    box.textContent=letter;
+    if(letter===options[0]) box.classList.add("selected-option");
+    box.onclick=()=>setTileLetter(tile,letter);
+    row.appendChild(box);
+  });
+
+  tile.appendChild(row);
+
+  tile.draggable=true;
+  tile.addEventListener("dragstart",()=> dragSrc=tile);
+  tile.addEventListener("dragover",e=> e.preventDefault());
+  tile.addEventListener("drop",()=>{
+    const tiles=[...tilesContainer.children];
+    const a=tiles.indexOf(dragSrc);
+    const b=tiles.indexOf(tile);
+    if(a<b) tilesContainer.insertBefore(dragSrc,tile.nextSibling);
+    else tilesContainer.insertBefore(dragSrc,tile);
+  });
+
+  return tile;
+}
+
+function setTileLetter(tile,letter){
+  tile.dataset.letter = letter;
+  tile.children[0].textContent = letter;
+  tile.querySelectorAll(".letter-option").forEach(el=>{
+    el.classList.toggle("selected-option", el.textContent===letter);
+  });
+}
+
+function getGuess(){
+  return [...tilesContainer.children].map(t=>t.dataset.letter).join("");
+}
+
+/* ------------------ GUESS EVAL ------------------ */
+function evaluate(guess, answer){
+  const res=new Array(answer.length).fill("absent");
+  const counts={};
+  
+  for(let c of answer) counts[c]=(counts[c]||0)+1;
+
+  for(let i=0;i<answer.length;i++){
+    if(guess[i]===answer[i]){
+      res[i]="correct";
+      counts[guess[i]]--;
+    }
+  }
+
+  for(let i=0;i<answer.length;i++){
+    if(res[i]!=="correct" && counts[guess[i]]>0){
+      res[i]="present";
+      counts[guess[i]]--;
+    }
+  }
+  return res;
+}
+
+function addHistory(guess,result){
+  const row=document.createElement("div");
+  row.style.textAlign="center";
+
+  result.forEach((mark,i)=>{
+    const box=document.createElement("div");
+    box.className=`history-letter ${mark}`;
+    box.textContent=guess[i];
+    row.appendChild(box);
+  });
+  
+  historyDiv.appendChild(row);
+}
+
+/* ------------------ TYPE REVEAL ------------------ */
+async function typeDefinition(){
+  definitionBox.style.display="block";
+  definitionWord.textContent = LEVEL.answer;
+  
+  let text = `${WORD_INFO.definition}\n"${WORD_INFO.example}"`;
+  definitionText.innerHTML="";
+  
+  for(let i=0;i<text.length;i++){
+    definitionText.innerHTML = text.slice(0, i).replace(/\n/g, "<br><br>");
+    await new Promise(res=> setTimeout(res, TYPE_SPEED));
+  }
+  shareBtn.style.display="block";
+}
+
+/* ------------------ CHECK ------------------ */
+function checkGuess(){
+  if(gameOver) return;
+  const guess=getGuess();
+
+  if(!VALID_WORDS.includes(guess)){
+    messageDiv.textContent="Not a valid word.";
+    return;
+  }
+
+  const result=evaluate(guess,LEVEL.answer);
+  addHistory(guess,result);
+
+  if(guess===LEVEL.answer){
+    messageDiv.textContent="🎉 Correct!";
+    solved = true;
+    endGame();
+    return;
+  }
+
+  attemptsLeft--;
+  attemptsSpan.textContent=attemptsLeft;
+
+  if(attemptsLeft<=0){
+    messageDiv.textContent=`❌ Out of attempts!`;
+    solved = false;
+    endGame();
+  } else {
+    messageDiv.textContent="Try again.";
+  }
+}
+
+/* ------------------ END GAME ------------------ */
+function endGame(){
+  gameOver=true;
+  document.getElementById("check-btn").disabled=true;
+  typeDefinition();
+}
+
+/* ------------------ SHARING ------------------ */
+function generateShareText(){
+  if(solved){
+    return `Swap and Weave — I solved today's puzzle!\n\nWord: ${LEVEL.answer}\n${WORD_INFO.definition}\n"${WORD_INFO.example}"\n\nTry it: weavetxt.com`;
+  }
+  return `I couldn't solve today's Swap and Weave puzzle 😅\nWord was: ${LEVEL.answer}`;
+}
+
+shareBtn.onclick = async () => {
+  const text = generateShareText();
+
+  if(navigator.share){
+    try{
+      await navigator.share({text});
+      return;
+    } catch {}
+  }
+
+  navigator.clipboard.writeText(text);
+  shareBtn.textContent="Copied! 📋";
+  setTimeout(()=> shareBtn.textContent="Share Result 📤", 2000);
+};
+
+/* ------------------ INIT ------------------ */
+function init(){
+  tilesContainer.innerHTML="";
+  historyDiv.innerHTML="";
+  definitionBox.style.display="none";
+  shareBtn.style.display="none";
+  
+  LEVEL.tiles.forEach(opt=> tilesContainer.appendChild(createTile(opt)));
+  
+  attemptsLeft=6;
+  attemptsSpan.textContent=attemptsLeft;
+  messageDiv.textContent="";
+  solved=false;
+  gameOver=false;
+  document.getElementById("check-btn").disabled=false;
+}
+
+document.getElementById("check-btn").onclick=checkGuess;
+document.getElementById("restart-btn").onclick=init;
+document.addEventListener("keydown",e=>{ if(e.key==="Enter") checkGuess() });
+
+init();
+</script>
+</body>
+</html>
