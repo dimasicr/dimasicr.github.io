@@ -317,6 +317,26 @@
       color: var(--accent-soft);
     }
 
+    /* Footer */
+    #footer {
+      margin-top: 12px;
+      padding-top: 8px;
+      border-top: 1px solid #444;
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    #footer a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    #footer a:hover {
+      text-decoration: underline;
+    }
+
     /* Mobile tweaks */
     @media (max-width: 480px) {
       #game-container {
@@ -380,6 +400,14 @@
         • Selected tiles appear empty in the grid and show up below, chained to form the word.<br />
         • Accepted words remove tiles permanently. Clear all tiles to win.
       </div>
+    </div>
+
+    <!-- FOOTER LINKS TO OTHER GAME -->
+    <div id="footer">
+      More from WeaveTXT:
+      <a href="https://www.weavetxt.com/index.html" target="_blank" rel="noopener noreferrer">
+        Swap and Weave
+      </a>
     </div>
   </div>
 
