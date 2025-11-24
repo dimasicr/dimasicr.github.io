@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>WeaveTXT – Neighbor Tail</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    :root {
+      --bg-main: #222;
+      --bg-card: #333;
+      --bg-tile: #444;
+      --bg-tile-empty: #2b2b2b;
+      --bg-tile-selected: #3f3f3f;
+      --accent: #ffb347;
+      --accent-soft: #ffecb3;
+      --accent-border: #ff9800;
+      --text-main: #f5f5f5;
+      --text-muted: #aaa;
+      --text-soft: #ddd;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #2b3a4a 0, #111 55%);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px;
+      margin: 0;
+    }
+
+    /* -------- BRANDING -------- */
+    #brand {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin-top: 6px;
+      margin-bottom: 4px;
+    }
+
+    .brand-weave {
+      font-family: "Georgia", serif;
+      font-size: clamp(22px, 5vw, 30px);
+      font-weight: bold;
+      letter-spacing: 0.03em;
+    }
+
+    .brand-txt {
+      font-family: "Courier New", monospace;
+      font-size: clamp(18px, 4.5vw, 24px);
+      font-weight: bold;
+      color: var(--accent);
+      border-right: 2px solid var(--accent);
+      padding-right: 4px;
+      animation: caret-blink 0.9s step-end infinite;
+      min-width: 3ch;
+    }
+
+    @keyframes caret-blink {
+      0%, 100% { border-color: transparent; }
+      50% { border-color: var(--accent); }
+    }
+
+    h1 {
+      margin: 2px 0 0;
+      font-size: clamp(20px, 5vw, 26px);
+      text-align: center;
+    }
+
+    #subtitle {
+      font-size: 12px;
+      margin-top: 4px;
+      margin-bottom: 14px;
+      color: var(--text-muted);
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    /* -------- GAME CARD -------- */
+    #game-container {
+      background: var(--bg-card);
+      padding: 16px 14px 18px;
+      border-radius: 10px;
+      box-shadow: 0 0 18px rgba(0,0,0,0.55);
+      max-width: 520px;
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid #414141;
+    }
+
+    #top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+      font-size: 13px;
+    }
+
+    #points-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-soft);
+    }
+
+    #points {
+      color: var(--accent);
+      font-weight: 700;
+      margin-left: 4px;
+    }
+
+    #puzzle-info {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: right;
+    }
+
+    /* -------- WORD ROWS -------- */
+    #word-rows {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 12px;
+      font-family: "Courier New", monospace;
+      font-size: clamp(18px, 4.5vw, 22px);
+    }
+
+    .word-row {
+      background: var(--bg-tile-empty);
+      padding: 8px 12px;
+      border-radius: 8px;
+      letter-spacing: 3px;
+      border: 1px solid #444;
+    }
+
+    /* -------- INSTRUCTIONS -------- */
+    .instructions {
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--text-soft);
+      margin-bottom: 10px;
+    }
+
+    .instructions strong {
+      color: var(--accent-soft);
+    }
+
+    /* -------- CONTROLS -------- */
+    #controls {
+      margin-top: 4px;
+      border-top: 1px solid #444;
+      padding-top: 10px;
+      font-size: 13px;
+    }
+
+    #guess-section {
+      margin-bottom: 10px;
+    }
+
+    #guess-label {
+      font-size: 13px;
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    #guess-input {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid #555;
+      background: #252525;
+      color: var(--text-main);
+      font-size: 16px;
+    }
+
+    #guess-input::placeholder {
+      color: #777;
+    }
+
+    #guess-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 4px rgba(255, 179, 71, 0.7);
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 6px;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 7px 14px;
+      font-size: 13px;
+      cursor: pointer;
+      background: var(--accent);
+      color: #222;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      transition: background 0.1s ease, transform 0.07s ease, box-shadow 0.07s ease;
+      white-space: nowrap;
+      min-width: 110px;
+      text-align: center;
+      justify-content: center;
+    }
+
+    button:hover:not(:disabled) {
+      background: #ffab2c;
+      transform: translateY(-1px);
+      box-shadow: 0 3px 9px rgba(0,0,0,0.6);
+    }
+
+    button:disabled {
+      background: #555;
+      color: #999;
+      cursor: default;
+      transform: none;
+      box-shadow: none;
+    }
+
+    #reveal-btn {
+      background: #555;
+      color: var(--text-main);
+    }
+
+    #reveal-btn:hover:not(:disabled) {
+      background: #666;
+    }
+
+    #next-btn {
+      background: #444;
+      color: var(--text-main);
+    }
+
+    #next-btn:hover:not(:disabled) {
+      background: #555;
+    }
+
+    #cost-info {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 6px;
+    }
+
+    #message {
+      min-height: 24px;
+      font-size: 12px;
+      text-align: center;
+      margin-top: 2px;
+      white-space: pre-line;
+    }
+
+    .msg-info {
+      color: var(--accent-soft);
+    }
+
+    .msg-success {
+      color: #9be59b;
+    }
+
+    .msg-error {
+      color: #ff9d9d;
+    }
+
+    .msg-warning {
+      color: var(--accent);
+    }
+
+    #hint {
+      margin-top: 8px;
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.4;
+      text-align: left;
+    }
+
+    #hint strong {
+      color: var(--accent-soft);
+    }
+
+    /* Footer */
+    #footer {
+      margin-top: 12px;
+      padding-top: 8px;
+      border-top: 1px solid #444;
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    #footer a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    #footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Mobile tweaks */
+    @media (max-width: 480px) {
+      #game-container {
+        padding: 14px 10px 16px;
+      }
+      #top-bar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      #puzzle-info {
+        text-align: left;
+      }
+      .word-row {
+        font-size: 18px;
+      }
+      #hint {
+        font-size: 10.5px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- BRAND -->
+  <div id="brand">
+    <span class="brand-weave">Weave</span>
+    <span class="brand-txt" id="brand-txt"></span>
+  </div>
+
+  <h1>Neighbor Tail</h1>
+  <div id="subtitle">Guess the shared 3-letter ending</div>
+
+  <div id="game-container">
+    <div id="top-bar">
+      <div id="points-label">
+        Points:
+        <span id="points">15</span>
+      </div>
+      <div id="puzzle-info">
+        <span id="puzzle-counter">Puzzle 1 / 5</span>
+      </div>
+    </div>
+
+    <p class="instructions">
+      You see four related words, but only their first letter is shown.<br />
+      Your goal is to guess the <strong>3 missing letters</strong> that complete all four words.
+    </p>
+
+    <div id="word-rows">
+      <div class="word-row"></div>
+      <div class="word-row"></div>
+      <div class="word-row"></div>
+      <div class="word-row"></div>
+    </div>
+
+    <div id="controls">
+      <div id="guess-section">
+        <label id="guess-label" for="guess-input">
+          Type the shared 3-letter ending (e.g. <code>xxx</code>):
+        </label>
+        <input id="guess-input" type="text" maxlength="3" autocomplete="off" placeholder="3 letters" />
+      </div>
+
+      <div class="button-row">
+        <button id="submit-btn">Submit</button>
+        <button id="reveal-btn">Reveal a Letter</button>
+        <button id="next-btn" disabled>Next Puzzle</button>
+      </div>
+
+      <div id="cost-info">
+        Wrong guess: <strong>-5</strong> points · Reveal 1 letter: <strong>-10</strong> points<br />
+        You lose if your points reach <strong>0</strong> or below.
+      </div>
+
+      <div id="message" class="msg-info"></div>
+
+      <div id="hint">
+        Hints:
+        <br />• All four words form a <strong>one-letter neighbor set</strong> (same ending, different first letter).
+        <br />• Example pattern: <code>g _ _ _</code>, <code>s _ _ _</code>, <code>n _ _ _</code>, <code>c _ _ _</code> → all four share the same hidden 3-letter ending.
+        <br />• Use <em>Reveal a Letter</em> if you're stuck – but spend your points wisely.
+      </div>
+    </div>
+
+    <!-- FOOTER with two game links -->
+    <div id="footer">
+      More from WeaveTXT:
+      <a href="https://www.weavetxt.com/index.html" target="_blank" rel="noopener noreferrer">
+        Swap and Weave
+      </a>
+      ·
+      <a href="https://www.weavetxt.com/solitaire.html" target="_blank" rel="noopener noreferrer">
+        Weave Solitaire
+      </a>
+    </div>
+  </div>
+
+  <script>
+    /* --------- LOOPING TXT ANIMATION --------- */
+    (function animateTXT(){
+      const el = document.getElementById("brand-txt");
+      const word = "TXT";
+      let i = 0;
+      let forward = true;
+
+      function loop(){
+        el.textContent = word.slice(0, i);
+
+        if (forward) {
+          i++;
+          if (i > word.length) {
+            forward = false;
+            setTimeout(loop, 900);
+            return;
+          }
+        } else {
+          i--;
+          if (i < 0) {
+            forward = true;
+            setTimeout(loop, 600);
+            return;
+          }
+        }
+        setTimeout(loop, 120);
+      }
+
+      loop();
+    })();
+
+    // --------- GAME LOGIC ---------
+    const puzzles = [
+      {
+        prefixes: ["g", "s", "n", "c"],
+        suffix: "ame",
+        words: ["game", "same", "name", "came"],
+        hint: "Four very common everyday words; two are things you can play."
+      },
+      {
+        prefixes: ["f", "k", "b", "w"],
+        suffix: "ind",
+        words: ["find", "kind", "bind", "wind"],
+        hint: "One means to search, one describes being nice."
+      },
+      {
+        prefixes: ["c", "b", "l", "h"],
+        suffix: "old",
+        words: ["cold", "bold", "gold", "hold"],
+        hint: "Think of temperature, courage, and something shiny."
+      },
+      {
+        prefixes: ["t", "b", "c", "h"],
+        suffix: "ook",
+        words: ["took", "book", "cook", "hook"],
+        hint: "Related to time, reading, food, and fishing."
+      },
+      {
+        prefixes: ["h", "r", "y", "n"],
+        suffix: "ear",
+        words: ["hear", "rear", "year", "near"],
+        hint: "About sound, position, and passing time."
+      }
+    ];
+
+    let currentIndex = 0;
+    let points = 15;
+    let revealed = [false, false, false]; // track revealed letters of suffix
+    let gameOver = false;
+
+    const pointsSpan = document.getElementById("points");
+    const puzzleCounterSpan = document.getElementById("puzzle-counter");
+    const wordRows = document.querySelectorAll(".word-row");
+    const guessInput = document.getElementById("guess-input");
+    const submitBtn = document.getElementById("submit-btn");
+    const revealBtn = document.getElementById("reveal-btn");
+    const nextBtn = document.getElementById("next-btn");
+    const messageDiv = document.getElementById("message");
+
+    function currentPuzzle() {
+      return puzzles[currentIndex];
+    }
+
+    function updatePuzzleCounter() {
+      puzzleCounterSpan.textContent = `Puzzle ${currentIndex + 1} / ${puzzles.length}`;
+    }
+
+    function updateWordRows() {
+      const puzzle = currentPuzzle();
+      const chars = [];
+
+      for (let i = 0; i < 3; i++) {
+        if (revealed[i]) {
+          chars.push(puzzle.suffix[i]);
+        } else {
+          chars.push("_");
+        }
+      }
+
+      const missingDisplay = chars.join(" ");
+
+      for (let i = 0; i < wordRows.length; i++) {
+        const prefix = puzzle.prefixes[i] || "";
+        if (!prefix) {
+          wordRows[i].textContent = "";
+        } else {
+          wordRows[i].textContent = prefix + " " + missingDisplay;
+        }
+      }
+    }
+
+    function updatePoints() {
+      pointsSpan.textContent = points;
+    }
+
+    function setMessage(text, type = "info") {
+      messageDiv.textContent = text;
+      messageDiv.className = "";
+      if (type === "success") {
+        messageDiv.classList.add("msg-success");
+      } else if (type === "error") {
+        messageDiv.classList.add("msg-error");
+      } else if (type === "warning") {
+        messageDiv.classList.add("msg-warning");
+      } else {
+        messageDiv.classList.add("msg-info");
+      }
+    }
+
+    function endGameLost() {
+      gameOver = true;
+      const puzzle = currentPuzzle();
+      revealed = [true, true, true];
+      updateWordRows();
+      const fullWords = puzzle.words.join(", ");
+      setMessage(
+        `You ran out of points.\nThe ending was "${puzzle.suffix.toUpperCase()}".\nWords: ${fullWords}`,
+        "error"
+      );
+      submitBtn.disabled = true;
+      revealBtn.disabled = true;
+      nextBtn.disabled = false;
+    }
+
+    function endGameWin() {
+      gameOver = true;
+      const puzzle = currentPuzzle();
+      revealed = [true, true, true];
+      updateWordRows();
+      const fullWords = puzzle.words.join(", ");
+      setMessage(
+        `Nice! "${puzzle.suffix.toUpperCase()}" is correct.\nWords: ${fullWords}\nFinal points: ${points}`,
+        "success"
+      );
+      submitBtn.disabled = true;
+      revealBtn.disabled = true;
+      nextBtn.disabled = false;
+    }
+
+    function handleSubmit() {
+      if (gameOver) return;
+
+      const raw = guessInput.value.trim().toLowerCase();
+      if (raw.length !== 3) {
+        setMessage("Please enter exactly 3 letters.", "warning");
+        return;
+      }
+
+      const puzzle = currentPuzzle();
+      if (raw === puzzle.suffix.toLowerCase()) {
+        endGameWin();
+      } else {
+        points -= 5;
+        updatePoints();
+        if (points <= 0) {
+          endGameLost();
+        } else {
+          setMessage(`Not quite. -5 points. Try again! (Remaining: ${points})`, "error");
+        }
+      }
+    }
+
+    function handleReveal() {
+      if (gameOver) return;
+
+      const unrevealedIndices = [];
+      for (let i = 0; i < 3; i++) {
+        if (!revealed[i]) unrevealedIndices.push(i);
+      }
+
+      if (unrevealedIndices.length === 0) {
+        setMessage("All letters are already revealed.", "warning");
+        return;
+      }
+
+      points -= 10;
+      updatePoints();
+
+      const randIndex = unrevealedIndices[Math.floor(Math.random() * unrevealedIndices.length)];
+      revealed[randIndex] = true;
+      updateWordRows();
+
+      const puzzle = currentPuzzle();
+      const revealedChar = puzzle.suffix[randIndex].toUpperCase();
+
+      if (points <= 0) {
+        setMessage(
+          `Revealed letter: position ${randIndex + 1} is "${revealedChar}".\nBut your points dropped to ${points}.`,
+          "error"
+        );
+        endGameLost();
+      } else {
+        setMessage(
+          `Revealed letter: position ${randIndex + 1} is "${revealedChar}". (Points: ${points})`,
+          "warning"
+        );
+      }
+    }
+
+    function nextPuzzle() {
+      currentIndex = (currentIndex + 1) % puzzles.length;
+      resetGameState();
+    }
+
+    function resetGameState() {
+      points = 15;
+      revealed = [false, false, false];
+      gameOver = false;
+      submitBtn.disabled = false;
+      revealBtn.disabled = false;
+      nextBtn.disabled = true;
+      guessInput.value = "";
+      updateWordRows();
+      updatePoints();
+      updatePuzzleCounter();
+      const puzzle = currentPuzzle();
+      setMessage(`New puzzle! ${puzzle.hint}`, "info");
+      guessInput.focus();
+    }
+
+    // Event listeners
+    submitBtn.addEventListener("click", handleSubmit);
+    revealBtn.addEventListener("click", handleReveal);
+    nextBtn.addEventListener("click", nextPuzzle);
+    guessInput.addEventListener("keyup", (e) => {
+      if (e.key === "Enter") {
+        handleSubmit();
+      }
+    });
+
+    // Initialize
+    resetGameState();
+  </script>
+</body>
+</html>
