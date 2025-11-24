@@ -2,37 +2,96 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Column Queue Word Game</title>
+  <title>Weave Solitaire</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <style>
+    :root {
+      --bg-main: #222;
+      --bg-card: #333;
+      --bg-tile: #444;
+      --bg-tile-empty: #2b2b2b;
+      --bg-tile-selected: #3f3f3f;
+      --accent: #ffb347;
+      --accent-soft: #ffecb3;
+      --accent-border: #ff9800;
+      --text-main: #f5f5f5;
+      --text-muted: #aaa;
+      --text-soft: #ddd;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f5f5f5;
-      color: #222;
+      background: radial-gradient(circle at top, #2b3a4a 0, #111 55%);
+      color: var(--text-main);
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 20px;
+      padding: 16px;
+      margin: 0;
+    }
+
+    /* -------- BRANDING -------- */
+    #brand {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin-top: 6px;
+      margin-bottom: 4px;
+    }
+
+    .brand-weave {
+      font-family: "Georgia", serif;
+      font-size: clamp(22px, 5vw, 30px);
+      font-weight: bold;
+      letter-spacing: 0.03em;
+    }
+
+    .brand-txt {
+      font-family: "Courier New", monospace;
+      font-size: clamp(18px, 4.5vw, 24px);
+      font-weight: bold;
+      color: var(--accent);
+      border-right: 2px solid var(--accent);
+      padding-right: 4px;
+      animation: caret-blink 0.9s step-end infinite;
+      min-width: 3ch;
+    }
+
+    @keyframes caret-blink {
+      0%, 100% { border-color: transparent; }
+      50% { border-color: var(--accent); }
     }
 
     h1 {
-      margin-bottom: 4px;
-      font-size: 26px;
+      margin: 2px 0 0;
+      font-size: clamp(20px, 5vw, 26px);
+      text-align: center;
     }
 
     #subtitle {
-      font-size: 14px;
-      margin-bottom: 16px;
-      color: #555;
+      font-size: 12px;
+      margin-top: 4px;
+      margin-bottom: 14px;
+      color: var(--text-muted);
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
     }
 
     #game-container {
-      background: #ffffff;
-      padding: 16px 20px 20px;
+      background: var(--bg-card);
+      padding: 16px 14px 18px;
       border-radius: 10px;
-      box-shadow: 0 0 12px rgba(0,0,0,0.1);
+      box-shadow: 0 0 18px rgba(0,0,0,0.55);
       max-width: 520px;
       width: 100%;
       box-sizing: border-box;
+      border: 1px solid #414141;
     }
 
     #top-bar {
@@ -42,76 +101,81 @@
       gap: 10px;
       margin-bottom: 10px;
       flex-wrap: wrap;
+      font-size: 13px;
     }
 
     #level-title {
-      font-size: 15px;
+      font-size: 13px;
       font-weight: 600;
+      color: var(--text-soft);
     }
 
     #level-select {
       font-size: 13px;
       padding: 4px 8px;
       border-radius: 6px;
-      border: 1px solid #ccc;
-      background: #fafafa;
+      border: 1px solid #555;
+      background: #252525;
+      color: var(--text-main);
     }
 
     #board {
       display: grid;
       gap: 8px;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
       justify-content: center;
     }
 
+    /* Tiles use aspect-ratio to be responsive */
     .tile {
-      width: 60px;
-      height: 60px;
       border-radius: 8px;
-      background: #ffecb3;
-      border: 2px solid #ff9800;
+      background: var(--bg-tile);
+      border: 2px solid #555;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 28px;
+      font-size: clamp(20px, 5vw, 28px);
       font-weight: bold;
       text-transform: uppercase;
       user-select: none;
-      box-sizing: border-box;
-      transition: box-shadow 0.07s ease, background 0.1s, border-color 0.1s, opacity 0.1s;
+      transition: box-shadow 0.08s ease, background 0.1s, border-color 0.1s, opacity 0.1s, transform 0.07s ease;
+      aspect-ratio: 1 / 1;
+      min-width: 44px;
     }
 
     .tile.empty {
-      background: #e0e0e0;
-      border-color: #bdbdbd;
-      color: #9e9e9e;
+      background: var(--bg-tile-empty);
+      border-color: #444;
+      color: #555;
     }
 
     .tile.active {
       cursor: pointer;
-      background: #fff3cd;
+      background: #505050;
+      border-color: var(--accent-border);
     }
 
     .tile.active:hover {
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+      transform: translateY(-1px);
     }
 
-    /* Selected tiles: visually "taken" out (no letter, faded) */
     .tile.selected {
-      background: #ffe0b2;
-      border-color: #ffb74d;
-      opacity: 0.5;
+      background: var(--bg-tile-selected);
+      border-color: var(--accent);
+      opacity: 0.55;
     }
 
     #panel {
-      margin-top: 10px;
-      border-top: 1px solid #ddd;
+      margin-top: 8px;
+      border-top: 1px solid #444;
       padding-top: 10px;
-      font-size: 14px;
+      font-size: 13px;
     }
 
     #current-word-box {
       margin-bottom: 8px;
+      text-align: center;
     }
 
     #current-word-label {
@@ -124,23 +188,24 @@
       letter-spacing: 2px;
       font-size: 18px;
       vertical-align: middle;
+      color: var(--accent-soft);
     }
 
-    /* Container for the "moved" tiles forming the word */
     #current-word-tiles {
       margin-top: 6px;
       display: flex;
       justify-content: center;
       gap: 6px;
       min-height: 40px;
+      flex-wrap: nowrap;
     }
 
     .word-tile {
       width: 36px;
       height: 36px;
       border-radius: 6px;
-      background: #ffecb3;
-      border: 2px solid #ff9800;
+      background: var(--bg-tile);
+      border: 2px solid var(--accent-border);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -149,6 +214,7 @@
       text-transform: uppercase;
       box-sizing: border-box;
       animation: pop-in 0.12s ease-out;
+      color: var(--text-main);
     }
 
     @keyframes pop-in {
@@ -167,33 +233,35 @@
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
+      justify-content: center;
     }
 
     button {
       border: none;
-      border-radius: 6px;
-      padding: 6px 12px;
+      border-radius: 999px;
+      padding: 7px 14px;
       font-size: 13px;
       cursor: pointer;
-      background: #ffb74d;
+      background: var(--accent);
       color: #222;
       font-weight: 600;
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
       transition: background 0.1s ease, transform 0.07s ease, box-shadow 0.07s ease;
+      white-space: nowrap;
     }
 
     button:hover {
-      background: #ffa726;
+      background: #ffab2c;
       transform: translateY(-1px);
-      box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+      box-shadow: 0 3px 9px rgba(0,0,0,0.6);
     }
 
     button:disabled {
-      background: #bdbdbd;
-      color: #666;
+      background: #555;
+      color: #999;
       cursor: default;
       transform: none;
       box-shadow: none;
@@ -203,46 +271,76 @@
       min-height: 18px;
       margin-bottom: 4px;
       font-size: 13px;
-      color: #444;
+      color: var(--accent-soft);
+      text-align: center;
     }
 
     #found-words-title {
       font-weight: 600;
       margin-top: 4px;
-      margin-bottom: 2px;
+      margin-bottom: 4px;
+      color: var(--text-soft);
+      text-align: center;
     }
 
     #found-words {
       list-style: none;
       padding-left: 0;
       margin: 0;
-      font-size: 13px;
+      font-size: 12px;
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
+      justify-content: center;
     }
 
     #found-words li {
-      padding: 2px 6px;
-      border-radius: 4px;
-      background: #eeeeee;
-      border: 1px solid #bdbdbd;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #2f2f2f;
+      border: 1px solid #555;
       font-family: "Fira Mono", Menlo, Consolas, monospace;
       letter-spacing: 1px;
       text-transform: uppercase;
+      color: var(--text-main);
     }
 
     #hint {
       margin-top: 8px;
-      font-size: 12px;
-      color: #777;
-      line-height: 1.4;
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      text-align: left;
+    }
+
+    #hint strong {
+      color: var(--accent-soft);
+    }
+
+    /* Mobile tweaks */
+    @media (max-width: 480px) {
+      #game-container {
+        padding: 14px 10px 16px;
+      }
+      #top-bar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      #hint {
+        font-size: 10.5px;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Column Queue Word Game</h1>
-  <div id="subtitle">Use only the bottom letter of each column to clear all tiles.</div>
+  <!-- BRAND -->
+  <div id="brand">
+    <span class="brand-weave">Weave</span>
+    <span class="brand-txt" id="brand-txt"></span>
+  </div>
+
+  <h1>Weave Solitaire</h1>
+  <div id="subtitle">Clear the board using only the bottom letters</div>
 
   <div id="game-container">
     <div id="top-bar">
@@ -279,7 +377,7 @@
         • Each letter you click is appended to the word row at the bottom.<br />
         • On an <strong>N×N</strong> board, only <strong>N-letter</strong> words are accepted (3×3 → 3 letters, 4×4 → 4 letters, 5×5 → 5 letters, etc.).<br />
         • Words are checked against the dictionary (<code>VALID_WORDS</code>, uppercase).<br />
-        • Selected tiles appear empty in the grid (as if taken) and show up below, chained to form the word.<br />
+        • Selected tiles appear empty in the grid and show up below, chained to form the word.<br />
         • Accepted words remove tiles permanently. Clear all tiles to win.
       </div>
     </div>
@@ -289,6 +387,37 @@
   <script src="valid-3-6.js"></script>
 
   <script>
+    /* --------- LOOPING TXT ANIMATION --------- */
+    (function animateTXT(){
+      const el = document.getElementById("brand-txt");
+      const word = "TXT";
+      let i = 0;
+      let forward = true;
+
+      function loop(){
+        el.textContent = word.slice(0, i);
+
+        if(forward){
+          i++;
+          if(i > word.length){
+            forward = false;
+            setTimeout(loop, 900);
+            return;
+          }
+        } else {
+          i--;
+          if(i < 0){
+            forward = true;
+            setTimeout(loop, 600);
+            return;
+          }
+        }
+        setTimeout(loop, 120);
+      }
+
+      loop();
+    })();
+
     // Optional safety check
     if (typeof VALID_WORDS === "undefined") {
       console.error("VALID_WORDS is not defined. Make sure valid-3-6.js is loaded.");
@@ -378,7 +507,7 @@
       renderBoard();
       renderCurrentWord();
       renderFoundWords();
-      setMessage("Click the bottom letters of each column to build a word.");
+      setMessage("Tap the bottom letters of each column to build a word.");
       updateButtons();
     }
 
@@ -410,7 +539,7 @@
       const cols = board[0].length;
       const activeSet = computeActiveCells();
 
-      boardEl.style.gridTemplateColumns = `repeat(${cols}, 60px)`;
+      boardEl.style.gridTemplateColumns = `repeat(${cols}, minmax(44px, 1fr))`;
       boardEl.innerHTML = "";
 
       function isSelected(r, c) {
@@ -576,7 +705,7 @@
         setMessage(`Great! You cleared all tiles with: ${foundWords.join(", ")}.`);
         updateButtons();
       } else {
-        setMessage(`Accepted "${wordUpper}". Keep going!`);
+        setMessage(`Accepted "${wordUpper}". Keep weaving!`);
       }
     }
 
