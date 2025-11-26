@@ -359,7 +359,7 @@
   </div>
 
   <h1>Neighbor Tail</h1>
-  <div id="subtitle">Guess the shared 3-letter ending</div>
+  <div id="subtitle">Guess the shared 3-letter pattern</div>
 
   <div id="game-container">
     <div id="top-bar">
@@ -368,15 +368,16 @@
         <span id="points">15</span>
       </div>
       <div id="puzzle-info">
-        <span id="puzzle-counter">Puzzle 1 / 6</span>
+        <span id="puzzle-counter">Puzzle 1 / 7</span>
         <label for="level-select" style="font-size:11px;">Choose:</label>
         <select id="level-select"></select>
       </div>
     </div>
 
     <p class="instructions">
-      You see four related words, but only their first letter is shown.<br />
-      Your goal is to guess the <strong>3 missing letters</strong> that complete all four words.
+      You see four related words, but part of each word is hidden.<br />
+      Your goal is to guess the <strong>3-letter pattern</strong> that they all share
+      (either at the <em>beginning</em> or the <em>end</em>).
     </p>
 
     <div id="word-rows">
@@ -389,7 +390,7 @@
     <div id="controls">
       <div id="guess-section">
         <label id="guess-label" for="guess-input">
-          Type the shared 3-letter ending (e.g. <code>xxx</code>):
+          Type the shared 3-letter pattern (e.g. <code>xxx</code>):
         </label>
         <input id="guess-input" type="text" maxlength="3" autocomplete="off" placeholder="3 letters" />
       </div>
@@ -409,9 +410,9 @@
 
       <div id="hint">
         Hints:
-        <br />• All four words form a <strong>one-letter neighbor set</strong> (same ending, different first letter).
-        <br />• Example pattern: <code>g _ _ _</code>, <code>s _ _ _</code>, <code>n _ _ _</code>, <code>c _ _ _</code> → all four share the same hidden 3-letter ending.
-        <br />• Use <em>Reveal a Letter</em> if you're stuck – but spend your points wisely.
+        <br />• Some puzzles hide a shared <strong>ending</strong> (e.g. <code>g _ _ _</code>, <code>s _ _ _</code>).
+        <br />• Some hide a shared <strong>beginning</strong> (e.g. <code>s w a _</code>, <code>s w a _</code>).
+        <br />• All four completed words must be valid English words.
       </div>
     </div>
 
@@ -464,10 +465,10 @@
     })();
 
     // --------- GAME LOGIC ---------
-    // EXPECTS: global const VALID_WORDS = ["GAME","SAME", ...] (UPPERCASE)
     const puzzles = [
       {
         name: "Puzzle 1 – g s n c",
+        mode: "tail",
         prefixes: ["g", "s", "n", "c"],
         suffix: "ame",
         words: ["game", "same", "name", "came"],
@@ -475,6 +476,7 @@
       },
       {
         name: "Puzzle 2 – f k b w",
+        mode: "tail",
         prefixes: ["f", "k", "b", "w"],
         suffix: "ind",
         words: ["find", "kind", "bind", "wind"],
@@ -482,6 +484,7 @@
       },
       {
         name: "Puzzle 3 – b d p m",
+        mode: "tail",
         prefixes: ["b", "d", "p", "m"],
         suffix: "ark",
         words: ["bark", "dark", "park", "mark"],
@@ -489,6 +492,7 @@
       },
       {
         name: "Puzzle 4 – c b l h",
+        mode: "tail",
         prefixes: ["c", "b", "l", "h"],
         suffix: "old",
         words: ["cold", "bold", "gold", "hold"],
@@ -496,6 +500,7 @@
       },
       {
         name: "Puzzle 5 – t b c h",
+        mode: "tail",
         prefixes: ["t", "b", "c", "h"],
         suffix: "ook",
         words: ["took", "book", "cook", "hook"],
@@ -503,16 +508,25 @@
       },
       {
         name: "Puzzle 6 – h r y n",
+        mode: "tail",
         prefixes: ["h", "r", "y", "n"],
         suffix: "ear",
         words: ["hear", "rear", "year", "near"],
         hint: "About sound, position, and passing time."
+      },
+      {
+        name: "Puzzle 7 – n p b y",
+        mode: "head",
+        prefix: "swa",
+        endings: ["n", "p", "b", "y"],
+        words: ["swan", "swap", "swab", "sway"],
+        hint: "Bird, exchange, medical tool, and movement."
       }
     ];
 
     let currentIndex = 0;
     let points = 15;
-    let revealed = [false, false, false]; // track revealed letters of canonical suffix
+    let revealed = [false, false, false]; // pattern positions
     let gameOver = false;
 
     const pointsSpan = document.getElementById("points");
@@ -525,16 +539,27 @@
     const nextBtn = document.getElementById("next-btn");
     const messageDiv = document.getElementById("message");
 
-    // Build a fast lookup set from VALID_WORDS (if provided)
+    // ---- Lazy dictionary init ----
     let WORD_SET = null;
-    if (Array.isArray(window.VALID_WORDS)) {
-      WORD_SET = new Set(window.VALID_WORDS.map(w => w.toUpperCase()));
-    } else {
-      console.warn("VALID_WORDS not found. Neighbor Tail will fall back to fixed answers.");
+
+    function ensureWordSet() {
+      if (WORD_SET) return true;
+
+      if (Array.isArray(window.VALID_WORDS)) {
+        WORD_SET = new Set(window.VALID_WORDS.map(w => w.toUpperCase()));
+        return true;
+      }
+
+      console.warn("VALID_WORDS not ready yet or not an array. Falling back to canonical answers.");
+      return false;
     }
 
     function currentPuzzle() {
       return puzzles[currentIndex];
+    }
+
+    function getAffix(puzzle) {
+      return puzzle.mode === "head" ? puzzle.prefix : puzzle.suffix;
     }
 
     function updatePuzzleCounter() {
@@ -559,24 +584,27 @@
 
     function updateWordRows() {
       const puzzle = currentPuzzle();
-      const chars = [];
+      const affix = getAffix(puzzle);
 
+      const chars = [];
       for (let i = 0; i < 3; i++) {
         if (revealed[i]) {
-          chars.push(puzzle.suffix[i]);
+          chars.push(affix[i]);
         } else {
           chars.push("_");
         }
       }
+      const chunkDisplay = chars.join(" ");
 
-      const missingDisplay = chars.join(" ");
-
-      for (let i = 0; i < wordRows.length; i++) {
-        const prefix = puzzle.prefixes[i] || "";
-        if (!prefix) {
-          wordRows[i].textContent = "";
-        } else {
-          wordRows[i].textContent = prefix + " " + missingDisplay;
+      if (puzzle.mode === "tail") {
+        for (let i = 0; i < wordRows.length; i++) {
+          const prefix = (puzzle.prefixes && puzzle.prefixes[i]) || "";
+          wordRows[i].textContent = prefix ? prefix + " " + chunkDisplay : "";
+        }
+      } else {
+        for (let i = 0; i < wordRows.length; i++) {
+          const ending = (puzzle.endings && puzzle.endings[i]) || "";
+          wordRows[i].textContent = ending ? chunkDisplay + " " + ending : "";
         }
       }
     }
@@ -602,11 +630,12 @@
     function endGameLost() {
       gameOver = true;
       const puzzle = currentPuzzle();
+      const affix = getAffix(puzzle);
       revealed = [true, true, true];
       updateWordRows();
       const fullWords = puzzle.words.join(", ");
       setMessage(
-        `You ran out of points.\nOne valid ending was "${puzzle.suffix.toUpperCase()}".\nExample set: ${fullWords}`,
+        `You ran out of points.\nOne valid pattern was "${affix.toUpperCase()}".\nExample set: ${fullWords}`,
         "error"
       );
       submitBtn.disabled = true;
@@ -614,13 +643,12 @@
       nextBtn.disabled = false;
     }
 
-    function endGameWin(suffixGuess, wordsUsed) {
+    function endGameWin(patternGuess, wordsUsed) {
       gameOver = true;
-      // Reveal canonical suffix in the rows (visual consistency)
       revealed = [true, true, true];
       updateWordRows();
       setMessage(
-        `Nice! "${suffixGuess.toUpperCase()}" makes a valid family.\nWords: ${wordsUsed.join(", ")}\nFinal points: ${points}`,
+        `Nice! "${patternGuess.toUpperCase()}" makes a valid family.\nWords: ${wordsUsed.join(", ")}\nFinal points: ${points}`,
         "success"
       );
       submitBtn.disabled = true;
@@ -638,20 +666,29 @@
       }
 
       const puzzle = currentPuzzle();
+      const affix = getAffix(puzzle);
 
-      // If we have a dictionary, accept ANY suffix that yields 4 real words
-      if (WORD_SET) {
-        const candidateWordsLower = puzzle.prefixes.map(p => p + raw);
+      // Try to build dictionary set (if available)
+      const hasDict = ensureWordSet();
+
+      if (hasDict && WORD_SET) {
+        let candidateWordsLower;
+
+        if (puzzle.mode === "tail") {
+          candidateWordsLower = puzzle.prefixes.map(p => p + raw);
+        } else {
+          candidateWordsLower = puzzle.endings.map(e => raw + e);
+        }
+
         const candidateWordsUpper = candidateWordsLower.map(w => w.toUpperCase());
-
         const allValid = candidateWordsUpper.every(w => WORD_SET.has(w));
         if (allValid) {
           endGameWin(raw, candidateWordsUpper);
           return;
         }
       } else {
-        // Fallback: strict to canonical suffix if dictionary not loaded
-        if (raw === puzzle.suffix.toLowerCase()) {
+        // Fallback to canonical affix if dictionary isn't usable yet
+        if (raw === affix.toLowerCase()) {
           const canonicalUpper = puzzle.words.map(w => w.toUpperCase());
           endGameWin(raw, canonicalUpper);
           return;
@@ -684,12 +721,14 @@
       points -= 10;
       updatePoints();
 
+      const puzzle = currentPuzzle();
+      const affix = getAffix(puzzle);
+
       const randIndex = unrevealedIndices[Math.floor(Math.random() * unrevealedIndices.length)];
       revealed[randIndex] = true;
       updateWordRows();
 
-      const puzzle = currentPuzzle();
-      const revealedChar = puzzle.suffix[randIndex].toUpperCase();
+      const revealedChar = affix[randIndex].toUpperCase();
 
       if (points <= 0) {
         setMessage(
