@@ -121,6 +121,22 @@
       font-size: 11px;
       color: var(--text-muted);
       text-align: right;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    #puzzle-counter {
+      white-space: nowrap;
+    }
+
+    #level-select {
+      font-size: 12px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      border: 1px solid #555;
+      background: #252525;
+      color: var(--text-main);
     }
 
     /* -------- WORD ROWS -------- */
@@ -324,7 +340,7 @@
         align-items: flex-start;
       }
       #puzzle-info {
-        text-align: left;
+        justify-content: flex-start;
       }
       .word-row {
         font-size: 18px;
@@ -352,7 +368,9 @@
         <span id="points">15</span>
       </div>
       <div id="puzzle-info">
-        <span id="puzzle-counter">Puzzle 1 / 5</span>
+        <span id="puzzle-counter">Puzzle 1 / 6</span>
+        <label for="level-select" style="font-size:11px;">Choose:</label>
+        <select id="level-select"></select>
       </div>
     </div>
 
@@ -410,6 +428,9 @@
     </div>
   </div>
 
+  <!-- Dictionary (UPPERCASE words) -->
+  <script src="valid-3-6.js"></script>
+
   <script>
     /* --------- LOOPING TXT ANIMATION --------- */
     (function animateTXT(){
@@ -446,40 +467,46 @@
     // EXPECTS: global const VALID_WORDS = ["GAME","SAME", ...] (UPPERCASE)
     const puzzles = [
       {
+        name: "Puzzle 1 – g s n c",
         prefixes: ["g", "s", "n", "c"],
         suffix: "ame",
         words: ["game", "same", "name", "came"],
         hint: "Four very common everyday words; two are things you can play."
       },
       {
+        name: "Puzzle 2 – f k b w",
         prefixes: ["f", "k", "b", "w"],
         suffix: "ind",
         words: ["find", "kind", "bind", "wind"],
         hint: "One means to search, one describes being nice."
       },
       {
-        prefixes: ["c", "b", "g", "h"],
+        name: "Puzzle 3 – b d p m",
+        prefixes: ["b", "d", "p", "m"],
+        suffix: "ark",
+        words: ["bark", "dark", "park", "mark"],
+        hint: "Animal voice and lighting condition."
+      },
+      {
+        name: "Puzzle 4 – c b l h",
+        prefixes: ["c", "b", "l", "h"],
         suffix: "old",
         words: ["cold", "bold", "gold", "hold"],
         hint: "Think of temperature, courage, and something shiny."
       },
       {
+        name: "Puzzle 5 – t b c h",
         prefixes: ["t", "b", "c", "h"],
         suffix: "ook",
         words: ["took", "book", "cook", "hook"],
         hint: "Related to time, reading, food, and fishing."
       },
       {
+        name: "Puzzle 6 – h r y n",
         prefixes: ["h", "r", "y", "n"],
         suffix: "ear",
         words: ["hear", "rear", "year", "near"],
         hint: "About sound, position, and passing time."
-      },
-      {
-        prefixes: ["b", "d", "p", "m"],
-        suffix: "ark",
-        words: ["bark", "dark", "park", "mark"],
-        hint: "Animal voice, lighting condition"
       }
     ];
 
@@ -490,6 +517,7 @@
 
     const pointsSpan = document.getElementById("points");
     const puzzleCounterSpan = document.getElementById("puzzle-counter");
+    const levelSelectEl = document.getElementById("level-select");
     const wordRows = document.querySelectorAll(".word-row");
     const guessInput = document.getElementById("guess-input");
     const submitBtn = document.getElementById("submit-btn");
@@ -511,6 +539,22 @@
 
     function updatePuzzleCounter() {
       puzzleCounterSpan.textContent = `Puzzle ${currentIndex + 1} / ${puzzles.length}`;
+    }
+
+    function initLevelSelect() {
+      levelSelectEl.innerHTML = "";
+      puzzles.forEach((p, idx) => {
+        const opt = document.createElement("option");
+        opt.value = idx;
+        opt.textContent = p.name || `Puzzle ${idx + 1}`;
+        levelSelectEl.appendChild(opt);
+      });
+      levelSelectEl.value = String(currentIndex);
+
+      levelSelectEl.addEventListener("change", () => {
+        currentIndex = parseInt(levelSelectEl.value, 10) || 0;
+        resetGameState();
+      });
     }
 
     function updateWordRows() {
@@ -677,6 +721,7 @@
       updateWordRows();
       updatePoints();
       updatePuzzleCounter();
+      if (levelSelectEl) levelSelectEl.value = String(currentIndex);
       const puzzle = currentPuzzle();
       setMessage(`New puzzle! ${puzzle.hint}`, "info");
       guessInput.focus();
@@ -693,6 +738,7 @@
     });
 
     // Initialize
+    initLevelSelect();
     resetGameState();
   </script>
 </body>
