@@ -443,6 +443,7 @@
     })();
 
     // --------- GAME LOGIC ---------
+    // EXPECTS: global const VALID_WORDS = ["GAME","SAME", ...] (UPPERCASE)
     const puzzles = [
       {
         prefixes: ["g", "s", "n", "c"],
@@ -478,7 +479,7 @@
 
     let currentIndex = 0;
     let points = 15;
-    let revealed = [false, false, false]; // track revealed letters of suffix
+    let revealed = [false, false, false]; // track revealed letters of canonical suffix
     let gameOver = false;
 
     const pointsSpan = document.getElementById("points");
@@ -489,6 +490,14 @@
     const revealBtn = document.getElementById("reveal-btn");
     const nextBtn = document.getElementById("next-btn");
     const messageDiv = document.getElementById("message");
+
+    // Build a fast lookup set from VALID_WORDS (if provided)
+    let WORD_SET = null;
+    if (Array.isArray(window.VALID_WORDS)) {
+      WORD_SET = new Set(window.VALID_WORDS.map(w => w.toUpperCase()));
+    } else {
+      console.warn("VALID_WORDS not found. Neighbor Tail will fall back to fixed answers.");
+    }
 
     function currentPuzzle() {
       return puzzles[currentIndex];
@@ -547,7 +556,7 @@
       updateWordRows();
       const fullWords = puzzle.words.join(", ");
       setMessage(
-        `You ran out of points.\nThe ending was "${puzzle.suffix.toUpperCase()}".\nWords: ${fullWords}`,
+        `You ran out of points.\nOne valid ending was "${puzzle.suffix.toUpperCase()}".\nExample set: ${fullWords}`,
         "error"
       );
       submitBtn.disabled = true;
@@ -555,14 +564,13 @@
       nextBtn.disabled = false;
     }
 
-    function endGameWin() {
+    function endGameWin(suffixGuess, wordsUsed) {
       gameOver = true;
-      const puzzle = currentPuzzle();
+      // Reveal canonical suffix in the rows (visual consistency)
       revealed = [true, true, true];
       updateWordRows();
-      const fullWords = puzzle.words.join(", ");
       setMessage(
-        `Nice! "${puzzle.suffix.toUpperCase()}" is correct.\nWords: ${fullWords}\nFinal points: ${points}`,
+        `Nice! "${suffixGuess.toUpperCase()}" makes a valid family.\nWords: ${wordsUsed.join(", ")}\nFinal points: ${points}`,
         "success"
       );
       submitBtn.disabled = true;
@@ -580,16 +588,33 @@
       }
 
       const puzzle = currentPuzzle();
-      if (raw === puzzle.suffix.toLowerCase()) {
-        endGameWin();
-      } else {
-        points -= 5;
-        updatePoints();
-        if (points <= 0) {
-          endGameLost();
-        } else {
-          setMessage(`Not quite. -5 points. Try again! (Remaining: ${points})`, "error");
+
+      // If we have a dictionary, accept ANY suffix that yields 4 real words
+      if (WORD_SET) {
+        const candidateWordsLower = puzzle.prefixes.map(p => p + raw);
+        const candidateWordsUpper = candidateWordsLower.map(w => w.toUpperCase());
+
+        const allValid = candidateWordsUpper.every(w => WORD_SET.has(w));
+        if (allValid) {
+          endGameWin(raw, candidateWordsUpper);
+          return;
         }
+      } else {
+        // Fallback: strict to canonical suffix if dictionary not loaded
+        if (raw === puzzle.suffix.toLowerCase()) {
+          const canonicalUpper = puzzle.words.map(w => w.toUpperCase());
+          endGameWin(raw, canonicalUpper);
+          return;
+        }
+      }
+
+      // Wrong guess
+      points -= 5;
+      updatePoints();
+      if (points <= 0) {
+        endGameLost();
+      } else {
+        setMessage(`Not quite. -5 points. Try again! (Remaining: ${points})`, "error");
       }
     }
 
