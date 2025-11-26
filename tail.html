@@ -451,7 +451,7 @@
         prefixes: ["b", "d", "p", "m"],
         suffix: "ark",
         words: ["bark", "dark", "park", "mark"],
-        hint: "Animal voice, lighting, and place."
+        hint: "Animal voice, lighting, and a place to relax."
       },
       {
         name: "Puzzle 4 – c b l h",
@@ -459,7 +459,7 @@
         prefixes: ["c", "b", "l", "h"],
         suffix: "old",
         words: ["cold", "bold", "gold", "hold"],
-        hint: "Temperature, courage, precious metal, grip."
+        hint: "Temperature, courage, precious metal, and grip."
       },
       {
         name: "Puzzle 5 – t b c h",
@@ -478,7 +478,7 @@
         hint: "Sound, position, and time."
       },
       {
-        name: "Puzzle 7 – swa _",
+        name: "Puzzle 7 – n p b y",
         mode: "head",
         prefix: "swa",
         endings: ["n", "p", "b", "y"],
@@ -491,6 +491,11 @@
     let points = 15;
     let revealed = [false, false, false]; // three pattern letters
     let gameOver = false;
+
+    // This controls what the rows display.
+    // Normally it's the canonical affix, but if the player finds a different valid pattern,
+    // we switch this to their pattern so the board shows THEIR family.
+    let displayAffix = null;
 
     const pointsSpan = document.getElementById("points");
     const puzzleCounterSpan = document.getElementById("puzzle-counter");
@@ -529,8 +534,13 @@
       return puzzles[currentIndex];
     }
 
-    function getAffix(p) {
-      return p.mode === "head" ? p.prefix : p.suffix;
+    function getCanonicalAffix(puzzle) {
+      return puzzle.mode === "head" ? puzzle.prefix : puzzle.suffix;
+    }
+
+    function getAffixForDisplay(puzzle) {
+      // Use player's affix if they've found one, otherwise canonical
+      return displayAffix || getCanonicalAffix(puzzle);
     }
 
     function updatePuzzleCounter() {
@@ -555,7 +565,7 @@
 
     function updateWordRows() {
       const puzzle = currentPuzzle();
-      const affix = getAffix(puzzle);
+      const affix = getAffixForDisplay(puzzle);
 
       const chars = [];
       for (let i = 0; i < 3; i++) {
@@ -584,6 +594,7 @@
 
     function endGameWin(patternGuess, wordsUsed) {
       gameOver = true;
+      displayAffix = patternGuess.toLowerCase();  // show player's pattern on board
       revealed = [true, true, true];
       updateWordRows();
       setMessage(
@@ -597,12 +608,13 @@
 
     function endGameLost() {
       gameOver = true;
-      const puzzle = currentPuzzle();
-      const affix = getAffix(puzzle).toUpperCase();
+      // On lose we keep canonical affix (displayAffix remains default)
       revealed = [true, true, true];
       updateWordRows();
+      const puzzle = currentPuzzle();
+      const canonicalAffix = getCanonicalAffix(puzzle).toUpperCase();
       setMessage(
-        `You ran out of points.\nOne valid pattern was "${affix}".`,
+        `You ran out of points.\nOne valid pattern was "${canonicalAffix}".`,
         "error"
       );
       submitBtn.disabled = true;
@@ -659,7 +671,7 @@
       }
 
       const puzzle = currentPuzzle();
-      const affix = getAffix(puzzle);
+      const affix = getAffixForDisplay(puzzle);
 
       const unrevealedIndices = [];
       for (let i = 0; i < 3; i++) {
@@ -707,11 +719,12 @@
       revealBtn.disabled = false;
       nextBtn.disabled = true;
       guessInput.value = "";
+      const puzzle = currentPuzzle();
+      displayAffix = getCanonicalAffix(puzzle); // reset to canonical at start
       updateWordRows();
       updatePoints();
       updatePuzzleCounter();
       levelSelectEl.value = String(currentIndex);
-      const puzzle = currentPuzzle();
       setMessage(puzzle.hint, "info");
       guessInput.focus();
     }
