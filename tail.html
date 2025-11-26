@@ -33,7 +33,7 @@
       margin: 0;
     }
 
-    /* -------- Branding -------- */
+    /* BRANDING */
     #brand {
       display: flex;
       align-items: baseline;
@@ -81,7 +81,7 @@
       letter-spacing: 0.12em;
     }
 
-    /* -------- Game Container -------- */
+    /* GAME CARD */
     #game-container {
       background: var(--bg-card);
       padding: 16px 14px 18px;
@@ -108,15 +108,48 @@
       color: var(--text-soft);
     }
 
-    #points { color: var(--accent); font-weight: 700; margin-left: 4px; }
+    #points {
+      color: var(--accent);
+      font-weight: 700;
+      margin-left: 4px;
+    }
 
     #puzzle-info {
       font-size: 11px;
       color: var(--text-muted);
       text-align: right;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
     }
 
-    /* -------- Word Rows -------- */
+    #puzzle-counter {
+      white-space: nowrap;
+    }
+
+    #level-select {
+      font-size: 12px;
+      padding: 2px 6px;
+      border-radius: 6px;
+      border: 1px solid #555;
+      background: #252525;
+      color: var(--text-main);
+    }
+
+    /* INSTRUCTIONS */
+    .instructions {
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--text-soft);
+      margin-bottom: 10px;
+    }
+
+    .instructions strong {
+      color: var(--accent-soft);
+    }
+
+    /* WORD ROWS */
     #word-rows {
       display: flex;
       flex-direction: column;
@@ -134,12 +167,16 @@
       border: 1px solid #444;
     }
 
-    /* -------- Controls -------- */
+    /* CONTROLS */
     #controls {
       margin-top: 4px;
       border-top: 1px solid #444;
       padding-top: 10px;
       font-size: 13px;
+    }
+
+    #guess-section {
+      margin-bottom: 10px;
     }
 
     #guess-input {
@@ -150,6 +187,16 @@
       background: #252525;
       color: var(--text-main);
       font-size: 16px;
+    }
+
+    #guess-input::placeholder {
+      color: #777;
+    }
+
+    #guess-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 4px rgba(255, 179, 71, 0.7);
     }
 
     .button-row {
@@ -171,9 +218,50 @@
       font-weight: 600;
       display: inline-flex;
       align-items: center;
-      justify-content: center;
+      gap: 4px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      transition: background 0.1s ease, transform 0.07s ease, box-shadow 0.07s ease;
       min-width: 110px;
-      transition: 0.1s;
+      justify-content: center;
+    }
+
+    button:hover:not(:disabled) {
+      background: #ffab2c;
+      transform: translateY(-1px);
+      box-shadow: 0 3px 9px rgba(0,0,0,0.6);
+    }
+
+    button:disabled {
+      background: #555;
+      color: #999;
+      cursor: default;
+      transform: none;
+      box-shadow: none;
+    }
+
+    #reveal-btn {
+      background: #555;
+      color: var(--text-main);
+    }
+
+    #reveal-btn:hover:not(:disabled) {
+      background: #666;
+    }
+
+    #next-btn {
+      background: #444;
+      color: var(--text-main);
+    }
+
+    #next-btn:hover:not(:disabled) {
+      background: #555;
+    }
+
+    #cost-info {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 6px;
     }
 
     #message {
@@ -185,10 +273,11 @@
     }
 
     .msg-success { color: #9be59b; }
-    .msg-error { color: #ff9d9d; }
+    .msg-error   { color: #ff9d9d; }
     .msg-warning { color: var(--accent); }
-    .msg-info { color: var(--accent-soft); }
+    .msg-info    { color: var(--accent-soft); }
 
+    /* FOOTER */
     #footer {
       margin-top: 12px;
       padding-top: 8px;
@@ -200,246 +289,444 @@
 
     #footer a {
       color: var(--accent);
-      font-weight: 600;
       text-decoration: none;
+      font-weight: 600;
     }
 
+    #footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* MOBILE */
+    @media (max-width: 480px) {
+      #game-container {
+        padding: 14px 10px 16px;
+      }
+      #top-bar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      #puzzle-info {
+        align-items: flex-start;
+      }
+      .word-row {
+        font-size: 18px;
+      }
+      .instructions {
+        font-size: 11px;
+      }
+      #cost-info {
+        font-size: 10.5px;
+      }
+    }
   </style>
 </head>
-
 <body>
+  <!-- BRAND -->
+  <div id="brand">
+    <span class="brand-weave">Weave</span>
+    <span class="brand-txt" id="brand-txt"></span>
+  </div>
 
-<!-- BRAND -->
-<div id="brand">
-  <span class="brand-weave">Weave</span>
-  <span class="brand-txt" id="brand-txt"></span>
-</div>
+  <h1>Neighbor Tail / Head</h1>
+  <div id="subtitle">Guess the shared 3-letter pattern</div>
 
-<h1>Neighbor Tail / Head</h1>
-<div id="subtitle">Find the shared affix</div>
-
-<div id="game-container">
-
-  <div id="top-bar">
-    <div id="points-label">
-      Points: <span id="points">15</span>
+  <div id="game-container">
+    <div id="top-bar">
+      <div id="points-label">
+        Points:
+        <span id="points">15</span>
+      </div>
+      <div id="puzzle-info">
+        <span id="puzzle-counter">Puzzle 1 / 7</span>
+        <label style="font-size:11px;">
+          Level:
+          <select id="level-select"></select>
+        </label>
+      </div>
     </div>
 
-    <div id="puzzle-info">
-      <span id="puzzle-counter">Puzzle 1 / 7</span><br>
-      <label style="font-size: 11px;">Level:
-        <select id="level-select" style="font-size: 12px; padding: 2px 4px;"></select>
-      </label>
+    <p class="instructions">
+      You see four related words, but part of each word is hidden.<br />
+      Your goal is to guess the <strong>3-letter pattern</strong> they all share
+      (either at the <em>beginning</em> or the <em>end</em>).
+    </p>
+
+    <div id="word-rows">
+      <div class="word-row"></div>
+      <div class="word-row"></div>
+      <div class="word-row"></div>
+      <div class="word-row"></div>
+    </div>
+
+    <div id="controls">
+      <div id="guess-section">
+        <label for="guess-input">Type the shared 3-letter pattern:</label>
+        <input id="guess-input" type="text" maxlength="3" autocomplete="off" placeholder="3 letters" />
+      </div>
+
+      <div class="button-row">
+        <button id="submit-btn">Submit</button>
+        <button id="reveal-btn">Reveal a Letter</button>
+        <button id="next-btn" disabled>Next Puzzle</button>
+      </div>
+
+      <div id="cost-info">
+        Wrong guess: <strong>-5</strong> points · Reveal 1 letter: <strong>-10</strong> points<br />
+        You lose if your points reach <strong>0</strong> or below.
+      </div>
+
+      <div id="message" class="msg-info"></div>
+    </div>
+
+    <!-- FOOTER -->
+    <div id="footer">
+      More from WeaveTXT:
+      <a href="https://www.weavetxt.com/index.html" target="_blank" rel="noopener noreferrer">
+        Swap and Weave
+      </a>
+      ·
+      <a href="https://www.weavetxt.com/solitaire.html" target="_blank" rel="noopener noreferrer">
+        Weave Solitaire
+      </a>
     </div>
   </div>
 
-  <p class="instructions">
-    You see four related words, but only partial letters.<br>
-    Your job is to guess the missing <strong>3-letter affix</strong>.
-  </p>
+  <!-- Dictionary (MUST define: const VALID_WORDS = [...] ) -->
+  <script src="valid-3-6.js"></script>
 
-  <div id="word-rows">
-    <div class="word-row"></div>
-    <div class="word-row"></div>
-    <div class="word-row"></div>
-    <div class="word-row"></div>
-  </div>
+  <script>
+    /* -------- TXT animation -------- */
+    (function animateTXT(){
+      const el = document.getElementById("brand-txt");
+      const word = "TXT";
+      let i = 0;
+      let forward = true;
 
-  <div id="controls">
-    <label>Type your 3-letter guess:</label>
-    <input id="guess-input" type="text" maxlength="3" autocomplete="off" />
+      function loop(){
+        el.textContent = word.slice(0, i);
 
-    <div class="button-row">
-      <button id="submit-btn">Submit</button>
-      <button id="reveal-btn">Reveal Letter</button>
-      <button id="next-btn" disabled>Next</button>
-    </div>
+        if (forward) {
+          i++;
+          if (i > word.length) {
+            forward = false;
+            setTimeout(loop, 800);
+            return;
+          }
+        } else {
+          i--;
+          if (i < 0) {
+            forward = true;
+            setTimeout(loop, 600);
+            return;
+          }
+        }
+        setTimeout(loop, 110);
+      }
 
-    <div id="message" class="msg-info"></div>
-  </div>
+      loop();
+    })();
 
-  <div id="footer">
-    More from WeaveTXT:
-    <a href="https://www.weavetxt.com/index.html" target="_blank">Swap and Weave</a> ·
-    <a href="https://www.weavetxt.com/solitaire.html" target="_blank">Weave Solitaire</a>
-  </div>
+    /* -------- Game data -------- */
+    const puzzles = [
+      {
+        name: "Puzzle 1 – g s n c",
+        mode: "tail",
+        prefixes: ["g", "s", "n", "c"],
+        suffix: "ame",
+        words: ["game", "same", "name", "came"],
+        hint: "Everyday words; two are things you can play."
+      },
+      {
+        name: "Puzzle 2 – f k b w",
+        mode: "tail",
+        prefixes: ["f", "k", "b", "w"],
+        suffix: "ind",
+        words: ["find", "kind", "bind", "wind"],
+        hint: "All rhyme with 'find'."
+      },
+      {
+        name: "Puzzle 3 – b d p m",
+        mode: "tail",
+        prefixes: ["b", "d", "p", "m"],
+        suffix: "ark",
+        words: ["bark", "dark", "park", "mark"],
+        hint: "Animal voice, lighting, and place."
+      },
+      {
+        name: "Puzzle 4 – c b l h",
+        mode: "tail",
+        prefixes: ["c", "b", "l", "h"],
+        suffix: "old",
+        words: ["cold", "bold", "gold", "hold"],
+        hint: "Temperature, courage, precious metal, grip."
+      },
+      {
+        name: "Puzzle 5 – t b c h",
+        mode: "tail",
+        prefixes: ["t", "b", "c", "h"],
+        suffix: "ook",
+        words: ["took", "book", "cook", "hook"],
+        hint: "Time, reading, food, and fishing."
+      },
+      {
+        name: "Puzzle 6 – h r y n",
+        mode: "tail",
+        prefixes: ["h", "r", "y", "n"],
+        suffix: "ear",
+        words: ["hear", "rear", "year", "near"],
+        hint: "Sound, position, and time."
+      },
+      {
+        name: "Puzzle 7 – swa _",
+        mode: "head",
+        prefix: "swa",
+        endings: ["n", "p", "b", "y"],
+        words: ["swan", "swap", "swab", "sway"],
+        hint: "Bird, exchange, medical tool, and movement."
+      }
+    ];
 
-</div>
+    let currentIndex = 0;
+    let points = 15;
+    let revealed = [false, false, false]; // three pattern letters
+    let gameOver = false;
 
-<!-- STRICT DICTIONARY REQUIRED -->
-<script src="valid-3-6.js"></script>
+    const pointsSpan = document.getElementById("points");
+    const puzzleCounterSpan = document.getElementById("puzzle-counter");
+    const levelSelectEl = document.getElementById("level-select");
+    const wordRows = document.querySelectorAll(".word-row");
+    const guessInput = document.getElementById("guess-input");
+    const submitBtn = document.getElementById("submit-btn");
+    const revealBtn = document.getElementById("reveal-btn");
+    const nextBtn = document.getElementById("next-btn");
+    const messageDiv = document.getElementById("message");
 
-<script>
-/* ——— TXT Animation ——— */
-(function animateTXT(){
-  const el = document.getElementById("brand-txt");
-  const word = "TXT";
-  let i = 0, fwd = true;
-  function loop(){
-    el.textContent = word.slice(0, i);
-    if (fwd) { i++; if (i > word.length){ fwd = false; setTimeout(loop, 700); return; } }
-    else { i--; if (i < 0){ fwd = true; setTimeout(loop, 500); return; } }
-    setTimeout(loop, 100);
-  }
-  loop();
-})();
+    // STRICT dictionary: must exist, no window.VALID_WORDS
+    let WORD_SET = null;
+    let DICT_READY = false;
 
-/* ——— Game Data ——— */
-const puzzles = [
-  { name:"Tail – g s n c", mode:"tail", prefixes:["g","s","n","c"], suffix:"ame",
-    words:["game","same","name","came"], hint:"Common everyday words." },
-
-  { name:"Tail – f k b w", mode:"tail", prefixes:["f","k","b","w"], suffix:"ind",
-    words:["find","kind","bind","wind"], hint:"All rhyme with 'find'." },
-
-  { name:"Tail – b d p m", mode:"tail", prefixes:["b","d","p","m"], suffix:"ark",
-    words:["bark","dark","park","mark"], hint:"Animal voice + conditions." },
-
-  { name:"Head – swa _", mode:"head", prefix:"swa",
-    endings:["n","p","b","y"], words:["swan","swap","swab","sway"], hint:"Bird / exchange / tool." }
-];
-
-let currentIndex = 0;
-let points = 15;
-let revealed = [false,false,false];
-let gameOver = false;
-
-/* ——— Strict Dictionary Loading ——— */
-let WORD_SET = null;
-let DICT_READY = false;
-
-function initDictionary() {
-  if (!Array.isArray(window.VALID_WORDS)) {
-    alert("ERROR: valid-3-6.js not loaded. VALID_WORDS must exist.");
-    DICT_READY = false;
-    return false;
-  }
-  WORD_SET = new Set(window.VALID_WORDS.map(w => w.toUpperCase()));
-  DICT_READY = true;
-  return true;
-}
-
-// Attempt immediately
-initDictionary();
-
-/* ——— Elements ——— */
-const pointsSpan = document.getElementById("points");
-const wordRows = document.querySelectorAll(".word-row");
-const guessInput = document.getElementById("guess-input");
-const submitBtn = document.getElementById("submit-btn");
-const revealBtn = document.getElementById("reveal-btn");
-const nextBtn = document.getElementById("next-btn");
-const messageDiv = document.getElementById("message");
-const puzzleCounterSpan = document.getElementById("puzzle-counter");
-const levelSelectEl = document.getElementById("level-select");
-
-/* ——— Helpers ——— */
-function setMessage(t, type="info"){
-  messageDiv.textContent = t;
-  messageDiv.className = "msg-" + type;
-}
-
-function getPuzzle(){ return puzzles[currentIndex]; }
-
-function getAffix(p){
-  return p.mode === "tail" ? p.suffix : p.prefix;
-}
-
-function updateRows(){
-  const p = getPuzzle();
-  const affix = getAffix(p);
-  let chars = [];
-  for (let i=0;i<3;i++){
-    chars.push(revealed[i] ? affix[i] : "_");
-  }
-  const display = chars.join(" ");
-
-  if (p.mode === "tail"){
-    for (let i=0;i<4;i++){
-      wordRows[i].textContent = p.prefixes[i] + " " + display;
+    function initDictionary() {
+      if (typeof VALID_WORDS === "undefined" || !Array.isArray(VALID_WORDS)) {
+        alert("ERROR: valid-3-6.js not loaded or VALID_WORDS is not an array.\nGame requires VALID_WORDS.");
+        DICT_READY = false;
+        return false;
+      }
+      WORD_SET = new Set(VALID_WORDS.map(w => w.toUpperCase()));
+      DICT_READY = true;
+      return true;
     }
-  } else {
-    for (let i=0;i<4;i++){
-      wordRows[i].textContent = display + " " + p.endings[i];
+
+    // Initialize dictionary once at load
+    initDictionary();
+
+    function setMessage(text, type = "info") {
+      messageDiv.textContent = text;
+      messageDiv.className = "msg-" + type;
     }
-  }
-}
 
-function updatePoints(){
-  pointsSpan.textContent = points;
-}
+    function currentPuzzle() {
+      return puzzles[currentIndex];
+    }
 
-function endWin(guess, words){
-  gameOver = true;
-  revealed=[true,true,true];
-  updateRows();
-  setMessage(`Correct! Words: ${words.join(", ")}`, "success");
-  submitBtn.disabled=true; revealBtn.disabled=true; nextBtn.disabled=false;
-}
+    function getAffix(p) {
+      return p.mode === "head" ? p.prefix : p.suffix;
+    }
 
-function endLose(){
-  gameOver = true;
-  const p = getPuzzle();
-  const affix = getAffix(p).toUpperCase();
-  revealed=[true,true,true];
-  updateRows();
-  setMessage(`You ran out of points.\nOne valid affix was "${affix}".`, "error");
-  submitBtn.disabled=true; revealBtn.disabled=true; nextBtn.disabled=false;
-}
+    function updatePuzzleCounter() {
+      puzzleCounterSpan.textContent = `Puzzle ${currentIndex + 1} / ${puzzles.length}`;
+    }
 
-function handleSubmit(){
-  if (gameOver) return;
-  if (!DICT_READY){ setMessage("Dictionary not loaded.", "error"); return; }
+    function initLevelSelect() {
+      levelSelectEl.innerHTML = "";
+      puzzles.forEach((p, idx) => {
+        const opt = document.createElement("option");
+        opt.value = idx;
+        opt.textContent = p.name;
+        levelSelectEl.appendChild(opt);
+      });
 
-  const input = guessInput.value.trim().toLowerCase();
-  if (input.length !== 3){ setMessage("Enter exactly 3 letters.", "warning"); return; }
+      levelSelectEl.value = String(currentIndex);
+      levelSelectEl.addEventListener("change", () => {
+        currentIndex = parseInt(levelSelectEl.value, 10) || 0;
+        resetGameState();
+      });
+    }
 
-  const p = getPuzzle();
-  let candidates;
+    function updateWordRows() {
+      const puzzle = currentPuzzle();
+      const affix = getAffix(puzzle);
 
-  if (p.mode === "tail"){
-    candidates = p.prefixes.map(x => x + input);
-  } else {
-    candidates = p.endings.map(e => input + e);
-  }
+      const chars = [];
+      for (let i = 0; i < 3; i++) {
+        if (revealed[i]) {
+          chars.push(affix[i]);
+        } else {
+          chars.push("_");
+        }
+      }
+      const chunkDisplay = chars.join(" ");
 
-  const upper = candidates.map(w => w.toUpperCase());
-  const allValid = upper.every(w => WORD_SET.has(w));
+      if (puzzle.mode === "tail") {
+        for (let i = 0; i < 4; i++) {
+          wordRows[i].textContent = puzzle.prefixes[i] + " " + chunkDisplay;
+        }
+      } else {
+        for (let i = 0; i < 4; i++) {
+          wordRows[i].textContent = chunkDisplay + " " + puzzle.endings[i];
+        }
+      }
+    }
 
-  if (allValid){
-    endWin(input, upper);
-    return;
-  }
+    function updatePoints() {
+      pointsSpan.textContent = points;
+    }
 
-  points -= 5;
-  updatePoints();
+    function endGameWin(patternGuess, wordsUsed) {
+      gameOver = true;
+      revealed = [true, true, true];
+      updateWordRows();
+      setMessage(
+        `Nice! "${patternGuess.toUpperCase()}" makes a valid family.\nWords: ${wordsUsed.join(", ")}\nFinal points: ${points}`,
+        "success"
+      );
+      submitBtn.disabled = true;
+      revealBtn.disabled = true;
+      nextBtn.disabled = false;
+    }
 
-  if (points <=0){ endLose(); }
-  else setMessage(`Wrong. -5 points. (${points} left)`, "error");
-}
+    function endGameLost() {
+      gameOver = true;
+      const puzzle = currentPuzzle();
+      const affix = getAffix(puzzle).toUpperCase();
+      revealed = [true, true, true];
+      updateWordRows();
+      setMessage(
+        `You ran out of points.\nOne valid pattern was "${affix}".`,
+        "error"
+      );
+      submitBtn.disabled = true;
+      revealBtn.disabled = true;
+      nextBtn.disabled = false;
+    }
 
-function handleReveal(){
-  if (gameOver) return;
-  if (!DICT_READY){ setMessage("Dictionary missing.", "error"); return; }
+    function handleSubmit() {
+      if (gameOver) return;
 
-  const p = getPuzzle();
-  const affix = getAffix(p);
-  const unrevealed=[];
-  for (let i=0;i<3;i++) if(!revealed[i]) unrevealed.push(i);
+      if (!DICT_READY) {
+        setMessage("Dictionary not loaded. Check valid-3-6.js.", "error");
+        return;
+      }
 
-  if (unrevealed.length ===0){
-    setMessage("All letters already revealed.", "warning");
-    return;
-  }
+      const raw = guessInput.value.trim().toLowerCase();
+      if (raw.length !== 3) {
+        setMessage("Please enter exactly 3 letters.", "warning");
+        return;
+      }
 
-  points -=10;
-  updatePoints();
+      const puzzle = currentPuzzle();
+      let candidateWordsLower;
 
-  const idx = unrevealed[Math.floor(Math.random()*unrevealed.length)];
-  revealed[idx]=true;
-  updateRows();
+      if (puzzle.mode === "tail") {
+        candidateWordsLower = puzzle.prefixes.map(p => p + raw);
+      } else {
+        candidateWordsLower = puzzle.endings.map(e => raw + e);
+      }
 
-  if (points<=0){
-    endLose();
-  } else {
-    setMessage(`Revealed: letter ${idx+1} is "${affix[idx].toUpperCase(
+      const candidateWordsUpper = candidateWordsLower.map(w => w.toUpperCase());
+      const allValid = candidateWordsUpper.every(w => WORD_SET.has(w));
+
+      if (allValid) {
+        endGameWin(raw, candidateWordsUpper);
+        return;
+      }
+
+      points -= 5;
+      updatePoints();
+      if (points <= 0) {
+        endGameLost();
+      } else {
+        setMessage(`Not quite. -5 points. Try again! (Remaining: ${points})`, "error");
+      }
+    }
+
+    function handleReveal() {
+      if (gameOver) return;
+
+      if (!DICT_READY) {
+        setMessage("Dictionary not loaded. Check valid-3-6.js.", "error");
+        return;
+      }
+
+      const puzzle = currentPuzzle();
+      const affix = getAffix(puzzle);
+
+      const unrevealedIndices = [];
+      for (let i = 0; i < 3; i++) {
+        if (!revealed[i]) unrevealedIndices.push(i);
+      }
+
+      if (unrevealedIndices.length === 0) {
+        setMessage("All letters are already revealed.", "warning");
+        return;
+      }
+
+      points -= 10;
+      updatePoints();
+
+      const randIndex = unrevealedIndices[Math.floor(Math.random() * unrevealedIndices.length)];
+      revealed[randIndex] = true;
+      updateWordRows();
+
+      const revealedChar = affix[randIndex].toUpperCase();
+
+      if (points <= 0) {
+        setMessage(
+          `Revealed letter: position ${randIndex + 1} is "${revealedChar}".\nBut your points dropped to ${points}.`,
+          "error"
+        );
+        endGameLost();
+      } else {
+        setMessage(
+          `Revealed letter: position ${randIndex + 1} is "${revealedChar}". (Points: ${points})`,
+          "warning"
+        );
+      }
+    }
+
+    function nextPuzzle() {
+      currentIndex = (currentIndex + 1) % puzzles.length;
+      resetGameState();
+    }
+
+    function resetGameState() {
+      points = 15;
+      revealed = [false, false, false];
+      gameOver = false;
+      submitBtn.disabled = false;
+      revealBtn.disabled = false;
+      nextBtn.disabled = true;
+      guessInput.value = "";
+      updateWordRows();
+      updatePoints();
+      updatePuzzleCounter();
+      levelSelectEl.value = String(currentIndex);
+      const puzzle = currentPuzzle();
+      setMessage(puzzle.hint, "info");
+      guessInput.focus();
+    }
+
+    // Events
+    submitBtn.addEventListener("click", handleSubmit);
+    revealBtn.addEventListener("click", handleReveal);
+    nextBtn.addEventListener("click", nextPuzzle);
+    guessInput.addEventListener("keyup", (e) => {
+      if (e.key === "Enter") handleSubmit();
+    });
+
+    // Init
+    initLevelSelect();
+    resetGameState();
+  </script>
+</body>
+</html>
