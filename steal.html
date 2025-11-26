@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>WeaveTXT – Steal & Weave</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    :root {
+      --bg-main: #222;
+      --bg-card: #333;
+      --bg-tile: #444;
+      --bg-tile-empty: #2b2b2b;
+      --accent: #ffb347;
+      --accent-soft: #ffecb3;
+      --accent-border: #ff9800;
+      --text-main: #f5f5f5;
+      --text-muted: #aaa;
+      --text-soft: #ddd;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #2b3a4a 0, #111 55%);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px;
+      margin: 0;
+    }
+
+    /* BRANDING */
+    #brand {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin-top: 6px;
+      margin-bottom: 4px;
+    }
+
+    .brand-weave {
+      font-family: "Georgia", serif;
+      font-size: clamp(22px, 5vw, 30px);
+      font-weight: bold;
+      letter-spacing: 0.03em;
+    }
+
+    .brand-txt {
+      font-family: "Courier New", monospace;
+      font-size: clamp(18px, 4.5vw, 24px);
+      font-weight: bold;
+      color: var(--accent);
+      border-right: 2px solid var(--accent);
+      padding-right: 4px;
+      animation: caret-blink 0.9s step-end infinite;
+      min-width: 3ch;
+    }
+
+    @keyframes caret-blink {
+      0%, 100% { border-color: transparent; }
+      50% { border-color: var(--accent); }
+    }
+
+    h1 {
+      margin: 2px 0 0;
+      font-size: clamp(20px, 5vw, 26px);
+      text-align: center;
+    }
+
+    #subtitle {
+      font-size: 12px;
+      margin-top: 4px;
+      margin-bottom: 14px;
+      color: var(--text-muted);
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    /* GAME CARD */
+    #game-container {
+      background: var(--bg-card);
+      padding: 16px 14px 18px;
+      border-radius: 10px;
+      box-shadow: 0 0 18px rgba(0,0,0,0.55);
+      max-width: 520px;
+      width: 100%;
+      border: 1px solid #414141;
+    }
+
+    #top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+      font-size: 13px;
+    }
+
+    #goal-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-soft);
+    }
+
+    #goal-label span {
+      color: var(--accent);
+    }
+
+    #progress-info {
+      font-size: 11px;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 3px;
+      text-align: right;
+    }
+
+    .small-tag {
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      border: 1px solid #555;
+      background: #252525;
+      color: var(--text-soft);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .small-tag span {
+      font-weight: 600;
+      color: var(--accent-soft);
+    }
+
+    /* INSTRUCTIONS */
+    .instructions {
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--text-soft);
+      margin-bottom: 10px;
+    }
+
+    .instructions strong {
+      color: var(--accent-soft);
+    }
+
+    /* GRID */
+    #grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(40px, 56px));
+      grid-auto-rows: 44px;
+      gap: 6px;
+      justify-content: center;
+      margin-bottom: 10px;
+      margin-top: 4px;
+    }
+
+    .tile {
+      background: var(--bg-tile);
+      border-radius: 7px;
+      border: 1px solid #555;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Courier New", monospace;
+      font-size: clamp(18px, 4.3vw, 22px);
+      letter-spacing: 1px;
+      user-select: none;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+      transition: transform 0.07s ease, box-shadow 0.07s ease, background 0.07s ease, border-color 0.07s ease;
+    }
+
+    .tile.empty {
+      background: var(--bg-tile-empty);
+      border-style: dashed;
+      border-color: #555;
+      box-shadow: none;
+      cursor: default;
+    }
+
+    .tile.letter:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 3px 9px rgba(0,0,0,0.6);
+      border-color: var(--accent-border);
+      background: #4b4b4b;
+    }
+
+    /* CURRENT WORD */
+    #current-section {
+      margin-top: 4px;
+      margin-bottom: 8px;
+      border-top: 1px solid #444;
+      padding-top: 8px;
+      font-size: 13px;
+    }
+
+    #current-label {
+      margin-bottom: 4px;
+      color: var(--text-soft);
+    }
+
+    #current-word {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      min-height: 28px;
+    }
+
+    .current-letter {
+      min-width: 24px;
+      padding: 3px 7px;
+      border-radius: 999px;
+      border: 1px solid #555;
+      background: #252525;
+      font-family: "Courier New", monospace;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    /* FOUND WORDS */
+    #found-section {
+      margin-top: 4px;
+      font-size: 12px;
+      color: var(--text-soft);
+      border-top: 1px solid #444;
+      padding-top: 6px;
+    }
+
+    #found-list {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 4px;
+      margin-top: 4px;
+    }
+
+    .found-slot {
+      background: #292929;
+      border-radius: 7px;
+      padding: 4px 6px;
+      border: 1px solid #444;
+      text-align: center;
+      font-size: 11px;
+    }
+
+    .found-slot-label {
+      color: var(--text-muted);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 2px;
+    }
+
+    .found-word {
+      font-family: "Courier New", monospace;
+      font-size: 14px;
+      color: var(--accent-soft);
+      font-weight: 600;
+      min-height: 16px;
+    }
+
+    /* CONTROLS */
+    #controls {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid #444;
+      font-size: 13px;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 6px;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 7px 14px;
+      font-size: 13px;
+      cursor: pointer;
+      background: var(--accent);
+      color: #222;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      transition: background 0.1s ease, transform 0.07s ease, box-shadow 0.07s ease;
+      min-width: 110px;
+      justify-content: center;
+    }
+
+    button:hover:not(:disabled) {
+      background: #ffab2c;
+      transform: translateY(-1px);
+      box-shadow: 0 3px 9px rgba(0,0,0,0.6);
+    }
+
+    button:disabled {
+      background: #555;
+      color: #999;
+      cursor: default;
+      transform: none;
+      box-shadow: none;
+    }
+
+    #undo-btn {
+      background: #444;
+      color: var(--text-main);
+    }
+
+    #undo-btn:hover:not(:disabled) {
+      background: #555;
+    }
+
+    #clear-btn {
+      background: #555;
+      color: var(--text-main);
+    }
+
+    #clear-btn:hover:not(:disabled) {
+      background: #666;
+    }
+
+    #reset-btn {
+      background: #444;
+      color: var(--text-main);
+    }
+
+    #reset-btn:hover:not(:disabled) {
+      background: #555;
+    }
+
+    #message {
+      min-height: 26px;
+      font-size: 12px;
+      text-align: center;
+      margin-top: 4px;
+      white-space: pre-line;
+    }
+
+    .msg-success { color: #9be59b; }
+    .msg-error   { color: #ff9d9d; }
+    .msg-warning { color: var(--accent); }
+    .msg-info    { color: var(--accent-soft); }
+
+    /* FOOTER */
+    #footer {
+      margin-top: 12px;
+      padding-top: 8px;
+      border-top: 1px solid #444;
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    #footer a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    #footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* MOBILE */
+    @media (max-width: 480px) {
+      #game-container {
+        padding: 14px 10px 16px;
+      }
+      #top-bar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      #progress-info {
+        align-items: flex-start;
+      }
+      .instructions {
+        font-size: 11px;
+      }
+      #grid {
+        grid-auto-rows: 40px;
+      }
+      #found-section {
+        font-size: 11px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- BRAND -->
+  <div id="brand">
+    <span class="brand-weave">Weave</span>
+    <span class="brand-txt" id="brand-txt"></span>
+  </div>
+
+  <h1>Steal &amp; Weave</h1>
+  <div id="subtitle">Steal letters, keep columns valid, weave new words</div>
+
+  <div id="game-container">
+    <div id="top-bar">
+      <div id="goal-label">
+        Goals:
+        <span>3L, 4L, 5L</span> &nbsp;·&nbsp; Bonus: 6L
+      </div>
+      <div id="progress-info">
+        <div class="small-tag">
+          Required found: <span id="required-count">0 / 3</span>
+        </div>
+        <div class="small-tag">
+          Status: <span id="status-label">In progress</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="instructions">
+      The board has <strong>4 vertical words</strong> (top-to-bottom): STRING, ALONE, PHONE, and CRATE.<br />
+      Click a letter to <strong>steal</strong> it. You may only steal if the remaining letters
+      in that column still form a <strong>valid English word</strong>.<br />
+      Use the stolen letters to build new words and press <strong>Submit word</strong>.<br />
+      After a valid word, the board <strong>resets</strong> so you can try new words from a fresh set of letters.<br />
+      You win when you find at least one <strong>3-letter</strong>, <strong>4-letter</strong>, and
+      <strong>5-letter</strong> word. A <strong>6-letter</strong> word is a bonus.
+    </p>
+
+    <!-- GRID -->
+    <div id="grid"></div>
+
+    <!-- CURRENT WORD -->
+    <div id="current-section">
+      <div id="current-label">Current stolen word (3–6 letters):</div>
+      <div id="current-word"></div>
+    </div>
+
+    <!-- FOUND WORDS -->
+    <div id="found-section">
+      <div>Found words:</div>
+      <div id="found-list">
+        <div class="found-slot">
+          <div class="found-slot-label">3 letters</div>
+          <div class="found-word" id="found-3">—</div>
+        </div>
+        <div class="found-slot">
+          <div class="found-slot-label">4 letters</div>
+          <div class="found-word" id="found-4">—</div>
+        </div>
+        <div class="found-slot">
+          <div class="found-slot-label">5 letters</div>
+          <div class="found-word" id="found-5">—</div>
+        </div>
+        <div class="found-slot">
+          <div class="found-slot-label">6-letter bonus</div>
+          <div class="found-word" id="found-6">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTROLS -->
+    <div id="controls">
+      <div class="button-row">
+        <button id="undo-btn">Undo last letter</button>
+        <button id="clear-btn">Clear current word</button>
+        <button id="submit-btn">Submit word</button>
+        <button id="reset-btn">Reset puzzle</button>
+      </div>
+      <div id="message" class="msg-info"></div>
+    </div>
+
+    <!-- FOOTER -->
+    <div id="footer">
+      More from WeaveTXT:
+      <a href="https://www.weavetxt.com/index.html" target="_blank" rel="noopener noreferrer">
+        Swap and Weave
+      </a>
+      ·
+      <a href="https://www.weavetxt.com/solitaire.html" target="_blank" rel="noopener noreferrer">
+        Weave Solitaire
+      </a>
+      ·
+      <a href="https://www.weavetxt.com/tail.html" target="_blank" rel="noopener noreferrer">
+        Head & Tail
+      </a>
+    </div>
+  </div>
+
+  <!-- Dictionary (MUST define: const VALID_WORDS = [...] ) -->
+  <script src="valid-2-6.js"></script>
+
+  <script>
+    /* -------- TXT animation (same as Neighbor Tail / Head) -------- */
+    (function animateTXT() {
+      const el = document.getElementById("brand-txt");
+      const word = "TXT";
+      let i = 0;
+      let forward = true;
+
+      function loop() {
+        el.textContent = word.slice(0, i);
+
+        if (forward) {
+          i++;
+          if (i > word.length) {
+            forward = false;
+            setTimeout(loop, 800);
+            return;
+          }
+        } else {
+          i--;
+          if (i < 0) {
+            forward = true;
+            setTimeout(loop, 600);
+            return;
+          }
+        }
+        setTimeout(loop, 110);
+      }
+
+      loop();
+    })();
+
+    /* -------- Dictionary init -------- */
+    let WORD_SET = null;
+    let DICT_READY = false;
+
+    function initDictionary() {
+      if (typeof VALID_WORDS === "undefined" || !Array.isArray(VALID_WORDS)) {
+        alert("ERROR: valid-3-6.js not loaded or VALID_WORDS is not an array.\\nGame requires VALID_WORDS.");
+        DICT_READY = false;
+        return false;
+      }
+      WORD_SET = new Set(VALID_WORDS.map(w => w.toUpperCase()));
+      DICT_READY = true;
+      return true;
+    }
+
+    initDictionary();
+
+    /* -------- Game data -------- */
+
+    const GRID_ROWS = 6;
+    const GRID_COLS = 4;
+
+    // First level: your example
+    const initialColumns = [
+      "STRING", // column 0
+      "ALONE",  // column 1
+      "PHONE",  // column 2
+      "CRATE"   // column 3
+    ];
+
+    let columnsWords = []; // array of arrays of letters per column
+    let currentLetters = []; // letters in current word (in order stolen)
+    let historyStack = [];   // to undo unsubmitted steals
+    let gameOver = false;
+
+    // Found words by length (3,4,5 required; 6 bonus)
+    const found = {
+      3: null,
+      4: null,
+      5: null,
+      6: null
+    };
+
+    // DOM references
+    const gridEl = document.getElementById("grid");
+    const currentWordEl = document.getElementById("current-word");
+    const messageDiv = document.getElementById("message");
+    const undoBtn = document.getElementById("undo-btn");
+    const clearBtn = document.getElementById("clear-btn");
+    const submitBtn = document.getElementById("submit-btn");
+    const resetBtn = document.getElementById("reset-btn");
+
+    const found3El = document.getElementById("found-3");
+    const found4El = document.getElementById("found-4");
+    const found5El = document.getElementById("found-5");
+    const found6El = document.getElementById("found-6");
+
+    const requiredCountEl = document.getElementById("required-count");
+    const statusLabelEl = document.getElementById("status-label");
+
+    // store tile elements as [row][col]
+    const tiles = [];
+
+    function createGrid() {
+      gridEl.innerHTML = "";
+      for (let r = 0; r < GRID_ROWS; r++) {
+        for (let c = 0; c < GRID_COLS; c++) {
+          if (!tiles[r]) tiles[r] = [];
+          const tile = document.createElement("div");
+          tile.className = "tile empty";
+          tile.dataset.row = String(r);
+          tile.dataset.col = String(c);
+          tiles[r][c] = tile;
+          gridEl.appendChild(tile);
+        }
+      }
+    }
+
+    function resetColumns() {
+      columnsWords = initialColumns.map(word => word.split(""));
+    }
+
+    function setMessage(text, type = "info") {
+      messageDiv.textContent = text;
+      messageDiv.className = "msg-" + type;
+    }
+
+    function renderGrid() {
+      for (let c = 0; c < GRID_COLS; c++) {
+        const letters = columnsWords[c];
+        const L = letters.length;
+
+        for (let r = 0; r < GRID_ROWS; r++) {
+          const tile = tiles[r][c];
+          const idx = r - (GRID_ROWS - L); // bottom-align columns
+
+          if (idx < 0) {
+            tile.textContent = "";
+            tile.classList.add("empty");
+            tile.classList.remove("letter");
+          } else {
+            tile.textContent = letters[idx];
+            tile.classList.remove("empty");
+            tile.classList.add("letter");
+          }
+        }
+      }
+    }
+
+    function renderCurrentWord() {
+      currentWordEl.innerHTML = "";
+      if (currentLetters.length === 0) {
+        return;
+      }
+      currentLetters.forEach(ch => {
+        const span = document.createElement("div");
+        span.className = "current-letter";
+        span.textContent = ch;
+        currentWordEl.appendChild(span);
+      });
+    }
+
+    function updateFoundDisplay() {
+      found3El.textContent = found[3] || "—";
+      found4El.textContent = found[4] || "—";
+      found5El.textContent = found[5] || "—";
+      found6El.textContent = found[6] || "—";
+
+      let reqCount = 0;
+      if (found[3]) reqCount++;
+      if (found[4]) reqCount++;
+      if (found[5]) reqCount++;
+      requiredCountEl.textContent = reqCount + " / 3";
+
+      if (reqCount === 3) {
+        statusLabelEl.textContent = "Goal reached!";
+      } else {
+        statusLabelEl.textContent = "In progress";
+      }
+    }
+
+    function deepCopyColumns(cols) {
+      return cols.map(col => col.slice());
+    }
+
+    function attemptSteal(row, col) {
+      if (gameOver) return;
+      if (!DICT_READY) {
+        setMessage("Dictionary not loaded. Check valid-3-6.js.", "error");
+        return;
+      }
+
+      const letters = columnsWords[col];
+      const L = letters.length;
+      const idx = row - (GRID_ROWS - L);
+
+      if (idx < 0 || idx >= L) {
+        // clicked empty cell
+        return;
+      }
+
+      const letter = letters[idx];
+
+      // Compute new word for this column if we remove this letter
+      const newLetters = letters.slice(0, idx).concat(letters.slice(idx + 1));
+      const newWord = newLetters.join("");
+
+      if (newWord.length > 0 && !WORD_SET.has(newWord.toUpperCase())) {
+        setMessage(
+          `You cannot steal "${letter}". Column would become "${newWord || "(empty)"}", which is not a valid word.`,
+          "error"
+        );
+        return;
+      }
+
+      // Save snapshot for undo
+      historyStack.push({
+        columns: deepCopyColumns(columnsWords),
+        current: currentLetters.slice()
+      });
+
+      // Apply steal
+      columnsWords[col] = newLetters;
+      currentLetters.push(letter.toUpperCase());
+
+      renderGrid();
+      renderCurrentWord();
+
+      setMessage(`Stole "${letter.toUpperCase()}". Build a word and press "Submit word".`, "info");
+    }
+
+    function undoLast() {
+      if (gameOver) return;
+      if (historyStack.length === 0) {
+        setMessage("Nothing to undo.", "warning");
+        return;
+      }
+      const snapshot = historyStack.pop();
+      columnsWords = deepCopyColumns(snapshot.columns);
+      currentLetters = snapshot.current.slice();
+      renderGrid();
+      renderCurrentWord();
+      setMessage("Undid last stolen letter.", "info");
+    }
+
+    function clearCurrentWord() {
+      if (gameOver) return;
+      if (historyStack.length === 0 && currentLetters.length === 0) {
+        setMessage("Nothing to clear.", "warning");
+        return;
+      }
+      // Undo until we reach the state with empty current word
+      while (historyStack.length > 0) {
+        const snapshot = historyStack[historyStack.length - 1];
+        if (snapshot.current.length === 0) {
+          // Restore final snapshot with empty current
+          const snap = historyStack.pop();
+          columnsWords = deepCopyColumns(snap.columns);
+          currentLetters = [];
+          renderGrid();
+          renderCurrentWord();
+          setMessage("Cleared current word and returned letters to the board.", "info");
+          return;
+        }
+        historyStack.pop();
+      }
+      // If no snapshot with empty word, just reset columns & current
+      resetColumns();
+      currentLetters = [];
+      renderGrid();
+      renderCurrentWord();
+      setMessage("Cleared current word.", "info");
+    }
+
+    function submitWord() {
+      if (gameOver) return;
+
+      if (!DICT_READY) {
+        setMessage("Dictionary not loaded. Check valid-3-6.js.", "error");
+        return;
+      }
+
+      if (currentLetters.length === 0) {
+        setMessage("Steal some letters first to form a word.", "warning");
+        return;
+      }
+
+      const word = currentLetters.join("");
+      const len = word.length;
+
+      if (len < 3 || len > 6) {
+        setMessage(`"${word}" has length ${len}. Word must be 3–6 letters.`, "warning");
+        return;
+      }
+
+      if (!WORD_SET.has(word.toUpperCase())) {
+        setMessage(`"${word}" is not in the dictionary.`, "error");
+        return;
+      }
+
+      // Lock in this word
+      if (!found[len]) {
+        found[len] = word.toUpperCase();
+        updateFoundDisplay();
+
+        if (len === 6) {
+          setMessage(`Great! Bonus 6-letter word: "${word.toUpperCase()}". Board reset for another try.`, "success");
+        } else {
+          setMessage(`Nice! You found a ${len}-letter word: "${word.toUpperCase()}". Board reset for another try.`, "success");
+        }
+      } else {
+        setMessage(
+          `Valid word "${word.toUpperCase()}", but you already have a ${len}-letter word: "${found[len]}". Board reset for another try.`,
+          "info"
+        );
+      }
+
+      // After a successful word, reset board so player can try again with full letters
+      resetColumns();
+      renderGrid();
+      currentLetters = [];
+      historyStack = [];
+      renderCurrentWord();
+
+      // Check win condition (3,4,5 all found)
+      if (found[3] && found[4] && found[5]) {
+        gameOver = true;
+        let msg = `You win!\\n3-letter: ${found[3]}\\n4-letter: ${found[4]}\\n5-letter: ${found[5]}`;
+        if (found[6]) {
+          msg += `\\nBonus 6-letter: ${found[6]}`;
+        } else {
+          msg += `\\nTry to find a 6-letter word for a bonus!`;
+        }
+        setMessage(msg, "success");
+      }
+    }
+
+    function resetGame() {
+      gameOver = false;
+      historyStack = [];
+      currentLetters = [];
+      found[3] = found[4] = found[5] = found[6] = null;
+      resetColumns();
+      renderGrid();
+      renderCurrentWord();
+      updateFoundDisplay();
+      setMessage(
+        "Puzzle reset. Columns spell STRING / ALONE / PHONE / CRATE. Steal letters without breaking any column word.",
+        "info"
+      );
+    }
+
+    // Event bindings
+    gridEl.addEventListener("click", (e) => {
+      const tile = e.target.closest(".tile");
+      if (!tile) return;
+      const row = parseInt(tile.dataset.row, 10);
+      const col = parseInt(tile.dataset.col, 10);
+      attemptSteal(row, col);
+    });
+
+    undoBtn.addEventListener("click", undoLast);
+    clearBtn.addEventListener("click", clearCurrentWord);
+    submitBtn.addEventListener("click", submitWord);
+    resetBtn.addEventListener("click", resetGame);
+
+    // Init
+    createGrid();
+    resetGame();
+  </script>
+</body>
+</html>
