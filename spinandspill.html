@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Team Question Roulette</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #222;
+      --fg: #f5f5f5;
+      --accent: #ffb347;
+      --accent-soft: rgba(255, 179, 71, 0.15);
+      --card-bg: #2c2c2c;
+      --muted: #bbbbbb;
+      --danger: #ff6b6b;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial,
+        sans-serif;
+      background: radial-gradient(circle at top, #333 0, #111 55%, #000 100%);
+      color: var(--fg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    /* Branding (WeaveTxt-ish) */
+    #brand {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .brand-main {
+      font-family: "Georgia", serif;
+      font-size: clamp(24px, 6vw, 30px);
+      font-weight: bold;
+      letter-spacing: 0.04em;
+    }
+
+    .brand-sub {
+      font-family: "Courier New", monospace;
+      font-size: clamp(18px, 4.5vw, 22px);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      opacity: 0.9;
+    }
+
+    .brand-dot {
+      margin-right: 2px;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 20px;
+      text-align: center;
+      max-width: 500px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 14px;
+      padding: 16px 18px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .section {
+      width: 100%;
+      max-width: 900px;
+      margin-bottom: 18px;
+    }
+
+    .section-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* Player picker */
+
+    #player-card {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+      text-align: center;
+    }
+
+    #player-display {
+      font-size: clamp(26px, 7vw, 34px);
+      font-weight: 700;
+      padding: 12px 22px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: linear-gradient(
+        135deg,
+        rgba(255, 179, 71, 0.15),
+        rgba(255, 255, 255, 0.03)
+      );
+      min-width: 220px;
+      min-height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #player-display.highlight {
+      box-shadow: 0 0 12px rgba(255, 179, 71, 0.9);
+      border-color: var(--accent);
+    }
+
+    .btn {
+      border: none;
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: var(--accent);
+      color: #111;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: transform 0.1s ease, box-shadow 0.1s ease,
+        background 0.2s ease, opacity 0.2s ease;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.35);
+    }
+
+    .btn:active {
+      transform: translateY(1px) scale(0.99);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
+    }
+
+    .btn[disabled] {
+      opacity: 0.6;
+      cursor: default;
+      box-shadow: none;
+    }
+
+    .hint {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    /* Logs */
+    .log {
+      margin-top: 10px;
+      width: 100%;
+      font-size: 0.8rem;
+      color: var(--muted);
+      max-height: 110px;
+      overflow-y: auto;
+    }
+
+    .log-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-size: 0.72rem;
+    }
+
+    .log-list {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+    }
+
+    .log-list li {
+      margin-bottom: 2px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    /* Question cards */
+
+    #question-card {
+      margin-top: 12px;
+    }
+
+    #card-list {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    @media (max-width: 700px) {
+      #card-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .qcard {
+      padding: 12px;
+      border-radius: 12px;
+      background: #262626;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: transform 0.1s ease, box-shadow 0.15s ease,
+        border-color 0.15s ease, background 0.15s ease;
+    }
+
+    .qcard:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.45);
+      border-color: var(--accent);
+      background: #2b2b2b;
+    }
+
+    .qcard.selected {
+      border-color: var(--accent);
+      box-shadow: 0 0 10px rgba(255, 179, 71, 0.7);
+      background: #2f2619;
+    }
+
+    .qcard-title {
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .qcard-range {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .qcard-desc {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    #question-display {
+      margin-top: 8px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: var(--accent-soft);
+      font-size: 0.98rem;
+      line-height: 1.5;
+      border: 1px solid rgba(255, 179, 71, 0.7);
+      min-height: 40px;
+    }
+
+    #status {
+      margin-top: 8px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .pill-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <div id="brand">
+    <div class="brand-main">Spin & Spill</div>
+  </div>
+  <div class="subtitle">
+    1) Pick who will answer &nbsp;→&nbsp; 2) Pick a card &nbsp;→&nbsp; 3) Let fate choose the question.
+  </div>
+
+  <!-- Player Picker -->
+  <div class="section">
+    <div class="section-title">Step 1 · Pick the Player</div>
+    <div class="card" id="player-card">
+      <div id="player-display">Tap “Random Player”</div>
+      <button class="btn" id="pick-player-btn">Random Player</button>
+      <div class="hint">
+        We’ll do a quick roulette animation and stop on the chosen one. Everyone gets picked once before repeats.
+      </div>
+
+      <div class="log" id="player-log">
+        <div class="log-title">Picked Players</div>
+        <ul class="log-list" id="player-log-list"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Question Cards -->
+  <div class="section">
+    <div class="section-title">Step 2 · Pick a Question Card</div>
+    <div class="card" id="question-card">
+      <div id="card-list">
+        <div class="qcard" data-group="0">
+          <div class="qcard-title">Card A</div>
+          <div class="qcard-range">Questions 1–5</div>
+          <div class="qcard-desc">Life & vibe checks.</div>
+        </div>
+        <div class="qcard" data-group="1">
+          <div class="qcard-title">Card B</div>
+          <div class="qcard-range">Questions 6–10</div>
+          <div class="qcard-desc">Work + personality mix.</div>
+        </div>
+        <div class="qcard" data-group="2">
+          <div class="qcard-title">Card C</div>
+          <div class="qcard-range">Questions 11–15</div>
+          <div class="qcard-desc">Team & chaos energy.</div>
+        </div>
+        <div class="qcard" data-group="3">
+          <div class="qcard-title">Card D</div>
+          <div class="qcard-range">Questions 16–20</div>
+          <div class="qcard-desc">Awards & office legends.</div>
+        </div>
+      </div>
+
+      <div class="pill">
+        <span class="pill-dot"></span>
+        Tap a card to draw a random question from that group (no repeats until all 5 are used).
+      </div>
+
+      <div id="question-display">
+        Pick a card to reveal the question…
+      </div>
+
+      <div id="status"></div>
+
+      <div class="log" id="question-log">
+        <div class="log-title">Asked Questions</div>
+        <ul class="log-list" id="question-log-list"></ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- Data ---
+
+    const playersOriginal = [
+      "Timur", "Ammar", "Anien", "Uncle Dan", "Dennis", "Billy", "Dita",
+      "Emily", "Esa", "Farhan", "Farrel", "Fateh", "Bian", "Ferdi", "Gian",
+      "Ciella", "Haekal", "Hanny", "Ican", "Iqbal", "Jen", "Jo", "Josh",
+      "Marvin", "Mozzy", "Sasa", "Tasya", "Paskah", "Icad", "Stefie",
+      "Tifara", "Handriko"
+    ];
+
+    let remainingPlayers = [...playersOriginal];
+
+    const questions = [
+      // 1–20 (18 updated to Emoji Reactor)
+      "What movie would describe your life?",                                  // 1
+      "If your life were a book, what would the title be?",                   // 2
+      "If you could relive one day, which one would it be?",                  // 3
+      "What’s the weirdest talent you secretly have?",                        // 4
+      "What sound or smell instantly calms you?",                             // 5
+      "Which movie character would you date if they were real?",              // 6
+      "Where’s one place you want to visit before you’re 40?",                // 7
+      "If you could teleport anywhere right now, where would you go?",        // 8
+      "If you could swap jobs with anyone here for a week, who and why?",     // 9
+      "What’s your most “I feel like an adult” moment at work?",              // 10
+      "If your team was a movie genre, what genre would it be?",              // 11
+      "What’s the funniest misunderstanding you’ve had at work?",             // 12
+      "If you had a personal assistant robot, what’s the first task you’d give it?", // 13
+      "Which coworker do you think would survive longest in a zombie apocalypse — and why?", // 14
+      "Stakeholder Management Master – Which coworker always gets praised by stakeholders?", // 15
+      "Comedian – Which coworker makes the office bearable?",                 // 16
+      "Pushback Master – Which coworker can push back stakeholders politely but firmly?", // 17
+      "Emoji Reactor – Which coworker replies with the most emojis or stickers in chats?", // 18
+      "Tab Hoarder – Which coworker always has the most browser tabs or windows open?", // 19
+      "PowerPoint Picasso – Whose slides always look suspiciously polished?"  // 20
+    ];
+
+    // Track used questions by group (0-3), each group has indices 0-4
+    const usedQuestionIndicesByGroup = {
+      0: new Set(),
+      1: new Set(),
+      2: new Set(),
+      3: new Set()
+    };
+
+    // --- Player Roulette Logic ---
+
+    const playerDisplay = document.getElementById("player-display");
+    const pickPlayerBtn = document.getElementById("pick-player-btn");
+    const playerLogList = document.getElementById("player-log-list");
+
+    let playerAnimationInterval = null;
+    let isAnimatingPlayer = false;
+
+    function resetPlayersIfNeeded() {
+      if (remainingPlayers.length === 0) {
+        remainingPlayers = [...playersOriginal];
+        const li = document.createElement("li");
+        li.textContent = "— All players have been picked once. Restarting pool. —";
+        li.style.color = "#888";
+        playerLogList.appendChild(li);
+      }
+    }
+
+    function appendPlayerLog(name) {
+      const li = document.createElement("li");
+      li.textContent = name;
+      playerLogList.appendChild(li);
+      playerLogList.scrollTop = playerLogList.scrollHeight;
+    }
+
+    function pickRandomPlayerWithAnimation() {
+      if (isAnimatingPlayer) return; // prevent spam
+      resetPlayersIfNeeded();
+      if (remainingPlayers.length === 0) return;
+
+      isAnimatingPlayer = true;
+      pickPlayerBtn.disabled = true;
+      playerDisplay.classList.remove("highlight");
+
+      let tempPool = [...remainingPlayers];
+      let currentIndex = Math.floor(Math.random() * tempPool.length);
+      playerDisplay.textContent = tempPool[currentIndex];
+
+      // Fast roulette effect
+      playerAnimationInterval = setInterval(() => {
+        if (tempPool.length === 0) {
+          tempPool = [...remainingPlayers];
+        }
+        currentIndex = Math.floor(Math.random() * tempPool.length);
+        playerDisplay.textContent = tempPool[currentIndex];
+      }, 80);
+
+      // Stop after a short duration
+      const duration = 2200 + Math.random() * 800; // 2.2–3.0 s
+      setTimeout(() => {
+        clearInterval(playerAnimationInterval);
+        playerAnimationInterval = null;
+
+        // Choose from remainingPlayers to ensure no repeat
+        const finalIndex = Math.floor(Math.random() * remainingPlayers.length);
+        const chosen = remainingPlayers[finalIndex];
+        playerDisplay.textContent = chosen;
+        playerDisplay.classList.add("highlight");
+        isAnimatingPlayer = false;
+        pickPlayerBtn.disabled = false;
+
+        // Remove chosen from remaining
+        remainingPlayers.splice(finalIndex, 1);
+        appendPlayerLog(chosen);
+      }, duration);
+    }
+
+    pickPlayerBtn.addEventListener("click", pickRandomPlayerWithAnimation);
+
+    // --- Question Card Logic ---
+
+    const cardElements = document.querySelectorAll(".qcard");
+    const questionDisplay = document.getElementById("question-display");
+    const statusEl = document.getElementById("status");
+    const questionLogList = document.getElementById("question-log-list");
+
+    function clearCardSelection() {
+      cardElements.forEach((card) => card.classList.remove("selected"));
+    }
+
+    function appendQuestionLog(text, meta) {
+      const li = document.createElement("li");
+      li.textContent = `${meta} · ${text}`;
+      questionLogList.appendChild(li);
+      questionLogList.scrollTop = questionLogList.scrollHeight;
+    }
+
+    function handleCardClick(e) {
+      const card = e.currentTarget;
+      const groupIndex = parseInt(card.dataset.group, 10);
+      clearCardSelection();
+      card.classList.add("selected");
+
+      const start = groupIndex * 5;
+      const end = start + 5;
+      const groupSize = 5;
+
+      const usedSet = usedQuestionIndicesByGroup[groupIndex];
+
+      // If all used, reset that group's used set
+      if (usedSet.size >= groupSize) {
+        usedSet.clear();
+        statusEl.textContent = `All 5 questions in Card ${
+          ["A", "B", "C", "D"][groupIndex]
+        } have been used once. Resetting this card's pool.`;
+      } else {
+        statusEl.textContent = "";
+      }
+
+      // Build list of available local indices (0–4) not used
+      const availableLocalIndices = [];
+      for (let i = 0; i < groupSize; i++) {
+        if (!usedSet.has(i)) {
+          availableLocalIndices.push(i);
+        }
+      }
+
+      // Safety: if somehow none, just allow any
+      if (availableLocalIndices.length === 0) {
+        for (let i = 0; i < groupSize; i++) {
+          availableLocalIndices.push(i);
+        }
+      }
+
+      const randomIdxLocal =
+        availableLocalIndices[Math.floor(Math.random() * availableLocalIndices.length)];
+      usedSet.add(randomIdxLocal);
+
+      const globalIndex = start + randomIdxLocal;
+      const chosenQuestion = questions[globalIndex];
+      const questionNumber = globalIndex + 1; // 1-based index
+
+      questionDisplay.textContent = chosenQuestion;
+      const meta = `Card ${["A", "B", "C", "D"][groupIndex]} · Question #${questionNumber}`;
+      statusEl.textContent = meta;
+      appendQuestionLog(chosenQuestion, meta);
+    }
+
+    cardElements.forEach((card) => {
+      card.addEventListener("click", handleCardClick);
+    });
+  </script>
+</body>
+</html>
