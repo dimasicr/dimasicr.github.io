@@ -287,7 +287,10 @@
 </head>
 <body>
   <div id="brand">
-    <div class="brand-main">Spin & Spill</div>
+    <div class="brand-main">Team</div>
+    <div class="brand-sub">
+      <span class="brand-dot">●</span>QST
+    </div>
   </div>
   <div class="subtitle">
     1) Pick who will answer &nbsp;→&nbsp; 2) Pick a card &nbsp;→&nbsp; 3) Let fate choose the question.
@@ -318,22 +321,22 @@
         <div class="qcard" data-group="0">
           <div class="qcard-title">Card A</div>
           <div class="qcard-range">Questions 1–5</div>
-          <div class="qcard-desc">Life & vibe checks.</div>
+          <div class="qcard-desc">Life & identity.</div>
         </div>
         <div class="qcard" data-group="1">
           <div class="qcard-title">Card B</div>
           <div class="qcard-range">Questions 6–10</div>
-          <div class="qcard-desc">Work + personality mix.</div>
+          <div class="qcard-desc">Coworker scenarios I.</div>
         </div>
         <div class="qcard" data-group="2">
           <div class="qcard-title">Card C</div>
           <div class="qcard-range">Questions 11–15</div>
-          <div class="qcard-desc">Team & chaos energy.</div>
+          <div class="qcard-desc">Coworker scenarios II.</div>
         </div>
         <div class="qcard" data-group="3">
           <div class="qcard-title">Card D</div>
           <div class="qcard-range">Questions 16–20</div>
-          <div class="qcard-desc">Awards & office legends.</div>
+          <div class="qcard-desc">Work & awards.</div>
         </div>
       </div>
 
@@ -368,31 +371,38 @@
 
     let remainingPlayers = [...playersOriginal];
 
+    // Final 20 questions (grouped 5 / 5 / 5 / 5)
     const questions = [
-      // 1–20 (18 updated to Emoji Reactor)
+      // Card A: Life & identity (1–5)
       "What movie would describe your life?",                                  // 1
       "If your life were a book, what would the title be?",                   // 2
-      "If you could relive one day, which one would it be?",                  // 3
-      "What’s the weirdest talent you secretly have?",                        // 4
-      "What sound or smell instantly calms you?",                             // 5
-      "Which movie character would you date if they were real?",              // 6
-      "Where’s one place you want to visit before you’re 40?",                // 7
-      "If you could teleport anywhere right now, where would you go?",        // 8
-      "If you could swap jobs with anyone here for a week, who and why?",     // 9
-      "What’s your most “I feel like an adult” moment at work?",              // 10
-      "If your team was a movie genre, what genre would it be?",              // 11
-      "What’s the funniest misunderstanding you’ve had at work?",             // 12
-      "If you had a personal assistant robot, what’s the first task you’d give it?", // 13
-      "Which coworker do you think would survive longest in a zombie apocalypse — and why?", // 14
-      "Stakeholder Management Master – Which coworker always gets praised by stakeholders?", // 15
-      "Comedian – Which coworker makes the office bearable?",                 // 16
-      "Pushback Master – Which coworker can push back stakeholders politely but firmly?", // 17
-      "Emoji Reactor – Which coworker replies with the most emojis or stickers in chats?", // 18
-      "Tab Hoarder – Which coworker always has the most browser tabs or windows open?", // 19
-      "PowerPoint Picasso – Whose slides always look suspiciously polished?"  // 20
+      "What’s the weirdest talent you secretly have?",                        // 3
+      "Which movie character would you date if they were real?",              // 4
+      "If you could teleport anywhere right now, where would you go?",        // 5
+
+      // Card B: Coworker scenarios I (6–10)
+      "Which coworker would accidentally become famous on TikTok — and for what?", // 6
+      "Which coworker would survive the longest on a deserted island — and how?",  // 7
+      "If the office became a reality TV show, who would be the unexpected fan favorite — and why?", // 8
+      "If our team formed a band, who would be the lead vocalist — and what’s the band name?", // 9
+      "Which coworker would befriend a ghost if our office were haunted — and why?", // 10
+
+      // Card C: Coworker scenarios II (11–15)
+      "If our office turned into a Hogwarts house, who would become the head prefect — and why?", // 11
+      "If our team were characters in a heist movie, who would be the mastermind — and why?", // 12
+      "If our team got teleported into a video game, who would be the final boss — and why?", // 13
+      "If your team was a movie genre, what genre would it be?",              // 14
+      "Which coworker do you think would survive longest in a zombie apocalypse — and why?", // 15
+
+      // Card D: Work, dynamics & awards (16–20)
+      "If you could swap jobs with anyone here for a week, who and why?",     // 16
+      "What’s your most “I feel like an adult” moment at work?",              // 17
+      "What’s the funniest misunderstanding you’ve had at work?",             // 18
+      "Emoji Reactor – Which coworker replies with the most emojis or stickers in chats?", // 19
+      "Tab Hoarder – Which coworker always has the most browser tabs or windows open?" // 20
     ];
 
-    // Track used questions by group (0-3), each group has indices 0-4
+    // Track used questions by group (0–3), each group has indices 0–4
     const usedQuestionIndicesByGroup = {
       0: new Set(),
       1: new Set(),
@@ -495,7 +505,6 @@
       card.classList.add("selected");
 
       const start = groupIndex * 5;
-      const end = start + 5;
       const groupSize = 5;
 
       const usedSet = usedQuestionIndicesByGroup[groupIndex];
