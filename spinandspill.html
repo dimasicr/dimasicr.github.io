@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Team Question Roulette</title>
+  <title>Spin & Spill</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     :root {
@@ -32,31 +32,28 @@
       min-height: 100vh;
     }
 
-    /* Branding (WeaveTxt-ish) */
+    /* Branding */
     #brand {
       display: flex;
-      align-items: baseline;
-      gap: 6px;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
       margin-bottom: 10px;
     }
 
     .brand-main {
       font-family: "Georgia", serif;
-      font-size: clamp(24px, 6vw, 30px);
+      font-size: clamp(26px, 7vw, 34px);
       font-weight: bold;
       letter-spacing: 0.04em;
     }
 
     .brand-sub {
       font-family: "Courier New", monospace;
-      font-size: clamp(18px, 4.5vw, 22px);
-      letter-spacing: 0.18em;
+      font-size: 0.8rem;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
-      opacity: 0.9;
-    }
-
-    .brand-dot {
-      margin-right: 2px;
+      opacity: 0.85;
     }
 
     .subtitle {
@@ -64,7 +61,7 @@
       color: var(--muted);
       margin-bottom: 20px;
       text-align: center;
-      max-width: 500px;
+      max-width: 520px;
     }
 
     .card {
@@ -123,11 +120,18 @@
       border-color: var(--accent);
     }
 
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
     .btn {
       border: none;
       padding: 10px 18px;
       border-radius: 999px;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 600;
       cursor: pointer;
       background: var(--accent);
@@ -137,6 +141,14 @@
       transition: transform 0.1s ease, box-shadow 0.1s ease,
         background 0.2s ease, opacity 0.2s ease;
       box-shadow: 0 6px 15px rgba(0, 0, 0, 0.35);
+      white-space: nowrap;
+    }
+
+    .btn.secondary {
+      background: #3a3a3a;
+      color: var(--fg);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     }
 
     .btn:active {
@@ -287,20 +299,24 @@
 </head>
 <body>
   <div id="brand">
-    <div class="brand-main"> Spin and Spill </div>
+    <div class="brand-main">Spin &amp; Spill</div>
+    <div class="brand-sub">SPIN · REVEAL · BOND</div>
   </div>
   <div class="subtitle">
-    1) Pick who will answer &nbsp;→&nbsp; 2) Pick a card &nbsp;→&nbsp; 3) Let fate choose the question.
+    One spin to pick who talks, one draw to decide what they spill.
   </div>
 
   <!-- Player Picker -->
   <div class="section">
     <div class="section-title">Step 1 · Pick the Player</div>
     <div class="card" id="player-card">
-      <div id="player-display">Tap “Random Player”</div>
-      <button class="btn" id="pick-player-btn">Random Player</button>
+      <div id="player-display">Tap a button to start</div>
+      <div class="btn-row">
+        <button class="btn" id="pick-player-btn">Random Player</button>
+        <button class="btn secondary" id="one-round-btn">One Click Round</button>
+      </div>
       <div class="hint">
-        We’ll do a quick roulette animation and stop on the chosen one. Everyone gets picked once before repeats.
+        “Random Player” only spins the name. “One Click Round” will pick the player <em>and</em> a random card + question.
       </div>
 
       <div class="log" id="player-log">
@@ -343,7 +359,7 @@
       </div>
 
       <div id="question-display">
-        Pick a card to reveal the question…
+        Pick a card or use “One Click Round” to reveal the question…
       </div>
 
       <div id="status"></div>
@@ -411,10 +427,16 @@
 
     const playerDisplay = document.getElementById("player-display");
     const pickPlayerBtn = document.getElementById("pick-player-btn");
+    const oneRoundBtn = document.getElementById("one-round-btn");
     const playerLogList = document.getElementById("player-log-list");
 
     let playerAnimationInterval = null;
     let isAnimatingPlayer = false;
+
+    function setControlsDisabled(disabled) {
+      pickPlayerBtn.disabled = disabled;
+      oneRoundBtn.disabled = disabled;
+    }
 
     function resetPlayersIfNeeded() {
       if (remainingPlayers.length === 0) {
@@ -433,20 +455,20 @@
       playerLogList.scrollTop = playerLogList.scrollHeight;
     }
 
-    function pickRandomPlayerWithAnimation() {
-      if (isAnimatingPlayer) return; // prevent spam
+    // Core roulette runner with callback when done
+    function runPlayerRoulette(onDone) {
+      if (isAnimatingPlayer) return;
       resetPlayersIfNeeded();
       if (remainingPlayers.length === 0) return;
 
       isAnimatingPlayer = true;
-      pickPlayerBtn.disabled = true;
+      setControlsDisabled(true);
       playerDisplay.classList.remove("highlight");
 
       let tempPool = [...remainingPlayers];
       let currentIndex = Math.floor(Math.random() * tempPool.length);
       playerDisplay.textContent = tempPool[currentIndex];
 
-      // Fast roulette effect
       playerAnimationInterval = setInterval(() => {
         if (tempPool.length === 0) {
           tempPool = [...remainingPlayers];
@@ -455,27 +477,34 @@
         playerDisplay.textContent = tempPool[currentIndex];
       }, 80);
 
-      // Stop after a short duration
       const duration = 2200 + Math.random() * 800; // 2.2–3.0 s
       setTimeout(() => {
         clearInterval(playerAnimationInterval);
         playerAnimationInterval = null;
 
-        // Choose from remainingPlayers to ensure no repeat
         const finalIndex = Math.floor(Math.random() * remainingPlayers.length);
         const chosen = remainingPlayers[finalIndex];
         playerDisplay.textContent = chosen;
         playerDisplay.classList.add("highlight");
-        isAnimatingPlayer = false;
-        pickPlayerBtn.disabled = false;
 
         // Remove chosen from remaining
         remainingPlayers.splice(finalIndex, 1);
         appendPlayerLog(chosen);
+
+        isAnimatingPlayer = false;
+        setControlsDisabled(false);
+
+        if (typeof onDone === "function") {
+          onDone(chosen);
+        }
       }, duration);
     }
 
-    pickPlayerBtn.addEventListener("click", pickRandomPlayerWithAnimation);
+    function pickRandomPlayerOnly() {
+      runPlayerRoulette(); // no extra action
+    }
+
+    pickPlayerBtn.addEventListener("click", pickRandomPlayerOnly);
 
     // --- Question Card Logic ---
 
@@ -495,15 +524,9 @@
       questionLogList.scrollTop = questionLogList.scrollHeight;
     }
 
-    function handleCardClick(e) {
-      const card = e.currentTarget;
-      const groupIndex = parseInt(card.dataset.group, 10);
-      clearCardSelection();
-      card.classList.add("selected");
-
+    function drawQuestionFromGroup(groupIndex) {
       const start = groupIndex * 5;
       const groupSize = 5;
-
       const usedSet = usedQuestionIndicesByGroup[groupIndex];
 
       // If all used, reset that group's used set
@@ -516,7 +539,6 @@
         statusEl.textContent = "";
       }
 
-      // Build list of available local indices (0–4) not used
       const availableLocalIndices = [];
       for (let i = 0; i < groupSize; i++) {
         if (!usedSet.has(i)) {
@@ -524,7 +546,6 @@
         }
       }
 
-      // Safety: if somehow none, just allow any
       if (availableLocalIndices.length === 0) {
         for (let i = 0; i < groupSize; i++) {
           availableLocalIndices.push(i);
@@ -545,9 +566,35 @@
       appendQuestionLog(chosenQuestion, meta);
     }
 
+    function handleCardClick(e) {
+      const card = e.currentTarget;
+      const groupIndex = parseInt(card.dataset.group, 10);
+      clearCardSelection();
+      card.classList.add("selected");
+      drawQuestionFromGroup(groupIndex);
+    }
+
     cardElements.forEach((card) => {
       card.addEventListener("click", handleCardClick);
     });
+
+    // --- One Click Round ---
+
+    function runOneClickRound() {
+      if (isAnimatingPlayer) return;
+      runPlayerRoulette(() => {
+        // After player is chosen, auto-pick a card and question
+        const groupIndex = Math.floor(Math.random() * 4); // 0–3
+        const card = document.querySelector(`.qcard[data-group="${groupIndex}"]`);
+        clearCardSelection();
+        if (card) {
+          card.classList.add("selected");
+        }
+        drawQuestionFromGroup(groupIndex);
+      });
+    }
+
+    oneRoundBtn.addEventListener("click", runOneClickRound);
   </script>
 </body>
 </html>
