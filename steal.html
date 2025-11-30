@@ -2,410 +2,443 @@
 <html lang="en">
 <head>
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-C3LDF2V8MF"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-C3LDF2V8MF"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
-  gtag('config', 'G-C3LDF2V8MF');
-</script>
-  <meta charset="UTF-8" />
-  <title>WeaveTXT – Steal & Weave</title>
-  <link rel="icon" href="logo.svg" type="image/svg+xml">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      gtag('config', 'G-C3LDF2V8MF');
+    </script>
+    <meta charset="UTF-8" />
+    <title>WeaveTXT – Steal & Weave</title>
+    <link rel="icon" href="logo.svg" type="image/svg+xml">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <style>
-    :root {
-      --bg-main: #222;
-      --bg-card: #333;
-      --bg-tile: #444;
-      --bg-tile-empty: #2b2b2b;
-      --accent: #ffb347;
-      --accent-soft: #ffecb3;
-      --accent-border: #ff9800;
-      --text-main: #f5f5f5;
-      --text-muted: #aaa;
-      --text-soft: #ddd;
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #2b3a4a 0, #111 55%);
-      color: var(--text-main);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 16px;
-      margin: 0;
-    }
-
-    /* BRANDING */
-    #brand {
-      display: flex;
-      align-items: baseline;
-      gap: 6px;
-      margin-top: 6px;
-      margin-bottom: 4px;
-    }
-
-    .brand-weave {
-      font-family: "Georgia", serif;
-      font-size: clamp(22px, 5vw, 30px);
-      font-weight: bold;
-      letter-spacing: 0.03em;
-    }
-
-    .brand-txt {
-      font-family: "Courier New", monospace;
-      font-size: clamp(18px, 4.5vw, 24px);
-      font-weight: bold;
-      color: var(--accent);
-      border-right: 2px solid var(--accent);
-      padding-right: 4px;
-      animation: caret-blink 0.9s step-end infinite;
-      min-width: 3ch;
-    }
-
-    @keyframes caret-blink {
-      0%, 100% { border-color: transparent; }
-      50% { border-color: var(--accent); }
-    }
-
-    h1 {
-      margin: 2px 0 0;
-      font-size: clamp(20px, 5vw, 26px);
-      text-align: center;
-    }
-
-    #subtitle {
-      font-size: 12px;
-      margin-top: 4px;
-      margin-bottom: 14px;
-      color: var(--text-muted);
-      text-align: center;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-    }
-
-    /* GAME CARD */
-    #game-container {
-      background: var(--bg-card);
-      padding: 16px 14px 18px;
-      border-radius: 10px;
-      box-shadow: 0 0 18px rgba(0,0,0,0.55);
-      max-width: 520px;
-      width: 100%;
-      border: 1px solid #414141;
-    }
-
-    #top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 10px;
-      flex-wrap: wrap;
-      font-size: 13px;
-    }
-
-    #goal-label {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-soft);
-    }
-
-    #goal-label span {
-      color: var(--accent);
-    }
-
-    #progress-info {
-      font-size: 11px;
-      color: var(--text-muted);
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 3px;
-      text-align: right;
-    }
-
-    .small-tag {
-      font-size: 11px;
-      padding: 2px 6px;
-      border-radius: 999px;
-      border: 1px solid #555;
-      background: #252525;
-      color: var(--text-soft);
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .small-tag span {
-      font-weight: 600;
-      color: var(--accent-soft);
-    }
-
-    /* INSTRUCTIONS */
-    .instructions {
-      font-size: 12px;
-      line-height: 1.5;
-      color: var(--text-soft);
-      margin-bottom: 10px;
-    }
-
-    .instructions strong {
-      color: var(--accent-soft);
-    }
-
-    /* GRID */
-    #grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(40px, 56px));
-      grid-auto-rows: 44px;
-      gap: 6px;
-      justify-content: center;
-      margin-bottom: 10px;
-      margin-top: 4px;
-    }
-
-    .tile {
-      background: var(--bg-tile);
-      border-radius: 7px;
-      border: 1px solid #555;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: "Courier New", monospace;
-      font-size: clamp(18px, 4.3vw, 22px);
-      letter-spacing: 1px;
-      user-select: none;
-      cursor: pointer;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.35);
-      transition: transform 0.07s ease, box-shadow 0.07s ease, background 0.07s ease, border-color 0.07s ease;
-    }
-
-    .tile.empty {
-      background: var(--bg-tile-empty);
-      border-style: dashed;
-      border-color: #555;
-      box-shadow: none;
-      cursor: default;
-    }
-
-    .tile.letter:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 3px 9px rgba(0,0,0,0.6);
-      border-color: var(--accent-border);
-      background: #4b4b4b;
-    }
-
-    /* CURRENT WORD */
-    #current-section {
-      margin-top: 4px;
-      margin-bottom: 8px;
-      border-top: 1px solid #444;
-      padding-top: 8px;
-      font-size: 13px;
-    }
-
-    #current-label {
-      margin-bottom: 4px;
-      color: var(--text-soft);
-    }
-
-    #current-word {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-      min-height: 28px;
-    }
-
-    .current-letter {
-      min-width: 24px;
-      padding: 3px 7px;
-      border-radius: 999px;
-      border: 1px solid #555;
-      background: #252525;
-      font-family: "Courier New", monospace;
-      font-size: 14px;
-      text-align: center;
-    }
-
-    /* FOUND WORDS */
-    #found-section {
-      margin-top: 4px;
-      font-size: 12px;
-      color: var(--text-soft);
-      border-top: 1px solid #444;
-      padding-top: 6px;
-    }
-
-    #found-list {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 4px;
-      margin-top: 4px;
-    }
-
-    .found-slot {
-      background: #292929;
-      border-radius: 7px;
-      padding: 4px 6px;
-      border: 1px solid #444;
-      text-align: center;
-      font-size: 11px;
-    }
-
-    .found-slot-label {
-      color: var(--text-muted);
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 2px;
-    }
-
-    .found-word {
-      font-family: "Courier New", monospace;
-      font-size: 14px;
-      color: var(--accent-soft);
-      font-weight: 600;
-      min-height: 16px;
-    }
-
-    /* CONTROLS */
-    #controls {
-      margin-top: 8px;
-      padding-top: 8px;
-      border-top: 1px solid #444;
-      font-size: 13px;
-    }
-
-    .button-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      justify-content: center;
-      margin-bottom: 6px;
-    }
-
-    button {
-      border: none;
-      border-radius: 999px;
-      padding: 7px 14px;
-      font-size: 13px;
-      cursor: pointer;
-      background: var(--accent);
-      color: #222;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
-      transition: background 0.1s ease, transform 0.07s ease, box-shadow 0.07s ease;
-      min-width: 110px;
-      justify-content: center;
-    }
-
-    button:hover:not(:disabled) {
-      background: #ffab2c;
-      transform: translateY(-1px);
-      box-shadow: 0 3px 9px rgba(0,0,0,0.6);
-    }
-
-    button:disabled {
-      background: #555;
-      color: #999;
-      cursor: default;
-      transform: none;
-      box-shadow: none;
-    }
-
-    #undo-btn {
-      background: #444;
-      color: var(--text-main);
-    }
-
-    #undo-btn:hover:not(:disabled) {
-      background: #555;
-    }
-
-    #clear-btn {
-      background: #555;
-      color: var(--text-main);
-    }
-
-    #clear-btn:hover:not(:disabled) {
-      background: #666;
-    }
-
-    #reset-btn {
-      background: #444;
-      color: var(--text-main);
-    }
-
-    #reset-btn:hover:not(:disabled) {
-      background: #555;
-    }
-
-    #message {
-      min-height: 26px;
-      font-size: 12px;
-      text-align: center;
-      margin-top: 4px;
-      white-space: pre-line;
-    }
-
-    .msg-success { color: #9be59b; }
-    .msg-error   { color: #ff9d9d; }
-    .msg-warning { color: var(--accent); }
-    .msg-info    { color: var(--accent-soft); }
-
-    /* FOOTER */
-    #footer {
-      margin-top: 12px;
-      padding-top: 8px;
-      border-top: 1px solid #444;
-      font-size: 11px;
-      color: var(--text-muted);
-      text-align: center;
-    }
-
-    #footer a {
-      color: var(--accent);
-      text-decoration: none;
-      font-weight: 600;
-    }
-
-    #footer a:hover {
-      text-decoration: underline;
-    }
-
-    /* MOBILE */
-    @media (max-width: 480px) {
-      #game-container {
-        padding: 14px 10px 16px;
+    <style>
+      :root {
+        --bg-main: #222;
+        --bg-card: #333;
+        --bg-tile: #444;
+        --bg-tile-empty: #2b2b2b;
+        --accent: #ffb347;
+        --accent-soft: #ffecb3;
+        --accent-border: #ff9800;
+        --text-main: #f5f5f5;
+        --text-muted: #aaa;
+        --text-soft: #ddd;
       }
-      #top-bar {
+
+      * { box-sizing: border-box; }
+
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: radial-gradient(circle at top, #2b3a4a 0, #111 55%);
+        color: var(--text-main);
+        display: flex;
         flex-direction: column;
-        align-items: flex-start;
+        align-items: center;
+        padding: 16px;
+        margin: 0;
       }
+
+      /* BRANDING */
+      #brand {
+        display: flex;
+        align-items: baseline;
+        gap: 6px;
+        margin-top: 6px;
+        margin-bottom: 4px;
+      }
+
+      .brand-weave {
+        font-family: "Georgia", serif;
+        font-size: clamp(22px, 5vw, 30px);
+        font-weight: bold;
+        letter-spacing: 0.03em;
+      }
+
+      .brand-txt {
+        font-family: "Courier New", monospace;
+        font-size: clamp(18px, 4.5vw, 24px);
+        font-weight: bold;
+        color: var(--accent);
+        border-right: 2px solid var(--accent);
+        padding-right: 4px;
+        animation: caret-blink 0.9s step-end infinite;
+        min-width: 3ch;
+      }
+
+      @keyframes caret-blink {
+        0%, 100% { border-color: transparent; }
+        50% { border-color: var(--accent); }
+      }
+
+      h1 {
+        margin: 2px 0 0;
+        font-size: clamp(20px, 5vw, 26px);
+        text-align: center;
+      }
+
+      #subtitle {
+        font-size: 12px;
+        margin-top: 4px;
+        margin-bottom: 14px;
+        color: var(--text-muted);
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+      }
+
+      /* GAME CARD */
+      #game-container {
+        background: var(--bg-card);
+        padding: 16px 14px 18px;
+        border-radius: 10px;
+        box-shadow: 0 0 18px rgba(0,0,0,0.55);
+        max-width: 520px;
+        width: 100%;
+        border: 1px solid #414141;
+      }
+
+      #top-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+        font-size: 13px;
+      }
+
+      #goal-label {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-soft);
+      }
+
+      #goal-label span {
+        color: var(--accent);
+      }
+
       #progress-info {
-        align-items: flex-start;
+        font-size: 11px;
+        color: var(--text-muted);
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 3px;
+        text-align: right;
       }
+
+      .small-tag {
+        font-size: 11px;
+        padding: 2px 6px;
+        border-radius: 999px;
+        border: 1px solid #555;
+        background: #252525;
+        color: var(--text-soft);
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .small-tag span {
+        font-weight: 600;
+        color: var(--accent-soft);
+      }
+
+      /* LEVEL SELECTOR */
+      #level-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        margin-bottom: 8px;
+        font-size: 12px;
+      }
+
+      #level-label {
+        color: var(--text-soft);
+      }
+
+      #level-select {
+        border-radius: 999px;
+        padding: 4px 10px;
+        background: #252525;
+        border: 1px solid #555;
+        color: var(--text-soft);
+        font-size: 12px;
+      }
+
+      /* INSTRUCTIONS */
       .instructions {
-        font-size: 11px;
+        font-size: 12px;
+        line-height: 1.5;
+        color: var(--text-soft);
+        margin-bottom: 10px;
       }
+
+      .instructions strong {
+        color: var(--accent-soft);
+      }
+
+      #board-words {
+        margin-top: 4px;
+        font-size: 12px;
+        color: var(--accent-soft);
+      }
+
+      /* GRID */
       #grid {
-        grid-auto-rows: 40px;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(40px, 56px));
+        grid-auto-rows: 44px;
+        gap: 6px;
+        justify-content: center;
+        margin-bottom: 10px;
+        margin-top: 4px;
       }
+
+      .tile {
+        background: var(--bg-tile);
+        border-radius: 7px;
+        border: 1px solid #555;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Courier New", monospace;
+        font-size: clamp(18px, 4.3vw, 22px);
+        letter-spacing: 1px;
+        user-select: none;
+        cursor: pointer;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+        transition: transform 0.07s ease, box-shadow 0.07s ease, background 0.07s ease, border-color 0.07s ease;
+      }
+
+      .tile.empty {
+        background: var(--bg-tile-empty);
+        border-style: dashed;
+        border-color: #555;
+        box-shadow: none;
+        cursor: default;
+      }
+
+      .tile.letter:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 3px 9px rgba(0,0,0,0.6);
+        border-color: var(--accent-border);
+        background: #4b4b4b;
+      }
+
+      /* CURRENT WORD */
+      #current-section {
+        margin-top: 4px;
+        margin-bottom: 8px;
+        border-top: 1px solid #444;
+        padding-top: 8px;
+        font-size: 13px;
+      }
+
+      #current-label {
+        margin-bottom: 4px;
+        color: var(--text-soft);
+      }
+
+      #current-word {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        min-height: 28px;
+      }
+
+      .current-letter {
+        min-width: 24px;
+        padding: 3px 7px;
+        border-radius: 999px;
+        border: 1px solid #555;
+        background: #252525;
+        font-family: "Courier New", monospace;
+        font-size: 14px;
+        text-align: center;
+      }
+
+      /* FOUND WORDS */
       #found-section {
+        margin-top: 4px;
+        font-size: 12px;
+        color: var(--text-soft);
+        border-top: 1px solid #444;
+        padding-top: 6px;
+      }
+
+      #found-list {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 4px;
+        margin-top: 4px;
+      }
+
+      .found-slot {
+        background: #292929;
+        border-radius: 7px;
+        padding: 4px 6px;
+        border: 1px solid #444;
+        text-align: center;
         font-size: 11px;
       }
-    }
-  </style>
+
+      .found-slot-label {
+        color: var(--text-muted);
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 2px;
+      }
+
+      .found-word {
+        font-family: "Courier New", monospace;
+        font-size: 14px;
+        color: var(--accent-soft);
+        font-weight: 600;
+        min-height: 16px;
+      }
+
+      /* CONTROLS */
+      #controls {
+        margin-top: 8px;
+        padding-top: 8px;
+        border-top: 1px solid #444;
+        font-size: 13px;
+      }
+
+      .button-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: center;
+        margin-bottom: 6px;
+      }
+
+      button {
+        border: none;
+        border-radius: 999px;
+        padding: 7px 14px;
+        font-size: 13px;
+        cursor: pointer;
+        background: var(--accent);
+        color: #222;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+        transition: background 0.1s ease, transform 0.07s ease, box-shadow 0.07s ease;
+        min-width: 110px;
+        justify-content: center;
+      }
+
+      button:hover:not(:disabled) {
+        background: #ffab2c;
+        transform: translateY(-1px);
+        box-shadow: 0 3px 9px rgba(0,0,0,0.6);
+      }
+
+      button:disabled {
+        background: #555;
+        color: #999;
+        cursor: default;
+        transform: none;
+        box-shadow: none;
+      }
+
+      #undo-btn {
+        background: #444;
+        color: var(--text-main);
+      }
+
+      #undo-btn:hover:not(:disabled) {
+        background: #555;
+      }
+
+      #clear-btn {
+        background: #555;
+        color: var(--text-main);
+      }
+
+      #clear-btn:hover:not(:disabled) {
+        background: #666;
+      }
+
+      #reset-btn {
+        background: #444;
+        color: var(--text-main);
+      }
+
+      #reset-btn:hover:not(:disabled) {
+        background: #555;
+      }
+
+      #message {
+        min-height: 26px;
+        font-size: 12px;
+        text-align: center;
+        margin-top: 4px;
+        white-space: pre-line;
+      }
+
+      .msg-success { color: #9be59b; }
+      .msg-error   { color: #ff9d9d; }
+      .msg-warning { color: var(--accent); }
+      .msg-info    { color: var(--accent-soft); }
+
+      /* FOOTER */
+      #footer {
+        margin-top: 12px;
+        padding-top: 8px;
+        border-top: 1px solid #444;
+        font-size: 11px;
+        color: var(--text-muted);
+        text-align: center;
+      }
+
+      #footer a {
+        color: var(--accent);
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      #footer a:hover {
+        text-decoration: underline;
+      }
+
+      /* MOBILE */
+      @media (max-width: 480px) {
+        #game-container {
+          padding: 14px 10px 16px;
+        }
+        #top-bar {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        #progress-info {
+          align-items: flex-start;
+        }
+        .instructions {
+          font-size: 11px;
+        }
+        #grid {
+          grid-auto-rows: 40px;
+        }
+        #found-section {
+          font-size: 11px;
+        }
+        #level-row {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+    </style>
 </head>
 <body>
   <!-- BRAND -->
@@ -417,6 +450,9 @@
   <h1>Steal &amp; Weave</h1>
   <div id="subtitle">Steal letters, keep columns valid, weave new words</div>
 
+  <h4> 30th November 2025 </h4>
+
+    
   <div id="game-container">
     <div id="top-bar">
       <div id="goal-label">
@@ -433,14 +469,25 @@
       </div>
     </div>
 
+    <!-- LEVEL SELECT -->
+    <div id="level-row">
+      <div id="level-label">Level:</div>
+      <select id="level-select">
+        <option value="1">Level 1 – STRING / ALONE / PHONE / CRATE</option>
+        <option value="2">Level 2 – SPLIT / HEARD / PLANE / PLAIDS</option>
+      </select>
+    </div>
+
     <p class="instructions">
-      The board has <strong>4 vertical words</strong> (top-to-bottom): STRING, ALONE, PHONE, and CRATE.<br />
+      The board has <strong>4 vertical words</strong> (top-to-bottom).<br />
       Click a letter to <strong>steal</strong> it. You may only steal if the remaining letters
       in that column still form a <strong>valid English word</strong>.<br />
       Use the stolen letters to build new words and press <strong>Submit word</strong>.<br />
       After a valid word, the board <strong>resets</strong> so you can try new words from a fresh set of letters.<br />
-      You win when you find at least one <strong>3-letter</strong>, <strong>4-letter</strong>, and
-      <strong>5-letter</strong> word. A <strong>6-letter</strong> word is a bonus.
+      You win the main goal when you find at least one <strong>3-letter</strong>, <strong>4-letter</strong>, and
+      <strong>5-letter</strong> word. A <strong>6-letter</strong> word is a bonus – you can still keep playing for it
+      after completing the main goals.
+      <div id="board-words"></div>
     </p>
 
     <!-- GRID -->
@@ -500,8 +547,8 @@
       <a href="https://www.weavetxt.com/tail.html" target="_blank" rel="noopener noreferrer">
         Head & Tail
       </a>
-
-    <a href="https://www.weavetxt.com/book/chapter1.html" target="_blank" rel="noopener noreferrer">
+      ·
+      <a href="https://www.weavetxt.com/book/chapter1.html" target="_blank" rel="noopener noreferrer">
         Geometry of Batik
       </a>
     </div>
@@ -511,7 +558,7 @@
   <script src="valid-2-6.js"></script>
 
   <script>
-    /* -------- TXT animation (same as Neighbor Tail / Head) -------- */
+    /* -------- TXT animation -------- */
     (function animateTXT() {
       const el = document.getElementById("brand-txt");
       const word = "TXT";
@@ -548,7 +595,7 @@
 
     function initDictionary() {
       if (typeof VALID_WORDS === "undefined" || !Array.isArray(VALID_WORDS)) {
-        alert("ERROR: valid-3-6.js not loaded or VALID_WORDS is not an array.\\nGame requires VALID_WORDS.");
+        alert("ERROR: valid-2-6.js not loaded or VALID_WORDS is not an array.\nGame requires VALID_WORDS.");
         DICT_READY = false;
         return false;
       }
@@ -564,20 +611,18 @@
     const GRID_ROWS = 6;
     const GRID_COLS = 4;
 
-    // First level: your example
-    const initialColumns = [
-      "STRING", // column 0
-      "ALONE",  // column 1
-      "PHONE",  // column 2
-      "CRATE"   // column 3
-    ];
+    const LEVELS = {
+      1: ["STRING", "ALONE", "PHONE", "CRATE"],
+      2: ["SPLIT", "HEARD", "PLANE", "PLAIDS"]
+    };
+
+    let currentLevel = 1;
 
     let columnsWords = []; // array of arrays of letters per column
-    let currentLetters = []; // letters in current word (in order stolen)
+    let currentLetters = []; // letters in current word
     let historyStack = [];   // to undo unsubmitted steals
     let gameOver = false;
 
-    // Found words by length (3,4,5 required; 6 bonus)
     const found = {
       3: null,
       4: null,
@@ -601,6 +646,8 @@
 
     const requiredCountEl = document.getElementById("required-count");
     const statusLabelEl = document.getElementById("status-label");
+    const levelSelectEl = document.getElementById("level-select");
+    const boardWordsEl = document.getElementById("board-words");
 
     // store tile elements as [row][col]
     const tiles = [];
@@ -608,8 +655,8 @@
     function createGrid() {
       gridEl.innerHTML = "";
       for (let r = 0; r < GRID_ROWS; r++) {
+        tiles[r] = [];
         for (let c = 0; c < GRID_COLS; c++) {
-          if (!tiles[r]) tiles[r] = [];
           const tile = document.createElement("div");
           tile.className = "tile empty";
           tile.dataset.row = String(r);
@@ -621,7 +668,14 @@
     }
 
     function resetColumns() {
-      columnsWords = initialColumns.map(word => word.split(""));
+      const words = LEVELS[currentLevel];
+      columnsWords = words.map(word => word.split(""));
+      updateBoardWordsText();
+    }
+
+    function updateBoardWordsText() {
+      const words = LEVELS[currentLevel];
+      boardWordsEl.textContent = "Current board columns: " + words.join(" / ");
     }
 
     function setMessage(text, type = "info") {
@@ -636,7 +690,7 @@
 
         for (let r = 0; r < GRID_ROWS; r++) {
           const tile = tiles[r][c];
-          const idx = r - (GRID_ROWS - L); // bottom-align columns
+          const idx = r - (GRID_ROWS - L); // bottom-align
 
           if (idx < 0) {
             tile.textContent = "";
@@ -653,9 +707,8 @@
 
     function renderCurrentWord() {
       currentWordEl.innerHTML = "";
-      if (currentLetters.length === 0) {
-        return;
-      }
+      if (currentLetters.length === 0) return;
+
       currentLetters.forEach(ch => {
         const span = document.createElement("div");
         span.className = "current-letter";
@@ -677,7 +730,11 @@
       requiredCountEl.textContent = reqCount + " / 3";
 
       if (reqCount === 3) {
-        statusLabelEl.textContent = "Goal reached!";
+        if (found[6]) {
+          statusLabelEl.textContent = "All goals + bonus!";
+        } else {
+          statusLabelEl.textContent = "Goal reached! Bonus: 6-letter";
+        }
       } else {
         statusLabelEl.textContent = "In progress";
       }
@@ -690,7 +747,7 @@
     function attemptSteal(row, col) {
       if (gameOver) return;
       if (!DICT_READY) {
-        setMessage("Dictionary not loaded. Check valid-3-6.js.", "error");
+        setMessage("Dictionary not loaded. Check valid-2-6.js.", "error");
         return;
       }
 
@@ -757,7 +814,6 @@
       while (historyStack.length > 0) {
         const snapshot = historyStack[historyStack.length - 1];
         if (snapshot.current.length === 0) {
-          // Restore final snapshot with empty current
           const snap = historyStack.pop();
           columnsWords = deepCopyColumns(snap.columns);
           currentLetters = [];
@@ -780,7 +836,7 @@
       if (gameOver) return;
 
       if (!DICT_READY) {
-        setMessage("Dictionary not loaded. Check valid-3-6.js.", "error");
+        setMessage("Dictionary not loaded. Check valid-2-6.js.", "error");
         return;
       }
 
@@ -826,15 +882,25 @@
       historyStack = [];
       renderCurrentWord();
 
-      // Check win condition (3,4,5 all found)
-      if (found[3] && found[4] && found[5]) {
+      // Check progress:
+      if (found[3] && found[4] && found[5] && found[6]) {
+        // main + bonus complete
         gameOver = true;
-        let msg = `You win!\\n3-letter: ${found[3]}\\n4-letter: ${found[4]}\\n5-letter: ${found[5]}`;
-        if (found[6]) {
-          msg += `\\nBonus 6-letter: ${found[6]}`;
-        } else {
-          msg += `\\nTry to find a 6-letter word for a bonus!`;
-        }
+        let msg =
+          `You found everything!\n` +
+          `3-letter: ${found[3]}\n` +
+          `4-letter: ${found[4]}\n` +
+          `5-letter: ${found[5]}\n` +
+          `Bonus 6-letter: ${found[6]}`;
+        setMessage(msg, "success");
+      } else if (found[3] && found[4] && found[5]) {
+        // main goals complete, keep playing for bonus
+        let msg =
+          `Main goals complete!\n` +
+          `3-letter: ${found[3]}\n` +
+          `4-letter: ${found[4]}\n` +
+          `5-letter: ${found[5]}\n` +
+          `Try to find a 6-letter word for the bonus.`;
         setMessage(msg, "success");
       }
     }
@@ -849,7 +915,7 @@
       renderCurrentWord();
       updateFoundDisplay();
       setMessage(
-        "Puzzle reset. Columns spell STRING / ALONE / PHONE / CRATE. Steal letters without breaking any column word.",
+        "Puzzle reset. Steal letters without breaking any column word, then build 3–6 letter words.",
         "info"
       );
     }
@@ -867,6 +933,12 @@
     clearBtn.addEventListener("click", clearCurrentWord);
     submitBtn.addEventListener("click", submitWord);
     resetBtn.addEventListener("click", resetGame);
+
+    levelSelectEl.addEventListener("change", () => {
+      const val = parseInt(levelSelectEl.value, 10);
+      currentLevel = val || 1;
+      resetGame();
+    });
 
     // Init
     createGrid();
