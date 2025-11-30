@@ -1,0 +1,1736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-C3LDF2V8MF"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-C3LDF2V8MF');
+</script>
+
+  <meta charset="UTF-8" />
+  <title>Visualizing Geometry of Batik – Chapter 1: Kawung</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    :root {
+      --bg-main: #222;
+      --bg-card: #333;
+      --bg-tile: #444;
+      --bg-tile-empty: #2b2b2b;
+      --bg-tile-selected: #3f3f3f;
+      --accent: #ffb347;
+      --accent-soft: #ffecb3;
+      --accent-border: #ff9800;
+      --text-main: #f5f5f5;
+      --text-muted: #aaa;
+      --text-soft: #ddd;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #2b3a4a 0, #111 55%);
+      color: var(--text-main);
+      margin: 0;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* BRANDING – Geometry of Batik, WeaveTXT style */
+    #brand {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin-top: 6px;
+      margin-bottom: 4px;
+    }
+
+    .brand-weave {
+      font-family: "Georgia", serif;
+      font-size: clamp(22px, 5vw, 30px);
+      font-weight: bold;
+      letter-spacing: 0.03em;
+    }
+
+    .brand-txt {
+      font-family: "Courier New", monospace;
+      font-size: clamp(18px, 4.5vw, 24px);
+      font-weight: bold;
+      color: var(--accent);
+      border-right: 2px solid var(--accent);
+      padding-right: 4px;
+      animation: caret-blink 0.9s step-end infinite;
+      min-width: 3ch;
+    }
+
+    @keyframes caret-blink {
+      0%, 100% { border-color: transparent; }
+      50% { border-color: var(--accent); }
+    }
+
+    h1 {
+      margin: 2px 0 0;
+      font-size: clamp(20px, 5vw, 26px);
+      text-align: center;
+    }
+
+    #subtitle {
+      font-size: 12px;
+      margin-top: 4px;
+      margin-bottom: 12px;
+      color: var(--text-muted);
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    /* Chapter container card */
+    #chapter-container {
+      background: var(--bg-card);
+      padding: 16px 14px 18px;
+      border-radius: 10px;
+      box-shadow: 0 0 18px rgba(0,0,0,0.55);
+      max-width: 720px;
+      width: 100%;
+      border: 1px solid #414141;
+    }
+
+    /* Top nav inside chapter */
+    #chapter-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 12px;
+      font-size: 13px;
+    }
+
+    #chapter-nav a {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #252525;
+      color: var(--text-soft);
+      text-decoration: none;
+      border: 1px solid #555;
+      transition: background 0.1s ease, transform 0.07s ease, box-shadow 0.07s ease;
+      white-space: nowrap;
+    }
+
+    #chapter-nav a:hover {
+      background: #2f2f2f;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    }
+
+    section {
+      margin-top: 16px;
+      padding-top: 8px;
+      border-top: 1px solid #444;
+    }
+
+    section h2 {
+      margin-top: 0;
+      font-size: 18px;
+      margin-bottom: 6px;
+    }
+
+    section p {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-soft);
+      margin-top: 4px;
+      margin-bottom: 8px;
+    }
+
+    .tagline {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--accent-soft);
+      margin-bottom: 4px;
+    }
+
+    /* Geometry card, reusing "tile" feel */
+    .geometry-card {
+      margin-top: 8px;
+      background: #2b2b2b;
+      border-radius: 10px;
+      border: 1px solid #555;
+      padding: 12px;
+    }
+
+    .geometry-card h3 {
+      margin: 4px 0 4px;
+      font-size: 15px;
+    }
+
+    .geometry-meta {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+
+    .gallery-thumb-img {
+  width: 100%;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 7px;
+  background: #222;
+}
+
+    .canvas-wrapper {
+      display: flex;
+      justify-content: center;
+      margin: 8px 0 6px;
+    }
+
+    canvas {
+      display: block;
+      max-width: 100%;
+      border-radius: 8px;
+      background: #333;
+    }
+
+    .formula {
+      font-family: "Fira Mono", Menlo, Consolas, monospace;
+      font-size: 12px;
+      text-align: center;
+      color: var(--accent-soft);
+      margin-top: 4px;
+      margin-bottom: 4px;
+    }
+
+    .small-note {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    /* Gallery placeholder tiles */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .gallery-item {
+      background: #2b2b2b;
+      border-radius: 10px;
+      border: 1px solid #555;
+      padding: 10px;
+      font-size: 11px;
+      color: var(--text-soft);
+      text-align: center;
+    }
+
+.gallery-thumb,
+.gallery-thumb-img {
+  aspect-ratio: 1 / 1;   /* makes it a perfect square */
+  height: auto;          /* let width define size */
+}
+
+    /* HISTORY MAP CARD */
+    .history-card {
+      margin-top: 10px;
+      background: #2b2b2b;
+      border-radius: 10px;
+      border: 1px solid #555;
+      padding: 12px;
+    }
+
+    .history-card-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .history-card-meta {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .map-wrapper {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #1a2430;
+    }
+
+    .map-inner {
+      position: relative;
+      width: 100%;
+      padding-top: 52%; /* aspect ratio ~ world map */
+      border-radius: 10px;
+      overflow: hidden;
+      background-color: #1a2430;
+    }
+
+    .map-inner::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: url("https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg");
+      background-size: cover;
+      background-position: center;
+      opacity: 0.95;
+      filter: saturate(0.4) contrast(1.05);
+    }
+
+    .map-marker {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      margin-left: -9px;
+      margin-top: -9px;
+      border-radius: 50%;
+      border: 2px solid var(--accent);
+      background: rgba(0, 0, 0, 0.75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(0,0,0,0.8);
+      z-index: 1;
+    }
+
+    .map-marker-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 6px rgba(255, 179, 71, 0.9);
+    }
+
+    .map-marker-pulse {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 1px solid var(--accent);
+      opacity: 0.6;
+      animation: marker-pulse 1.8s ease-out infinite;
+    }
+
+    @keyframes marker-pulse {
+      0% {
+        transform: scale(1);
+        opacity: 0.6;
+      }
+      100% {
+        transform: scale(2.2);
+        opacity: 0;
+      }
+    }
+
+    .map-header-label {
+      position: absolute;
+      left: 10px;
+      top: 8px;
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.55);
+      font-size: 11px;
+      color: #d0d8e5;
+      z-index: 1;
+    }
+
+    .map-text-label {
+      position: absolute;
+      font-size: 11px;
+      color: #f5f5f5;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.9);
+      pointer-events: none;
+      white-space: nowrap;
+      z-index: 1;
+    }
+
+    .map-tooltip {
+      position: absolute;
+      min-width: 130px;
+      max-width: 200px;
+      padding: 6px 8px;
+      border-radius: 8px;
+      font-size: 11px;
+      background: rgba(12, 12, 16, 0.92);
+      color: var(--text-soft);
+      border: 1px solid #555;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+      pointer-events: none;
+      opacity: 0;
+      transform: translate(-50%, -110%);
+      transition: opacity 0.15s ease, transform 0.15s ease;
+      z-index: 2;
+    }
+
+    .map-tooltip.visible {
+      opacity: 1;
+      transform: translate(-50%, -115%);
+    }
+
+    .map-tooltip-title {
+      font-weight: 600;
+      margin-bottom: 2px;
+      color: #ffe0a3;
+    }
+
+    .map-tooltip-name {
+      font-style: italic;
+      color: #ffd28a;
+    }
+
+    .map-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+      font-size: 11px;
+    }
+
+    .map-legend-item {
+      flex: 1 1 150px;
+      background: #262626;
+      border-radius: 8px;
+      border: 1px solid #555;
+      padding: 6px 8px;
+      cursor: pointer;
+      transition: border 0.12s ease, background 0.12s ease, transform 0.08s ease;
+    }
+
+    .map-legend-item:hover {
+      background: #2f2f2f;
+      transform: translateY(-1px);
+    }
+
+    .map-legend-item.active {
+      border-color: var(--accent-border);
+      background: #343434;
+    }
+
+    .map-label {
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .map-label span {
+      font-style: italic;
+      color: #ffd28a;
+    }
+
+    .map-desc {
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Footer */
+    #footer {
+      margin-top: 14px;
+      padding-top: 8px;
+      border-top: 1px solid #444;
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    #footer a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    #footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 480px) {
+      #chapter-container {
+        padding: 14px 10px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- BRAND -->
+  <div id="brand">
+    <span class="brand-weave">Geometry of Batik</span>
+    <span class="brand-txt" id="brand-txt"></span>
+  </div>
+
+  <h1>Chapter 1 · Batik Kawung</h1>
+  <div id="subtitle">Visualizing history, geometry, and art</div>
+
+  <div id="chapter-container">
+    <!-- In-page navigation -->
+    <nav id="chapter-nav">
+      <a href="#history">History</a>
+      <a href="#geometry">Geometry</a>
+      <a href="#gallery">Art Gallery</a>
+    </nav>
+
+    <!-- HISTORY SECTION -->
+    <section id="history">
+      <div class="tagline">Section I · History of Batik Kawung</div>
+      <h2>Origins and Symbolism</h2>
+      <p>
+        Batik Kawung is often cited as one of the oldest batik motifs in Java. Its four-petaled, overlapping-circle geometry
+        appears on stone carvings in temples and on royal textiles, long before it became a modern batik staple. The motif
+        decorates statues of Mahakala in Singosari temple, as well as images of Ganesha, Nandishvara, and Durga Mahishasuramardini.
+      </p>
+      <p>
+        Interestingly, similar circle-based patterns appear far beyond Indonesia. In Old Babylonian mathematics, a related figure built from
+        circular arcs is known as the <em>apsamikkum</em>, and in Japan a comparable overlapping-circle pattern is called
+        <em>shippo</em>, the “seven treasures” motif often seen in family crests and Buddhist ornament. Across cultures, the same simple geometry
+        is reinterpreted with different meanings—prosperity, harmony, sacred protection.
+      </p>
+      <p>
+        The popularity of Kawung has easily crossed into the 21st century. Today you can find it on fabric, building façades, graphic design,
+        and even in popular media—if you look closely, echoes of Kawung-like circles appear in the opening credits of Studio Ghibli’s
+        <em>The Tale of the Princess Kaguya</em> (2013). Knowing how widely this motif travels, it becomes even more tempting to explore
+        the geometry that lies underneath.
+      </p>
+
+      <!-- HISTORY MAP CARD -->
+      <div class="history-card">
+        <div class="history-card-title">A motif that travels</div>
+        <div class="history-card-meta">
+          World map · Tap / hover the glowing dots or legend items to see local names.
+        </div>
+
+        <div class="map-wrapper">
+          <div class="map-inner" id="kawung-map-inner">
+            <!-- Header label -->
+            <div class="map-header-label">
+              Kawung-like circle geometries across regions
+            </div>
+
+            <!-- MESOPOTAMIA marker -->
+            <div
+              class="map-marker"
+              data-key="mesopotamia"
+              data-region="Mesopotamia (Iraq / Syria region)"
+              data-name="apsamikkum"
+              data-desc="Old Babylonian circular-arc figure used in mathematics tablets."
+              style="left: 61%; top: 31%;"
+            >
+              <div class="map-marker-pulse"></div>
+              <div class="map-marker-dot"></div>
+            </div>
+
+            <!-- JAVA marker (Indonesia) -->
+            <div
+              class="map-marker"
+              data-key="java"
+              data-region="Java (Indonesia)"
+              data-name="Kawung"
+              data-desc="Four-petaled batik motif on cloth, stone carving, and architecture."
+              style="left: 80%; top: 54%;"
+            >
+              <div class="map-marker-pulse"></div>
+              <div class="map-marker-dot"></div>
+            </div>
+
+            <!-- JAPAN marker -->
+            <div
+              class="map-marker"
+              data-key="japan"
+              data-region="Japan"
+              data-name="shippo"
+              data-desc="Overlapping-circle “seven treasures” pattern in crests and Buddhist ornament."
+              style="left: 88%; top: 30%;"
+            >
+              <div class="map-marker-pulse"></div>
+              <div class="map-marker-dot"></div>
+            </div>
+
+            <!-- Text labels on map -->
+            <div class="map-text-label" style="left: 64%; top: 28%;">Mesopotamia</div>
+            <div class="map-text-label" style="left: 83%; top: 58%;">Java · Indonesia</div>
+            <div class="map-text-label" style="left: 91%; top: 27%;">Japan</div>
+
+            <!-- Tooltip -->
+            <div class="map-tooltip" id="map-tooltip">
+              <div class="map-tooltip-title"></div>
+              <div><span class="map-tooltip-name"></span></div>
+              <div class="map-tooltip-desc"></div>
+            </div>
+          </div>
+
+          <!-- Legend under the map -->
+          <div class="map-legend">
+            <div class="map-legend-item" data-key="mesopotamia">
+              <div class="map-label">Mesopotamia · <span>apsamikkum</span></div>
+              <div class="map-desc">
+                Old Babylonian figure built from circular arcs, used in mathematics problems about areas and diagonals.
+              </div>
+            </div>
+            <div class="map-legend-item" data-key="java">
+              <div class="map-label">Java · <span>Kawung</span></div>
+              <div class="map-desc">
+                One of the oldest Javanese batik motifs, found on cloth, temple statues, and modern Indonesian design.
+              </div>
+            </div>
+            <div class="map-legend-item" data-key="japan">
+              <div class="map-label">Japan · <span>shippo</span></div>
+              <div class="map-desc">
+                Overlapping-circle “seven treasures” pattern, common in family crests, textiles, and Buddhist ornament.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GEOMETRY SECTION -->
+    <section id="geometry">
+      <div class="tagline">Section II · Geometry of Batik Kawung</div>
+      <h2>Astroid Curve as a Kawung Cell</h2>
+      <p>
+        One way to see Batik Kawung is as a repetition of a smooth four-petaled shape.
+        That shape can be generated by tracing a point on a circle rolling inside a larger circle.
+        Mathematically, the resulting curve is called an <strong>astroid</strong>.
+      </p>
+
+      <!-- ASTROID CARD -->
+      <div class="geometry-card">
+        <div class="geometry-meta">
+          Interactive demo · Drag/scroll the page normally; the curve loops on its own.
+        </div>
+
+        <div class="canvas-wrapper">
+          <canvas id="astroid-canvas"></canvas>
+        </div>
+
+        <div class="formula">
+          Astroid parametrization: &nbsp; x = a·cos³(t), &nbsp; y = a·sin³(t)
+        </div>
+        <p>
+          In Kawung, this rounded diamond shape is repeated and overlapped in a grid.
+          Each astroid can be thought of as a single “seed” of the motif. By translating
+          and rotating this seed, we can fill the plane with Kawung patterns.
+        </p>
+        <div class="small-note">
+          The animation shows a small circle rolling inside a larger circle.
+          The yellow point traces the astroid curve, then the region between
+          the curve and the outer circle is softly filled—hinting at a Kawung “petal”.
+        </div>
+      </div>
+
+      <!-- FOUR CIRCLES CARD -->
+      <div class="geometry-card" style="margin-top: 14px;">
+        <div class="geometry-meta">
+          Another viewpoint · Kawung as the intersection of four circles with centers at A, B, C, and D.
+        </div>
+
+        <div class="canvas-wrapper">
+          <canvas id="circles-canvas"></canvas>
+        </div>
+
+        <p>
+          The same Kawung cell can also be seen as the common intersection of four circles:
+          two along the horizontal axis and two along the vertical axis. Their overlapping region
+          forms the familiar four-lobed Kawung shape.
+        </p>
+        <div class="small-note">
+          First the circle centers C, D, A, and B appear, then circles are drawn,
+          and finally the overlapping region is filled in blue—as the Kawung “seed” built purely
+          from circles.
+        </div>
+      </div>
+
+      <!-- BEZIER ENVELOPE CARD -->
+      <div class="geometry-card" style="margin-top: 14px;">
+        <div class="geometry-meta">
+          Yet another construction · Kawung from the envelope of Bézier curves inside a square.
+        </div>
+
+        <div class="canvas-wrapper">
+          <canvas id="bezier-canvas"></canvas>
+        </div>
+
+        <p>
+          Imagine a square rotated by 45° around the center. Using its four vertices as endpoints,
+          we draw families of Bézier curves from the origin to each vertex and back. The envelope
+          of these curves thickens into a smooth, rounded diamond. Repeating this construction
+          four times reveals a full Kawung cell—built entirely from Bézier strokes.
+        </p>
+        <div class="small-note">
+          Watch how the envelope grows from thin white lines, then the Kawung stroke is highlighted,
+          and finally the blue fill fades in with the caption:
+          <br><em>“Kawung as Bézier Curve with square end points”</em>.
+        </div>
+      </div>
+
+
+      <!-- QUADRIFOLIUM CARD (4th animation) -->
+      <div class="geometry-card" style="margin-top: 14px;">
+        <div class="geometry-meta">
+          Polar curve view · Kawung as a four-leaf quadrifolium (a rose curve with four petals).
+        </div>
+
+        <div class="canvas-wrapper">
+          <canvas id="quad-canvas"></canvas>
+        </div>
+
+        <div class="formula">
+          Quadrifolium: &nbsp; r = a·cos(2θ)
+        </div>
+        <p>
+          The same four-lobed silhouette also appears as a <em>quadrifolium</em>, a polar curve defined by
+          <code>r = a·cos(2θ)</code>. As θ runs from 0 to 2π, the point moves in and out from the center, tracing four
+          symmetric petals. With the right scaling and rotation, this rose curve lines up beautifully with a Kawung cell.
+        </p>
+        <div class="small-note">
+          Watch the curve grow petal by petal. Once the full quadrifolium is traced, the Kawung-like region is filled
+          with the same blue used in the previous animations, tying all constructions together.
+        </div>
+      </div>
+
+
+    </section>
+
+    <!-- GALLERY SECTION -->
+    <section id="gallery">
+      <div class="tagline">Section III · Art Gallery of Batik Kawung</div>
+      <h2>From Geometry to Visual Art</h2>
+      <p>
+        This section will showcase Kawung renderings built from the underlying geometry:
+        variations with different colors, stroke widths, densities, and layering styles.
+      </p>
+
+      <div class="gallery-grid">
+        <div class="gallery-item">
+           <img src="apolloniangasket.svg" class="gallery-thumb-img" alt="Apollonian Gasket">
+           Apollonian Kawung Gasket · Symmetric
+
+        </div>
+        <div class="gallery-item">
+         <img src="asymmetricgasket.svg" class="gallery-thumb-img" alt="Apollonian Gasket ASymmetric">
+           Apollonian Kawung Gasket · ASymmetric
+        </div>
+        <div class="gallery-item">
+         <img src="tripletgasket.svg" class="gallery-thumb-img" alt="Apollonian Gasket Triplet">
+           Apollonian Kawung Gasket · Triplet
+        </div>
+      </div>
+    </section>
+
+    <div id="footer">
+      Part of the interactive series <strong>Visualizing Geometry of Batik</strong> ·
+      <a href="https://www.weavetxt.com" target="_blank" rel="noopener noreferrer">
+        WeaveTxt
+      </a>
+    </div>
+  </div>
+
+  <script>
+    /* --------- LOOPING TXT ANIMATION (WeaveTXT-style) --------- */
+    (function animateTXT(){
+      const el = document.getElementById("brand-txt");
+      const word = "VISUALIZED";
+      let i = 0;
+      let forward = true;
+
+      function loop(){
+        el.textContent = word.slice(0, i);
+
+        if(forward){
+          i++;
+          if(i > word.length){
+            forward = false;
+            setTimeout(loop, 900);
+            return;
+          }
+        } else {
+          i--;
+          if(i < 0){
+            forward = true;
+            setTimeout(loop, 600);
+            return;
+          }
+        }
+        setTimeout(loop, 120);
+      }
+
+      loop();
+    })();
+
+    /* --------- MAP INTERACTIVITY --------- */
+    (function(){
+      const mapInner = document.getElementById("kawung-map-inner");
+      if (!mapInner) return;
+
+      const markers = mapInner.querySelectorAll(".map-marker");
+      const tooltip = document.getElementById("map-tooltip");
+      const legendItems = document.querySelectorAll(".map-legend-item");
+
+      function setActiveByKey(key) {
+        markers.forEach(m => {
+          m.classList.toggle("active", m.dataset.key === key);
+        });
+        legendItems.forEach(item => {
+          item.classList.toggle("active", item.dataset.key === key);
+        });
+      }
+
+      function showTooltipForMarker(marker) {
+        if (!marker || !tooltip) return;
+
+        const key = marker.dataset.key;
+        setActiveByKey(key);
+
+        const region = marker.dataset.region || "";
+        const name = marker.dataset.name || "";
+        const desc = marker.dataset.desc || "";
+
+        tooltip.querySelector(".map-tooltip-title").textContent = region;
+        tooltip.querySelector(".map-tooltip-name").textContent = name;
+        tooltip.querySelector(".map-tooltip-desc").textContent = desc;
+
+        // Position tooltip above marker, in %
+        const mapRect = mapInner.getBoundingClientRect();
+        const markerRect = marker.getBoundingClientRect();
+
+        const leftPct =
+          ((markerRect.left + markerRect.width / 2) - mapRect.left) / mapRect.width * 100;
+        const topPct =
+          (markerRect.top - mapRect.top) / mapRect.height * 100;
+
+        tooltip.style.left = leftPct + "%";
+        tooltip.style.top = topPct + "%";
+
+        tooltip.classList.add("visible");
+      }
+
+      function hideTooltip() {
+        if (tooltip) {
+          tooltip.classList.remove("visible");
+        }
+      }
+
+      markers.forEach(marker => {
+        marker.addEventListener("mouseenter", () => {
+          showTooltipForMarker(marker);
+        });
+        marker.addEventListener("mouseleave", () => {
+          hideTooltip();
+        });
+        marker.addEventListener("click", () => {
+          showTooltipForMarker(marker);
+        });
+      });
+
+      legendItems.forEach(item => {
+        item.addEventListener("mouseenter", () => {
+          const key = item.dataset.key;
+          const marker = mapInner.querySelector('.map-marker[data-key="' + key + '"]');
+          if (marker) showTooltipForMarker(marker);
+        });
+        item.addEventListener("mouseleave", () => {
+          hideTooltip();
+        });
+        item.addEventListener("click", () => {
+          const key = item.dataset.key;
+          const marker = mapInner.querySelector('.map-marker[data-key="' + key + '"]');
+          if (marker) showTooltipForMarker(marker);
+        });
+      });
+
+      // Initial state: highlight Java / Kawung
+      const defaultMarker = mapInner.querySelector('.map-marker[data-key="java"]');
+      if (defaultMarker) {
+        showTooltipForMarker(defaultMarker);
+      }
+    })();
+
+    /* --------- ASTROID ANIMATION (responsive, looped, with pause) --------- */
+    (function(){
+      const canvas = document.getElementById("astroid-canvas");
+      const ctx = canvas.getContext("2d");
+
+      let centerX = 0;
+      let centerY = 0;
+      let r = 0;
+      let R = 0;
+
+      let t = 0;
+      const step = 0.02;
+      const trail = [];
+
+      let fadeAlpha = 0;
+      const fadeStep = 0.02;
+      let phase = "draw"; // "draw", "fade", or "pause"
+      let pauseStart = null;
+      const pauseDuration = 2000; // milliseconds
+
+      function resizeCanvas() {
+        const pixelRatio = window.devicePixelRatio || 1;
+        const maxCssSize = Math.min(window.innerWidth - 48, 480); // inset on mobile
+        const cssSize = Math.max(260, maxCssSize); // minimum size
+
+        canvas.style.width = cssSize + "px";
+        canvas.style.height = cssSize + "px";
+
+        canvas.width = cssSize * pixelRatio;
+        canvas.height = cssSize * pixelRatio;
+
+        centerX = canvas.width / 2;
+        centerY = canvas.height / 2 - 40 * pixelRatio;
+
+        // radius scaled to canvas
+        r = canvas.width * 0.10;
+        R = 4 * r;
+
+        // reset animation on resize
+        trail.length = 0;
+        t = 0;
+        fadeAlpha = 0;
+        phase = "draw";
+        pauseStart = null;
+      }
+
+      window.addEventListener("resize", resizeCanvas);
+      resizeCanvas();
+
+      function drawCommonBackground() {
+        // Background
+        ctx.fillStyle = "#333";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Big fixed circle
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, R, 0, 2 * Math.PI);
+        ctx.strokeStyle = "#d0d0d0";
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+      }
+
+      function drawTrailOnly() {
+        if (trail.length === 0) return;
+        ctx.beginPath();
+        ctx.moveTo(trail[0][0], trail[0][1]);
+        for (let i = 1; i < trail.length; i++) {
+          ctx.lineTo(trail[i][0], trail[i][1]);
+        }
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 2.2;
+        ctx.stroke();
+      }
+
+      function drawTextOverlay() {
+        ctx.fillStyle = "#ffffff";
+        ctx.textAlign = "center";
+        const scale = canvas.width / 480;
+        ctx.font = `${24 * scale}px Arial`;
+        ctx.fillText(
+          "Tracing the Astroid Curve for Kawung",
+          canvas.width / 2,
+          canvas.height - 50 * scale
+        );
+
+        ctx.font = `${18 * scale}px Arial`;
+        ctx.fillText(
+          "x = a·cos³(t),   y = a·sin³(t)",
+          canvas.width / 2,
+          canvas.height - 25 * scale
+        );
+      }
+
+      function drawFrame() {
+        drawCommonBackground();
+
+        // Rolling circle center
+        const cx = centerX + (R - r) * Math.cos(t);
+        const cy = centerY + (R - r) * Math.sin(t);
+
+        // Rolling circle
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+        ctx.strokeStyle = "#88cccc";
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        // Tracing point
+        const angleInside = -3 * t;
+        const px = cx + r * Math.cos(angleInside);
+        const py = cy + r * Math.sin(angleInside);
+
+        trail.push([px, py]);
+
+        // Draw trail
+        drawTrailOnly();
+
+        // Point on curve
+        ctx.beginPath();
+        ctx.arc(px, py, 6, 0, 2 * Math.PI);
+        ctx.fillStyle = "#ffdd33";
+        ctx.fill();
+
+        // Line from small circle center to point
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(px, py);
+        ctx.strokeStyle = "#ffdd33";
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+
+        drawTextOverlay();
+      }
+
+      function drawFade() {
+        drawCommonBackground();
+        drawTrailOnly();
+
+        // Fill region between outer circle and astroid
+        if (trail.length > 1) {
+          ctx.globalAlpha = fadeAlpha;
+          ctx.beginPath();
+
+          // Outer circle
+          ctx.arc(centerX, centerY, R, 0, 2 * Math.PI, false);
+
+          // Astroid path reversed
+          ctx.moveTo(trail[trail.length - 1][0], trail[trail.length - 1][1]);
+          for (let i = trail.length - 2; i >= 0; i--) {
+            ctx.lineTo(trail[i][0], trail[i][1]);
+          }
+          ctx.closePath();
+
+          ctx.fillStyle = "#59c3e2";  // blue fill
+          ctx.fill();
+          ctx.globalAlpha = 1.0;
+        }
+
+        drawTextOverlay();
+      }
+
+      function animate() {
+        if (phase === "draw") {
+          drawFrame();
+          t += step;
+          if (t >= 2 * Math.PI) {
+            phase = "fade";
+            fadeAlpha = 0;
+          }
+        } else if (phase === "fade") {
+          drawFade();
+          fadeAlpha += fadeStep;
+          if (fadeAlpha >= 0.9) {
+            // enter pause phase, keep final pattern visible
+            phase = "pause";
+            pauseStart = performance.now();
+          }
+        } else if (phase === "pause") {
+          // Just keep the final filled Kawung visible
+          drawFade();
+          if (pauseStart && performance.now() - pauseStart >= pauseDuration) {
+            // restart cycle
+            phase = "draw";
+            t = 0;
+            fadeAlpha = 0;
+            trail.length = 0;
+            pauseStart = null;
+          }
+        }
+
+        requestAnimationFrame(animate);
+      }
+
+      animate();
+    })();
+
+    /* --------- FOUR CIRCLES ANIMATION (solid circles, fill fade-in, loop, responsive) --------- */
+    (function(){
+      const canvas = document.getElementById("circles-canvas");
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+
+      let cxMid, cyMid, radius;
+      let leftX, rightX, topY, bottomY;
+
+      // Kawung from four circle arcs – blue fill, white stroke
+      function kawung(x, y, r, fill_col = "#59c3e2", alpha = 1) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle = fill_col;
+        ctx.strokeStyle = "#ffffff";
+        const k = 4;
+        for (let i = 0; i < k; i++) {
+          ctx.beginPath();
+          ctx.arc(0, -r, r, 0.5 * Math.PI, 1 * Math.PI);
+          ctx.arc(-r, 0, r, 1.5 * Math.PI, 2 * Math.PI);
+          ctx.fill();
+          ctx.stroke();
+          ctx.rotate(Math.PI / 2);
+        }
+        ctx.restore();
+        ctx.globalAlpha = 1;
+      }
+
+      function drawCircleTextOverlay() {
+        ctx.fillStyle = "#ffffff";
+        ctx.textAlign = "center";
+        const scale = canvas.width / 480;
+        ctx.font = `${22 * scale}px Arial`;
+        ctx.fillText(
+          "Kawung as Intersection of Four Circles",
+          canvas.width / 2,
+          canvas.height - 10 * scale
+        );
+      }
+
+      let txt1_opacity, txt2_opacity, txt3_opacity, txt4_opacity;
+      const fadeSpeed = 0.04;
+
+      let startAngle, endAngle;
+      let second_startAngle, second_endAngle;
+      let third_startAngle, third_endAngle;
+      let fourth_startAngle, fourth_endAngle;
+
+      const strokeThickness = 2;
+      const strokeColor = "#ffffff";
+
+      let drawSecond, drawThird, drawFourth, drawFifth;
+      let fillAlpha;
+      const fillFadeSpeed = 0.04;
+
+      let paused;
+      let pauseStart;
+      const pauseDuration = 2000; // ms
+
+      function resetState() {
+        txt1_opacity = 0;
+        txt2_opacity = 0;
+        txt3_opacity = 0;
+        txt4_opacity = 0;
+
+        startAngle = 0;
+        endAngle = 0;
+        second_startAngle = 0;
+        second_endAngle = 0;
+        third_startAngle = 0;
+        third_endAngle = 0;
+        fourth_startAngle = 0;
+        fourth_endAngle = 0;
+
+        drawSecond = 0;
+        drawThird = 0;
+        drawFourth = 0;
+        drawFifth = 0;
+        fillAlpha = 0;
+
+        paused = false;
+        pauseStart = null;
+      }
+
+      function resizeCanvas() {
+        const pixelRatio = window.devicePixelRatio || 1;
+        const maxCssSize = Math.min(window.innerWidth - 48, 480);
+        const cssSize = Math.max(260, maxCssSize);
+
+        canvas.style.width = cssSize + "px";
+        canvas.style.height = cssSize + "px";
+
+        canvas.width = cssSize * pixelRatio;
+        canvas.height = cssSize * pixelRatio;
+
+        cxMid = canvas.width / 2;
+        cyMid = canvas.height / 2;
+        radius = Math.min(canvas.width, canvas.height) * 0.22;
+
+        leftX   = cxMid - radius;
+        rightX  = cxMid + radius;
+        topY    = cyMid - radius;
+        bottomY = cyMid + radius;
+
+        resetState();
+      }
+
+      window.addEventListener("resize", resizeCanvas);
+      resizeCanvas();
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        const scale = canvas.width / 480;
+        ctx.font = `${14 * scale}px Arial`;
+        ctx.fillStyle = "#ffffff";
+
+        // C (-r,0)
+        ctx.globalAlpha = txt1_opacity;
+        if (!paused && txt1_opacity < 1) {
+          txt1_opacity += fadeSpeed;
+        }
+        ctx.fillText("C (-r,0)", leftX - radius * 0.2, cyMid - radius * 0.1);
+        ctx.beginPath();
+        ctx.arc(leftX, cyMid, 3.5, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+
+        // First circle (center C), solid stroke
+        if (txt1_opacity >= 1) {
+          ctx.beginPath();
+          ctx.arc(leftX, cyMid, radius, startAngle, endAngle);
+          ctx.strokeStyle = strokeColor;
+          ctx.lineWidth = strokeThickness;
+          ctx.stroke();
+          if (!paused && endAngle <= Math.PI * 2) {
+            endAngle += 0.04;
+          } else if (endAngle > Math.PI * 2) {
+            drawSecond = 1;
+          }
+        }
+
+        // D (r,0)
+        if (drawSecond === 1) {
+          ctx.globalAlpha = txt2_opacity;
+          if (!paused && txt2_opacity < 1) {
+            txt2_opacity += fadeSpeed;
+          }
+          ctx.fillText("D (r,0)", rightX + radius * 0.1, cyMid - radius * 0.1);
+          ctx.beginPath();
+          ctx.arc(rightX, cyMid, 3.5, 0, 2 * Math.PI);
+          ctx.fill();
+          ctx.globalAlpha = 1;
+        }
+
+        if (drawSecond === 1 && txt1_opacity >= 1) {
+          ctx.beginPath();
+          ctx.arc(rightX, cyMid, radius, second_startAngle, second_endAngle);
+          ctx.strokeStyle = strokeColor;
+          ctx.lineWidth = strokeThickness;
+          ctx.stroke();
+          if (!paused && second_endAngle <= Math.PI * 2) {
+            second_endAngle += 0.04;
+          } else if (second_endAngle > Math.PI * 2) {
+            drawThird = 1;
+          }
+        }
+
+        // A (0,r)
+        if (drawThird === 1) {
+          ctx.globalAlpha = txt3_opacity;
+          if (!paused && txt3_opacity < 1) {
+            txt3_opacity += fadeSpeed;
+          }
+          ctx.fillText("A (0,r)", cxMid - radius * 0.1, topY - radius * 0.25);
+          ctx.beginPath();
+          ctx.arc(cxMid, topY, 3.5, 0, 2 * Math.PI);
+          ctx.fill();
+          ctx.globalAlpha = 1;
+        }
+
+        if (drawThird === 1 && txt2_opacity >= 1) {
+          ctx.beginPath();
+          ctx.arc(cxMid, topY, radius, third_startAngle, third_endAngle);
+          ctx.strokeStyle = strokeColor;
+          ctx.lineWidth = strokeThickness;
+          ctx.stroke();
+          if (!paused && third_endAngle <= Math.PI * 2) {
+            third_endAngle += 0.04;
+          } else if (third_endAngle > Math.PI * 2) {
+            drawFourth = 1;
+          }
+        }
+
+        // B (0,-r)
+        if (drawFourth === 1) {
+          ctx.globalAlpha = txt4_opacity;
+          if (!paused && txt4_opacity < 1) {
+            txt4_opacity += fadeSpeed;
+          }
+          ctx.fillText("B (0,-r)", cxMid - radius * 0.2, bottomY + radius * 0.3);
+          ctx.beginPath();
+          ctx.arc(cxMid, bottomY, 3.5, 0, 2 * Math.PI);
+          ctx.fill();
+          ctx.globalAlpha = 1;
+        }
+
+        if (drawFourth === 1 && txt3_opacity >= 1) {
+          ctx.beginPath();
+          ctx.arc(cxMid, bottomY, radius, fourth_startAngle, fourth_endAngle);
+          ctx.strokeStyle = strokeColor;
+          ctx.lineWidth = strokeThickness;
+          ctx.stroke();
+          if (!paused && fourth_endAngle <= Math.PI * 2) {
+            fourth_endAngle += 0.04;
+          } else if (fourth_endAngle > Math.PI * 2) {
+            drawFifth = 1;
+          }
+        }
+
+        // Final Kawung intersection fill, with fade-in (only on fill)
+        if (drawFifth === 1) {
+          if (!paused && fillAlpha < 1) {
+            fillAlpha += fillFadeSpeed;
+            if (fillAlpha > 1) fillAlpha = 1;
+          }
+          kawung(cxMid, cyMid, radius, "#59c3e2", fillAlpha);
+
+          // Once fully visible, start pause timer
+          if (!paused && fillAlpha >= 1) {
+            paused = true;
+            pauseStart = performance.now();
+          }
+        }
+
+        // Title text at bottom
+        drawCircleTextOverlay();
+
+        // Handle pause and restart
+        if (paused && pauseStart !== null) {
+          const now = performance.now();
+          if (now - pauseStart >= pauseDuration) {
+            resetState();
+          }
+        }
+
+        requestAnimationFrame(draw);
+      }
+
+      draw();
+    })();
+
+    /* --------- BEZIER ENVELOPE ANIMATION (bigger, stroke highlight, then blue fade) --------- */
+    (function(){
+      const canvas = document.getElementById("bezier-canvas");
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+
+      let step = 0;
+      let fade = 0;              // 0 → 1 for blue fill fade-in
+      let highlightProgress = 0; // 0 → 1 for stroke highlight fade-in
+      let phase = "envelope";    // "envelope", "highlight", "fade", "pause"
+      let pauseStart = null;
+      const pauseDuration = 2000; // ms
+      const drawSpeed = 0.6;
+      const ENVELOPE_DONE_STEP = 240; // when last envelope segment is fully drawn
+
+      function resizeCanvas() {
+        const pixelRatio = window.devicePixelRatio || 1;
+        const maxCssSize = Math.min(window.innerWidth - 48, 480);
+        const cssSize = Math.max(260, maxCssSize);
+
+        canvas.style.width = cssSize + "px";
+        canvas.style.height = cssSize + "px";
+
+        canvas.width = cssSize * pixelRatio;
+        canvas.height = cssSize * pixelRatio;
+
+        // reset animation on resize
+        step = 0;
+        fade = 0;
+        highlightProgress = 0;
+        phase = "envelope";
+        pauseStart = null;
+      }
+
+      window.addEventListener("resize", resizeCanvas);
+      resizeCanvas();
+
+      function animateLine(x1, y1, x2, y2, localStep, run = false) {
+        if (!run) return;
+        let s = Math.min(Math.max(localStep, 0), 20);
+        const t = s / 20;
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(
+          x1 + (x2 - x1) * t,
+          y1 + (y2 - y1) * t
+        );
+        ctx.stroke();
+      }
+
+      // Smooth envelope animation for the quadratic Bézier-like envelope lines
+      function animateBezier(x1, y1, xcp, ycp, x2, y2, localStep, run = false) {
+        if (!run) return;
+
+        const maxStep = 20;
+        const s = Math.max(0, Math.min(localStep, maxStep));
+        const tProgress = s / maxStep;
+
+        const totalSegments = 24;
+        const visibleSegments = Math.floor(totalSegments * tProgress);
+
+        for (let i = 0; i <= visibleSegments; i++) {
+          const u = i / totalSegments;
+
+          // P0 → CP
+          const Ax = x1 + (xcp - x1) * u;
+          const Ay = y1 + (ycp - y1) * u;
+
+          // CP → P2
+          const Bx = xcp + (x2 - xcp) * u;
+          const By = ycp + (y2 - ycp) * u;
+
+          ctx.beginPath();
+          ctx.moveTo(Ax, Ay);
+          ctx.lineTo(Bx, By);
+          ctx.stroke();
+        }
+      }
+
+      function drawFilledLeaves(Ax, Ay, Bx, By, Cx, Cy, Dx, Dy, alpha) {
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle = "#59c3e2";  // SAME blue as animation 1 & 2
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 2;
+
+        // Leaf towards A
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.quadraticCurveTo(0, Ay, Ax, Ay);
+        ctx.quadraticCurveTo(Ax, 0, 0, 0);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Leaf towards B
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.quadraticCurveTo(0, By, Bx, By);
+        ctx.quadraticCurveTo(Bx, 0, 0, 0);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Leaf towards C
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.quadraticCurveTo(0, Cy, Cx, Cy);
+        ctx.quadraticCurveTo(Cx, 0, 0, 0);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Leaf towards D
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.quadraticCurveTo(0, Dy, Dx, Dy);
+        ctx.quadraticCurveTo(Dx, 0, 0, 0);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.restore();
+      }
+
+      function drawHighlightLeaves(Ax, Ay, Bx, By, Cx, Cy, Dx, Dy, alpha) {
+        // Highlight just the stroke of the Kawung “petals” — fade-in
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 2.6;
+        ctx.setLineDash([]);
+
+        // Leaf towards A
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.quadraticCurveTo(0, Ay, Ax, Ay);
+        ctx.quadraticCurveTo(Ax, 0, 0, 0);
+        ctx.stroke();
+
+        // Leaf towards B
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.quadraticCurveTo(0, By, Bx, By);
+        ctx.quadraticCurveTo(Bx, 0, 0, 0);
+        ctx.stroke();
+
+        // Leaf towards C
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.quadraticCurveTo(0, Cy, Cx, Cy);
+        ctx.quadraticCurveTo(Cx, 0, 0, 0);
+        ctx.stroke();
+
+        // Leaf towards D
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.quadraticCurveTo(0, Dy, Dx, Dy);
+        ctx.quadraticCurveTo(Dx, 0, 0, 0);
+        ctx.stroke();
+
+        ctx.restore();
+      }
+
+      function drawTextOverlay() {
+        ctx.fillStyle = "#ffffff";
+        ctx.textAlign = "center";
+        const scale = canvas.width / 480;
+        ctx.font = `${20 * scale}px Arial`;
+        ctx.fillText(
+          "Kawung as Bézier Curve with square end points",
+          canvas.width / 2,
+          canvas.height - 30 * scale
+        );
+      }
+
+      function drawFrame() {
+        // Background
+        ctx.fillStyle = "#333";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        // BIGGER shape: radius scaled up (canvas size stays the same)
+        const r = canvas.width * 0.38;
+
+        ctx.save();
+        ctx.translate(centerX, centerY);
+
+        // Rotated square vertices (π/4)
+        const Ax = Math.cos(1 * 2 * Math.PI / 4 - 1 * Math.PI / 4) * r;
+        const Ay = Math.sin(1 * 2 * Math.PI / 4 - 1 * Math.PI / 4) * r;
+        const Bx = Math.cos(2 * 2 * Math.PI / 4 - 1 * Math.PI / 4) * r;
+        const By = Math.sin(2 * 2 * Math.PI / 4 - 1 * Math.PI / 4) * r;
+        const Cx = Math.cos(3 * 2 * Math.PI / 4 - 1 * Math.PI / 4) * r;
+        const Cy = Math.sin(3 * 2 * Math.PI / 4 - 1 * Math.PI / 4) * r;
+        const Dx = Math.cos(4 * 2 * Math.PI / 4 - 1 * Math.PI / 4) * r;
+        const Dy = Math.sin(4 * 2 * Math.PI / 4 - 1 * Math.PI / 4) * r;
+
+        // Square outline animation
+        ctx.strokeStyle = "white";
+        ctx.setLineDash([]);
+        ctx.lineWidth = 2;
+        animateLine(Ax, Ay, Bx, By, step - 0,   step > 0);
+        animateLine(Bx, By, Cx, Cy, step - 20,  step > 20);
+        animateLine(Cx, Cy, Dx, Dy, step - 40,  step > 40);
+        animateLine(Dx, Dy, Ax, Ay, step - 60,  step > 60);
+
+        // Envelope (8 Bezier-like families around origin → each vertex)
+        ctx.strokeStyle = "white";
+        ctx.setLineDash([]);
+        ctx.lineWidth = 1.3;
+
+        animateBezier(0, 0, (Ax + Bx) / 2, (Ay + By) / 2, Bx, By, step - 80,  step > 80);
+        animateBezier(0, 0, (Bx + Cx) / 2, (By + Cy) / 2, Bx, By, step - 100, step > 100);
+        animateBezier(0, 0, (Bx + Cx) / 2, (By + Cy) / 2, Cx, Cy, step - 120, step > 120);
+        animateBezier(0, 0, (Cx + Dx) / 2, (Cy + Dy) / 2, Cx, Cy, step - 140, step > 140);
+        animateBezier(0, 0, (Cx + Dx) / 2, (Cy + Dy) / 2, Dx, Dy, step - 160, step > 160);
+        animateBezier(0, 0, (Dx + Ax) / 2, (Dy + Ay) / 2, Dx, Dy, step - 180, step > 180);
+        animateBezier(0, 0, (Dx + Ax) / 2, (Dy + Ay) / 2, Ax, Ay, step - 200, step > 200);
+        animateBezier(0, 0, (Ax + Bx) / 2, (Ay + By) / 2, Ax, Ay, step - 220, step > 220);
+
+        // Highlight stroke of Kawung shape (after envelope is fully constructed)
+        if (phase === "highlight" || phase === "fade" || phase === "pause") {
+          const alpha = 0.2 + 0.8 * Math.min(highlightProgress, 1);
+          drawHighlightLeaves(Ax, Ay, Bx, By, Cx, Cy, Dx, Dy, alpha);
+        }
+
+        // Fade-in blue Kawung leaves once stroke highlight is done / ongoing
+        if (phase === "fade" || phase === "pause") {
+          drawFilledLeaves(Ax, Ay, Bx, By, Cx, Cy, Dx, Dy, fade);
+        }
+
+        ctx.restore();
+
+        // Caption text
+        drawTextOverlay();
+      }
+
+      function animate() {
+        if (phase === "envelope") {
+          step += drawSpeed;
+          if (step >= ENVELOPE_DONE_STEP) {
+            step = ENVELOPE_DONE_STEP;
+            phase = "highlight";
+            highlightProgress = 0;
+          }
+        } else if (phase === "highlight") {
+          highlightProgress = Math.min(highlightProgress + 0.03, 1);
+          if (highlightProgress >= 1) {
+            phase = "fade";
+          }
+        } else if (phase === "fade") {
+          fade = Math.min(fade + 0.02, 1);
+          if (fade >= 1) {
+            phase = "pause";
+            pauseStart = performance.now();
+          }
+        } else if (phase === "pause") {
+          if (pauseStart && performance.now() - pauseStart >= pauseDuration) {
+            // restart cycle
+            step = 0;
+            fade = 0;
+            highlightProgress = 0;
+            phase = "envelope";
+            pauseStart = null;
+          }
+        }
+
+        drawFrame();
+        requestAnimationFrame(animate);
+      }
+
+      animate();
+    })();
+
+
+        /* --------- QUADRIFOLIUM ANIMATION (4th animation) --------- */
+    (function(){
+      const canvas = document.getElementById("quad-canvas");
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+
+      let centerX = 0;
+      let centerY = 0;
+      let a = 0;
+
+      let t = 0;
+      const step = 0.03;
+      let phase = "draw"; // "draw", "fill", "pause"
+      let fade = 0;
+      let pauseStart = null;
+      const pauseDuration = 2000; // ms
+
+      const points = [];
+
+      function resizeCanvas() {
+        const pixelRatio = window.devicePixelRatio || 1;
+        const maxCssSize = Math.min(window.innerWidth - 48, 480);
+        const cssSize = Math.max(260, maxCssSize);
+
+        canvas.style.width = cssSize + "px";
+        canvas.style.height = cssSize + "px";
+
+        canvas.width = cssSize * pixelRatio;
+        canvas.height = cssSize * pixelRatio;
+
+        centerX = canvas.width / 2;
+        centerY = canvas.height / 2 - 20 * pixelRatio;
+        a = canvas.width * 0.16; // radius scale for quadrifolium
+
+        t = 0;
+        phase = "draw";
+        fade = 0;
+        pauseStart = null;
+        points.length = 0;
+      }
+
+      window.addEventListener("resize", resizeCanvas);
+      resizeCanvas();
+
+      function drawBackground() {
+        ctx.fillStyle = "#333";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // soft reference circle
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, a * 2.1, 0, 2 * Math.PI);
+        ctx.strokeStyle = "#555";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
+
+      function drawCurve() {
+        if (points.length === 0) return;
+        ctx.beginPath();
+        ctx.moveTo(points[0].x, points[0].y);
+        for (let i = 1; i < points.length; i++) {
+          ctx.lineTo(points[i].x, points[i].y);
+        }
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      }
+
+      function drawFill(alpha) {
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        ctx.beginPath();
+
+        const steps = 420;
+        for (let i = 0; i <= steps; i++) {
+          const theta = (i / steps) * Math.PI * 2;
+          const rVal = a * Math.cos(2 * theta);
+          const x = centerX + rVal * Math.cos(theta);
+          const y = centerY + rVal * Math.sin(theta);
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+
+        ctx.fillStyle = "#59c3e2"; // same blue as others
+        ctx.fill();
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        ctx.restore();
+      }
+
+      function drawTextOverlay() {
+        ctx.fillStyle = "#ffffff";
+        ctx.textAlign = "center";
+        const scale = canvas.width / 480;
+        ctx.font = `${22 * scale}px Arial`;
+        ctx.fillText(
+          "Kawung as Quadrifolium",
+          canvas.width / 2,
+          canvas.height - 45 * scale
+        );
+        ctx.font = `${16 * scale}px Arial`;
+        ctx.fillText(
+          "r = a·cos(2θ)",
+          canvas.width / 2,
+          canvas.height - 22 * scale
+        );
+      }
+
+      function animate() {
+        drawBackground();
+
+        if (phase === "draw") {
+          const rVal = a * Math.cos(2 * t);
+          const x = centerX + rVal * Math.cos(t);
+          const y = centerY + rVal * Math.sin(t);
+          points.push({ x, y });
+
+          drawCurve();
+
+          t += step;
+          if (t >= Math.PI * 2) {
+            phase = "fill";
+            fade = 0;
+          }
+        } else if (phase === "fill") {
+          drawFill(fade);
+          fade += 0.03;
+          if (fade >= 1) {
+            phase = "pause";
+            pauseStart = performance.now();
+          }
+        } else if (phase === "pause") {
+          drawFill(1);
+          if (pauseStart && performance.now() - pauseStart >= pauseDuration) {
+            t = 0;
+            fade = 0;
+            points.length = 0;
+            phase = "draw";
+            pauseStart = null;
+          }
+        }
+
+        drawTextOverlay();
+        requestAnimationFrame(animate);
+      }
+
+      animate();
+    })();
+
+  </script>
+</body>
+</html>
