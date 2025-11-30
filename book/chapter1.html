@@ -858,10 +858,16 @@
       const canvas = document.getElementById("astroid-canvas");
       const ctx = canvas.getContext("2d");
 
-      let centerX = 0;
-      let centerY = 0;
-      let r = 0;
-      let R = 0;
+centerX = canvas.width / 2;
+
+// Sedikit kurang diangkat untuk mobile agar tidak kepotong
+const isMobile = window.innerWidth <= 480;
+const verticalShift = isMobile ? 10 * pixelRatio : 30 * pixelRatio;
+centerY = canvas.height / 2 - verticalShift;
+
+// Radius sedikit diperkecil di mobile supaya ada margin
+r = canvas.width * (isMobile ? 0.085 : 0.10);
+R = 3.6 * r;
 
       let t = 0;
       const step = 0.02;
