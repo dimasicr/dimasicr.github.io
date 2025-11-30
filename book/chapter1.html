@@ -858,17 +858,11 @@
       const canvas = document.getElementById("astroid-canvas");
       const ctx = canvas.getContext("2d");
 
-centerX = canvas.width / 2;
-
-// Sedikit kurang diangkat untuk mobile agar tidak kepotong
-const isMobile = window.innerWidth <= 480;
-const verticalShift = isMobile ? 10 * pixelRatio : 30 * pixelRatio;
-centerY = canvas.height / 2 - verticalShift;
-
-// Radius sedikit diperkecil di mobile supaya ada margin
-r = canvas.width * (isMobile ? 0.085 : 0.10);
-R = 3.6 * r;
-
+        
+  let centerX = 0;
+  let centerY = 0;
+  let r = 0;
+  let R = 0;
       let t = 0;
       const step = 0.02;
       const trail = [];
@@ -879,31 +873,38 @@ R = 3.6 * r;
       let pauseStart = null;
       const pauseDuration = 2000; // milliseconds
 
-      function resizeCanvas() {
-        const pixelRatio = window.devicePixelRatio || 1;
-        const maxCssSize = Math.min(window.innerWidth - 48, 480); // inset on mobile
-        const cssSize = Math.max(260, maxCssSize); // minimum size
+     function resizeCanvas() {
+  // Penting: definisikan pixelRatio dulu
+  const pixelRatio = window.devicePixelRatio || 1;
 
-        canvas.style.width = cssSize + "px";
-        canvas.style.height = cssSize + "px";
+  const maxCssSize = Math.min(window.innerWidth - 48, 480); // inset on mobile
+  const cssSize = Math.max(260, maxCssSize); // minimum size
 
-        canvas.width = cssSize * pixelRatio;
-        canvas.height = cssSize * pixelRatio;
+  canvas.style.width = cssSize + "px";
+  canvas.style.height = cssSize + "px";
 
-        centerX = canvas.width / 2;
-        centerY = canvas.height / 2 - 40 * pixelRatio;
+  canvas.width = cssSize * pixelRatio;
+  canvas.height = cssSize * pixelRatio;
 
-        // radius scaled to canvas
-        r = canvas.width * 0.10;
-        R = 4 * r;
+  centerX = canvas.width / 2;
 
-        // reset animation on resize
-        trail.length = 0;
-        t = 0;
-        fadeAlpha = 0;
-        phase = "draw";
-        pauseStart = null;
-      }
+  // Deteksi mobile
+  const isMobile = window.innerWidth <= 480;
+  // Sedikit geser ke atas, tapi jangan terlalu besar di mobile
+  const verticalShift = isMobile ? 10 * pixelRatio : 30 * pixelRatio;
+  centerY = canvas.height / 2 - verticalShift;
+
+  // radius scaled to canvas, sedikit lebih kecil di mobile
+  r = canvas.width * (isMobile ? 0.085 : 0.10);
+  R = 3.6 * r;
+
+  // reset animation on resize
+  trail.length = 0;
+  t = 0;
+  fadeAlpha = 0;
+  phase = "draw";
+  pauseStart = null;
+}
 
       window.addEventListener("resize", resizeCanvas);
       resizeCanvas();
