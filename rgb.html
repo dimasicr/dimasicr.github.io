@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-C3LDF2V8MF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-C3LDF2V8MF');
+  </script>
+
+  <meta charset="UTF-8" />
+  <title>WeaveTXT – RGB Craft</title>
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    :root {
+      --bg-main: #222;
+      --bg-card: #333;
+      --bg-tile: #444;
+      --bg-tile-empty: #2b2b2b;
+      --accent: #ffb347;
+      --accent-soft: #ffecb3;
+      --accent-border: #ff9800;
+      --text-main: #f5f5f5;
+      --text-muted: #aaa;
+      --text-soft: #ddd;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #2b3a4a 0, #111 55%);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px;
+      margin: 0;
+    }
+
+    /* BRANDING */
+    #brand {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin-top: 6px;
+      margin-bottom: 4px;
+    }
+
+    .brand-weave {
+      font-family: "Georgia", serif;
+      font-size: clamp(22px, 5vw, 30px);
+      font-weight: bold;
+      letter-spacing: 0.03em;
+    }
+
+    .brand-txt {
+      font-family: "Courier New", monospace;
+      font-size: clamp(18px, 4.5vw, 24px);
+      font-weight: bold;
+      color: var(--accent);
+      border-right: 2px solid var(--accent);
+      padding-right: 4px;
+      animation: caret-blink 0.9s step-end infinite;
+      min-width: 3ch;
+    }
+
+    @keyframes caret-blink {
+      0%, 100% { border-color: transparent; }
+      50% { border-color: var(--accent); }
+    }
+
+    h1 {
+      margin: 2px 0 0;
+      font-size: clamp(20px, 5vw, 26px);
+      text-align: center;
+    }
+
+    #subtitle {
+      font-size: 12px;
+      margin-top: 4px;
+      margin-bottom: 14px;
+      color: var(--text-muted);
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    /* GAME CARD */
+    #game-container {
+      background: var(--bg-card);
+      padding: 16px 14px 18px;
+      border-radius: 10px;
+      box-shadow: 0 0 18px rgba(0,0,0,0.55);
+      max-width: 520px;
+      width: 100%;
+      border: 1px solid #414141;
+    }
+
+    #top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+      font-size: 13px;
+    }
+
+    #goal-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-soft);
+    }
+
+    #goal-label span {
+      color: var(--accent);
+    }
+
+    #progress-info {
+      font-size: 11px;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 3px;
+      text-align: right;
+    }
+
+    .small-tag {
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      border: 1px solid #555;
+      background: #252525;
+      color: var(--text-soft);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .small-tag span {
+      font-weight: 600;
+      color: var(--accent-soft);
+    }
+
+    /* LEVEL SELECTOR */
+    #level-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 12px;
+    }
+
+    #level-label {
+      color: var(--text-soft);
+    }
+
+    #level-select {
+      border-radius: 999px;
+      padding: 4px 10px;
+      background: #252525;
+      border: 1px solid #555;
+      color: var(--text-soft);
+      font-size: 12px;
+    }
+
+    /* INSTRUCTIONS */
+    .instructions {
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--text-soft);
+      margin-bottom: 10px;
+    }
+
+    .instructions strong {
+      color: var(--accent-soft);
+    }
+
+    /* BOARD + PREVIEW LAYOUT */
+    #board-row {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      justify-content: center;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+
+    #board-wrapper {
+      flex: 1 1 auto;
+      display: flex;
+      justify-content: center;
+    }
+
+    #preview-wrapper {
+      flex: 0 0 auto;
+      min-width: 120px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background: #2a2a2a;
+      padding: 6px 8px 8px;
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+
+    #preview-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    #preview-board {
+      display: grid;
+      grid-template-columns: repeat(4, 18px);
+      grid-auto-rows: 18px;
+      gap: 3px;
+      justify-content: center;
+    }
+
+    .preview-tile {
+      width: 18px;
+      height: 18px;
+      border-radius: 3px;
+      border: 1px solid #555;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-family: "Courier New", monospace;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    }
+
+    .preview-empty {
+      background: #1f1f1f;
+      border-style: dashed;
+      opacity: 0.6;
+    }
+
+    /* GRID (MAIN BOARD) */
+    #board {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(40px, 56px));
+      grid-auto-rows: 56px;
+      gap: 6px;
+      justify-content: center;
+      margin-bottom: 4px;
+      margin-top: 4px;
+    }
+
+    .tile {
+      background: var(--bg-tile);
+      border-radius: 7px;
+      border: 1px solid #555;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Courier New", monospace;
+      font-size: clamp(18px, 4.3vw, 22px);
+      letter-spacing: 1px;
+      user-select: none;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+      transition: transform 0.07s ease, box-shadow 0.07s ease, background 0.07s ease, border-color 0.07s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tile-inner {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.1rem;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+      border-radius: 7px;
+    }
+
+    .tile.empty {
+      background: var(--bg-tile-empty);
+      border-style: dashed;
+      border-color: #555;
+      box-shadow: none;
+      cursor: default;
+    }
+
+    .tile:not(.empty):hover {
+      transform: translateY(-1px);
+      box-shadow: 0 3px 9px rgba(0,0,0,0.6);
+      border-color: var(--accent-border);
+      background: #4b4b4b;
+    }
+
+    .tile.selected {
+      transform: translateY(-1px) scale(1.02);
+      box-shadow: 0 3px 9px rgba(255,179,71,0.6);
+      border-color: var(--accent-border);
+    }
+
+    .tile.invalid-flash {
+      animation: flash 0.18s ease;
+    }
+
+    @keyframes flash {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-2px) scale(1.03); }
+      100% { transform: translateY(0); }
+    }
+
+    /* CONTROLS */
+    #controls {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid #444;
+      font-size: 13px;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 6px;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 7px 14px;
+      font-size: 13px;
+      cursor: pointer;
+      background: var(--accent);
+      color: #222;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      transition: background 0.1s ease, transform 0.07s ease, box-shadow 0.07s ease;
+      min-width: 110px;
+      justify-content: center;
+    }
+
+    button:hover:not(:disabled) {
+      background: #ffab2c;
+      transform: translateY(-1px);
+      box-shadow: 0 3px 9px rgba(0,0,0,0.6);
+    }
+
+    button:disabled {
+      background: #555;
+      color: #999;
+      cursor: default;
+      transform: none;
+      box-shadow: none;
+    }
+
+    #undo-btn {
+      background: #444;
+      color: var(--text-main);
+    }
+
+    #undo-btn:hover:not(:disabled) {
+      background: #555;
+    }
+
+    #reset-btn {
+      background: #555;
+      color: var(--text-main);
+    }
+
+    #reset-btn:hover:not(:disabled) {
+      background: #666;
+    }
+
+    #message {
+      min-height: 26px;
+      font-size: 12px;
+      text-align: center;
+      margin-top: 4px;
+      white-space: pre-line;
+    }
+
+    .msg-success { color: #9be59b; }
+    .msg-error   { color: #ff9d9d; }
+    .msg-warning { color: var(--accent); }
+    .msg-info    { color: var(--accent-soft); }
+
+    /* FOOTER */
+    #footer {
+      margin-top: 12px;
+      padding-top: 8px;
+      border-top: 1px solid #444;
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    #footer a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    #footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+    }
+
+    .modal {
+      background: #2a2a2a;
+      border-radius: 10px;
+      padding: 16px 16px 14px;
+      border: 1px solid #555;
+      max-width: 320px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 18px 50px rgba(0,0,0,0.8);
+      font-size: 13px;
+    }
+
+    .modal h2 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+
+    .modal p {
+      margin: 0 0 10px;
+      font-size: 13px;
+      color: var(--text-soft);
+    }
+
+    .modal button {
+      width: 100%;
+      min-width: 0;
+    }
+
+    /* MOBILE */
+    @media (max-width: 480px) {
+      #game-container {
+        padding: 14px 10px 16px;
+      }
+      #top-bar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      #progress-info {
+        align-items: flex-start;
+      }
+      .instructions {
+        font-size: 11px;
+      }
+      #board {
+        grid-auto-rows: 48px;
+      }
+      #level-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      #board-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      #preview-wrapper {
+        align-self: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- BRAND -->
+  <div id="brand">
+    <span class="brand-weave">Weave</span>
+    <span class="brand-txt" id="brand-txt"></span>
+  </div>
+
+  <h1>RGB Craft</h1>
+  <div id="subtitle">Mix colors, clear the board, keep only white</div>
+
+  <div id="game-container">
+    <div id="top-bar">
+      <div id="goal-label">
+        Goal:
+        <span id="goal-short"></span>
+      </div>
+      <div id="progress-info">
+        <div class="small-tag">
+          Mode: <span>RGB puzzle</span>
+        </div>
+        <div class="small-tag">
+          Rule: <span>Adjacent mix only</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- LEVEL SELECT -->
+    <div id="level-row">
+      <div id="level-label">Level:</div>
+      <select id="level-select">
+        <option value="1">Level 1 – White in top-right</option>
+        <option value="2">Level 2 – White at row 3, col 2</option>
+      </select>
+    </div>
+
+    <p class="instructions">
+      The board starts with <strong>Red (R)</strong>, <strong>Green (G)</strong>, and <strong>Blue (B)</strong> tiles.<br />
+      Click a non-empty tile, then an <strong>adjacent</strong> tile (up / down / left / right) to
+      <strong>mix</strong> them. The <strong>first tile becomes empty</strong>, and the second tile becomes the
+      result of the mix.<br /><br />
+      <strong>Mix rules:</strong><br />
+      – Same color + same color → same color (R+R=R, G+G=G, B+B=B, …)<br />
+      – R+G → Y (Yellow), R+B → P (Purple), G+B → C (Cyan)<br />
+      – Y+B → W, P+G → W, C+R → W (White)<br /><br />
+      <strong id="objective-text"></strong>
+    </p>
+
+    <!-- BOARD + PREVIEW -->
+    <div id="board-row">
+      <div id="board-wrapper">
+        <div id="board"></div>
+      </div>
+      <div id="preview-wrapper">
+        <div id="preview-label">Target pattern</div>
+        <div id="preview-board"></div>
+      </div>
+    </div>
+
+    <!-- CONTROLS -->
+    <div id="controls">
+      <div class="button-row">
+        <button id="undo-btn" disabled>Undo last move</button>
+        <button id="reset-btn">Reset puzzle</button>
+      </div>
+      <div id="message" class="msg-info">
+        Click a non-empty tile, then an adjacent tile to combine them.
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div id="footer">
+      More from WeaveTXT:
+      <a href="https://www.weavetxt.com/index.html" target="_blank" rel="noopener noreferrer">
+        Swap and Weave
+      </a>
+      ·
+      <a href="https://www.weavetxt.com/solitaire.html" target="_blank" rel="noopener noreferrer">
+        Weave Solitaire
+      </a>
+      ·
+      <a href="https://www.weavetxt.com/tail.html" target="_blank" rel="noopener noreferrer">
+        Head &amp; Tail
+      </a>
+      ·
+      <a href="https://www.weavetxt.com/book/chapter1.html" target="_blank" rel="noopener noreferrer">
+        Geometry of Batik
+      </a>
+      ·
+      <a href="https://www.weavetxt.com/rgb.html" target="_blank" rel="noopener noreferrer">
+        RGB
+      </a>
+    </div>
+  </div>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal">
+      <h2>Level Complete!</h2>
+      <p>You matched this level's target pattern. Want to play it again?</p>
+      <button id="play-again-button">Restart puzzle</button>
+    </div>
+  </div>
+
+  <script>
+    /* -------- TXT animation -------- */
+    (function animateTXT() {
+      const el = document.getElementById("brand-txt");
+      const word = "TXT";
+      let i = 0;
+      let forward = true;
+
+      function loop() {
+        el.textContent = word.slice(0, i);
+
+        if (forward) {
+          i++;
+          if (i > word.length) {
+            forward = false;
+            setTimeout(loop, 800);
+            return;
+          }
+        } else {
+          i--;
+          if (i < 0) {
+            forward = true;
+            setTimeout(loop, 600);
+            return;
+          }
+        }
+        setTimeout(loop, 110);
+      }
+
+      loop();
+    })();
+
+    /* -------- Game logic -------- */
+    const EMPTY = ".";
+    const BOARD_SIZE = 4;
+
+    const COLOR_META = {
+      R: { name: "Red",    bg: "#dc2626", text: "#f9fafb" },
+      G: { name: "Green",  bg: "#16a34a", text: "#f9fafb" },
+      B: { name: "Blue",   bg: "#2563eb", text: "#f9fafb" },
+      P: { name: "Purple", bg: "#7c3aed", text: "#f9fafb" },
+      Y: { name: "Yellow", bg: "#eab308", text: "#111827" },
+      C: { name: "Cyan",   bg: "#06b6d4", text: "#0f172a" },
+      W: { name: "White",  bg: "#f9fafb", text: "#111827" }
+    };
+
+    function makeGrid(rows) {
+      return rows.map(row =>
+        row.split("").map(ch => ch === "." ? EMPTY : ch)
+      );
+    }
+
+    const LEVELS = {
+      1: {
+        start: makeGrid([
+          "RGBB",
+          "RRRG",
+          "GGGR",
+          "GGRR"
+        ]),
+        target: makeGrid([
+          "...W",
+          "....",
+          "....",
+          "...."
+        ]),
+        short: "White in top-right · others empty",
+        objective: "Level 1 – Create a White tile in the top-right corner; all other tiles must be empty."
+      },
+      2: {
+        start: makeGrid([
+          "RRRG",
+          "RRRG",
+          "GBRG",
+          "BBBG"
+        ]),
+        target: makeGrid([
+          "....",
+          "....",
+          ".W..",
+          "...."
+        ]),
+        short: "White at row 3, col 2 · others empty",
+        objective: "Level 2 – Create a White tile in row 3, column 2; all other tiles must be empty."
+      }
+    };
+
+    let currentLevel = 1;
+    let board = [];
+    let selected = null;
+    let historyStack = [];
+
+    const boardEl         = document.getElementById("board");
+    const previewBoardEl  = document.getElementById("preview-board");
+    const messageEl       = document.getElementById("message");
+    const undoBtn         = document.getElementById("undo-btn");
+    const resetBtn        = document.getElementById("reset-btn");
+    const modalOverlay    = document.getElementById("modal-overlay");
+    const playAgainBtn    = document.getElementById("play-again-button");
+    const levelSelectEl   = document.getElementById("level-select");
+    const goalShortEl     = document.getElementById("goal-short");
+    const objectiveTextEl = document.getElementById("objective-text");
+
+    function deepCopyBoard(src) {
+      return src.map(row => row.slice());
+    }
+
+    function setMessage(text, type = "info") {
+      messageEl.textContent = text;
+      messageEl.className = "msg-" + type;
+    }
+
+    function updateUndoButton() {
+      undoBtn.disabled = historyStack.length === 0;
+    }
+
+    function applyLevelTexts() {
+      const data = LEVELS[currentLevel];
+      goalShortEl.textContent = data.short;
+      objectiveTextEl.textContent = data.objective;
+    }
+
+    function initBoardForLevel() {
+      const data = LEVELS[currentLevel];
+      board = deepCopyBoard(data.start);
+      historyStack = [];
+      selected = null;
+      updateUndoButton();
+    }
+
+    function renderBoard() {
+      boardEl.innerHTML = "";
+
+      for (let r = 0; r < BOARD_SIZE; r++) {
+        for (let c = 0; c < BOARD_SIZE; c++) {
+          const tile = document.createElement("div");
+          tile.className = "tile";
+          tile.dataset.row = r;
+          tile.dataset.col = c;
+
+          const inner = document.createElement("div");
+          inner.className = "tile-inner";
+
+          const code = board[r][c];
+          if (code === EMPTY) {
+            tile.classList.add("empty");
+            inner.textContent = "";
+            inner.style.backgroundColor = "transparent";
+            inner.style.color = "#4b5563";
+          } else {
+            const meta = COLOR_META[code];
+            inner.textContent = code;
+            inner.style.backgroundColor = meta.bg;
+            inner.style.color = meta.text;
+          }
+
+          tile.appendChild(inner);
+          tile.addEventListener("click", () => onTileClick(r, c, tile));
+          boardEl.appendChild(tile);
+        }
+      }
+
+      updateSelectionHighlight();
+    }
+
+    function renderPreview() {
+      const targetGrid = LEVELS[currentLevel].target;
+      previewBoardEl.innerHTML = "";
+
+      for (let r = 0; r < BOARD_SIZE; r++) {
+        for (let c = 0; c < BOARD_SIZE; c++) {
+          const code = targetGrid[r][c];
+          const tile = document.createElement("div");
+          tile.className = "preview-tile";
+
+          if (code === EMPTY) {
+            tile.classList.add("preview-empty");
+            tile.textContent = "";
+          } else {
+            const meta = COLOR_META[code];
+            tile.style.backgroundColor = meta.bg;
+            tile.style.color = meta.text;
+            tile.textContent = code;
+          }
+
+          previewBoardEl.appendChild(tile);
+        }
+      }
+    }
+
+    function updateSelectionHighlight() {
+      const tiles = boardEl.querySelectorAll(".tile");
+      tiles.forEach(tile => {
+        const r = Number(tile.dataset.row);
+        const c = Number(tile.dataset.col);
+        if (selected && selected.row === r && selected.col === c) {
+          tile.classList.add("selected");
+        } else {
+          tile.classList.remove("selected");
+        }
+      });
+    }
+
+    function flashInvalid(tileEl) {
+      tileEl.classList.remove("invalid-flash");
+      void tileEl.offsetWidth;
+      tileEl.classList.add("invalid-flash");
+    }
+
+    function combineColors(code1, code2) {
+      if (code1 === EMPTY || code2 === EMPTY) return null;
+
+      // Same color → same color
+      if (code1 === code2) return code1;
+
+      const key = [code1, code2].sort().join("+");
+
+      const combos = {
+        // primary → secondary
+        "B+R": "P", // Purple
+        "G+R": "Y", // Yellow
+        "B+G": "C", // Cyan
+
+        // secondary + primary → White
+        "B+Y": "W",
+        "G+P": "W",
+        "C+R": "W"
+      };
+
+      return combos[key] || null;
+    }
+
+    function isAdjacent(r1, c1, r2, c2) {
+      const dr = Math.abs(r1 - r2);
+      const dc = Math.abs(c1 - c2);
+      return dr + dc === 1;
+    }
+
+    function onTileClick(row, col, tileEl) {
+      const code = board[row][col];
+
+      if (!selected) {
+        if (code === EMPTY) {
+          flashInvalid(tileEl);
+          setMessage("You can't start from an empty tile.", "error");
+          return;
+        }
+        selected = { row, col };
+        updateSelectionHighlight();
+        setMessage("Now choose an adjacent tile to mix with.", "info");
+        return;
+      }
+
+      if (selected.row === row && selected.col === col) {
+        selected = null;
+        updateSelectionHighlight();
+        setMessage("Selection cleared. Choose a tile to start mixing.", "info");
+        return;
+      }
+
+      if (!isAdjacent(selected.row, selected.col, row, col)) {
+        flashInvalid(tileEl);
+        selected = null;
+        updateSelectionHighlight();
+        setMessage("You can only combine adjacent tiles (up, down, left, right).", "error");
+        return;
+      }
+
+      const fromCode = board[selected.row][selected.col];
+      const toCode   = board[row][col];
+
+      const result = combineColors(fromCode, toCode);
+
+      if (!result) {
+        flashInvalid(tileEl);
+        selected = null;
+        updateSelectionHighlight();
+        setMessage("No valid combination for these two tiles.", "error");
+        return;
+      }
+
+      // Save state for undo BEFORE mutating
+      historyStack.push(deepCopyBoard(board));
+      updateUndoButton();
+
+      // Apply move
+      board[row][col] = result;
+      board[selected.row][selected.col] = EMPTY;
+
+      renderBoard();
+
+      const fromName = COLOR_META[fromCode]?.name || "Empty";
+      const toName   = COLOR_META[toCode]?.name   || "Empty";
+      const resName  = COLOR_META[result]?.name   || result;
+      setMessage(`${fromName} + ${toName} → ${resName} (first tile is now empty)`, "success");
+
+      selected = null;
+      updateSelectionHighlight();
+      checkLevelComplete();
+    }
+
+    function checkLevelComplete() {
+      const targetGrid = LEVELS[currentLevel].target;
+
+      for (let r = 0; r < BOARD_SIZE; r++) {
+        for (let c = 0; c < BOARD_SIZE; c++) {
+          const expected = targetGrid[r][c];
+          const actual   = board[r][c];
+          if (expected === EMPTY) {
+            if (actual !== EMPTY) return;
+          } else {
+            if (actual !== expected) return;
+          }
+        }
+      }
+      // If we reach here, pattern matched
+      modalOverlay.style.display = "flex";
+    }
+
+    function undoLastMove() {
+      if (historyStack.length === 0) {
+        setMessage("Nothing to undo.", "warning");
+        return;
+      }
+      const prevBoard = historyStack.pop();
+      board = prevBoard;
+      renderBoard();
+      selected = null;
+      updateSelectionHighlight();
+      updateUndoButton();
+      setMessage("Undid last move.", "info");
+    }
+
+    function resetPuzzle() {
+      initBoardForLevel();
+      renderBoard();
+      renderPreview();
+      setMessage("Puzzle reset. Click a non-empty tile, then an adjacent tile to combine them.", "info");
+    }
+
+    // Event listeners
+    resetBtn.addEventListener("click", resetPuzzle);
+    undoBtn.addEventListener("click", undoLastMove);
+
+    playAgainBtn.addEventListener("click", () => {
+      modalOverlay.style.display = "none";
+      resetPuzzle();
+    });
+
+    modalOverlay.addEventListener("click", (e) => {
+      if (e.target === modalOverlay) {
+        modalOverlay.style.display = "none";
+      }
+    });
+
+    levelSelectEl.addEventListener("change", () => {
+      const val = parseInt(levelSelectEl.value, 10);
+      currentLevel = LEVELS[val] ? val : 1;
+      applyLevelTexts();
+      resetPuzzle();
+    });
+
+    // Init
+    applyLevelTexts();
+    initBoardForLevel();
+    renderBoard();
+    renderPreview();
+    setMessage("Click a non-empty tile, then an adjacent tile to combine them.", "info");
+  </script>
+</body>
+</html>
