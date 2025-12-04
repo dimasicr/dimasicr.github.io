@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-C3LDF2V8MF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-C3LDF2V8MF');
+  </script>
+
+  <meta charset="UTF-8" />
+  <title>WeaveTXT – Bomb Hunt</title>
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    :root {
+      --bg-main: #222;
+      --bg-card: #333;
+      --bg-tile: #444;
+      --bg-tile-empty: #2b2b2b;
+      --bg-tile-selected: #3f3f3f;
+      --accent: #ffb347;
+      --accent-soft: #ffecb3;
+      --accent-border: #ff9800;
+      --text-main: #f5f5f5;
+      --text-muted: #aaa;
+      --text-soft: #ddd;
+
+      --safe: #4caf50;
+      --safe-soft: #a5d6a7;
+      --bomb: #ffeb3b;
+      --bomb-soft: #fff59d;
+      --danger: #ef5350;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #2b3a4a 0, #111 55%);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px;
+      margin: 0;
+    }
+
+    /* -------- BRANDING -------- */
+    #brand {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin-top: 6px;
+      margin-bottom: 4px;
+    }
+
+    .brand-weave {
+      font-family: "Georgia", serif;
+      font-size: clamp(22px, 5vw, 30px);
+      font-weight: bold;
+      letter-spacing: 0.03em;
+    }
+
+    .brand-txt {
+      font-family: "Courier New", monospace;
+      font-size: clamp(18px, 4.5vw, 24px);
+      font-weight: bold;
+      color: var(--accent);
+      border-right: 2px solid var(--accent);
+      padding-right: 4px;
+      animation: caret-blink 0.9s step-end infinite;
+      min-width: 3ch;
+    }
+
+    @keyframes caret-blink {
+      0%, 100% { border-color: transparent; }
+      50% { border-color: var(--accent); }
+    }
+
+    h1 {
+      margin: 2px 0 0;
+      font-size: clamp(20px, 5vw, 26px);
+      text-align: center;
+    }
+
+    #subtitle {
+      font-size: 12px;
+      margin-top: 4px;
+      margin-bottom: 8px;
+      color: var(--text-muted);
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    #date-tag {
+      font-size: 11px;
+      margin-bottom: 14px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    #game-container {
+      background: var(--bg-card);
+      padding: 16px 14px 18px;
+      border-radius: 10px;
+      box-shadow: 0 0 18px rgba(0,0,0,0.55);
+      max-width: 520px;
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid #414141;
+    }
+
+    #top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+      font-size: 13px;
+    }
+
+    #level-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-soft);
+    }
+
+    #level-select {
+      font-size: 13px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: 1px solid #555;
+      background: #252525;
+      color: var(--text-main);
+    }
+
+    #status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 13px;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    #lives {
+      font-weight: 600;
+      color: var(--accent-soft);
+    }
+
+    #safe-letters {
+      font-size: 12px;
+      color: var(--safe-soft);
+    }
+
+    #board {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 12px;
+      justify-content: center;
+      grid-template-columns: repeat(10, minmax(26px, 1fr));
+    }
+
+    .tile {
+      border-radius: 8px;
+      background: var(--bg-tile);
+      border: 2px solid #555;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(18px, 4vw, 24px);
+      font-weight: bold;
+      text-transform: uppercase;
+      user-select: none;
+      aspect-ratio: 1 / 1;
+      min-width: 32px;
+      transition: background 0.1s, border-color 0.1s, transform 0.07s ease;
+    }
+
+    .tile.safe {
+      background: #36523a;
+      border-color: var(--safe-soft);
+      color: var(--safe-soft);
+    }
+
+    /* NEW: suspect (yellow) tiles from bomb-hit guesses */
+    .tile.suspect {
+      background: #5a4c20;
+      border-color: var(--bomb-soft);
+      color: var(--bomb-soft);
+    }
+
+    /* On win, actual bomb letters revealed */
+    .tile.bomb {
+      background: #7a5c00;
+      border-color: #ffd54f;
+      color: #ffe082;
+    }
+
+    #panel {
+      margin-top: 4px;
+      border-top: 1px solid #444;
+      padding-top: 10px;
+      font-size: 13px;
+    }
+
+    .section-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--text-soft);
+      text-align: left;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+    }
+
+    input[type="text"] {
+      background: #222;
+      border-radius: 999px;
+      border: 1px solid #555;
+      padding: 6px 10px;
+      font-size: 13px;
+      color: var(--text-main);
+      min-width: 0;
+      flex: 1 1 120px;
+      text-transform: uppercase;
+      font-family: "Fira Mono", Menlo, Consolas, monospace;
+      letter-spacing: 0.08em;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: var(--accent-border);
+      box-shadow: 0 0 0 1px var(--accent-border);
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 7px 14px;
+      font-size: 13px;
+      cursor: pointer;
+      background: var(--accent);
+      color: #222;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      transition: background 0.1s ease, transform 0.07s ease, box-shadow 0.07s ease;
+      white-space: nowrap;
+    }
+
+    button:hover {
+      background: #ffab2c;
+      transform: translateY(-1px);
+      box-shadow: 0 3px 9px rgba(0,0,0,0.6);
+    }
+
+    button:disabled {
+      background: #555;
+      color: #999;
+      cursor: default;
+      transform: none;
+      box-shadow: none;
+    }
+
+    #message {
+      min-height: 18px;
+      margin-bottom: 6px;
+      font-size: 13px;
+      color: var(--accent-soft);
+      text-align: center;
+    }
+
+    #message.error {
+      color: var(--danger);
+    }
+
+    #guess-history-title {
+      font-weight: 600;
+      margin-top: 4px;
+      margin-bottom: 4px;
+      color: var(--text-soft);
+      text-align: left;
+    }
+
+    #guess-history {
+      list-style: none;
+      padding-left: 0;
+      margin: 0 0 4px;
+      font-size: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      max-height: 160px;
+      overflow-y: auto;
+    }
+
+    .guess-item {
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid #555;
+      font-family: "Fira Mono", Menlo, Consolas, monospace;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .guess-item.safe {
+      background: rgba(76, 175, 80, 0.16);
+      border-color: var(--safe-soft);
+      color: var(--safe-soft);
+    }
+
+    .guess-item.hit {
+      background: rgba(255, 235, 59, 0.15);
+      border-color: var(--bomb-soft);
+      color: var(--bomb-soft);
+    }
+
+    .guess-note {
+      font-size: 11px;
+      opacity: 0.9;
+      margin-left: 8px;
+    }
+
+    #hint {
+      margin-top: 8px;
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      text-align: left;
+    }
+
+    #hint strong {
+      color: var(--accent-soft);
+    }
+
+    /* Footer */
+    #footer {
+      margin-top: 12px;
+      padding-top: 8px;
+      border-top: 1px solid #444;
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    #footer a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+      margin: 0 4px;
+    }
+
+    #footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 480px) {
+      #game-container {
+        padding: 14px 10px 16px;
+      }
+      #top-bar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      #status-bar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      #hint {
+        font-size: 10.5px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- BRAND -->
+  <div id="brand">
+    <span class="brand-weave">Weave</span>
+    <span class="brand-txt" id="brand-txt"></span>
+  </div>
+
+  <h1>Bomb Hunt</h1>
+  <div id="subtitle">Deduce the hidden bomb word from safe guesses</div>
+  <div id="date-tag">1st December 2025</div>
+
+  <div id="game-container">
+    <div id="top-bar">
+      <div id="level-title"></div>
+      <div>
+        <label for="level-select" style="font-size:13px;margin-right:4px;">Level:</label>
+        <select id="level-select"></select>
+      </div>
+    </div>
+
+    <div id="status-bar">
+      <div id="lives"></div>
+      <div id="safe-letters"></div>
+    </div>
+
+    <div id="board"></div>
+
+    <div id="panel">
+      <div class="section-title">1. Probe with 4-letter words</div>
+      <div class="input-row">
+        <input
+          type="text"
+          id="probe-input"
+          maxlength="4"
+          placeholder="Enter 4-letter word"
+          autocomplete="off"
+        />
+        <button id="probe-btn">Submit word</button>
+      </div>
+
+      <div class="section-title">2. Guess the bomb word</div>
+      <div class="input-row">
+        <input
+          type="text"
+          id="bomb-input"
+          maxlength="10"
+          placeholder="Guess bomb word (e.g. TAG)"
+          autocomplete="off"
+        />
+        <button id="bomb-btn">Submit bomb</button>
+        <button id="reset-btn" style="margin-left:auto;">Reset level</button>
+      </div>
+
+      <div id="message"></div>
+
+      <div id="guess-history-title">Guess history:</div>
+      <ul id="guess-history"></ul>
+
+      <div id="hint">
+        Rules:<br />
+        • The letter tiles above show the <strong>pool of letters</strong> for this level.<br />
+        • Some of these letters form a <strong>bomb word</strong>. Hitting any bomb letter costs a life.<br />
+        • Step 1: Enter a <strong>4-letter English word</strong> using only the given letters.<br />
+        • If the word contains <strong>no bomb letters</strong>, it is marked <strong style="color:var(--safe-soft);">green</strong> and all its letters are safe (tiles turn green).<br />
+        • If the word contains <strong>at least one bomb letter</strong>, it is marked <strong style="color:var(--bomb-soft);">yellow</strong>, and all its letters become suspicious (tiles turn yellow).<br />
+        • Safe letters override suspicion: once a letter is in a safe word, it stays green.<br />
+        • When you’re confident, type the <strong>bomb word</strong> and submit. Correct → you win; wrong → you lose a life.
+      </div>
+    </div>
+
+    <!-- FOOTER LINKS TO OTHER GAMES -->
+    <div id="footer">
+      More from WeaveTXT:
+      <a href="https://www.weavetxt.com/index.html" target="_blank" rel="noopener noreferrer">
+        Swap and Weave
+      </a>
+      <a href="https://www.weavetxt.com/tail.html" target="_blank" rel="noopener noreferrer">
+        Neighbour Tail
+      </a>
+      <a href="https://www.weavetxt.com/steal.html" target="_blank" rel="noopener noreferrer">
+        Steal &amp; Weave
+      </a>
+      <a href="https://www.weavetxt.com/book/chapter1.html" target="_blank" rel="noopener noreferrer">
+        Geometry of Batik
+      </a>
+      <a href="https://www.weavetxt.com/rgb.html" target="_blank" rel="noopener noreferrer">
+        RGB
+      </a>
+    </div>
+  </div>
+
+  <!-- Dictionary: must define const VALID_WORDS = ["CAT","DOG",...] in UPPERCASE -->
+  <script src="valid-3-6.js"></script>
+
+  <script>
+    /* --------- LOOPING TXT ANIMATION --------- */
+    (function animateTXT(){
+      const el = document.getElementById("brand-txt");
+      const word = "TXT";
+      let i = 0;
+      let forward = true;
+
+      function loop(){
+        el.textContent = word.slice(0, i);
+
+        if(forward){
+          i++;
+          if(i > word.length){
+            forward = false;
+            setTimeout(loop, 900);
+            return;
+          }
+        } else {
+          i--;
+          if(i < 0){
+            forward = true;
+            setTimeout(loop, 600);
+            return;
+          }
+        }
+        setTimeout(loop, 120);
+      }
+
+      loop();
+    })();
+
+    // Optional safety check
+    if (typeof VALID_WORDS === "undefined") {
+      console.error("VALID_WORDS is not defined. Make sure valid-3-6.js is loaded.");
+      alert("Error: valid-3-6.js not loaded or VALID_WORDS not defined.");
+    }
+
+    // LEVEL CONFIG
+    const levels = [
+      {
+        name: "Level 1 – BAT",
+        letters: ["B","K","L","C","A","G","T","O","I","N"],
+        bombWord: "BAT",
+        lives: 5
+      }
+    ];
+
+    // GAME STATE
+    let currentLevelIndex = 0;
+    let letters = [];
+    let bombWord = "";
+    let bombSet = new Set();
+    let lives = 0;
+    let maxLives = 0;
+    let safeLetters = new Set(); // green
+    let hitLetters = new Set();  // yellow (suspect)
+    let guesses = []; // { word, hasBomb }
+    let gameOver = false;
+    let isWin = false;
+
+    // DOM ELEMENTS
+    const levelTitleEl = document.getElementById("level-title");
+    const levelSelectEl = document.getElementById("level-select");
+    const boardEl = document.getElementById("board");
+    const livesEl = document.getElementById("lives");
+    const safeLettersEl = document.getElementById("safe-letters");
+    const probeInputEl = document.getElementById("probe-input");
+    const probeBtn = document.getElementById("probe-btn");
+    const bombInputEl = document.getElementById("bomb-input");
+    const bombBtn = document.getElementById("bomb-btn");
+    const resetBtn = document.getElementById("reset-btn");
+    const messageEl = document.getElementById("message");
+    const guessHistoryEl = document.getElementById("guess-history");
+
+    // INIT LEVEL SELECT
+    function initLevelSelect() {
+      levelSelectEl.innerHTML = "";
+      levels.forEach((lvl, idx) => {
+        const opt = document.createElement("option");
+        opt.value = idx;
+        opt.textContent = lvl.name;
+        levelSelectEl.appendChild(opt);
+      });
+      levelSelectEl.value = currentLevelIndex;
+    }
+
+    levelSelectEl.addEventListener("change", () => {
+      const idx = parseInt(levelSelectEl.value, 10);
+      initLevel(idx);
+    });
+
+    function initLevel(index) {
+      const level = levels[index];
+      currentLevelIndex = index;
+      letters = level.letters.slice();
+      bombWord = level.bombWord.toUpperCase();
+      bombSet = new Set(bombWord.split(""));
+      lives = level.lives;
+      maxLives = level.lives;
+      safeLetters = new Set();
+      hitLetters = new Set();
+      guesses = [];
+      gameOver = false;
+      isWin = false;
+
+      levelTitleEl.textContent = level.name;
+      levelSelectEl.value = String(index);
+
+      probeInputEl.value = "";
+      bombInputEl.value = "";
+      clearMessage();
+      renderBoard();
+      renderLives();
+      renderSafeLetters();
+      renderGuessHistory();
+      updateButtons();
+    }
+
+    function renderBoard() {
+      boardEl.innerHTML = "";
+      boardEl.style.gridTemplateColumns = `repeat(${letters.length}, minmax(26px, 1fr))`;
+
+      letters.forEach(letter => {
+        const tile = document.createElement("div");
+        const classes = ["tile"];
+
+        if (gameOver && isWin && bombSet.has(letter)) {
+          classes.push("bomb");
+        } else if (safeLetters.has(letter)) {
+          classes.push("safe");
+        } else if (hitLetters.has(letter)) {
+          classes.push("suspect");
+        }
+
+        tile.className = classes.join(" ");
+        tile.textContent = letter;
+        boardEl.appendChild(tile);
+      });
+    }
+
+    function renderLives() {
+      const hearts = "❤".repeat(lives) + "♡".repeat(Math.max(0, maxLives - lives));
+      livesEl.textContent = `Lives: ${hearts} (${lives}/${maxLives})`;
+    }
+
+    function renderSafeLetters() {
+      if (safeLetters.size === 0) {
+        safeLettersEl.textContent = "Safe letters: –";
+      } else {
+        const arr = Array.from(safeLetters).sort();
+        safeLettersEl.textContent = "Safe letters: " + arr.join(" ");
+      }
+    }
+
+    function renderGuessHistory() {
+      guessHistoryEl.innerHTML = "";
+      guesses.forEach(g => {
+        const li = document.createElement("li");
+        li.className = "guess-item " + (g.hasBomb ? "hit" : "safe");
+        const label = document.createElement("span");
+        label.textContent = g.word;
+        const note = document.createElement("span");
+        note.className = "guess-note";
+        note.textContent = g.hasBomb ? "bomb nearby" : "safe";
+        li.appendChild(label);
+        li.appendChild(note);
+        guessHistoryEl.appendChild(li);
+      });
+    }
+
+    function setMessage(text, isError = false) {
+      messageEl.textContent = text;
+      messageEl.classList.toggle("error", !!isError);
+    }
+
+    function clearMessage() {
+      setMessage("");
+    }
+
+    function updateButtons() {
+      const disabled = gameOver;
+      probeBtn.disabled = disabled;
+      bombBtn.disabled = disabled;
+      probeInputEl.disabled = disabled;
+      bombInputEl.disabled = disabled;
+    }
+
+    function loseLife(reason) {
+      lives = Math.max(0, lives - 1);
+      renderLives();
+      if (lives <= 0) {
+        gameOver = true;
+        isWin = false;
+        setMessage(reason + " You ran out of lives. Game over.", true);
+        updateButtons();
+        renderBoard();
+      }
+    }
+
+    function handleProbeSubmit() {
+      if (gameOver) return;
+
+      let raw = probeInputEl.value.trim().toUpperCase();
+      if (!raw) {
+        setMessage("Enter a 4-letter word first.", true);
+        return;
+      }
+
+      if (raw.length !== 4) {
+        setMessage("Your probe word must be exactly 4 letters long.", true);
+        return;
+      }
+
+      // Check letters are from the level pool
+      const lettersSet = new Set(letters);
+      for (const ch of raw) {
+        if (!lettersSet.has(ch)) {
+          setMessage(`"${raw}" uses letter "${ch}" that is not in this level.`, true);
+          return;
+        }
+      }
+
+      // Check dictionary
+      if (!Array.isArray(VALID_WORDS) || !VALID_WORDS.includes(raw)) {
+        setMessage(`"${raw}" is not a valid English word in the dictionary.`, true);
+        return;
+      }
+
+      // Avoid duplicate probe
+      if (guesses.some(g => g.word === raw)) {
+        setMessage(`You already tried "${raw}". Use another probe.`, true);
+        return;
+      }
+
+      const chars = new Set(raw.split(""));
+      // Check if it hits any bomb letter
+      let hasBomb = false;
+      for (const ch of chars) {
+        if (bombSet.has(ch)) {
+          hasBomb = true;
+          break;
+        }
+      }
+
+      if (hasBomb) {
+        guesses.push({ word: raw, hasBomb: true });
+        // mark all letters in this word as suspect
+        for (const ch of chars) {
+          hitLetters.add(ch);
+        }
+        renderGuessHistory();
+        renderBoard();
+        setMessage(`"${raw}" contains at least one bomb letter. Be careful!`);
+        loseLife("Bomb hit!");
+      } else {
+        guesses.push({ word: raw, hasBomb: false });
+        // All letters in this word are safe
+        for (const ch of chars) {
+          safeLetters.add(ch);
+        }
+        // safe letters override suspicion
+        renderGuessHistory();
+        renderSafeLetters();
+        renderBoard();
+        setMessage(`"${raw}" is safe. All its letters are confirmed safe.`);
+      }
+
+      probeInputEl.value = "";
+      probeInputEl.focus();
+    }
+
+    function handleBombSubmit() {
+      if (gameOver) return;
+
+      let raw = bombInputEl.value.trim().toUpperCase();
+      if (!raw) {
+        setMessage("Type your bomb word guess first.", true);
+        return;
+      }
+
+      // Optional: restrict to letters in pool
+      const lettersSet = new Set(letters);
+      for (const ch of raw) {
+        if (!lettersSet.has(ch)) {
+          setMessage(`"${raw}" uses letter "${ch}" that is not in this level.`, true);
+          return;
+        }
+      }
+
+      if (raw === bombWord) {
+        gameOver = true;
+        isWin = true;
+        setMessage(`Correct! The bomb word is "${bombWord}". You win!`);
+        updateButtons();
+        renderBoard();
+      } else {
+        setMessage(`"${raw}" is not the bomb word.`, true);
+        loseLife("Wrong bomb guess.");
+      }
+
+      bombInputEl.value = "";
+      bombInputEl.focus();
+    }
+
+    // EVENTS
+    probeBtn.addEventListener("click", handleProbeSubmit);
+    bombBtn.addEventListener("click", handleBombSubmit);
+    resetBtn.addEventListener("click", () => initLevel(currentLevelIndex));
+
+    probeInputEl.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        handleProbeSubmit();
+      }
+    });
+
+    bombInputEl.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        handleBombSubmit();
+      }
+    });
+
+    // START
+    initLevelSelect();
+    initLevel(0);
+  </script>
+</body>
+</html>
