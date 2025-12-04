@@ -220,7 +220,7 @@
 
     #preview-board {
       display: grid;
-      grid-template-columns: repeat(4, 18px);
+      /* columns set dynamically via JS */
       grid-auto-rows: 18px;
       gap: 3px;
       justify-content: center;
@@ -248,7 +248,7 @@
     /* GRID (MAIN BOARD) */
     #board {
       display: grid;
-      grid-template-columns: repeat(4, minmax(40px, 56px));
+      /* columns set dynamically via JS */
       grid-auto-rows: 56px;
       gap: 6px;
       justify-content: center;
@@ -517,8 +517,10 @@
     <div id="level-row">
       <div id="level-label">Level:</div>
       <select id="level-select">
+        <option value="0">Level 0 – Tutorial · 3×3 white in top-right</option>
         <option value="1">Level 1 – White in top-right</option>
         <option value="2">Level 2 – White at row 3, col 2</option>
+        <option value="3">Level 3 – White at row 3, col 1</option>
       </select>
     </div>
 
@@ -624,7 +626,6 @@
 
     /* -------- Game logic -------- */
     const EMPTY = ".";
-    const BOARD_SIZE = 4;
 
     const COLOR_META = {
       R: { name: "Red",    bg: "#dc2626", text: "#f9fafb" },
@@ -643,6 +644,20 @@
     }
 
     const LEVELS = {
+      0: {
+        start: makeGrid([
+          "RGB",
+          "RGB",
+          "RBB"
+        ]),
+        target: makeGrid([
+          "..W",
+          "...",
+          "..."
+        ]),
+        short: "Tutorial · 3×3 white in top-right",
+        objective: "Level 0 – Tutorial: Create a White tile in the top-right corner on a 3×3 board; all other tiles must be empty."
+      },
       1: {
         start: makeGrid([
           "RGBB",
@@ -674,10 +689,26 @@
         ]),
         short: "White at row 3, col 2 · others empty",
         objective: "Level 2 – Create a White tile in row 3, column 2; all other tiles must be empty."
+      },
+      3: {
+        start: makeGrid([
+          "RRGB",
+          "RRGB",
+          "RBRB",
+          "GBGG"
+        ]),
+        target: makeGrid([
+          "....",
+          "....",
+          "W...",
+          "...."
+        ]),
+        short: "White at row 3, col 1 · others empty",
+        objective: "Level 3 – Create a White tile in the first column, third row; all other tiles must be empty."
       }
     };
 
-    let currentLevel = 1;
+    let currentLevel = 0;
     let board = [];
     let selected = null;
     let historyStack = [];
@@ -723,8 +754,14 @@
     function renderBoard() {
       boardEl.innerHTML = "";
 
-      for (let r = 0; r < BOARD_SIZE; r++) {
-        for (let c = 0; c < BOARD_SIZE; c++) {
+      const rows = board.length;
+      const cols = board[0].length;
+
+      // dynamic columns
+      boardEl.style.gridTemplateColumns = `repeat(${cols}, minmax(40px, 56px))`;
+
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
           const tile = document.createElement("div");
           tile.className = "tile";
           tile.dataset.row = r;
@@ -757,10 +794,14 @@
 
     function renderPreview() {
       const targetGrid = LEVELS[currentLevel].target;
-      previewBoardEl.innerHTML = "";
+      const rows = targetGrid.length;
+      const cols = targetGrid[0].length;
 
-      for (let r = 0; r < BOARD_SIZE; r++) {
-        for (let c = 0; c < BOARD_SIZE; c++) {
+      previewBoardEl.innerHTML = "";
+      previewBoardEl.style.gridTemplateColumns = `repeat(${cols}, 18px)`;
+
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
           const code = targetGrid[r][c];
           const tile = document.createElement("div");
           tile.className = "preview-tile";
@@ -893,9 +934,11 @@
 
     function checkLevelComplete() {
       const targetGrid = LEVELS[currentLevel].target;
+      const rows = targetGrid.length;
+      const cols = targetGrid[0].length;
 
-      for (let r = 0; r < BOARD_SIZE; r++) {
-        for (let c = 0; c < BOARD_SIZE; c++) {
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
           const expected = targetGrid[r][c];
           const actual   = board[r][c];
           if (expected === EMPTY) {
@@ -947,7 +990,7 @@
 
     levelSelectEl.addEventListener("change", () => {
       const val = parseInt(levelSelectEl.value, 10);
-      currentLevel = LEVELS[val] ? val : 1;
+      currentLevel = LEVELS[val] ? val : 0;
       applyLevelTexts();
       resetPuzzle();
     });
