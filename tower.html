@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-C3LDF2V8MF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-C3LDF2V8MF');
+  </script>
+
+  <meta charset="UTF-8" />
+  <title>WeaveTXT – Word Tower</title>
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    :root {
+      --bg-main: #222;
+      --bg-card: #333;
+      --bg-tile: #444;
+      --bg-tile-empty: #2b2b2b;
+      --bg-tile-selected: #3f3f3f;
+      --accent: #ffb347;
+      --accent-soft: #ffecb3;
+      --accent-border: #ff9800;
+      --text-main: #f5f5f5;
+      --text-muted: #aaa;
+      --text-soft: #ddd;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #2b3a4a 0, #111 55%);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px;
+      margin: 0;
+    }
+
+    /* -------- BRANDING -------- */
+    #brand {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin-top: 6px;
+      margin-bottom: 4px;
+    }
+
+    .brand-weave {
+      font-family: "Georgia", serif;
+      font-size: clamp(22px, 5vw, 30px);
+      font-weight: bold;
+      letter-spacing: 0.03em;
+    }
+
+    .brand-txt {
+      font-family: "Courier New", monospace;
+      font-size: clamp(18px, 4.5vw, 24px);
+      font-weight: bold;
+      color: var(--accent);
+      border-right: 2px solid var(--accent);
+      padding-right: 4px;
+      animation: caret-blink 0.9s step-end infinite;
+      min-width: 3ch;
+    }
+
+    @keyframes caret-blink {
+      0%, 100% { border-color: transparent; }
+      50% { border-color: var(--accent); }
+    }
+
+    h1 {
+      margin: 2px 0 0;
+      font-size: clamp(20px, 5vw, 26px);
+      text-align: center;
+    }
+
+    #subtitle {
+      font-size: 12px;
+      margin-top: 4px;
+      margin-bottom: 10px;
+      color: var(--text-muted);
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    h4 {
+      margin: 2px 0 10px;
+      font-size: 11px;
+      font-weight: normal;
+      color: var(--text-muted);
+    }
+
+    #game-container {
+      background: var(--bg-card);
+      padding: 16px 14px 18px;
+      border-radius: 10px;
+      box-shadow: 0 0 18px rgba(0,0,0,0.55);
+      max-width: 480px;
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid #414141;
+    }
+
+    #top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+      font-size: 13px;
+    }
+
+    #top-left {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    #tower-word-label {
+      font-weight: 600;
+      color: var(--text-soft);
+    }
+
+    #floor-info {
+      font-size: 12px;
+      color: var(--text-soft);
+    }
+
+    #floor-info strong {
+      color: var(--accent-soft);
+    }
+
+    #top-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 2px;
+      font-size: 11px;
+    }
+
+    #level-select {
+      font-size: 11px;
+      padding: 3px 6px;
+      border-radius: 6px;
+      border: 1px solid #555;
+      background: #252525;
+      color: var(--text-main);
+    }
+
+    /* -------- TOWER BOARD -------- */
+    #tower {
+      display: grid;
+      gap: 3px;
+      margin-bottom: 10px;
+      justify-content: center;
+      grid-template-columns: repeat(5, minmax(22px, 1fr));
+    }
+
+    .tile {
+      border-radius: 5px;
+      background: var(--bg-tile);
+      border: 2px solid #555;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(11px, 2.4vw, 14px);
+      font-weight: bold;
+      text-transform: uppercase;
+      user-select: none;
+      transition: background 0.1s, border-color 0.1s, transform 0.07s ease, box-shadow 0.08s ease;
+      aspect-ratio: 1 / 1;
+      min-width: 22px;
+    }
+
+    .tile.empty {
+      background: var(--bg-tile-empty);
+      border-color: #444;
+      color: #555;
+    }
+
+    .tile.center {
+      border-color: var(--accent-border);
+      background: #4a3b25;
+      color: var(--accent-soft);
+    }
+
+    .tile.floor-current {
+      box-shadow: 0 0 6px rgba(255,179,71,0.5);
+    }
+
+    .tile.floor-complete {
+      background: #505050;
+      border-color: #777;
+    }
+
+    /* -------- PANEL -------- */
+    #panel {
+      margin-top: 4px;
+      border-top: 1px solid #444;
+      padding-top: 10px;
+      font-size: 12px;
+    }
+
+    #current-word-box {
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    #pattern-rows {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .pattern-row {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .pattern-label {
+      font-size: 10px;
+      color: var(--text-soft);
+      text-transform: uppercase;
+    }
+
+    .pattern-tiles {
+      display: flex;
+      gap: 3px;
+    }
+
+    #candidate-display {
+      margin-top: 3px;
+      font-size: 11px;
+    }
+
+    #candidate-label {
+      font-weight: 600;
+      margin-right: 4px;
+    }
+
+    #candidate-word {
+      font-family: "Fira Mono", Menlo, Consolas, monospace;
+      letter-spacing: 2px;
+      font-size: 13px;
+      color: var(--accent-soft);
+    }
+
+    .word-tile {
+      width: 22px;
+      height: 22px;
+      border-radius: 5px;
+      background: var(--bg-tile);
+      border: 2px solid #555;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: bold;
+      text-transform: uppercase;
+      box-sizing: border-box;
+      color: var(--text-main);
+    }
+
+    .word-tile.center {
+      background: #4a3b25;
+      color: var(--accent-soft);
+      border-color: var(--accent-border);
+    }
+
+    .pattern-row.active .word-tile {
+      border-color: var(--accent);
+      box-shadow: 0 0 5px rgba(255,179,71,0.6);
+    }
+
+    #buttons {
+      margin-bottom: 8px;
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 11px;
+      cursor: pointer;
+      background: var(--accent);
+      color: #222;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+      transition: background 0.1s ease, transform 0.07s ease, box-shadow 0.07s ease;
+      white-space: nowrap;
+    }
+
+    button:hover {
+      background: #ffab2c;
+      transform: translateY(-1px);
+      box-shadow: 0 3px 7px rgba(0,0,0,0.6);
+    }
+
+    button:disabled {
+      background: #555;
+      color: #999;
+      cursor: default;
+      transform: none;
+      box-shadow: none;
+    }
+
+    #message {
+      min-height: 16px;
+      margin-bottom: 4px;
+      font-size: 11px;
+      color: var(--accent-soft);
+      text-align: center;
+    }
+
+    #found-words-title {
+      font-weight: 600;
+      margin-top: 4px;
+      margin-bottom: 4px;
+      color: var(--text-soft);
+      text-align: center;
+      font-size: 11px;
+    }
+
+    #found-words {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+      font-size: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      justify-content: center;
+    }
+
+    #found-words li {
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: #2f2f2f;
+      border: 1px solid #555;
+      font-family: "Fira Mono", Menlo, Consolas, monospace;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-main);
+    }
+
+    /* -------- LETTER BANK -------- */
+    #letter-bank-container {
+      margin-top: 8px;
+    }
+
+    #letter-bank-label {
+      font-weight: 600;
+      font-size: 11px;
+      margin-bottom: 4px;
+      color: var(--text-soft);
+      text-align: center;
+    }
+
+    #letter-bank {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 3px;
+      margin-bottom: 6px;
+    }
+
+    .bank-tile {
+      width: 22px;
+      height: 22px;
+      border-radius: 5px;
+      background: var(--bg-tile);
+      border: 2px solid #555;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.08s, border-color 0.08s, transform 0.06s ease, box-shadow 0.06s ease;
+      user-select: none;
+    }
+
+    .bank-tile:hover {
+      background: #505050;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+      transform: translateY(-1px);
+    }
+
+    .bank-tile.selected {
+      background: var(--bg-tile-selected);
+      border-color: var(--accent-border);
+      box-shadow: 0 0 6px rgba(255,179,71,0.6);
+    }
+
+    .bank-tile.used {
+      background: var(--bg-tile-empty);
+      border-color: #444;
+      color: #666;
+      cursor: default;
+      box-shadow: none;
+      transform: none;
+    }
+
+    #hint {
+      margin-top: 8px;
+      font-size: 10px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      text-align: left;
+    }
+
+    #hint strong {
+      color: var(--accent-soft);
+    }
+
+    /* Footer */
+    #footer {
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px solid #444;
+      font-size: 10px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    #footer a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+      margin: 0 4px;
+    }
+
+    #footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Mobile tweaks */
+    @media (max-width: 480px) {
+      #game-container {
+        padding: 14px 10px 16px;
+      }
+      #top-bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      #top-right {
+        align-items: flex-start;
+      }
+      #hint {
+        font-size: 9.5px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- BRAND -->
+  <div id="brand">
+    <span class="brand-weave">Weave</span>
+    <span class="brand-txt" id="brand-txt"></span>
+  </div>
+
+  <h1>Word Tower</h1>
+  <div id="subtitle">Build a tower of words around the hidden spine</div>
+  <h4>7th December 2025</h4>
+
+  <div id="game-container">
+    <div id="top-bar">
+      <div id="top-left">
+        <div id="tower-word-label">
+          Tower spine: <strong id="tower-word-value">SING</strong>
+        </div>
+        <div id="floor-info">
+          Floor <span id="floor-number">1</span>/<span id="floor-total">4</span> –
+          letter: <strong id="floor-letter">G</strong>
+        </div>
+      </div>
+      <div id="top-right">
+        <label for="level-select">Level:</label>
+        <select id="level-select"></select>
+      </div>
+    </div>
+
+    <div id="tower"></div>
+
+    <div id="panel">
+      <div id="current-word-box">
+        <div id="pattern-rows">
+          <div class="pattern-row" id="pattern-3-row">
+            <span class="pattern-label">3-letter</span>
+            <div class="pattern-tiles" id="pattern-3-tiles"></div>
+          </div>
+          <div class="pattern-row" id="pattern-5-row">
+            <span class="pattern-label">5-letter</span>
+            <div class="pattern-tiles" id="pattern-5-tiles"></div>
+          </div>
+        </div>
+        <div id="candidate-display">
+          <span id="candidate-label">Candidate:</span>
+          <span id="candidate-word"></span>
+        </div>
+      </div>
+
+      <div id="buttons">
+        <button id="submit-word-btn">Submit word</button>
+        <button id="undo-btn">Undo last word</button>
+        <button id="clear-word-btn">Clear selection</button>
+        <button id="reset-game-btn">Reset game</button>
+      </div>
+
+      <div id="message"></div>
+
+      <div id="found-words-title">Tower words used:</div>
+      <ul id="found-words"></ul>
+
+      <div id="letter-bank-container">
+        <div id="letter-bank-label">Letter tiles (use them all if you can):</div>
+        <div id="letter-bank"></div>
+      </div>
+
+      <div id="hint">
+        Rules:<br />
+        • The middle column spells the <strong>tower spine word</strong> from top to bottom.<br />
+        • You start from the <strong>bottom floor</strong> (last letter of the spine) and climb up to the top (first letter).<br />
+        • On each floor, the <strong>floor letter</strong> (from the spine word) is fixed in the middle:<br />
+        &nbsp;&nbsp;– Pick <strong>2 tiles</strong> → you build a <strong>3-letter word</strong> with pattern <code>_ L _</code>.<br />
+        &nbsp;&nbsp;– Pick <strong>4 tiles</strong> → you build a <strong>5-letter word</strong> with pattern <code>_ _ L _ _</code>.<br />
+        • As you click tiles, both patterns update live (e.g. <code>_ G _ → E G _ → E G G</code>).<br />
+        • The pattern matching your selection (2 or 4 tiles) is highlighted.<br />
+        • Only valid English words (from <code>VALID_WORDS</code>) of length 3 or 5 are accepted.<br />
+        • Used tiles are gone forever. You <strong>win</strong> if you reach the <strong>top floor</strong> or if <strong>all tiles are used</strong>.<br />
+        • You can <strong>undo</strong> the last accepted word to reclaim its tiles and reopen that floor.<br />
+        • Use the <strong>Level</strong> selector to switch between 4-letter, 5-letter, and 6-letter spines.
+      </div>
+    </div>
+
+    <!-- FOOTER LINKS TO OTHER GAMES -->
+    <div id="footer">
+      More from WeaveTXT:
+      <a href="https://www.weavetxt.com/index.html" target="_blank" rel="noopener noreferrer">
+        Swap and Weave
+      </a>
+      <a href="https://www.weavetxt.com/tail.html" target="_blank" rel="noopener noreferrer">
+        Neighbour Tail
+      </a>
+      <a href="https://www.weavetxt.com/steal.html" target="_blank" rel="noopener noreferrer">
+        Steal &amp; Weave
+      </a>
+      <a href="https://www.weavetxt.com/book/chapter1.html" target="_blank" rel="noopener noreferrer">
+        Geometry of Batik
+      </a>
+      <a href="https://www.weavetxt.com/rgb.html" target="_blank" rel="noopener noreferrer">
+        RGB
+      </a>
+    </div>
+  </div>
+
+  <!-- Dictionary: must define const VALID_WORDS = ["CAT","DOG",...] in UPPERCASE -->
+  <script src="valid-3-6.js"></script>
+
+  <script>
+    /* --------- LOOPING TXT ANIMATION --------- */
+    (function animateTXT(){
+      const el = document.getElementById("brand-txt");
+      const word = "TXT";
+      let i = 0;
+      let forward = true;
+
+      function loop(){
+        el.textContent = word.slice(0, i);
+
+        if(forward){
+          i++;
+          if(i > word.length){
+            forward = false;
+            setTimeout(loop, 900);
+            return;
+          }
+        } else {
+          i--;
+          if(i < 0){
+            forward = true;
+            setTimeout(loop, 600);
+            return;
+          }
+        }
+        setTimeout(loop, 120);
+      }
+
+      loop();
+    })();
+
+    if (typeof VALID_WORDS === "undefined") {
+      console.error("VALID_WORDS is not defined. Make sure valid-3-6.js is loaded.");
+      alert("Error: valid-3-6.js not loaded or VALID_WORDS not defined.");
+    }
+
+    // --------- MULTI-LEVEL CONFIG ---------
+    const LEVEL_CONFIGS = [
+      {
+        id: "SING",
+        label: "Level 1 – 4-letter spine (SING)",
+        spine: "SING",
+        tileBag: ["H","A","S","R","I","N","E","G"] // removed 1 A and 1 E
+      },
+      {
+        id: "STING",
+        label: "Level 2 – 5-letter spine (STING)",
+        spine: "STING",
+        tileBag: ["H","A","E","A","S","R","I","N","E","G"]
+      },
+      {
+        id: "STRING",
+        label: "Level 3 – 6-letter spine (STRING)",
+        spine: "STRING",
+        tileBag: ["A","H","A","E","A","T","S","R","I","N","E","G"]
+      }
+    ];
+
+    // Default level index: 0 → SING
+    let currentConfigIndex = 0;
+
+    // Dynamic per-config variables
+    let towerWord = "";
+    let levelCount = 0;
+    let levelLetters = [];
+    let baseLetterBag = [];
+
+    // Game state
+    let towerLevels = [];
+    let currentLevel = 0;
+    let letterBank = [];
+    let currentSelection = [];
+    let foundWords = [];
+    let gameOver = false;
+    let moveHistory = [];
+
+    // DOM
+    const towerEl = document.getElementById("tower");
+    const floorNumberEl = document.getElementById("floor-number");
+    const floorTotalEl = document.getElementById("floor-total");
+    const floorLetterEl = document.getElementById("floor-letter");
+    const towerWordValueEl = document.getElementById("tower-word-value");
+    const levelSelectEl = document.getElementById("level-select");
+    const messageEl = document.getElementById("message");
+    const foundWordsEl = document.getElementById("found-words");
+    const letterBankEl = document.getElementById("letter-bank");
+
+    const pattern3TilesEl = document.getElementById("pattern-3-tiles");
+    const pattern5TilesEl = document.getElementById("pattern-5-tiles");
+    const pattern3RowEl = document.getElementById("pattern-3-row");
+    const pattern5RowEl = document.getElementById("pattern-5-row");
+    const candidateWordEl = document.getElementById("candidate-word");
+
+    const submitBtn = document.getElementById("submit-word-btn");
+    const clearBtn = document.getElementById("clear-word-btn");
+    const resetBtn = document.getElementById("reset-game-btn");
+    const undoBtn = document.getElementById("undo-btn");
+
+    function initLevelSelect() {
+      levelSelectEl.innerHTML = "";
+      LEVEL_CONFIGS.forEach((cfg, idx) => {
+        const opt = document.createElement("option");
+        opt.value = idx;
+        opt.textContent = cfg.label;
+        levelSelectEl.appendChild(opt);
+      });
+      levelSelectEl.value = currentConfigIndex;
+    }
+
+    levelSelectEl.addEventListener("change", () => {
+      const idx = parseInt(levelSelectEl.value, 10);
+      initGame(idx);
+    });
+
+    function initGame(configIndex) {
+      if (typeof configIndex === "number") {
+        currentConfigIndex = configIndex;
+      }
+      const cfg = LEVEL_CONFIGS[currentConfigIndex];
+
+      towerWord = cfg.spine;
+      levelCount = towerWord.length;
+      levelLetters = towerWord.split("").reverse(); // bottom to top
+      baseLetterBag = cfg.tileBag.slice();
+
+      towerLevels = [];
+      for (let i = 0; i < levelCount; i++) {
+        towerLevels.push({ word: null });
+      }
+
+      letterBank = baseLetterBag.map(ch => ({ letter: ch, used: false }));
+
+      currentLevel = 0;
+      currentSelection = [];
+      foundWords = [];
+      gameOver = false;
+      moveHistory = [];
+
+      towerWordValueEl.textContent = towerWord;
+      floorTotalEl.textContent = levelCount.toString();
+
+      renderTower();
+      renderLetterBank();
+      renderPatterns();
+      renderFoundWords();
+      updateFloorInfo();
+      setMessage("Start at the bottom floor. Click tiles to fill the patterns.");
+      updateButtons();
+    }
+
+    function updateFloorInfo() {
+      floorNumberEl.textContent = (currentLevel + 1).toString();
+      floorLetterEl.textContent = levelLetters[currentLevel];
+    }
+
+    function renderTower() {
+      towerEl.innerHTML = "";
+
+      const cols = 5;
+      towerEl.style.gridTemplateColumns = `repeat(${cols}, minmax(22px, 1fr))`;
+
+      for (let visualRow = 0; visualRow < levelCount; visualRow++) {
+        const levelIndex = levelCount - 1 - visualRow;
+        const levelData = towerLevels[levelIndex];
+        const floorLetter = levelLetters[levelIndex];
+        const word = levelData.word;
+        const isCurrentFloor = (levelIndex === currentLevel);
+        const isCompleteFloor = (word !== null);
+
+        for (let c = 0; c < cols; c++) {
+          const tile = document.createElement("div");
+          tile.className = "tile";
+
+          if (isCompleteFloor) tile.classList.add("floor-complete");
+          if (isCurrentFloor) tile.classList.add("floor-current");
+
+          let char = "";
+          if (c === 2) {
+            tile.classList.add("center");
+            char = floorLetter;
+          }
+
+          if (word) {
+            if (word.length === 3) {
+              if (c === 1) char = word[0];
+              if (c === 2) char = floorLetter;
+              if (c === 3) char = word[2];
+            } else if (word.length === 5) {
+              if (c === 0) char = word[0];
+              if (c === 1) char = word[1];
+              if (c === 2) char = floorLetter;
+              if (c === 3) char = word[3];
+              if (c === 4) char = word[4];
+            }
+          } else {
+            if (c !== 2) {
+              tile.classList.add("empty");
+            }
+          }
+
+          tile.textContent = char;
+          towerEl.appendChild(tile);
+        }
+      }
+    }
+
+    function renderLetterBank() {
+      letterBankEl.innerHTML = "";
+
+      letterBank.forEach((tile, idx) => {
+        const div = document.createElement("div");
+        div.className = "bank-tile";
+        div.textContent = tile.letter;
+
+        if (tile.used) {
+          div.classList.add("used");
+        } else if (currentSelection.includes(idx)) {
+          div.classList.add("selected");
+        }
+
+        if (!gameOver && !tile.used) {
+          div.addEventListener("click", () => onBankTileClick(idx));
+        }
+
+        letterBankEl.appendChild(div);
+      });
+    }
+
+    function buildSlots3() {
+      const floorLetter = levelLetters[currentLevel];
+      const letters = currentSelection.map(i => letterBank[i].letter);
+      const slots = ["_", floorLetter, "_"];
+      const nonL = [0, 2];
+
+      for (let i = 0; i < letters.length && i < 2; i++) {
+        slots[nonL[i]] = letters[i];
+      }
+      return slots;
+    }
+
+    function buildSlots5() {
+      const floorLetter = levelLetters[currentLevel];
+      const letters = currentSelection.map(i => letterBank[i].letter);
+      const slots = ["_", "_", floorLetter, "_", "_"];
+      const nonL = [0, 1, 3, 4];
+
+      for (let i = 0; i < letters.length && i < 4; i++) {
+        slots[nonL[i]] = letters[i];
+      }
+      return slots;
+    }
+
+    function getCurrentCandidateWord() {
+      const letters = currentSelection.map(i => letterBank[i].letter);
+      const floorLetter = levelLetters[currentLevel];
+
+      if (letters.length === 2) {
+        return (letters[0] + floorLetter + letters[1]).toUpperCase();
+      } else if (letters.length === 4) {
+        return (letters[0] + letters[1] + floorLetter + letters[2] + letters[3]).toUpperCase();
+      }
+      return null;
+    }
+
+    function renderPatterns() {
+      const slots3 = buildSlots3();
+      const slots5 = buildSlots5();
+
+      pattern3TilesEl.innerHTML = "";
+      pattern5TilesEl.innerHTML = "";
+
+      slots3.forEach((ch, idx) => {
+        const t = document.createElement("div");
+        t.className = "word-tile";
+        if (idx === 1) t.classList.add("center");
+        t.textContent = ch;
+        pattern3TilesEl.appendChild(t);
+      });
+
+      slots5.forEach((ch, idx) => {
+        const t = document.createElement("div");
+        t.className = "word-tile";
+        if (idx === 2) t.classList.add("center");
+        t.textContent = ch;
+        pattern5TilesEl.appendChild(t);
+      });
+
+      const len = currentSelection.length;
+      pattern3RowEl.classList.toggle("active", len === 2);
+      pattern5RowEl.classList.toggle("active", len === 4);
+
+      const candidate = getCurrentCandidateWord();
+      candidateWordEl.textContent = candidate || "";
+    }
+
+    function renderFoundWords() {
+      foundWordsEl.innerHTML = "";
+      if (foundWords.length === 0) return;
+
+      foundWords.forEach(w => {
+        const li = document.createElement("li");
+        li.textContent = w;
+        foundWordsEl.appendChild(li);
+      });
+    }
+
+    function setMessage(text) {
+      messageEl.textContent = text || "";
+    }
+
+    function updateButtons() {
+      submitBtn.disabled = gameOver;
+      clearBtn.disabled = gameOver;
+      resetBtn.disabled = false;
+      undoBtn.disabled = (moveHistory.length === 0);
+    }
+
+    function onBankTileClick(index) {
+      if (gameOver) return;
+      if (letterBank[index].used) return;
+      if (currentSelection.includes(index)) return;
+      if (currentSelection.length >= 4) {
+        setMessage("You already selected 4 tiles (max for this floor). Submit or clear.");
+        return;
+      }
+
+      currentSelection.push(index);
+      renderLetterBank();
+      renderPatterns();
+
+      const letter = letterBank[index].letter;
+      setMessage('Tile "' + letter + '" added. Patterns updated.');
+    }
+
+    function clearSelection() {
+      currentSelection = [];
+      renderLetterBank();
+      renderPatterns();
+      setMessage("Selection cleared. Patterns reset.");
+    }
+
+    function areAllTilesUsed() {
+      return letterBank.every(t => t.used);
+    }
+
+    function submitWord() {
+      if (gameOver) return;
+
+      if (towerLevels[currentLevel].word !== null) {
+        setMessage("This floor is already complete. Move on to the next floor.");
+        clearSelection();
+        return;
+      }
+
+      if (!(currentSelection.length === 2 || currentSelection.length === 4)) {
+        setMessage("You must have exactly 2 tiles (3-letter word) or 4 tiles (5-letter word) selected.");
+        return;
+      }
+
+      const candidate = getCurrentCandidateWord();
+      if (!candidate) {
+        setMessage("Unable to form a word. Try a different selection.");
+        return;
+      }
+
+      const length = candidate.length;
+      const floorLetter = levelLetters[currentLevel];
+
+      if ((length === 3 && candidate[1] !== floorLetter) ||
+          (length === 5 && candidate[2] !== floorLetter)) {
+        setMessage('Middle letter must match the floor letter "' + floorLetter + '".');
+        return;
+      }
+
+      if (!Array.isArray(VALID_WORDS) || !VALID_WORDS.includes(candidate)) {
+        setMessage('"' + candidate + '" is not a valid English word.');
+        return;
+      }
+
+      if (foundWords.includes(candidate)) {
+        setMessage('"' + candidate + '" is already used. Try another word.');
+        return;
+      }
+
+      const usedIndices = currentSelection.slice();
+      usedIndices.forEach(idx => {
+        letterBank[idx].used = true;
+      });
+
+      towerLevels[currentLevel].word = candidate;
+      foundWords.push(candidate);
+
+      moveHistory.push({
+        floorIndex: currentLevel,
+        word: candidate,
+        tileIndices: usedIndices
+      });
+
+      currentSelection = [];
+
+      renderTower();
+      renderLetterBank();
+      renderPatterns();
+      renderFoundWords();
+
+      let reachedTop = (currentLevel === levelCount - 1);
+      let allTiles = areAllTilesUsed();
+      let msg = 'Accepted "' + candidate + '".';
+
+      if (reachedTop || allTiles) {
+        gameOver = true;
+
+        if (reachedTop && allTiles) {
+          msg += " Brilliant! You reached the top and used all tiles.";
+        } else if (reachedTop) {
+          msg += " Great! You reached the top of the Word Tower.";
+        } else if (allTiles) {
+          msg += " Great! You used all letter tiles.";
+        }
+        msg += " Words used: " + foundWords.join(", ") + ".";
+        setMessage(msg);
+        updateButtons();
+        return;
+      }
+
+      if (currentLevel < levelCount - 1) {
+        currentLevel++;
+      }
+      updateFloorInfo();
+      renderTower();
+      renderPatterns();
+
+      setMessage(msg + " Now climb to the next floor!");
+      updateButtons();
+    }
+
+    function undoLastMove() {
+      if (moveHistory.length === 0) {
+        setMessage("Nothing to undo.");
+        return;
+      }
+
+      const lastMove = moveHistory.pop();
+      const { floorIndex, word, tileIndices } = lastMove;
+
+      tileIndices.forEach(idx => {
+        if (letterBank[idx]) {
+          letterBank[idx].used = false;
+        }
+      });
+
+      towerLevels[floorIndex].word = null;
+
+      const pos = foundWords.lastIndexOf(word);
+      if (pos !== -1) {
+        foundWords.splice(pos, 1);
+      }
+
+      gameOver = false;
+      currentLevel = floorIndex;
+      currentSelection = [];
+
+      renderTower();
+      renderLetterBank();
+      renderPatterns();
+      renderFoundWords();
+      updateFloorInfo();
+      updateButtons();
+
+      setMessage('Undid "' + word + '". Floor reopened and tiles restored.');
+    }
+
+    submitBtn.addEventListener("click", submitWord);
+    clearBtn.addEventListener("click", clearSelection);
+    resetBtn.addEventListener("click", () => initGame(currentConfigIndex));
+    undoBtn.addEventListener("click", undoLastMove);
+
+    // Start
+    initLevelSelect();
+    initGame(currentConfigIndex);
+  </script>
+</body>
+</html>
