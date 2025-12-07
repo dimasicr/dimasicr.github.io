@@ -111,6 +111,7 @@
       border: 1px solid #414141;
     }
 
+    /* -------- TOP BAR -------- */
     #top-bar {
       display: flex;
       justify-content: space-between;
@@ -156,6 +157,12 @@
       border: 1px solid #555;
       background: #252525;
       color: var(--text-main);
+    }
+
+    #time-display {
+      margin-top: 4px;
+      font-size: 11px;
+      color: var(--accent-soft);
     }
 
     /* -------- TOWER BOARD -------- */
@@ -214,36 +221,40 @@
 
     #current-word-box {
       margin-bottom: 8px;
-      text-align: center;
     }
 
-    #pattern-rows {
+    #input-row {
       display: flex;
       flex-direction: column;
-      gap: 3px;
-      align-items: center;
-      margin-bottom: 4px;
-    }
-
-    .pattern-row {
-      display: flex;
-      align-items: center;
       gap: 4px;
+      margin-bottom: 6px;
     }
 
-    .pattern-label {
-      font-size: 10px;
+    #input-row label {
+      font-size: 11px;
       color: var(--text-soft);
-      text-transform: uppercase;
     }
 
-    .pattern-tiles {
-      display: flex;
-      gap: 3px;
+    #word-input {
+      width: 100%;
+      padding: 4px 6px;
+      border-radius: 6px;
+      border: 1px solid #555;
+      background: #222;
+      color: var(--text-main);
+      font-size: 13px;
+      font-family: "Fira Mono", Menlo, Consolas, monospace;
+      letter-spacing: 1px;
+      box-sizing: border-box;
+    }
+
+    #floor-letter-current {
+      font-weight: 600;
+      color: var(--accent-soft);
     }
 
     #candidate-display {
-      margin-top: 3px;
+      margin-top: 4px;
       font-size: 11px;
     }
 
@@ -259,31 +270,10 @@
       color: var(--accent-soft);
     }
 
-    .word-tile {
-      width: 22px;
-      height: 22px;
-      border-radius: 5px;
-      background: var(--bg-tile);
-      border: 2px solid #555;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-      font-weight: bold;
-      text-transform: uppercase;
-      box-sizing: border-box;
-      color: var(--text-main);
-    }
-
-    .word-tile.center {
-      background: #4a3b25;
-      color: var(--accent-soft);
-      border-color: var(--accent-border);
-    }
-
-    .pattern-row.active .word-tile {
-      border-color: var(--accent);
-      box-shadow: 0 0 5px rgba(255,179,71,0.6);
+    #pivot-info {
+      margin-top: 2px;
+      font-size: 10px;
+      color: var(--text-muted);
     }
 
     #buttons {
@@ -327,10 +317,38 @@
 
     #message {
       min-height: 16px;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
       font-size: 11px;
       color: var(--accent-soft);
       text-align: center;
+    }
+
+    #hint-message {
+      min-height: 14px;
+      margin-bottom: 4px;
+      font-size: 10px;
+      color: var(--text-soft);
+      text-align: center;
+      font-style: italic;
+    }
+
+    /* -------- BALANCE -------- */
+    #balance-box {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      font-size: 11px;
+      margin-bottom: 6px;
+      color: var(--text-soft);
+    }
+
+    #balance-box span strong {
+      color: var(--accent-soft);
+    }
+
+    #balance-status {
+      font-size: 11px;
+      color: var(--accent-soft);
     }
 
     #found-words-title {
@@ -408,12 +426,6 @@
       transform: translateY(-1px);
     }
 
-    .bank-tile.selected {
-      background: var(--bg-tile-selected);
-      border-color: var(--accent-border);
-      box-shadow: 0 0 6px rgba(255,179,71,0.6);
-    }
-
     .bank-tile.used {
       background: var(--bg-tile-empty);
       border-color: #444;
@@ -482,7 +494,7 @@
   </div>
 
   <h1>Word Tower</h1>
-  <div id="subtitle">Build a tower of words around the hidden spine</div>
+  <div id="subtitle">Balance every letter around the hidden spine</div>
   <h4>7th December 2025</h4>
 
   <div id="game-container">
@@ -499,6 +511,7 @@
       <div id="top-right">
         <label for="level-select">Level:</label>
         <select id="level-select"></select>
+        <div id="time-display">Time: 00:00</div>
       </div>
     </div>
 
@@ -506,52 +519,65 @@
 
     <div id="panel">
       <div id="current-word-box">
-        <div id="pattern-rows">
-          <div class="pattern-row" id="pattern-3-row">
-            <span class="pattern-label">3-letter</span>
-            <div class="pattern-tiles" id="pattern-3-tiles"></div>
-          </div>
-          <div class="pattern-row" id="pattern-5-row">
-            <span class="pattern-label">5-letter</span>
-            <div class="pattern-tiles" id="pattern-5-tiles"></div>
-          </div>
+        <div id="input-row">
+          <label>
+            Word for this floor
+            (<span id="floor-letter-current">G</span> must appear at least once):
+          </label>
+          <input id="word-input" type="text" autocomplete="off" spellcheck="false" />
         </div>
+
         <div id="candidate-display">
           <span id="candidate-label">Candidate:</span>
           <span id="candidate-word"></span>
+          <div id="pivot-info"></div>
         </div>
       </div>
 
       <div id="buttons">
         <button id="submit-word-btn">Submit word</button>
         <button id="undo-btn">Undo last word</button>
-        <button id="clear-word-btn">Clear selection</button>
+        <button id="hint-btn">Hint (+3:00)</button>
         <button id="reset-game-btn">Reset game</button>
       </div>
 
       <div id="message"></div>
+      <div id="hint-message"></div>
+
+      <div id="balance-box">
+        <span>Left: <strong id="left-total">0</strong></span>
+        <span>Right: <strong id="right-total">0</strong></span>
+      </div>
+      <div id="balance-status"></div>
 
       <div id="found-words-title">Tower words used:</div>
       <ul id="found-words"></ul>
 
       <div id="letter-bank-container">
-        <div id="letter-bank-label">Letter tiles (use them all if you can):</div>
+        <div id="letter-bank-label">
+          Letter tiles (click to append, but each can only be used once overall):
+        </div>
         <div id="letter-bank"></div>
       </div>
 
       <div id="hint">
         Rules:<br />
-        • The middle column spells the <strong>tower spine word</strong> from top to bottom.<br />
+        • The middle column shows the <strong>spine word</strong> from top to bottom (e.g. SING, STING, STRING).<br />
         • You start from the <strong>bottom floor</strong> (last letter of the spine) and climb up to the top (first letter).<br />
-        • On each floor, the <strong>floor letter</strong> (from the spine word) is fixed in the middle:<br />
-        &nbsp;&nbsp;– Pick <strong>2 tiles</strong> → you build a <strong>3-letter word</strong> with pattern <code>_ L _</code>.<br />
-        &nbsp;&nbsp;– Pick <strong>4 tiles</strong> → you build a <strong>5-letter word</strong> with pattern <code>_ _ L _ _</code>.<br />
-        • As you click tiles, both patterns update live (e.g. <code>_ G _ → E G _ → E G G</code>).<br />
-        • The pattern matching your selection (2 or 4 tiles) is highlighted.<br />
-        • Only valid English words (from <code>VALID_WORDS</code>) of length 3 or 5 are accepted.<br />
-        • Used tiles are gone forever. You <strong>win</strong> if you reach the <strong>top floor</strong> or if <strong>all tiles are used</strong>.<br />
-        • You can <strong>undo</strong> the last accepted word to reclaim its tiles and reopen that floor.<br />
-        • Use the <strong>Level</strong> selector to switch between 4-letter, 5-letter, and 6-letter spines.
+        • On each floor, the <strong>floor letter</strong> (from the spine) must appear at least once in your word.<br />
+        • When you submit a word:
+        <br />&nbsp;&nbsp;– We take the <strong>first occurrence</strong> of the floor letter as the pivot.
+        <br />&nbsp;&nbsp;– Letters <strong>before</strong> the pivot count to the <strong>left</strong>.
+        <br />&nbsp;&nbsp;– Letters <strong>after</strong> the pivot count to the <strong>right</strong>.
+        <br />&nbsp;&nbsp;– One pivot letter is “free” (from the spine); all other letters must come from the tile bag.<br />
+        • Tiles can only be used once. If a word needs more of some letter than you have, it will be rejected.<br />
+        • You can only play <strong>one word per floor</strong>, moving from bottom floor to top floor.<br />
+        • You <strong>win</strong> only if:
+        <br />&nbsp;&nbsp;– <strong>All tiles</strong> have been used, and
+        <br />&nbsp;&nbsp;– Total letters on the <strong>left</strong> equal total letters on the <strong>right</strong>.<br />
+        • Using a <strong>Hint</strong> adds <strong>+3:00</strong> to your time.<br />
+        • Use <strong>Undo</strong> to revert the last word (restores tiles and re-opens that floor).<br />
+        • Use the <strong>Level</strong> selector to swap between 4-letter, 5-letter, and 6-letter spine words.
       </div>
     </div>
 
@@ -590,16 +616,16 @@
       function loop(){
         el.textContent = word.slice(0, i);
 
-        if(forward){
+        if (forward) {
           i++;
-          if(i > word.length){
+          if (i > word.length) {
             forward = false;
             setTimeout(loop, 900);
             return;
           }
         } else {
           i--;
-          if(i < 0){
+          if (i < 0) {
             forward = true;
             setTimeout(loop, 600);
             return;
@@ -638,45 +664,57 @@
       }
     ];
 
-    // Default level index: 0 → SING
     let currentConfigIndex = 0;
 
-    // Dynamic per-config variables
     let towerWord = "";
     let levelCount = 0;
     let levelLetters = [];
     let baseLetterBag = [];
 
-    // Game state
-    let towerLevels = [];
-    let currentLevel = 0;
-    let letterBank = [];
-    let currentSelection = [];
-    let foundWords = [];
+    let towerLevels = [];   // [{ word, pivotIndex, leftCount, rightCount }]
+    let currentLevel = 0;   // index from bottom
+    let letterBank = [];    // [{letter, used}]
+    let foundWords = [];    // [{ floorIndex, word, leftCount, rightCount }]
     let gameOver = false;
-    let moveHistory = [];
+    let moveHistory = [];   // undo stack
+    let totalLeft = 0;
+    let totalRight = 0;
 
-    // DOM
+    // Timer state
+    let startTime = null;
+    let timePenaltySeconds = 0;
+    let timerIntervalId = null;
+
     const towerEl = document.getElementById("tower");
     const floorNumberEl = document.getElementById("floor-number");
     const floorTotalEl = document.getElementById("floor-total");
     const floorLetterEl = document.getElementById("floor-letter");
+    const floorLetterCurrentEl = document.getElementById("floor-letter-current");
     const towerWordValueEl = document.getElementById("tower-word-value");
     const levelSelectEl = document.getElementById("level-select");
+
+    const wordInputEl = document.getElementById("word-input");
+    const candidateWordEl = document.getElementById("candidate-word");
+    const pivotInfoEl = document.getElementById("pivot-info");
+
     const messageEl = document.getElementById("message");
+    const hintMessageEl = document.getElementById("hint-message");
     const foundWordsEl = document.getElementById("found-words");
     const letterBankEl = document.getElementById("letter-bank");
 
-    const pattern3TilesEl = document.getElementById("pattern-3-tiles");
-    const pattern5TilesEl = document.getElementById("pattern-5-tiles");
-    const pattern3RowEl = document.getElementById("pattern-3-row");
-    const pattern5RowEl = document.getElementById("pattern-5-row");
-    const candidateWordEl = document.getElementById("candidate-word");
+    const leftTotalEl = document.getElementById("left-total");
+    const rightTotalEl = document.getElementById("right-total");
+    const balanceStatusEl = document.getElementById("balance-status");
+    const timeDisplayEl = document.getElementById("time-display");
 
     const submitBtn = document.getElementById("submit-word-btn");
-    const clearBtn = document.getElementById("clear-word-btn");
     const resetBtn = document.getElementById("reset-game-btn");
     const undoBtn = document.getElementById("undo-btn");
+    const hintBtn = document.getElementById("hint-btn");
+
+    function setHint(text) {
+      hintMessageEl.textContent = text || "";
+    }
 
     function initLevelSelect() {
       levelSelectEl.innerHTML = "";
@@ -694,6 +732,46 @@
       initGame(idx);
     });
 
+    function startTimer() {
+      if (timerIntervalId !== null) {
+        clearInterval(timerIntervalId);
+      }
+      startTime = Date.now();
+      timePenaltySeconds = 0;
+      updateTimer();
+      timerIntervalId = setInterval(updateTimer, 1000);
+    }
+
+    function stopTimer() {
+      if (timerIntervalId !== null) {
+        clearInterval(timerIntervalId);
+        timerIntervalId = null;
+      }
+      updateTimer(); // final update
+    }
+
+    function addTimePenalty(seconds) {
+      timePenaltySeconds += seconds;
+      updateTimer();
+    }
+
+    function updateTimer() {
+      if (!startTime) {
+        timeDisplayEl.textContent = "Time: 00:00";
+        return;
+      }
+      const now = Date.now();
+      const baseSeconds = Math.floor((now - startTime) / 1000);
+      const totalSeconds = baseSeconds + timePenaltySeconds;
+
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = totalSeconds % 60;
+
+      const mm = String(minutes).padStart(2, "0");
+      const ss = String(seconds).padStart(2, "0");
+      timeDisplayEl.textContent = "Time: " + mm + ":" + ss;
+    }
+
     function initGame(configIndex) {
       if (typeof configIndex === "number") {
         currentConfigIndex = configIndex;
@@ -707,34 +785,44 @@
 
       towerLevels = [];
       for (let i = 0; i < levelCount; i++) {
-        towerLevels.push({ word: null });
+        towerLevels.push({ word: null, pivotIndex: null, leftCount: 0, rightCount: 0 });
       }
 
       letterBank = baseLetterBag.map(ch => ({ letter: ch, used: false }));
 
       currentLevel = 0;
-      currentSelection = [];
       foundWords = [];
       gameOver = false;
       moveHistory = [];
+      totalLeft = 0;
+      totalRight = 0;
 
       towerWordValueEl.textContent = towerWord;
       floorTotalEl.textContent = levelCount.toString();
 
+      wordInputEl.value = "";
+      candidateWordEl.textContent = "";
+      pivotInfoEl.textContent = "";
+      setHint("");
+
       renderTower();
       renderLetterBank();
-      renderPatterns();
       renderFoundWords();
       updateFloorInfo();
-      setMessage("Start at the bottom floor. Click tiles to fill the patterns.");
+      updateBalanceUI();
+      setMessage("Start at the bottom floor. Enter any valid word containing the floor letter.");
       updateButtons();
+
+      startTimer();
     }
 
     function updateFloorInfo() {
       floorNumberEl.textContent = (currentLevel + 1).toString();
       floorLetterEl.textContent = levelLetters[currentLevel];
+      floorLetterCurrentEl.textContent = levelLetters[currentLevel];
     }
 
+    // Render tower and show letters from submitted words around the spine
     function renderTower() {
       towerEl.innerHTML = "";
 
@@ -742,12 +830,21 @@
       towerEl.style.gridTemplateColumns = `repeat(${cols}, minmax(22px, 1fr))`;
 
       for (let visualRow = 0; visualRow < levelCount; visualRow++) {
-        const levelIndex = levelCount - 1 - visualRow;
+        const levelIndex = levelCount - 1 - visualRow; // top visually
         const levelData = towerLevels[levelIndex];
         const floorLetter = levelLetters[levelIndex];
-        const word = levelData.word;
         const isCurrentFloor = (levelIndex === currentLevel);
-        const isCompleteFloor = (word !== null);
+        const isCompleteFloor = (levelData.word !== null);
+
+        let word = levelData.word;
+        let pivotIndex = levelData.pivotIndex;
+        let leftLetters = [];
+        let rightLetters = [];
+
+        if (word && typeof pivotIndex === "number") {
+          leftLetters = word.slice(0, pivotIndex).split("");
+          rightLetters = word.slice(pivotIndex + 1).split("");
+        }
 
         for (let c = 0; c < cols; c++) {
           const tile = document.createElement("div");
@@ -757,27 +854,28 @@
           if (isCurrentFloor) tile.classList.add("floor-current");
 
           let char = "";
+
           if (c === 2) {
             tile.classList.add("center");
             char = floorLetter;
+          } else if (word && typeof pivotIndex === "number") {
+            if (c === 1 && leftLetters.length >= 1) {
+              // closest left letter
+              char = leftLetters[leftLetters.length - 1];
+            } else if (c === 0 && leftLetters.length >= 2) {
+              // second closest left
+              char = leftLetters[leftLetters.length - 2];
+            } else if (c === 3 && rightLetters.length >= 1) {
+              // closest right
+              char = rightLetters[0];
+            } else if (c === 4 && rightLetters.length >= 2) {
+              // second closest right
+              char = rightLetters[1];
+            }
           }
 
-          if (word) {
-            if (word.length === 3) {
-              if (c === 1) char = word[0];
-              if (c === 2) char = floorLetter;
-              if (c === 3) char = word[2];
-            } else if (word.length === 5) {
-              if (c === 0) char = word[0];
-              if (c === 1) char = word[1];
-              if (c === 2) char = floorLetter;
-              if (c === 3) char = word[3];
-              if (c === 4) char = word[4];
-            }
-          } else {
-            if (c !== 2) {
-              tile.classList.add("empty");
-            }
+          if (!char && c !== 2) {
+            tile.classList.add("empty");
           }
 
           tile.textContent = char;
@@ -796,92 +894,27 @@
 
         if (tile.used) {
           div.classList.add("used");
-        } else if (currentSelection.includes(idx)) {
-          div.classList.add("selected");
-        }
-
-        if (!gameOver && !tile.used) {
-          div.addEventListener("click", () => onBankTileClick(idx));
+        } else if (!gameOver) {
+          div.addEventListener("click", () => {
+            wordInputEl.value += tile.letter;
+            updateCandidateDisplay();
+          });
         }
 
         letterBankEl.appendChild(div);
       });
     }
 
-    function buildSlots3() {
-      const floorLetter = levelLetters[currentLevel];
-      const letters = currentSelection.map(i => letterBank[i].letter);
-      const slots = ["_", floorLetter, "_"];
-      const nonL = [0, 2];
-
-      for (let i = 0; i < letters.length && i < 2; i++) {
-        slots[nonL[i]] = letters[i];
-      }
-      return slots;
-    }
-
-    function buildSlots5() {
-      const floorLetter = levelLetters[currentLevel];
-      const letters = currentSelection.map(i => letterBank[i].letter);
-      const slots = ["_", "_", floorLetter, "_", "_"];
-      const nonL = [0, 1, 3, 4];
-
-      for (let i = 0; i < letters.length && i < 4; i++) {
-        slots[nonL[i]] = letters[i];
-      }
-      return slots;
-    }
-
-    function getCurrentCandidateWord() {
-      const letters = currentSelection.map(i => letterBank[i].letter);
-      const floorLetter = levelLetters[currentLevel];
-
-      if (letters.length === 2) {
-        return (letters[0] + floorLetter + letters[1]).toUpperCase();
-      } else if (letters.length === 4) {
-        return (letters[0] + letters[1] + floorLetter + letters[2] + letters[3]).toUpperCase();
-      }
-      return null;
-    }
-
-    function renderPatterns() {
-      const slots3 = buildSlots3();
-      const slots5 = buildSlots5();
-
-      pattern3TilesEl.innerHTML = "";
-      pattern5TilesEl.innerHTML = "";
-
-      slots3.forEach((ch, idx) => {
-        const t = document.createElement("div");
-        t.className = "word-tile";
-        if (idx === 1) t.classList.add("center");
-        t.textContent = ch;
-        pattern3TilesEl.appendChild(t);
-      });
-
-      slots5.forEach((ch, idx) => {
-        const t = document.createElement("div");
-        t.className = "word-tile";
-        if (idx === 2) t.classList.add("center");
-        t.textContent = ch;
-        pattern5TilesEl.appendChild(t);
-      });
-
-      const len = currentSelection.length;
-      pattern3RowEl.classList.toggle("active", len === 2);
-      pattern5RowEl.classList.toggle("active", len === 4);
-
-      const candidate = getCurrentCandidateWord();
-      candidateWordEl.textContent = candidate || "";
-    }
-
     function renderFoundWords() {
       foundWordsEl.innerHTML = "";
       if (foundWords.length === 0) return;
 
-      foundWords.forEach(w => {
+      foundWords.forEach(entry => {
+        const floorLetter = levelLetters[entry.floorIndex];
         const li = document.createElement("li");
-        li.textContent = w;
+        li.textContent =
+          floorLetter + ":" + entry.word +
+          " (L" + entry.leftCount + " / R" + entry.rightCount + ")";
         foundWordsEl.appendChild(li);
       });
     }
@@ -892,34 +925,55 @@
 
     function updateButtons() {
       submitBtn.disabled = gameOver;
-      clearBtn.disabled = gameOver;
       resetBtn.disabled = false;
       undoBtn.disabled = (moveHistory.length === 0);
+      hintBtn.disabled = gameOver;
     }
 
-    function onBankTileClick(index) {
-      if (gameOver) return;
-      if (letterBank[index].used) return;
-      if (currentSelection.includes(index)) return;
-      if (currentSelection.length >= 4) {
-        setMessage("You already selected 4 tiles (max for this floor). Submit or clear.");
+    function updateBalanceUI() {
+      leftTotalEl.textContent = totalLeft.toString();
+      rightTotalEl.textContent = totalRight.toString();
+
+      if (totalLeft === 0 && totalRight === 0) {
+        balanceStatusEl.textContent = "";
         return;
       }
 
-      currentSelection.push(index);
-      renderLetterBank();
-      renderPatterns();
-
-      const letter = letterBank[index].letter;
-      setMessage('Tile "' + letter + '" added. Patterns updated.');
+      if (totalLeft === totalRight) {
+        balanceStatusEl.textContent = "Balanced so far ✔";
+      } else if (totalLeft > totalRight) {
+        balanceStatusEl.textContent = "Leaning LEFT by " + (totalLeft - totalRight);
+      } else {
+        balanceStatusEl.textContent = "Leaning RIGHT by " + (totalRight - totalLeft);
+      }
     }
 
-    function clearSelection() {
-      currentSelection = [];
-      renderLetterBank();
-      renderPatterns();
-      setMessage("Selection cleared. Patterns reset.");
+    function updateCandidateDisplay() {
+      let word = wordInputEl.value.toUpperCase().replace(/[^A-Z]/g, "");
+      wordInputEl.value = word;
+      candidateWordEl.textContent = word;
+
+      if (!word) {
+        pivotInfoEl.textContent = "";
+        return;
+      }
+
+      const floorLetter = levelLetters[currentLevel];
+      const idx = word.indexOf(floorLetter);
+      if (idx === -1) {
+        pivotInfoEl.textContent =
+          'The word must contain the floor letter "' + floorLetter + '".';
+        return;
+      }
+
+      const left = idx;
+      const right = word.length - idx - 1;
+      pivotInfoEl.textContent =
+        'First "' + floorLetter + '" at position ' + (idx + 1) +
+        " → left: " + left + ", right: " + right + ".";
     }
+
+    wordInputEl.addEventListener("input", updateCandidateDisplay);
 
     function areAllTilesUsed() {
       return letterBank.every(t => t.used);
@@ -928,91 +982,142 @@
     function submitWord() {
       if (gameOver) return;
 
-      if (towerLevels[currentLevel].word !== null) {
-        setMessage("This floor is already complete. Move on to the next floor.");
-        clearSelection();
+      const floorData = towerLevels[currentLevel];
+      if (floorData.word !== null) {
+        setMessage("This floor already has a word. Move to the next floor.");
         return;
       }
 
-      if (!(currentSelection.length === 2 || currentSelection.length === 4)) {
-        setMessage("You must have exactly 2 tiles (3-letter word) or 4 tiles (5-letter word) selected.");
+      let word = wordInputEl.value.toUpperCase().trim();
+      if (!word) {
+        setMessage("Enter a word first.");
         return;
       }
 
-      const candidate = getCurrentCandidateWord();
-      if (!candidate) {
-        setMessage("Unable to form a word. Try a different selection.");
+      if (!Array.isArray(VALID_WORDS) || !VALID_WORDS.includes(word)) {
+        setMessage('"' + word + '" is not a valid English word.');
         return;
       }
 
-      const length = candidate.length;
       const floorLetter = levelLetters[currentLevel];
-
-      if ((length === 3 && candidate[1] !== floorLetter) ||
-          (length === 5 && candidate[2] !== floorLetter)) {
-        setMessage('Middle letter must match the floor letter "' + floorLetter + '".');
+      const pivotIndex = word.indexOf(floorLetter);
+      if (pivotIndex === -1) {
+        setMessage('"' + word + '" must contain the floor letter "' + floorLetter + '".');
         return;
       }
 
-      if (!Array.isArray(VALID_WORDS) || !VALID_WORDS.includes(candidate)) {
-        setMessage('"' + candidate + '" is not a valid English word.');
+      const leftCount = pivotIndex;
+      const rightCount = word.length - pivotIndex - 1;
+
+      const tempUsed = new Array(letterBank.length).fill(false);
+      const usedIndices = [];
+      let ok = true;
+      let errorMsg = "";
+
+      for (let i = 0; i < word.length; i++) {
+        const ch = word[i];
+
+        if (i === pivotIndex && ch === floorLetter) {
+          continue; // free pivot
+        }
+
+        let found = false;
+        for (let j = 0; j < letterBank.length; j++) {
+          if (!letterBank[j].used && !tempUsed[j] && letterBank[j].letter === ch) {
+            tempUsed[j] = true;
+            usedIndices.push(j);
+            found = true;
+            break;
+          }
+        }
+        if (!found) {
+          ok = false;
+          errorMsg = 'Not enough "' + ch + '" tiles left to use "' + word + '".';
+          break;
+        }
+      }
+
+      if (!ok) {
+        setMessage(errorMsg);
         return;
       }
 
-      if (foundWords.includes(candidate)) {
-        setMessage('"' + candidate + '" is already used. Try another word.');
+      if (foundWords.some(entry => entry.word === word)) {
+        setMessage('"' + word + '" was already used on this tower. Try another word.');
         return;
       }
 
-      const usedIndices = currentSelection.slice();
       usedIndices.forEach(idx => {
         letterBank[idx].used = true;
       });
 
-      towerLevels[currentLevel].word = candidate;
-      foundWords.push(candidate);
+      towerLevels[currentLevel] = {
+        word,
+        pivotIndex,
+        leftCount,
+        rightCount
+      };
+
+      totalLeft += leftCount;
+      totalRight += rightCount;
+
+      foundWords.push({
+        floorIndex: currentLevel,
+        word,
+        leftCount,
+        rightCount
+      });
 
       moveHistory.push({
         floorIndex: currentLevel,
-        word: candidate,
+        word,
+        pivotIndex,
+        leftCount,
+        rightCount,
         tileIndices: usedIndices
       });
 
-      currentSelection = [];
+      wordInputEl.value = "";
+      candidateWordEl.textContent = "";
+      pivotInfoEl.textContent = "";
+      setHint("");
 
       renderTower();
       renderLetterBank();
-      renderPatterns();
       renderFoundWords();
+      updateBalanceUI();
 
-      let reachedTop = (currentLevel === levelCount - 1);
-      let allTiles = areAllTilesUsed();
-      let msg = 'Accepted "' + candidate + '".';
-
-      if (reachedTop || allTiles) {
-        gameOver = true;
-
-        if (reachedTop && allTiles) {
-          msg += " Brilliant! You reached the top and used all tiles.";
-        } else if (reachedTop) {
-          msg += " Great! You reached the top of the Word Tower.";
-        } else if (allTiles) {
-          msg += " Great! You used all letter tiles.";
+      const allTiles = areAllTilesUsed();
+      if (allTiles) {
+        stopTimer();
+        if (totalLeft === totalRight) {
+          setMessage(
+            'Balanced tower! All tiles used and left = right (' +
+            totalLeft + '). Words: ' +
+            foundWords.map(e => e.word).join(", ") + "."
+          );
+        } else {
+          setMessage(
+            'All tiles used but tower is unbalanced: left ' +
+            totalLeft + " vs right " + totalRight + "."
+          );
         }
-        msg += " Words used: " + foundWords.join(", ") + ".";
-        setMessage(msg);
+        gameOver = true;
         updateButtons();
         return;
       }
 
       if (currentLevel < levelCount - 1) {
         currentLevel++;
+        updateFloorInfo();
       }
-      updateFloorInfo();
-      renderTower();
-      renderPatterns();
 
-      setMessage(msg + " Now climb to the next floor!");
+      setMessage(
+        'Accepted "' + word +
+        '". Left + ' + leftCount +
+        ", right + " + rightCount +
+        ". Continue to the next floor."
+      );
       updateButtons();
     }
 
@@ -1023,7 +1128,7 @@
       }
 
       const lastMove = moveHistory.pop();
-      const { floorIndex, word, tileIndices } = lastMove;
+      const { floorIndex, word, leftCount, rightCount, tileIndices } = lastMove;
 
       tileIndices.forEach(idx => {
         if (letterBank[idx]) {
@@ -1031,31 +1136,70 @@
         }
       });
 
-      towerLevels[floorIndex].word = null;
+      towerLevels[floorIndex] = {
+        word: null,
+        pivotIndex: null,
+        leftCount: 0,
+        rightCount: 0
+      };
 
-      const pos = foundWords.lastIndexOf(word);
+      const pos = foundWords.findIndex(
+        e => e.floorIndex === floorIndex && e.word === word
+      );
       if (pos !== -1) {
         foundWords.splice(pos, 1);
       }
 
-      gameOver = false;
+      totalLeft -= leftCount;
+      totalRight -= rightCount;
+
       currentLevel = floorIndex;
-      currentSelection = [];
+      gameOver = false;
+
+      wordInputEl.value = "";
+      candidateWordEl.textContent = "";
+      pivotInfoEl.textContent = "";
+      setHint("");
 
       renderTower();
       renderLetterBank();
-      renderPatterns();
       renderFoundWords();
       updateFloorInfo();
+      updateBalanceUI();
       updateButtons();
 
       setMessage('Undid "' + word + '". Floor reopened and tiles restored.');
     }
 
+    function showHint() {
+      const cfg = LEVEL_CONFIGS[currentConfigIndex];
+      const floorLetter = levelLetters[currentLevel];
+
+      // Time penalty for hint
+      addTimePenalty(180);
+
+      if (cfg.id === "SING") {
+        // Bottom: G (level index 0), then N, I, S
+        if (currentLevel === 0 && floorLetter === "G") {
+          setHint("Hint: I am fragile, oval, and breakable. Inside me life begins.");
+        } else if (currentLevel === 1 && floorLetter === "N") {
+          setHint("Hint: This N word ends with a double N.");
+        } else if (currentLevel === 2 && floorLetter === "I") {
+          setHint("Hint: This I word can also be a polite title for a man.");
+        } else if (currentLevel === 3 && floorLetter === "S") {
+          setHint("Hint: This S word is what’s left after something burns in a fireplace.");
+        } else {
+          setHint("No extra hint for this floor. Trust your vocabulary!");
+        }
+      } else {
+        setHint("Hint: Try any word that contains the floor letter and fits your remaining tiles.");
+      }
+    }
+
     submitBtn.addEventListener("click", submitWord);
-    clearBtn.addEventListener("click", clearSelection);
     resetBtn.addEventListener("click", () => initGame(currentConfigIndex));
     undoBtn.addEventListener("click", undoLastMove);
+    hintBtn.addEventListener("click", showHint);
 
     // Start
     initLevelSelect();
