@@ -453,6 +453,7 @@
     .modal button {
       width: 100%;
       min-width: 0;
+      margin-top: 4px;
     }
 
     /* MOBILE */
@@ -510,6 +511,9 @@
         <div class="small-tag">
           Rule: <span>Adjacent mix only</span>
         </div>
+        <div class="small-tag" id="timer-tag">
+          Time: <span id="timer-value">00:00</span>
+        </div>
       </div>
     </div>
 
@@ -521,6 +525,7 @@
         <option value="1">Level 1 – White in top-right</option>
         <option value="2">Level 2 – White at row 3, col 2</option>
         <option value="3">Level 3 – White at row 3, col 1</option>
+        <option value="4">Level 4 – White at row 4, col 1</option>
       </select>
     </div>
 
@@ -552,6 +557,7 @@
       <div class="button-row">
         <button id="undo-btn" disabled>Undo last move</button>
         <button id="reset-btn">Reset puzzle</button>
+        <button id="hint-btn">Hint (-2 min)</button>
       </div>
       <div id="message" class="msg-info">
         Click a non-empty tile, then an adjacent tile to combine them.
@@ -586,8 +592,10 @@
   <!-- MODAL -->
   <div class="modal-overlay" id="modal-overlay">
     <div class="modal">
-      <h2>Level Complete!</h2>
-      <p>You matched this level's target pattern. Want to play it again?</p>
+      <h2 id="modal-title">Level Complete!</h2>
+      <p id="modal-body">You matched this level's target pattern.</p>
+      <p id="modal-time"></p>
+      <button id="next-level-button">Next level</button>
       <button id="play-again-button">Restart puzzle</button>
     </div>
   </div>
@@ -705,24 +713,54 @@
         ]),
         short: "White at row 3, col 1 · others empty",
         objective: "Level 3 – Create a White tile in the first column, third row; all other tiles must be empty."
+      },
+      4: {
+        start: makeGrid([
+          "BBRR",
+          "BGRG",
+          "GRRB",
+          "RRGB"
+        ]),
+        target: makeGrid([
+          "....",
+          "....",
+          "....",
+          "W..."
+        ]),
+        short: "White at row 4, col 1 · others empty",
+        objective: "Level 4 – Create a White tile in the first column, fourth row; all other tiles must be empty. (Hint button reveals a strategy using 4 Whites.)"
       }
     };
+
+    const MAX_LEVEL_INDEX = Math.max(...Object.keys(LEVELS).map(Number));
 
     let currentLevel = 0;
     let board = [];
     let selected = null;
     let historyStack = [];
 
+    // Timer & hint state
+    let startTime = null;
+    let timerInterval = null;
+    let penaltySeconds = 0;
+    let hintClickCount = 0;
+
     const boardEl         = document.getElementById("board");
     const previewBoardEl  = document.getElementById("preview-board");
     const messageEl       = document.getElementById("message");
     const undoBtn         = document.getElementById("undo-btn");
     const resetBtn        = document.getElementById("reset-btn");
+    const hintBtn         = document.getElementById("hint-btn");
     const modalOverlay    = document.getElementById("modal-overlay");
     const playAgainBtn    = document.getElementById("play-again-button");
+    const nextLevelBtn    = document.getElementById("next-level-button");
     const levelSelectEl   = document.getElementById("level-select");
     const goalShortEl     = document.getElementById("goal-short");
     const objectiveTextEl = document.getElementById("objective-text");
+    const modalTitleEl    = document.getElementById("modal-title");
+    const modalBodyEl     = document.getElementById("modal-body");
+    const modalTimeEl     = document.getElementById("modal-time");
+    const timerValueEl    = document.getElementById("timer-value");
 
     function deepCopyBoard(src) {
       return src.map(row => row.slice());
@@ -869,6 +907,48 @@
       return dr + dc === 1;
     }
 
+    /* -------- Timer helpers -------- */
+    function getElapsedSeconds() {
+      if (!startTime) {
+        return penaltySeconds;
+      }
+      return penaltySeconds + Math.floor((Date.now() - startTime) / 1000);
+    }
+
+    function formatTime(totalSeconds) {
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = totalSeconds % 60;
+      return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+    }
+
+    function updateTimer() {
+      if (!timerValueEl) return;
+      const elapsedSeconds = getElapsedSeconds();
+      timerValueEl.textContent = formatTime(elapsedSeconds);
+    }
+
+    function ensureTimerStarted() {
+      if (!timerInterval && !startTime) {
+        startTime = Date.now();
+        updateTimer();
+        timerInterval = setInterval(updateTimer, 1000);
+      }
+    }
+
+    function stopTimer() {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+    }
+
+    function resetTimerDisplay() {
+      stopTimer();
+      startTime = null;
+      penaltySeconds = 0;
+      updateTimer();
+    }
+
     function onTileClick(row, col, tileEl) {
       const code = board[row][col];
 
@@ -912,6 +992,9 @@
         return;
       }
 
+      // Start timer on first successful move
+      ensureTimerStarted();
+
       // Save state for undo BEFORE mutating
       historyStack.push(deepCopyBoard(board));
       updateUndoButton();
@@ -949,6 +1032,14 @@
         }
       }
       // If we reach here, pattern matched
+      stopTimer();
+
+      const elapsedSeconds = getElapsedSeconds();
+
+      modalTitleEl.textContent = `Level ${currentLevel} complete!`;
+      modalBodyEl.textContent = "You matched this level's target pattern. Great job!";
+      modalTimeEl.textContent = `Time used: ${formatTime(elapsedSeconds)}`;
+
       modalOverlay.style.display = "flex";
     }
 
@@ -970,8 +1061,34 @@
       initBoardForLevel();
       renderBoard();
       renderPreview();
+      hintClickCount = 0;
+      resetTimerDisplay(); // timer only starts on first move
+      hintBtn.disabled = currentLevel !== 4;
       setMessage("Puzzle reset. Click a non-empty tile, then an adjacent tile to combine them.", "info");
     }
+
+    /* -------- Hint logic (Level 4 only) -------- */
+    hintBtn.addEventListener("click", () => {
+      if (currentLevel !== 4) return;
+
+      // Each hint click adds 2 minutes penalty
+      penaltySeconds += 120;
+      updateTimer();
+
+      hintClickCount++;
+      if (hintClickCount === 1) {
+        setMessage("Hint: you need to create 4 White tiles.", "info");
+      } else {
+        setMessage(
+          "Hint: the 4 Whites should be at:\n" +
+          "1) first column, last row\n" +
+          "2) second column, last row\n" +
+          "3) second column, third row\n" +
+          "4) third column, third row",
+          "info"
+        );
+      }
+    });
 
     // Event listeners
     resetBtn.addEventListener("click", resetPuzzle);
@@ -979,6 +1096,19 @@
 
     playAgainBtn.addEventListener("click", () => {
       modalOverlay.style.display = "none";
+      resetPuzzle();
+    });
+
+    nextLevelBtn.addEventListener("click", () => {
+      modalOverlay.style.display = "none";
+      if (currentLevel < MAX_LEVEL_INDEX) {
+        currentLevel += 1;
+      } else {
+        // If already at last level, loop back to level 0
+        currentLevel = 0;
+      }
+      levelSelectEl.value = String(currentLevel);
+      applyLevelTexts();
       resetPuzzle();
     });
 
@@ -1000,6 +1130,8 @@
     initBoardForLevel();
     renderBoard();
     renderPreview();
+    hintBtn.disabled = currentLevel !== 4;
+    resetTimerDisplay();
     setMessage("Click a non-empty tile, then an adjacent tile to combine them.", "info");
   </script>
 </body>
