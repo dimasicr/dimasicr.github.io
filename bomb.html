@@ -193,7 +193,7 @@
       color: var(--safe-soft);
     }
 
-    /* NEW: suspect (yellow) tiles from bomb-hit guesses */
+    /* suspect (yellow) tiles from bomb-hit guesses */
     .tile.suspect {
       background: #5a4c20;
       border-color: var(--bomb-soft);
@@ -399,7 +399,7 @@
     <span class="brand-txt" id="brand-txt"></span>
   </div>
 
-  <h1>Bomb Hunt</h1>
+  <h1>Three Bombs Hunt</h1>
   <div id="subtitle">Deduce the hidden bomb word from safe guesses</div>
   <div id="date-tag">1st December 2025</div>
 
@@ -420,19 +420,19 @@
     <div id="board"></div>
 
     <div id="panel">
-      <div class="section-title">1. Probe with 4-letter words</div>
+      <div class="section-title">1. Probe with 3–6 letter words</div>
       <div class="input-row">
         <input
           type="text"
           id="probe-input"
-          maxlength="4"
-          placeholder="Enter 4-letter word"
+          maxlength="6"
+          placeholder="Enter 3–6 letter word"
           autocomplete="off"
         />
         <button id="probe-btn">Submit word</button>
       </div>
 
-      <div class="section-title">2. Guess the bomb word</div>
+      <div class="section-title">2. Guess the bomb word (3 letters long) </div>
       <div class="input-row">
         <input
           type="text"
@@ -453,12 +453,12 @@
       <div id="hint">
         Rules:<br />
         • The letter tiles above show the <strong>pool of letters</strong> for this level.<br />
-        • Some of these letters form a <strong>bomb word</strong>. Hitting any bomb letter costs a life.<br />
-        • Step 1: Enter a <strong>4-letter English word</strong> using only the given letters.<br />
+        • Some of these letters form a hidden <strong>3-letter bomb word</strong>. Hitting any bomb letter costs a life.<br />
+        • Step 1: Enter a <strong>3–6 letter English word</strong> using only the given letters.<br />
         • If the word contains <strong>no bomb letters</strong>, it is marked <strong style="color:var(--safe-soft);">green</strong> and all its letters are safe (tiles turn green).<br />
         • If the word contains <strong>at least one bomb letter</strong>, it is marked <strong style="color:var(--bomb-soft);">yellow</strong>, and all its letters become suspicious (tiles turn yellow).<br />
         • Safe letters override suspicion: once a letter is in a safe word, it stays green.<br />
-        • When you’re confident, type the <strong>bomb word</strong> and submit. Correct → you win; wrong → you lose a life.
+        • When you’re confident, type the <strong>bomb word</strong> (3 letters) and submit. Correct → you win; wrong → you lose a life.
       </div>
     </div>
 
@@ -525,14 +525,21 @@
     }
 
     // LEVEL CONFIG
-    const levels = [
-      {
-        name: "Level 1 – BAT",
-        letters: ["B","K","L","C","A","G","T","O","I","N"],
-        bombWord: "BAT",
-        lives: 5
-      }
-    ];
+const levels = [
+  {
+    name: "Level 1 – Classic",
+    letters: ["B","K","L","C","A","G","T","O","I","N"],
+    bombWord: "GOT",   // hidden bomb word (3 letters)
+    lives: 7
+  },
+  {
+    name: "Level 2 – Frontline",
+    // SFNOL W E URA → S F N O L W E U R A
+    letters: ["S","F","N","O","L","W","E","U","R","A"],
+    bombWord: "WAR",   // hidden bomb word (3 letters)
+    lives: 7
+  }
+];
 
     // GAME STATE
     let currentLevelIndex = 0;
@@ -691,12 +698,12 @@
 
       let raw = probeInputEl.value.trim().toUpperCase();
       if (!raw) {
-        setMessage("Enter a 4-letter word first.", true);
+        setMessage("Enter a 3–6 letter word first.", true);
         return;
       }
 
-      if (raw.length !== 4) {
-        setMessage("Your probe word must be exactly 4 letters long.", true);
+      if (raw.length < 3 || raw.length > 6) {
+        setMessage("Your probe word must be 3–6 letters long.", true);
         return;
       }
 
@@ -767,6 +774,11 @@
         return;
       }
 
+      if (raw.length !== 3) {
+        setMessage("The bomb word is exactly 3 letters long.", true);
+        return;
+      }
+
       // Optional: restrict to letters in pool
       const lettersSet = new Set(letters);
       for (const ch of raw) {
@@ -779,7 +791,7 @@
       if (raw === bombWord) {
         gameOver = true;
         isWin = true;
-        setMessage(`Correct! The bomb word is "${bombWord}". You win!`);
+        setMessage(`Correct! You found the bomb word. You win!`);
         updateButtons();
         renderBoard();
       } else {
