@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Crossing – Puzzle Game</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #111827;
+      color: #e5e7eb;
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    #game-container {
+      max-width: 900px;
+      width: 100%;
+      background: #020617;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      border: 1px solid #1f2937;
+    }
+
+    h1 {
+      margin-top: 0;
+      text-align: center;
+      color: #f9fafb;
+      font-size: 1.6rem;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    #level-select {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #020617;
+      border: 1px solid #374151;
+      color: #e5e7eb;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #9ca3af;
+      margin-bottom: 16px;
+    }
+
+    .layout {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    #board-wrapper {
+      display: grid;
+      gap: 4px;
+    }
+
+    .cell {
+      width: 64px;
+      height: 64px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      position: relative;
+      box-sizing: border-box;
+    }
+
+    .grid-cell {
+      border: 1px solid #374151;
+      background: radial-gradient(circle at 30% 30%, #1f2937, #020617);
+    }
+
+    .start-cell {
+      border: 1px dashed #4b5563;
+      background: #020617;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, transform 0.1s;
+    }
+
+    .start-cell:hover {
+      border-color: #e5e7eb;
+      background: #030712;
+      transform: translateY(-1px);
+    }
+
+    .start-cell.empty::after {
+      content: "+";
+      font-size: 1.6rem;
+      color: #4b5563;
+    }
+
+    .corner-cell {
+      border: none;
+      background: transparent;
+      pointer-events: none;
+    }
+
+    .cell-label {
+      position: absolute;
+      font-size: 0.7rem;
+      color: #6b7280;
+    }
+
+    .bottom-label {
+      top: 4px;
+      left: 6px;
+    }
+
+    .right-label {
+      top: 4px;
+      left: 6px;
+    }
+
+    .grid-label {
+      bottom: 4px;
+      right: 6px;
+    }
+
+    .collision {
+      background: radial-gradient(circle at 30% 30%, #b91c1c, #450a0a) !important;
+      border-color: #fecaca !important;
+      animation: shake 0.2s linear 2;
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-2px); }
+      50% { transform: translateX(2px); }
+      75% { transform: translateX(-2px); }
+      100% { transform: translateX(0); }
+    }
+
+    .unit {
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      box-shadow: 0 0 0 2px #020617, 0 8px 14px rgba(0, 0, 0, 0.7);
+    }
+
+    .unit.human {
+      background: linear-gradient(135deg, #22c55e, #15803d);
+    }
+
+    .unit.horse {
+      background: linear-gradient(135deg, #eab308, #92400e);
+    }
+
+    .unit.car {
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    }
+
+    #controls {
+      flex: 1 1 240px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .unit-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .unit-btn {
+      flex: 1 1 80px;
+      border-radius: 999px;
+      padding: 6px 10px;
+      border: 1px solid #374151;
+      background: #020617;
+      color: #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, transform 0.05s, box-shadow 0.1s;
+    }
+
+    .unit-btn span.emoji {
+      font-size: 1.1rem;
+    }
+
+    .unit-btn.selected {
+      border-color: #f97316;
+      box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.8);
+      background: radial-gradient(circle at 20% 0%, #111827, #020617);
+    }
+
+    .unit-btn.disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .action-btn {
+      flex: 1 1 90px;
+      border-radius: 999px;
+      padding: 8px 14px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: background 0.15s, transform 0.05s, box-shadow 0.1s, opacity 0.15s;
+    }
+
+    .action-btn.primary {
+      background: linear-gradient(135deg, #22c55e, #15803d);
+      color: #022c22;
+      box-shadow: 0 10px 18px rgba(34, 197, 94, 0.3);
+    }
+
+    .action-btn.primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .action-btn.secondary {
+      background: #111827;
+      color: #e5e7eb;
+      border: 1px solid #374151;
+    }
+
+    .action-btn:hover:not(:disabled) {
+      transform: translateY(-1px);
+    }
+
+    .action-btn:active:not(:disabled) {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+
+    .legend {
+      font-size: 0.82rem;
+      color: #9ca3af;
+      line-height: 1.4;
+      border-radius: 10px;
+      padding: 8px 10px;
+      background: #020617;
+      border: 1px solid #1f2937;
+    }
+
+    .legend strong {
+      color: #e5e7eb;
+    }
+
+    .message {
+      min-height: 24px;
+      font-size: 0.9rem;
+      margin-top: 4px;
+    }
+
+    .message.error {
+      color: #fecaca;
+    }
+
+    .message.success {
+      color: #bbf7d0;
+    }
+
+    .message.info {
+      color: #93c5fd;
+    }
+
+    .remaining {
+      font-size: 0.82rem;
+      color: #9ca3af;
+    }
+
+    .remaining span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-right: 8px;
+    }
+
+    .remaining .dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+    }
+
+    .dot.human {
+      background: #22c55e;
+    }
+
+    .dot.horse {
+      background: #eab308;
+    }
+
+    .dot.car {
+      background: #3b82f6;
+    }
+  </style>
+</head>
+<body>
+  <div id="game-container">
+    <h1 id="game-title">Crossing – Level 1</h1>
+
+    <div class="top-bar">
+      <label for="level-select">Level:</label>
+      <select id="level-select">
+        <option value="1">Level 1 – 3×3 (Intro)</option>
+        <option value="4">Level 4 – 4×4 (Moderate)</option>
+      </select>
+    </div>
+
+    <div id="subtitle" class="subtitle"></div>
+
+    <div class="layout">
+      <div id="board-wrapper"></div>
+
+      <div id="controls">
+        <div class="unit-buttons">
+          <button class="unit-btn" data-type="human">
+            <span class="emoji">👤</span>
+            <span>Human<br><small>1 tile / s</small></span>
+          </button>
+          <button class="unit-btn" data-type="horse">
+            <span class="emoji">🐴</span>
+            <span>Horse<br><small>2 tiles / s</small></span>
+          </button>
+          <button class="unit-btn" data-type="car">
+            <span class="emoji">🚗</span>
+            <span>Car<br><small>3 tiles / s</small></span>
+          </button>
+        </div>
+
+        <div class="remaining" id="remaining"></div>
+
+        <div class="action-buttons">
+          <button id="start-btn" class="action-btn primary" disabled>Start</button>
+          <button id="undo-btn" class="action-btn secondary">Undo</button>
+          <button id="reset-btn" class="action-btn secondary">Reset</button>
+        </div>
+
+        <div class="legend">
+          <strong>How they move</strong><br />
+          • Bottom units move <strong>upwards</strong> from below the grid to the top and exit.<br />
+          • Right units move <strong>leftwards</strong> from the right of the grid to the left and exit.<br />
+          • At each second, Humans move 1 tile, Horses 2 tiles, Cars 3 tiles.<br />
+          • A <strong>collision</strong> happens if two units occupy the same grid tile at the same time.
+        </div>
+
+        <div id="message" class="message info">
+          1) Select a unit type. 2) Click bottom / right slots to place all units. 3) Press “Start”.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const UNIT_TYPES = {
+      human: { speed: 1, emoji: "👤", label: "Human" },
+      horse: { speed: 2, emoji: "🐴", label: "Horse" },
+      car:   { speed: 3, emoji: "🚗", label: "Car" }
+    };
+
+    const LEVELS = {
+      1: {
+        id: 1,
+        name: "Level 1",
+        gridSize: 3,
+        counts: { human: 2, horse: 2, car: 2 }
+      },
+      4: {
+        id: 4,
+        name: "Level 4",
+        gridSize: 4,
+        counts: { human: 3, horse: 2, car: 3 } // 8 units
+      }
+    };
+
+    let currentLevelId = 1;
+    let gridSize = LEVELS[1].gridSize;
+    let initialCounts = { ...LEVELS[1].counts };
+
+    let remainingCounts = { ...initialCounts };
+    let bottomPlacements = new Array(gridSize).fill(null);
+    let rightPlacements  = new Array(gridSize).fill(null);
+    let selectedType = null;
+
+    let units = [];
+    let simulationInterval = null;
+    let simulationRunning = false;
+    let collisionCells = new Set();
+
+    // history for undo
+    let placementHistory = []; // each: {side, index, prevType, nextType}
+
+    const boardWrapper = document.getElementById("board-wrapper");
+    const messageEl = document.getElementById("message");
+    const remainingEl = document.getElementById("remaining");
+    const startBtn = document.getElementById("start-btn");
+    const resetBtn = document.getElementById("reset-btn");
+    const undoBtn = document.getElementById("undo-btn");
+    const unitButtons = Array.from(document.querySelectorAll(".unit-btn"));
+    const levelSelect = document.getElementById("level-select");
+    const subtitleEl = document.getElementById("subtitle");
+    const gameTitleEl = document.getElementById("game-title");
+
+    function setMessage(text, type = "info") {
+      messageEl.textContent = text;
+      messageEl.className = "message " + type;
+    }
+
+    function updateSubtitle() {
+      const c = initialCounts;
+      subtitleEl.innerHTML =
+        `Place <strong>${c.human} Humans</strong>, <strong>${c.horse} Horses</strong>, and <strong>${c.car} Cars</strong> ` +
+        `on the bottom and right edges of a <strong>${gridSize}×${gridSize}</strong> grid. ` +
+        `Make sure they cross safely with <strong>no collisions</strong>.`;
+    }
+
+    function updateRemainingDisplay() {
+      remainingEl.innerHTML = `
+        Remaining:
+        <span><span class="dot human"></span>Human: ${remainingCounts.human}</span>
+        <span><span class="dot horse"></span>Horse: ${remainingCounts.horse}</span>
+        <span><span class="dot car"></span>Car: ${remainingCounts.car}</span>
+      `;
+    }
+
+    function updateUnitButtons() {
+      unitButtons.forEach(btn => {
+        const type = btn.dataset.type;
+        btn.classList.toggle("selected", type === selectedType);
+        if (remainingCounts[type] <= 0) {
+          btn.classList.add("disabled");
+        } else {
+          btn.classList.remove("disabled");
+        }
+      });
+    }
+
+    function allSlotsFilled() {
+      return bottomPlacements.every(t => t !== null) &&
+             rightPlacements.every(t => t !== null);
+    }
+
+    function updateStartButtonState() {
+      startBtn.disabled = !allSlotsFilled() || simulationRunning;
+    }
+
+    function createBoard() {
+      boardWrapper.style.gridTemplateColumns = `repeat(${gridSize + 1}, 64px)`;
+      boardWrapper.style.gridTemplateRows    = `repeat(${gridSize + 1}, 64px)`;
+
+      for (let r = 0; r < gridSize + 1; r++) {
+        for (let c = 0; c < gridSize + 1; c++) {
+          const cell = document.createElement("div");
+          cell.classList.add("cell");
+
+          if (r < gridSize && c < gridSize) {
+            cell.classList.add("grid-cell");
+            cell.dataset.kind = "grid";
+            cell.dataset.row = r;
+            cell.dataset.col = c;
+
+            const label = document.createElement("div");
+            label.classList.add("cell-label", "grid-label");
+            label.textContent = String.fromCharCode(65 + r) + (c + 1);
+            cell.appendChild(label);
+          } else if (r === gridSize && c < gridSize) {
+            cell.classList.add("start-cell", "bottom-start", "empty");
+            cell.dataset.kind = "bottom";
+            cell.dataset.index = c;
+
+            const label = document.createElement("div");
+            label.classList.add("cell-label", "bottom-label");
+            label.textContent = "Bottom " + (c + 1);
+            cell.appendChild(label);
+
+            cell.addEventListener("click", () => handleStartCellClick("bottom", c));
+          } else if (c === gridSize && r < gridSize) {
+            cell.classList.add("start-cell", "right-start", "empty");
+            cell.dataset.kind = "right";
+            cell.dataset.index = r;
+
+            const label = document.createElement("div");
+            label.classList.add("cell-label", "right-label");
+            label.textContent = "Right " + (r + 1);
+            cell.appendChild(label);
+
+            cell.addEventListener("click", () => handleStartCellClick("right", r));
+          } else {
+            cell.classList.add("corner-cell");
+          }
+
+          boardWrapper.appendChild(cell);
+        }
+      }
+    }
+
+    function clearUnitsFromCells() {
+      const cells = boardWrapper.querySelectorAll(".cell");
+      cells.forEach(cell => {
+        Array.from(cell.querySelectorAll(".unit")).forEach(u => u.remove());
+        cell.classList.remove("collision");
+      });
+    }
+
+    function createUnitElement(type) {
+      const unit = document.createElement("div");
+      unit.classList.add("unit", type);
+      unit.textContent = UNIT_TYPES[type].emoji;
+      return unit;
+    }
+
+    function renderPlacementView() {
+      clearUnitsFromCells();
+      collisionCells.clear();
+
+      const cells = boardWrapper.querySelectorAll(".cell");
+
+      cells.forEach(cell => {
+        const kind = cell.dataset.kind;
+        if (kind === "bottom") {
+          const index = parseInt(cell.dataset.index, 10);
+          const type = bottomPlacements[index];
+          cell.classList.toggle("empty", !type);
+          if (type) {
+            const unitEl = createUnitElement(type);
+            cell.appendChild(unitEl);
+          }
+        } else if (kind === "right") {
+          const index = parseInt(cell.dataset.index, 10);
+          const type = rightPlacements[index];
+          cell.classList.toggle("empty", !type);
+          if (type) {
+            const unitEl = createUnitElement(type);
+            cell.appendChild(unitEl);
+          }
+        } else if (kind === "grid") {
+          cell.classList.remove("collision");
+        }
+      });
+    }
+
+    function renderSimulation() {
+      clearUnitsFromCells();
+
+      const cells = boardWrapper.querySelectorAll(".cell");
+      const cellMap = {};
+
+      cells.forEach(cell => {
+        const kind = cell.dataset.kind;
+        if (kind === "grid") {
+          const r = cell.dataset.row;
+          const c = cell.dataset.col;
+          cellMap[`g:${r},${c}`] = cell;
+        } else if (kind === "bottom") {
+          const idx = cell.dataset.index;
+          cellMap[`b:${idx}`] = cell;
+        } else if (kind === "right") {
+          const idx = cell.dataset.index;
+          cellMap[`r:${idx}`] = cell;
+        }
+      });
+
+      units.forEach(u => {
+        if (u.finished) return;
+
+        let cellKey;
+        if (u.lane === "bottom") {
+          if (u.row >= gridSize) {
+            cellKey = `b:${u.index}`;
+          } else if (u.row >= 0) {
+            cellKey = `g:${u.row},${u.col}`;
+          } else {
+            return;
+          }
+        } else {
+          if (u.col >= gridSize) {
+            cellKey = `r:${u.index}`;
+          } else if (u.col >= 0) {
+            cellKey = `g:${u.row},${u.col}`;
+          } else {
+            return;
+          }
+        }
+
+        const cell = cellMap[cellKey];
+        if (!cell) return;
+        const unitEl = createUnitElement(u.type);
+        cell.appendChild(unitEl);
+      });
+
+      collisionCells.forEach(key => {
+        const cell = cellMap[key];
+        if (cell) cell.classList.add("collision");
+      });
+    }
+
+    function handleStartCellClick(side, index) {
+      if (simulationRunning) return;
+
+      if (!selectedType) {
+        setMessage("Select a unit type first, then click a starting slot.", "error");
+        return;
+      }
+
+      if (remainingCounts[selectedType] <= 0 &&
+          !((side === "bottom" ? bottomPlacements : rightPlacements)[index] === selectedType)) {
+        setMessage("No more " + UNIT_TYPES[selectedType].label + " available.", "error");
+        return;
+      }
+
+      const arr = side === "bottom" ? bottomPlacements : rightPlacements;
+      const prevType = arr[index];
+      let nextType;
+
+      if (prevType === selectedType) {
+        // remove
+        nextType = null;
+      } else {
+        // place/replace with selectedType
+        nextType = selectedType;
+      }
+
+      if (prevType === nextType) {
+        return;
+      }
+
+      // Adjust remaining counts for transition prevType -> nextType
+      if (prevType) remainingCounts[prevType]++;
+      if (nextType) remainingCounts[nextType]--;
+
+      arr[index] = nextType;
+
+      // Store history for undo
+      placementHistory.push({ side, index, prevType, nextType });
+
+      if (nextType === null) {
+        setMessage(
+          "Removed " + UNIT_TYPES[prevType].label + " from " +
+          (side === "bottom" ? "bottom" : "right") + " slot " + (index + 1) + ".",
+          "info"
+        );
+      } else {
+        setMessage(
+          "Placed " + UNIT_TYPES[nextType].label + " on " +
+          (side === "bottom" ? "bottom" : "right") + " slot " + (index + 1) + ".",
+          "info"
+        );
+      }
+
+      updateRemainingDisplay();
+      updateUnitButtons();
+      updateStartButtonState();
+      renderPlacementView();
+    }
+
+    function initUnitsFromPlacements() {
+      units = [];
+      let idCounter = 0;
+
+      for (let c = 0; c < gridSize; c++) {
+        const type = bottomPlacements[c];
+        if (!type) continue;
+        units.push({
+          id: idCounter++,
+          lane: "bottom",
+          index: c,
+          row: gridSize,
+          col: c,
+          type,
+          speed: UNIT_TYPES[type].speed,
+          finished: false
+        });
+      }
+
+      for (let r = 0; r < gridSize; r++) {
+        const type = rightPlacements[r];
+        if (!type) continue;
+        units.push({
+          id: idCounter++,
+          lane: "right",
+          index: r,
+          row: r,
+          col: gridSize,
+          type,
+          speed: UNIT_TYPES[type].speed,
+          finished: false
+        });
+      }
+    }
+
+    function stepSimulation() {
+      collisionCells.clear();
+
+      units.forEach(u => {
+        if (u.finished) return;
+
+        if (u.lane === "bottom") {
+          u.row -= u.speed;
+          if (u.row < 0) u.finished = true;
+        } else {
+          u.col -= u.speed;
+          if (u.col < 0) u.finished = true;
+        }
+      });
+
+      const occupancy = {};
+      units.forEach(u => {
+        if (u.finished) return;
+        if (u.row >= 0 && u.row < gridSize && u.col >= 0 && u.col < gridSize) {
+          const key = `g:${u.row},${u.col}`;
+          if (!occupancy[key]) occupancy[key] = [];
+          occupancy[key].push(u);
+        }
+      });
+
+      let collisionDetected = false;
+      Object.keys(occupancy).forEach(key => {
+        if (occupancy[key].length > 1) {
+          collisionDetected = true;
+          collisionCells.add(key);
+        }
+      });
+
+      renderSimulation();
+
+      if (collisionDetected) {
+        clearInterval(simulationInterval);
+        simulationInterval = null;
+        simulationRunning = false;
+        startBtn.disabled = true;
+        setMessage("Collision detected! Try adjusting your unit placement.", "error");
+        return;
+      }
+
+      const allFinished = units.every(u => u.finished);
+      if (allFinished) {
+        clearInterval(simulationInterval);
+        simulationInterval = null;
+        simulationRunning = false;
+        setMessage("Success! All units crossed safely with no collisions 🎉", "success");
+      }
+    }
+
+    function startSimulation() {
+      if (!allSlotsFilled()) {
+        setMessage("Place all units before starting the simulation.", "error");
+        return;
+      }
+      if (simulationRunning) return;
+
+      initUnitsFromPlacements();
+      simulationRunning = true;
+      startBtn.disabled = true;
+      setMessage("Simulation running... Watch their paths carefully!", "info");
+      renderSimulation();
+
+      simulationInterval = setInterval(stepSimulation, 700);
+    }
+
+    function resetPlacements() {
+      bottomPlacements = new Array(gridSize).fill(null);
+      rightPlacements  = new Array(gridSize).fill(null);
+      remainingCounts = { ...initialCounts };
+      selectedType = null;
+      collisionCells.clear();
+      units = [];
+      placementHistory = [];
+      if (simulationInterval) {
+        clearInterval(simulationInterval);
+        simulationInterval = null;
+      }
+      simulationRunning = false;
+
+      updateRemainingDisplay();
+      updateUnitButtons();
+      updateStartButtonState();
+      renderPlacementView();
+      setMessage(
+        "1) Select a unit type. 2) Click bottom / right slots to place all units. 3) Press “Start”.",
+        "info"
+      );
+    }
+
+    function undoPlacement() {
+      if (simulationRunning) return;
+
+      const op = placementHistory.pop();
+      if (!op) {
+        setMessage("Nothing to undo.", "info");
+        return;
+      }
+
+      const arr = op.side === "bottom" ? bottomPlacements : rightPlacements;
+      const currentType = arr[op.index]; // should equal op.nextType
+
+      if (currentType) remainingCounts[currentType]++;
+      if (op.prevType) remainingCounts[op.prevType]--;
+
+      arr[op.index] = op.prevType;
+
+      updateRemainingDisplay();
+      updateUnitButtons();
+      updateStartButtonState();
+      renderPlacementView();
+
+      setMessage(
+        "Undid last placement on " +
+        (op.side === "bottom" ? "bottom" : "right") +
+        " slot " + (op.index + 1) + ".",
+        "info"
+      );
+    }
+
+    function loadLevel(levelId) {
+      if (!LEVELS[levelId]) return;
+      currentLevelId = levelId;
+      const lvl = LEVELS[levelId];
+
+      gridSize = lvl.gridSize;
+      initialCounts = { ...lvl.counts };
+      remainingCounts = { ...initialCounts };
+      collisionCells = new Set();
+      placementHistory = [];
+
+      gameTitleEl.textContent = `Crossing – Level ${levelId}`;
+      updateSubtitle();
+
+      boardWrapper.innerHTML = "";
+      createBoard();
+
+      resetPlacements();
+      levelSelect.value = String(levelId);
+    }
+
+    unitButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const type = btn.dataset.type;
+        if (remainingCounts[type] <= 0 && selectedType !== type) {
+          setMessage("No more " + UNIT_TYPES[type].label + " available.", "error");
+          return;
+        }
+        selectedType = selectedType === type ? null : type;
+        updateUnitButtons();
+        if (selectedType) {
+          setMessage("Selected " + UNIT_TYPES[selectedType].label + ". Click bottom/right slots to place it.", "info");
+        } else {
+          setMessage("Selection cleared. Choose a unit type again.", "info");
+        }
+      });
+    });
+
+    startBtn.addEventListener("click", startSimulation);
+    resetBtn.addEventListener("click", resetPlacements);
+    undoBtn.addEventListener("click", undoPlacement);
+
+    levelSelect.addEventListener("change", () => {
+      const val = parseInt(levelSelect.value, 10);
+      loadLevel(val);
+    });
+
+    createBoard();
+    updateSubtitle();
+    resetPlacements();
+  </script>
+</body>
+</html>
