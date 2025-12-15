@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>WeaveTXT – Stack</title>
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    :root{
+      --muted:#a9a9a9;
+      --text:#f5f5f5;
+      --accent:#ffb347;
+      --accent2:#ffecb3;
+      --ok:#7dff9f;
+      --bad:#ff6b6b;
+    }
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      padding:16px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #2b3a4a 0, #111 55%);
+      color:var(--text);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      user-select:none;
+    }
+
+    /* Brand */
+    #brand{display:flex;align-items:baseline;gap:6px;margin-top:6px;margin-bottom:6px;}
+    .brand-weave{font-family:"Georgia",serif;font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:.03em;}
+    .brand-txt{
+      font-family:"Courier New",monospace;
+      font-size:clamp(18px,4.5vw,24px);
+      font-weight:800;
+      color:var(--accent);
+      border-right:2px solid var(--accent);
+      padding-right:4px;
+      animation: caret .9s step-end infinite;
+      min-width:3ch;
+    }
+    @keyframes caret{0%,100%{border-color:transparent;}50%{border-color:var(--accent);}}
+    h1{margin:2px 0 10px;font-size:clamp(18px,4.7vw,24px);text-align:center;font-weight:800;}
+
+    /* Keep compact */
+    #wrap{
+      width:min(760px, 100%);
+      background: rgba(255,255,255,0.04);
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius:14px;
+      box-shadow:0 0 18px rgba(0,0,0,0.55);
+      padding:14px;
+    }
+
+    /* Top row */
+    #top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:10px;
+    }
+    #levelTitle{
+      font-size:12px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:var(--muted);
+    }
+    #controls{
+      display:flex;gap:8px;align-items:center;flex-wrap:wrap;
+    }
+    button, select{
+      border-radius:999px;
+      padding:7px 12px;
+      font-size:13px;
+      font-weight:800;
+      white-space:nowrap;
+    }
+    button{
+      border:none;
+      cursor:pointer;
+      background:var(--accent);
+      color:#1c1c1c;
+      box-shadow:0 2px 6px rgba(0,0,0,0.35);
+      transition:transform .07s ease, background .12s ease;
+    }
+    button:hover{background:#ffab2c;transform:translateY(-1px);}
+    button:disabled{background:#555;color:#999;cursor:default;transform:none;}
+
+    select{
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(0,0,0,0.25);
+      color: var(--text);
+      box-shadow:none;
+      padding-right: 34px;
+      cursor:pointer;
+      font-weight:800;
+    }
+
+    /* Help button */
+    #helpBtn{
+      background: transparent;
+      color: var(--accent);
+      border: 1px solid rgba(255,179,71,0.4);
+      box-shadow: none;
+    }
+    #helpBtn:hover{ background: rgba(255,179,71,0.10); transform: translateY(-1px); }
+
+    /* Goals bar */
+    #goals{
+      display:grid;
+      gap:10px;
+      margin-bottom:12px;
+    }
+    .goal{
+      background: rgba(0,0,0,0.18);
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius:12px;
+      padding:10px 10px 9px;
+      text-align:center;
+    }
+    .goal .gTop{
+      display:flex;align-items:center;justify-content:center;gap:8px;
+      color:var(--muted);
+      font-size:11px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      margin-bottom:4px;
+    }
+    .badge{
+      display:inline-flex;align-items:center;justify-content:center;
+      width:18px;height:18px;border-radius:999px;
+      background: rgba(255,179,71,0.16);
+      border:1px solid rgba(255,179,71,0.35);
+      color:var(--accent2);
+      font-weight:900;
+      font-size:11px;
+    }
+    .gNums{
+      display:flex;align-items:baseline;justify-content:center;gap:8px;
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      letter-spacing:.08em;
+    }
+    .gNums .cur{font-size:18px;font-weight:900;}
+    .gNums .slash{color:#777;}
+    .gNums .tar{font-size:14px;color:var(--accent2);font-weight:900;}
+    .gState{margin-top:4px;font-size:12px;color:var(--muted);}
+    .gState.ok{color:var(--ok);}
+    .gState.bad{color:var(--bad);}
+
+    /* Board */
+    #board{
+      display:grid;
+      gap:12px;
+      touch-action:none;
+    }
+
+    .col{
+      background: rgba(0,0,0,0.16);
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius:14px;
+      padding:10px;
+      display:grid;
+      gap:10px;
+      min-height: 290px;
+      position:relative;
+      overflow:hidden;
+    }
+    .col::after{
+      content:"";
+      position:absolute; inset:0;
+      background: radial-gradient(circle at top, rgba(255,255,255,0.05), transparent 55%);
+      pointer-events:none;
+    }
+    .colLabel{
+      position:absolute;
+      top:8px; left:10px;
+      font-size:10px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:#7a7a7a;
+      pointer-events:none;
+      z-index:1;
+    }
+    .cell{
+      border-radius:14px;
+      background: rgba(255,255,255,0.03);
+      border:1px dashed rgba(255,255,255,0.14);
+      display:flex;align-items:center;justify-content:center;
+      position:relative;
+      overflow:hidden;
+      z-index:1;
+      transition: border-color .1s ease, box-shadow .1s ease;
+      aspect-ratio: 1 / 1;
+      max-width: 110px;
+      margin: 0 auto;
+    }
+    .cell.preview-ok{
+      border-color: rgba(125,255,159,0.65);
+      box-shadow: 0 0 0 2px rgba(125,255,159,0.14) inset;
+    }
+    .cell.preview-bad{
+      border-color: rgba(255,107,107,0.65);
+      box-shadow: 0 0 0 2px rgba(255,107,107,0.12) inset;
+    }
+
+    /* Bank */
+    #bankWrap{
+      margin-top: 12px;
+      background: rgba(0,0,0,0.18);
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius:14px;
+      padding:10px;
+      position:relative;
+    }
+    #bankWrap.drop-ok{
+      box-shadow: 0 0 0 2px rgba(125,255,159,0.18) inset;
+      border-color: rgba(125,255,159,0.35);
+    }
+    #bankWrap.drop-bad{
+      box-shadow: 0 0 0 2px rgba(255,107,107,0.14) inset;
+      border-color: rgba(255,107,107,0.30);
+    }
+
+    #bankTop{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      margin-bottom:10px;
+      flex-wrap:wrap;
+    }
+    #bankTop .left{
+      display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+      color:var(--muted);
+      font-size:12px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+    #bankCount{
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      color: var(--accent2);
+      font-weight:900;
+      letter-spacing:.12em;
+    }
+
+    #legend{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+    }
+    .legend-pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.22);
+      border: 1px solid rgba(255,255,255,0.10);
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      letter-spacing:.12em;
+      color: #eaeaea;
+    }
+    .legend-pill .m{ color: var(--accent2); font-weight: 900; letter-spacing:.12em; }
+    .legend-pill .mini{ display:inline-flex; align-items:center; gap:6px; color:#e8e8e8; opacity:.9; font-size: 11px; }
+
+    #bank{
+      display:grid;
+      gap:10px;
+      touch-action:none;
+    }
+    .slot{
+      aspect-ratio:1/1;
+      border-radius:14px;
+      background: rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.08);
+      overflow:hidden;
+    }
+    .slot.empty{opacity:.22;}
+
+    /* Boxes */
+    .box{
+      width:100%;
+      height:100%;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,0.10);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+      overflow:hidden;
+      cursor:default;
+      transform: translateZ(0);
+      touch-action:none;
+      box-shadow:
+        0 10px 18px rgba(0,0,0,0.35),
+        inset 0 1px 0 rgba(255,255,255,0.06);
+      transition: transform .08s ease, box-shadow .12s ease;
+    }
+    .box.movable{cursor:grab;}
+    .box.movable:active{cursor:grabbing;}
+    .box.movable:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 22px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+
+    .box .code{
+      font-size: clamp(20px, 4.0vw, 32px);
+      font-weight: 1000;
+      letter-spacing:.12em;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.45);
+      z-index:2;
+    }
+
+    /* Board-only stats */
+    .box .stats{
+      position:absolute;
+      bottom:8px; right:10px;
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      font-size:10px;
+      letter-spacing:.12em;
+      color: rgba(255,255,255,0.72);
+      z-index:2;
+    }
+    .box .stats span{
+      display:inline-block;
+      padding:2px 6px;
+      border-radius:999px;
+      background: rgba(0,0,0,0.25);
+      border:1px solid rgba(255,255,255,0.10);
+      margin-left:6px;
+    }
+    .box .stats .w::before{content:"⚖︎ "; opacity:.9;}
+    .box .stats .d::before{content:"🛡 "; opacity:.9;}
+
+    /* Materials */
+    .P{
+      color:#f7fbff;
+      background:
+        radial-gradient(circle at 30% 15%, rgba(255,255,255,0.35), transparent 45%),
+        radial-gradient(circle at 70% 80%, rgba(0,0,0,0.18), transparent 55%),
+        linear-gradient(135deg, rgba(130,220,255,0.40), rgba(40,110,140,0.20), rgba(10,18,22,0.92));
+    }
+    .P::before{
+      content:"";
+      position:absolute; inset:0;
+      background:
+        linear-gradient( to bottom right,
+          rgba(255,255,255,0.22) 0%,
+          rgba(255,255,255,0.10) 18%,
+          rgba(255,255,255,0.03) 40%,
+          rgba(255,255,255,0.00) 60% );
+      opacity:.9;
+      z-index:1;
+    }
+    .P::after{
+      content:"";
+      position:absolute; inset:-20% -30%;
+      background:
+        repeating-linear-gradient(45deg,
+          rgba(255,255,255,0.08) 0 5px,
+          rgba(255,255,255,0.00) 5px 13px);
+      transform: rotate(10deg);
+      opacity:.18;
+      z-index:1;
+    }
+
+    .W{
+      color:#ffe2bf;
+      background:
+        radial-gradient(circle at 35% 18%, rgba(255,255,255,0.14), transparent 48%),
+        linear-gradient(135deg, rgba(163,119,60,0.65), rgba(26,20,13,0.95));
+    }
+    .W::before{
+      content:"";
+      position:absolute; inset:0;
+      background:
+        repeating-linear-gradient(90deg,
+          rgba(255,255,255,0.05) 0 2px,
+          rgba(0,0,0,0.0) 2px 8px),
+        repeating-linear-gradient(0deg,
+          rgba(0,0,0,0.06) 0 1px,
+          rgba(0,0,0,0.0) 1px 6px);
+      opacity:.55;
+      z-index:1;
+      mix-blend-mode: overlay;
+    }
+    .W::after{
+      content:"";
+      position:absolute; inset:0;
+      background: radial-gradient(circle at 70% 60%, rgba(0,0,0,0.18), transparent 60%);
+      z-index:1;
+      opacity:.8;
+    }
+
+    .I{
+      color:#f5f5f5;
+      background:
+        radial-gradient(circle at 30% 15%, rgba(255,255,255,0.18), transparent 48%),
+        linear-gradient(135deg, rgba(220,220,220,0.28), rgba(30,30,30,0.95));
+    }
+    .I::before{
+      content:"";
+      position:absolute; inset:0;
+      background:
+        repeating-linear-gradient(90deg,
+          rgba(255,255,255,0.08) 0 1px,
+          rgba(255,255,255,0.00) 1px 5px);
+      opacity:.35;
+      z-index:1;
+    }
+
+    @keyframes snap {
+      0%   { transform: translate(var(--sx, 0px), var(--sy, 0px)) scale(1.06); }
+      70%  { transform: translate(0px, 0px) scale(0.985); }
+      100% { transform: translate(0px, 0px) scale(1.0); }
+    }
+    .snap{ animation: snap 160ms cubic-bezier(0.2,0.9,0.2,1); }
+
+    #msg{
+      margin-top:10px;
+      text-align:center;
+      min-height:18px;
+      font-size:13px;
+      color: var(--accent2);
+    }
+
+    /* Help Modal */
+    #modalOverlay{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      z-index: 9998;
+    }
+    #modal{
+      width: min(580px, 100%);
+      background: #232323;
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 14px;
+      box-shadow: 0 18px 44px rgba(0,0,0,0.65);
+      padding: 14px 14px 12px;
+    }
+    #modal h2{
+      margin: 2px 0 10px;
+      font-size: 16px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--accent2);
+    }
+    #modal .rules{
+      font-size: 13px;
+      color: #ddd;
+      line-height: 1.55;
+    }
+    #modal .rules b{ color: var(--accent2); }
+
+    .matGrid{
+      margin-top: 10px;
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:10px;
+    }
+    .matCard{
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(0,0,0,0.20);
+      padding: 10px;
+    }
+    .matHead{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom: 6px;
+    }
+    .matCode{
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      letter-spacing:.14em;
+      font-weight: 1000;
+      color: var(--accent2);
+      font-size: 14px;
+    }
+    .matName{
+      font-size: 11px;
+      letter-spacing:.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .matNums{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      letter-spacing:.12em;
+      color:#eee;
+    }
+    .matPill{
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.24);
+      font-size: 12px;
+    }
+
+    #modalActions{
+      margin-top: 12px;
+      display:flex;
+      justify-content:flex-end;
+      gap:8px;
+    }
+    #closeHelp{
+      background: rgba(255,179,71,0.18);
+      color: var(--accent2);
+      border: 1px solid rgba(255,179,71,0.35);
+      box-shadow:none;
+    }
+    #closeHelp:hover{ background: rgba(255,179,71,0.24); }
+
+    /* Win Modal */
+    #winOverlay{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      z-index: 9997;
+    }
+    #winModal{
+      width: min(520px, 100%);
+      background: #232323;
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 14px;
+      box-shadow:0 18px 44px rgba(0,0,0,0.65);
+      padding: 14px 14px 12px;
+      text-align:center;
+    }
+    #winModal h2{
+      margin: 2px 0 8px;
+      font-size: 16px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--accent2);
+    }
+    #winModal p{
+      margin: 0 0 12px;
+      color:#ddd;
+      font-size:13px;
+      line-height:1.45;
+    }
+    #winActions{
+      display:flex;
+      justify-content:center;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top: 8px;
+    }
+    #nextBtn{
+      background: var(--accent);
+      color:#1c1c1c;
+      border:none;
+      box-shadow:0 2px 6px rgba(0,0,0,0.35);
+    }
+    #stayBtn{
+      background: transparent;
+      color: var(--accent2);
+      border: 1px solid rgba(255,255,255,0.14);
+      box-shadow:none;
+    }
+    #stayBtn:hover{background: rgba(255,255,255,0.06);}
+
+    /* Ghost */
+    #ghost{
+      position:fixed; left:0; top:0;
+      width:92px; height:92px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,0.16);
+      display:none;
+      align-items:center;justify-content:center;
+      pointer-events:none;
+      transform: translate(-50%,-50%);
+      z-index:9999;
+      box-shadow:0 18px 30px rgba(0,0,0,0.55);
+      overflow:hidden;
+    }
+    #ghost .code{
+      font-size:34px;
+      font-weight:1000;
+      letter-spacing:.12em;
+      text-shadow:0 2px 10px rgba(0,0,0,0.45);
+      z-index:2;
+    }
+    #ghost .gstats{
+      position:absolute;
+      bottom:10px;
+      right:10px;
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      font-size: 11px;
+      letter-spacing:.12em;
+      background: rgba(0,0,0,0.35);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 999px;
+      padding: 4px 9px;
+      color: #fff;
+      z-index:2;
+    }
+
+    @media (max-width: 560px){
+      .matGrid{grid-template-columns: 1fr;}
+      .cell{max-width: 92px;}
+    }
+  </style>
+</head>
+
+<body>
+  <div id="brand">
+    <span class="brand-weave">Weave</span>
+    <span class="brand-txt" id="brand-txt"></span>
+  </div>
+
+  <h1>Stack</h1>
+
+  <div id="wrap">
+    <div id="top">
+      <div id="levelTitle"></div>
+      <div id="controls">
+        <select id="levelSelect" aria-label="Level selector"></select>
+        <button id="helpBtn">Instructions</button>
+        <button id="undoBtn" disabled>Undo</button>
+        <button id="resetBtn">Reset</button>
+      </div>
+    </div>
+
+    <div id="goals"></div>
+    <div id="board"></div>
+
+    <div id="bankWrap">
+      <div id="bankTop">
+        <div class="left">
+          <span>Bank</span>
+          <span id="bankCount">0</span>
+        </div>
+
+        <div id="legend" aria-label="Legend">
+          <span class="legend-pill"><span class="m">P</span><span class="mini">⚖︎2 🛡4</span></span>
+          <span class="legend-pill"><span class="m">W</span><span class="mini">⚖︎3 🛡8</span></span>
+          <span class="legend-pill"><span class="m">I</span><span class="mini">⚖︎5 🛡10</span></span>
+        </div>
+      </div>
+
+      <div id="bank"></div>
+    </div>
+
+    <div id="msg"></div>
+  </div>
+
+  <!-- Help Modal -->
+  <div id="modalOverlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div id="modal">
+      <h2>How to Play</h2>
+      <div class="rules" id="rulesText"></div>
+
+      <div class="rules" style="margin-top:10px;color:#cfcfcf;">
+        <b>Box stats</b>
+        <div class="matGrid" aria-label="Box stats">
+          <div class="matCard">
+            <div class="matHead">
+              <div class="matCode">P</div>
+              <div class="matName">Plastic</div>
+            </div>
+            <div class="matNums">
+              <span class="matPill">⚖︎ 2</span>
+              <span class="matPill">🛡 4</span>
+            </div>
+          </div>
+          <div class="matCard">
+            <div class="matHead">
+              <div class="matCode">W</div>
+              <div class="matName">Wood</div>
+            </div>
+            <div class="matNums">
+              <span class="matPill">⚖︎ 3</span>
+              <span class="matPill">🛡 8</span>
+            </div>
+          </div>
+          <div class="matCard">
+            <div class="matHead">
+              <div class="matCode">I</div>
+              <div class="matName">Iron</div>
+            </div>
+            <div class="matNums">
+              <span class="matPill">⚖︎ 5</span>
+              <span class="matPill">🛡 10</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="modalActions">
+        <button id="closeHelp">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Win Modal -->
+  <div id="winOverlay" aria-hidden="true">
+    <div id="winModal">
+      <h2>Level cleared</h2>
+      <p id="winText"></p>
+      <div id="winActions">
+        <button id="nextBtn">Next level</button>
+        <button id="stayBtn">Stay</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ghost -->
+  <div id="ghost">
+    <div class="code"></div>
+    <div class="gstats"></div>
+  </div>
+
+<script>
+/* --------- brand TXT animation --------- */
+(function animateTXT(){
+  const el = document.getElementById("brand-txt");
+  const word = "TXT";
+  let i = 0, forward = true;
+  function loop(){
+    el.textContent = word.slice(0, i);
+    if(forward){
+      i++;
+      if(i > word.length){ forward = false; setTimeout(loop, 900); return; }
+    } else {
+      i--;
+      if(i < 0){ forward = true; setTimeout(loop, 600); return; }
+    }
+    setTimeout(loop, 120);
+  }
+  loop();
+})();
+
+/* --------- rules/stats --------- */
+const TYPES = { P:{w:2,d:4}, W:{w:3,d:8}, I:{w:5,d:10} };
+const wOf = (t)=>TYPES[t].w;
+const dOf = (t)=>TYPES[t].d;
+
+/* --------- LEVELS --------- */
+const levels = [
+  {
+    id: 0,
+    name: "Level 1 • 3×3",
+    rows: 3,
+    cols: 3,
+    bankInit: ["P","W","W","P","P","P","P","W","I"],
+    goalsUI: "Goal weights: <b>Col1=3</b>, <b>Col2=7</b>, <b>Col3=10</b>.",
+    goalType: "exact-cols",
+    targets: [3,7,10]
+  },
+  {
+    id: 1,
+    name: "Level 2 • 5×3",
+    rows: 5,
+    cols: 3,
+    bankInit: ["P","P","W","P","I","I","W","W","W","W"],
+    goalsUI: "Goal pattern: <b>C1 = C3</b> (both non-zero), and <b>C2 = 0</b>.",
+    goalType: "pattern"
+  }
+];
+
+/* --------- state --------- */
+let ROWS = 3, COLS = 3;
+let currentLevel = 0;
+
+let bank = [];
+let cols = [];
+let undoStack = [];
+let dragging = null; // {from, id, type, srcCol?}
+let preview = {active:false, ok:false, col:-1, row:-1};
+let winShownForLevel = -1;
+
+/* --------- dom --------- */
+const levelTitleEl = document.getElementById("levelTitle");
+const levelSelectEl = document.getElementById("levelSelect");
+const goalsEl = document.getElementById("goals");
+const boardEl = document.getElementById("board");
+const bankEl = document.getElementById("bank");
+const bankWrapEl = document.getElementById("bankWrap");
+const msgEl = document.getElementById("msg");
+const bankCountEl = document.getElementById("bankCount");
+const undoBtn = document.getElementById("undoBtn");
+const resetBtn = document.getElementById("resetBtn");
+const helpBtn = document.getElementById("helpBtn");
+const modalOverlay = document.getElementById("modalOverlay");
+const closeHelp = document.getElementById("closeHelp");
+const rulesTextEl = document.getElementById("rulesText");
+
+const winOverlay = document.getElementById("winOverlay");
+const winText = document.getElementById("winText");
+const nextBtn = document.getElementById("nextBtn");
+const stayBtn = document.getElementById("stayBtn");
+
+const ghost  = document.getElementById("ghost");
+
+const setMsg = (t)=>{ msgEl.textContent = t || ""; };
+
+/* --------- modal --------- */
+function openHelp(){ modalOverlay.style.display = "flex"; modalOverlay.setAttribute("aria-hidden","false"); }
+function closeHelpFn(){ modalOverlay.style.display = "none"; modalOverlay.setAttribute("aria-hidden","true"); }
+helpBtn.addEventListener("click", openHelp);
+closeHelp.addEventListener("click", closeHelpFn);
+modalOverlay.addEventListener("click", (e)=>{ if(e.target === modalOverlay) closeHelpFn(); });
+window.addEventListener("keydown", (e)=>{ if(e.key === "Escape") { closeHelpFn(); closeWin(); } });
+
+function openWin(text){
+  winText.textContent = text;
+  winOverlay.style.display = "flex";
+  winOverlay.setAttribute("aria-hidden","false");
+}
+function closeWin(){
+  winOverlay.style.display = "none";
+  winOverlay.setAttribute("aria-hidden","true");
+}
+
+/* --------- tiny audio --------- */
+let audioCtx = null;
+let soundArmed = false;
+function ensureAudio(){ if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+function armSound(){
+  if(soundArmed) return;
+  soundArmed = true;
+  ensureAudio();
+  if(audioCtx.state === "suspended") audioCtx.resume().catch(()=>{});
+}
+function clink(intensity=0.55){
+  if(!audioCtx) return;
+  const t0 = audioCtx.currentTime;
+  const gain = audioCtx.createGain();
+  gain.gain.setValueAtTime(0.0001, t0);
+  gain.gain.exponentialRampToValueAtTime(0.05 * intensity, t0 + 0.005);
+  gain.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.11);
+
+  const o1 = audioCtx.createOscillator();
+  o1.type = "sine";
+  o1.frequency.setValueAtTime(820, t0);
+  o1.frequency.exponentialRampToValueAtTime(520, t0 + 0.08);
+
+  const o2 = audioCtx.createOscillator();
+  o2.type = "triangle";
+  o2.frequency.setValueAtTime(1220, t0);
+  o2.frequency.exponentialRampToValueAtTime(760, t0 + 0.06);
+
+  const hp = audioCtx.createBiquadFilter();
+  hp.type = "highpass";
+  hp.frequency.setValueAtTime(650, t0);
+
+  o1.connect(hp); o2.connect(hp);
+  hp.connect(gain);
+  gain.connect(audioCtx.destination);
+
+  o1.start(t0); o2.start(t0);
+  o1.stop(t0 + 0.12); o2.stop(t0 + 0.10);
+}
+function crack(intensity=0.6){
+  if(!audioCtx) return;
+  const t0 = audioCtx.currentTime;
+  const gain = audioCtx.createGain();
+  gain.gain.setValueAtTime(0.0001, t0);
+  gain.gain.exponentialRampToValueAtTime(0.07 * intensity, t0 + 0.004);
+  gain.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.10);
+
+  const osc = audioCtx.createOscillator();
+  osc.type = "square";
+  osc.frequency.setValueAtTime(170, t0);
+  osc.frequency.exponentialRampToValueAtTime(120, t0 + 0.07);
+
+  const hp = audioCtx.createBiquadFilter();
+  hp.type = "highpass";
+  hp.frequency.setValueAtTime(220, t0);
+
+  osc.connect(hp);
+  hp.connect(gain);
+  gain.connect(audioCtx.destination);
+
+  osc.start(t0);
+  osc.stop(t0 + 0.10);
+}
+
+/* --------- helpers --------- */
+function deepCopy(){
+  return { bank: bank.map(b=>({...b})), cols: cols.map(col => col.map(x=>({...x}))) };
+}
+function restore(s){
+  bank = s.bank.map(b=>({...b}));
+  cols = s.cols.map(col => col.map(x=>({...x})));
+  renderAll();
+}
+function pushUndo(){
+  undoStack.push(deepCopy());
+  if(undoStack.length > 80) undoStack.shift();
+  undoBtn.disabled = undoStack.length === 0;
+}
+function bankHasSpace(){ return bank.length < bankCapacity(); }
+function bankCapacity(){ return levels[currentLevel].bankInit.length; }
+function colWeight(c){ return cols[c].reduce((sum, b)=>sum + wOf(b.type), 0); }
+function bankEmpty(){ return bank.length === 0; }
+
+/* break rule */
+function settleAndBreak(){
+  let any = false;
+  for(let c=0;c<COLS;c++){
+    while(true){
+      const col = cols[c];
+      let brokenIndex = -1;
+      for(let i=0;i<col.length;i++){
+        let above = 0;
+        for(let j=i+1;j<col.length;j++) above += wOf(col[j].type);
+        if(above > dOf(col[i].type)){ brokenIndex = i; break; }
+      }
+      if(brokenIndex === -1) break;
+      col.splice(brokenIndex, 1);
+      any = true;
+    }
+  }
+  return any;
+}
+
+/* drop logic */
+function nextDropRow(col){
+  const len = cols[col].length;
+  if(len >= ROWS) return { ok:false, uiRow:-1 };
+  const uiRow = (ROWS - 1 - len);
+  return { ok:true, uiRow };
+}
+
+/* hit tests */
+function elementToCell(x,y){
+  const el = document.elementFromPoint(x,y);
+  if(!el) return null;
+  const cell = el.classList?.contains("cell") ? el : el.closest?.(".cell");
+  if(!cell) return null;
+  return { col: parseInt(cell.dataset.col,10), row: parseInt(cell.dataset.row,10) };
+}
+function overBank(x,y){
+  const el = document.elementFromPoint(x,y);
+  if(!el) return false;
+  return !!(el.id === "bankWrap" || el.closest?.("#bankWrap"));
+}
+
+/* --------- win logic --------- */
+function isGoalMet(){
+  const lvl = levels[currentLevel];
+  if(!bankEmpty()) return false;
+
+  if(lvl.goalType === "exact-cols"){
+    return lvl.targets.every((t,i)=>colWeight(i) === t);
+  }
+
+  // Level 2: C2 = 0, C1 = C3, AND C1/C3 must be non-zero
+  if(lvl.goalType === "pattern"){
+    const w1 = colWeight(0);
+    const w2 = colWeight(1);
+    const w3 = colWeight(2);
+    if(w2 !== 0) return false;
+    if(w1 === 0 || w3 === 0) return false;
+    return (w1 === w3);
+  }
+
+  return false;
+}
+
+/* --------- render goals --------- */
+function renderGoals(){
+  const lvl = levels[currentLevel];
+  goalsEl.innerHTML = "";
+
+  if(lvl.goalType === "exact-cols"){
+    goalsEl.style.gridTemplateColumns = `repeat(${lvl.cols}, 1fr)`;
+    for(let c=0;c<lvl.cols;c++){
+      const cur = colWeight(c);
+      const tar = lvl.targets[c];
+      const ok = (cur === tar);
+      const card = document.createElement("div");
+      card.className = "goal";
+      card.innerHTML = `
+        <div class="gTop"><span class="badge">${c+1}</span> Col</div>
+        <div class="gNums">
+          <span class="cur">${cur}</span><span class="slash">/</span><span class="tar">${tar}</span>
+        </div>
+        <div class="gState ${ok ? "ok":"bad"}">${ok ? "matched":"not matched"}</div>
+      `;
+      goalsEl.appendChild(card);
+    }
+    bankCountEl.textContent = String(bank.length);
+    return;
+  }
+
+  // Level 2 UI:
+  // Col1 shows "C1 = C3"
+  // Col2 shows "C2 = 0"
+  // Col3 shows "C1 = C3"
+  goalsEl.style.gridTemplateColumns = `repeat(3, 1fr)`;
+
+  const w1 = colWeight(0);
+  const w2 = colWeight(1);
+  const w3 = colWeight(2);
+
+  const okZero = (w2 === 0);
+
+  let pairText = "pending";
+  let pairClass = "bad";
+
+  if (w1 === 0 || w3 === 0) {
+    pairText = "must be non-zero";
+    pairClass = "bad";
+  } else if (w1 === w3) {
+    pairText = "matched";
+    pairClass = "ok";
+  } else {
+    pairText = "pending";
+    pairClass = "bad";
+  }
+
+  const g1 = document.createElement("div");
+  g1.className = "goal";
+  g1.innerHTML = `
+    <div class="gTop"><span class="badge">1</span> C1 = C3</div>
+    <div class="gNums">
+      <span class="cur">${w1}</span><span class="slash">=</span><span class="tar">${w3}</span>
+    </div>
+    <div class="gState ${pairClass}">${pairText}</div>
+  `;
+
+  const g2 = document.createElement("div");
+  g2.className = "goal";
+  g2.innerHTML = `
+    <div class="gTop"><span class="badge">2</span> C2 = 0</div>
+    <div class="gNums">
+      <span class="cur">${w2}</span><span class="slash">/</span><span class="tar">0</span>
+    </div>
+    <div class="gState ${okZero ? "ok":"bad"}">${okZero ? "ok":"pending"}</div>
+  `;
+
+  const g3 = document.createElement("div");
+  g3.className = "goal";
+  g3.innerHTML = `
+    <div class="gTop"><span class="badge">3</span> C1 = C3</div>
+    <div class="gNums">
+      <span class="cur">${w3}</span><span class="slash">=</span><span class="tar">${w1}</span>
+    </div>
+    <div class="gState ${pairClass}">${pairText}</div>
+  `;
+
+  goalsEl.appendChild(g1);
+  goalsEl.appendChild(g2);
+  goalsEl.appendChild(g3);
+
+  bankCountEl.textContent = String(bank.length);
+}
+
+/* --------- render board/bank --------- */
+function makeBoxNode(obj, movable, snapInfo=null){
+  const box = document.createElement("div");
+  box.className = `box ${obj.type}` + (movable ? " movable" : "");
+  box.dataset.id = obj.id;
+  box.dataset.type = obj.type;
+
+  const code = document.createElement("div");
+  code.className = "code";
+  code.textContent = obj.type;
+  box.appendChild(code);
+
+  if(!movable){
+    const stats = document.createElement("div");
+    stats.className = "stats";
+    stats.innerHTML = `<span class="w">${wOf(obj.type)}</span><span class="d">${dOf(obj.type)}</span>`;
+    box.appendChild(stats);
+  }
+
+  if(snapInfo && snapInfo.id === obj.id){
+    box.classList.add("snap");
+    box.style.setProperty("--sx", snapInfo.sx + "px");
+    box.style.setProperty("--sy", snapInfo.sy + "px");
+    box.addEventListener("animationend", ()=>{
+      box.classList.remove("snap");
+      box.style.removeProperty("--sx");
+      box.style.removeProperty("--sy");
+    }, {once:true});
+  }
+  return box;
+}
+
+function renderBoard(snapInfo=null){
+  boardEl.innerHTML = "";
+  boardEl.style.gridTemplateColumns = `repeat(${COLS}, 1fr)`;
+
+  const minH = (ROWS >= 5) ? 270 : 290;
+
+  for(let c=0;c<COLS;c++){
+    const colDiv = document.createElement("div");
+    colDiv.className = "col";
+    colDiv.style.gridTemplateRows = `repeat(${ROWS}, 1fr)`;
+    colDiv.style.minHeight = minH + "px";
+    colDiv.dataset.col = String(c);
+
+    const lab = document.createElement("div");
+    lab.className = "colLabel";
+    lab.textContent = `COL ${c+1}`;
+    colDiv.appendChild(lab);
+
+    for(let r=0;r<ROWS;r++){
+      const cell = document.createElement("div");
+      cell.className = "cell";
+      cell.dataset.col = String(c);
+      cell.dataset.row = String(r);
+
+      const dataIndex = (ROWS - 1 - r);
+      const obj = cols[c][dataIndex] || null;
+
+      if(obj){
+        const isTop = (dataIndex === cols[c].length - 1);
+        const node = makeBoxNode(obj, isTop, snapInfo);
+        if(isTop){
+          node.dataset.from = "col";
+          node.dataset.col = String(c);
+          node.addEventListener("pointerdown", onPointerDownBox);
+        }
+        cell.appendChild(node);
+      }
+
+      colDiv.appendChild(cell);
+    }
+    boardEl.appendChild(colDiv);
+  }
+}
+
+function renderBank(){
+  bankEl.innerHTML = "";
+  const cap = bankCapacity();
+  bankEl.style.gridTemplateColumns = `repeat(${Math.min(cap, 9)}, minmax(46px, 1fr))`;
+
+  for(let i=0;i<cap;i++){
+    const slot = document.createElement("div");
+    slot.className = "slot";
+    const b = bank[i];
+    if(!b){
+      slot.classList.add("empty");
+      bankEl.appendChild(slot);
+      continue;
+    }
+    const node = makeBoxNode(b, true, null);
+    node.dataset.from = "bank";
+    node.style.boxShadow = "none";
+    node.addEventListener("pointerdown", onPointerDownBox);
+    slot.appendChild(node);
+    bankEl.appendChild(slot);
+  }
+}
+
+function renderAll(snapInfo=null){
+  renderGoals();
+  renderBoard(snapInfo);
+  renderBank();
+  undoBtn.disabled = undoStack.length === 0;
+}
+
+/* --------- win dialog --------- */
+function maybeWin(){
+  if(isGoalMet() && winShownForLevel !== currentLevel){
+    winShownForLevel = currentLevel;
+    setMsg("✅");
+    if(currentLevel === 0){
+      nextBtn.style.display = "inline-flex";
+      openWin("Nice! Want to continue to Level 2?");
+    } else {
+      nextBtn.style.display = "none";
+      openWin("Cleared!");
+    }
+  }
+}
+
+/* --------- ghost --------- */
+function showGhost(type, x, y){
+  ghost.className = "";
+  ghost.classList.add(type);
+  ghost.querySelector(".code").textContent = type;
+  ghost.querySelector(".gstats").textContent = `⚖︎ ${wOf(type)}   🛡 ${dOf(type)}`;
+  ghost.style.display = "flex";
+  ghost.style.left = x+"px";
+  ghost.style.top  = y+"px";
+}
+function moveGhost(x,y){
+  ghost.style.left = x+"px";
+  ghost.style.top  = y+"px";
+}
+function hideGhost(){
+  ghost.style.display = "none";
+  ghost.className = "";
+}
+
+/* --------- drag --------- */
+function onPointerDownBox(e){
+  e.preventDefault();
+  armSound();
+
+  const el = e.currentTarget;
+  const from = el.dataset.from;
+  const id   = el.dataset.id;
+  const type = el.dataset.type;
+
+  if(from === "bank"){
+    dragging = { from:"bank", id, type };
+  } else {
+    const srcCol = parseInt(el.dataset.col, 10);
+    dragging = { from:"col", id, type, srcCol };
+  }
+
+  showGhost(type, e.clientX, e.clientY);
+  setMsg("");
+
+  window.addEventListener("pointermove", onPointerMove, {passive:false});
+  window.addEventListener("pointerup", onPointerUp, {passive:false});
+  window.addEventListener("pointercancel", onPointerUp, {passive:false});
+}
+
+function onPointerMove(e){
+  if(!dragging) return;
+  e.preventDefault();
+  moveGhost(e.clientX, e.clientY);
+}
+
+function onPointerUp(e){
+  if(!dragging) return;
+  e.preventDefault();
+
+  const dropOnBank = (dragging.from === "col") && overBank(e.clientX, e.clientY);
+
+  hideGhost();
+
+  window.removeEventListener("pointermove", onPointerMove);
+  window.removeEventListener("pointerup", onPointerUp);
+  window.removeEventListener("pointercancel", onPointerUp);
+
+  // Return top-most box to bank
+  if(dropOnBank){
+    if(!bankHasSpace()){ setMsg("Bank is full."); dragging = null; return; }
+
+    const srcCol = dragging.srcCol;
+    const top = cols[srcCol][cols[srcCol].length - 1];
+    if(!top || top.id !== dragging.id){ dragging = null; return; }
+
+    pushUndo();
+    cols[srcCol].pop();
+    bank.push(top);
+    clink(0.45);
+
+    const broke = settleAndBreak();
+    if(broke) crack(0.55);
+
+    renderAll({ id: top.id, sx: 0, sy: 18 });
+    maybeWin();
+    dragging = null;
+    return;
+  }
+
+  // Drop to board
+  const cell = elementToCell(e.clientX, e.clientY);
+  if(!cell){ dragging = null; return; }
+
+  const destCol = cell.col;
+  const drop = nextDropRow(destCol);
+  if(!drop.ok){ dragging = null; return; }
+
+  pushUndo();
+  let placedId = null;
+
+  if(dragging.from === "bank"){
+    const idx = bank.findIndex(b=>b.id === dragging.id);
+    if(idx < 0){ undoStack.pop(); undoBtn.disabled = undoStack.length === 0; dragging = null; return; }
+    const obj = bank.splice(idx, 1)[0];
+    cols[destCol].push(obj);
+    placedId = obj.id;
+    clink(0.45);
+  } else {
+    const srcCol = dragging.srcCol;
+    if(srcCol === destCol){ undoStack.pop(); undoBtn.disabled = undoStack.length === 0; dragging = null; return; }
+    const top = cols[srcCol][cols[srcCol].length - 1];
+    if(!top || top.id !== dragging.id){ undoStack.pop(); undoBtn.disabled = undoStack.length === 0; dragging = null; return; }
+    cols[srcCol].pop();
+    cols[destCol].push(top);
+    placedId = top.id;
+    clink(0.55);
+  }
+
+  const broke = settleAndBreak();
+  if(broke) crack(0.65);
+
+  renderAll(placedId ? { id: placedId, sx: 0, sy: -26 } : null);
+  maybeWin();
+  dragging = null;
+}
+
+/* --------- buttons --------- */
+undoBtn.addEventListener("click", ()=>{
+  if(undoStack.length === 0) return;
+  const s = undoStack.pop();
+  restore(s);
+  undoBtn.disabled = undoStack.length === 0;
+});
+resetBtn.addEventListener("click", ()=>initLevel(currentLevel));
+
+/* --------- win modal buttons --------- */
+nextBtn.addEventListener("click", ()=>{
+  closeWin();
+  initLevel(1);
+});
+stayBtn.addEventListener("click", closeWin);
+winOverlay.addEventListener("click", (e)=>{ if(e.target === winOverlay) closeWin(); });
+
+/* --------- instructions text --------- */
+function setRules(){
+  const lvl = levels[currentLevel];
+  rulesTextEl.innerHTML = `
+    • Drag boxes from the <b>Bank</b> into the grid.<br/>
+    • You can only move the <b>top-most</b> box in each column.<br/>
+    • A box breaks if the total weight <b>above</b> it exceeds its durability.<br/>
+    • Use (or break) <b>all</b> bank boxes.<br/>
+    • You may drag the top-most box from a column <b>back to the Bank</b>.<br/>
+    • ${lvl.goalsUI}
+  `;
+}
+
+/* --------- level selector --------- */
+function initLevelSelect(){
+  levelSelectEl.innerHTML = "";
+  levels.forEach((lvl, idx)=>{
+    const opt = document.createElement("option");
+    opt.value = String(idx);
+    opt.textContent = lvl.name;
+    levelSelectEl.appendChild(opt);
+  });
+  levelSelectEl.value = String(currentLevel);
+}
+levelSelectEl.addEventListener("change", ()=>{
+  const idx = parseInt(levelSelectEl.value, 10);
+  initLevel(idx);
+});
+
+/* --------- init level --------- */
+function initLevel(idx){
+  closeWin();
+  currentLevel = idx;
+  const lvl = levels[currentLevel];
+  ROWS = lvl.rows;
+  COLS = lvl.cols;
+
+  undoStack = [];
+  winShownForLevel = -1;
+
+  bank = lvl.bankInit.map((t,i)=>({ id:`L${idx}_b${i+1}`, type:t }));
+  cols = Array.from({length:COLS}, ()=>[]);
+  dragging = null;
+
+  levelTitleEl.textContent = lvl.name;
+  levelSelectEl.value = String(idx);
+
+  setRules();
+  renderAll(null);
+  setMsg("");
+}
+
+/* --------- start --------- */
+initLevelSelect();
+initLevel(0);
+</script>
+</body>
+</html>
