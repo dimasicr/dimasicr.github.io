@@ -220,7 +220,6 @@
 
     #preview-board {
       display: grid;
-      /* columns set dynamically via JS */
       grid-auto-rows: 18px;
       gap: 3px;
       justify-content: center;
@@ -248,7 +247,6 @@
     /* GRID (MAIN BOARD) */
     #board {
       display: grid;
-      /* columns set dynamically via JS */
       grid-auto-rows: 56px;
       gap: 6px;
       justify-content: center;
@@ -526,6 +524,7 @@
         <option value="2">Level 2 – White at row 3, col 2</option>
         <option value="3">Level 3 – White at row 3, col 1</option>
         <option value="4">Level 4 – White at row 4, col 1</option>
+        <option value="5">Level 5 – White at row 2, col 2 (use all tiles)</option>
       </select>
     </div>
 
@@ -733,6 +732,22 @@
         ]),
         short: "White at row 4, col 1 · others empty",
         objective: "Level 4 – Create a White tile in the first column, fourth row; all other tiles must be empty. (Hint button reveals a strategy using 4 Whites.)"
+      },
+      5: {
+        start: makeGrid([
+          "GRGB",
+          "BRGB",
+          "RRRR",
+          "RGBB"
+        ]),
+        target: makeGrid([
+          "....",
+          ".W..",
+          "....",
+          "...."
+        ]),
+        short: "White at row 2, col 2 · use all tiles",
+        objective: "Level 5 – Create a White tile in the second row, second column; all other tiles must be empty, meaning you've used every tile on the board."
       }
     };
 
@@ -799,7 +814,6 @@
       const rows = board.length;
       const cols = board[0].length;
 
-      // dynamic columns
       boardEl.style.gridTemplateColumns = `repeat(${cols}, minmax(40px, 56px))`;
 
       for (let r = 0; r < rows; r++) {
@@ -885,18 +899,14 @@
     function combineColors(code1, code2) {
       if (code1 === EMPTY || code2 === EMPTY) return null;
 
-      // Same color → same color
       if (code1 === code2) return code1;
 
       const key = [code1, code2].sort().join("+");
 
       const combos = {
-        // primary → secondary
-        "B+R": "P", // Purple
-        "G+R": "Y", // Yellow
-        "B+G": "C", // Cyan
-
-        // secondary + primary → White
+        "B+R": "P",
+        "G+R": "Y",
+        "B+G": "C",
         "B+Y": "W",
         "G+P": "W",
         "C+R": "W"
@@ -911,7 +921,6 @@
       return dr + dc === 1;
     }
 
-    /* -------- Timer helpers -------- */
     function getElapsedSeconds() {
       if (!startTime) {
         return penaltySeconds;
@@ -996,14 +1005,11 @@
         return;
       }
 
-      // Start timer on first successful move
       ensureTimerStarted();
 
-      // Save state for undo BEFORE mutating
       historyStack.push(deepCopyBoard(board));
       updateUndoButton();
 
-      // Apply move
       board[row][col] = result;
       board[selected.row][selected.col] = EMPTY;
 
@@ -1035,7 +1041,7 @@
           }
         }
       }
-      // If we reach here, pattern matched
+
       stopTimer();
 
       const elapsedSeconds = getElapsedSeconds();
@@ -1066,7 +1072,7 @@
       renderBoard();
       renderPreview();
       hintClickCount = 0;
-      resetTimerDisplay(); // timer only starts on first move
+      resetTimerDisplay();
       hintBtn.disabled = currentLevel !== 4;
       setMessage("Puzzle reset. Click a non-empty tile, then an adjacent tile to combine them.", "info");
     }
@@ -1075,7 +1081,6 @@
     hintBtn.addEventListener("click", () => {
       if (currentLevel !== 4) return;
 
-      // Each hint click adds 2 minutes penalty
       penaltySeconds += 120;
       updateTimer();
 
@@ -1094,7 +1099,6 @@
       }
     });
 
-    // Event listeners
     resetBtn.addEventListener("click", resetPuzzle);
     undoBtn.addEventListener("click", undoLastMove);
 
@@ -1108,7 +1112,6 @@
       if (currentLevel < MAX_LEVEL_INDEX) {
         currentLevel += 1;
       } else {
-        // If already at last level, loop back to level 0
         currentLevel = 0;
       }
       levelSelectEl.value = String(currentLevel);
@@ -1129,7 +1132,6 @@
       resetPuzzle();
     });
 
-    // Init
     applyLevelTexts();
     initBoardForLevel();
     renderBoard();
